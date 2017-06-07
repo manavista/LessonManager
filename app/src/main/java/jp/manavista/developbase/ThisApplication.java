@@ -20,7 +20,12 @@ public class ThisApplication extends Application {
 
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
-                .repositoryModule(new RepositoryModule())
+
+                /*
+                 * It is not necessary to describe
+                 * when Module is a constructor without arguments.
+                 */
+//                .repositoryModule(new RepositoryModule())
                 .build();
     }
 
