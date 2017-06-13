@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_weekly_row_horizontal_margin">4dp</dimen>
+    <dimen name="activity_weekly_lesson_margin">4dp</dimen>
+</resources>

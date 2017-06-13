@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DevelopBase</string>
+    <string name="button_previous_label">&lt;</string>
+    <string name="button_next_label">&gt;</string>
 </resources>
