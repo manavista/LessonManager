@@ -5,14 +5,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  * Created by atsushi on 2017/06/13.
  */
 
 public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
+    private Calendar calendar;
+
     public MyFragmentStatePagerAdapter(FragmentManager fm) {
         super(fm);
+    }
+
+    public MyFragmentStatePagerAdapter(FragmentManager fm, Calendar calendar) {
+        super(fm);
+        this.calendar = calendar;
     }
 
     @Override
@@ -40,6 +50,9 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "Page" + position;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        calendar.add(Calendar.DAY_OF_MONTH, position);
+        return sdf.format(calendar.getTime());
     }
 }

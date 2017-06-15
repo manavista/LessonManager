@@ -18,10 +18,12 @@ public final class DummySectionFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_section_dummy,container,false);
+    public View onCreateView (
+            LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.fragment_section_dummy, container, false);
         Bundle args = getArguments();
         ((TextView)rootView.findViewById(R.id.textDummy)).setText(getString(R.string.dummy_section_text, args.getInt(SECTION_NUMBER_PROP)));
         return rootView;
