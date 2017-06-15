@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,45 +15,33 @@ import java.util.Calendar;
 
 public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
-    private Calendar calendar;
+    public static final int MAX_PAGE_NUM = 1000;
+    private static final int OBJECT_NUM = 3;
 
     public MyFragmentStatePagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public MyFragmentStatePagerAdapter(FragmentManager fm, Calendar calendar) {
-        super(fm);
-        this.calendar = calendar;
-    }
-
     @Override
     public Fragment getItem(int position) {
 
-        switch (position) {
-//            case 0:
-//                return new Fragment0();
-//            case 1:
-//                return new Fragment1();
-            default:
-//                return new Fragment2();
-                Fragment fragment = new DummySectionFragment();
-                Bundle args = new Bundle();
-                args.putInt(DummySectionFragment.SECTION_NUMBER_PROP, position + 1);
-                fragment.setArguments(args);
-                return fragment;
-        }
+        int diff = (position - (MAX_PAGE_NUM / 2));
+
+        Fragment fragment = new DummySectionFragment();
+        Bundle args = new Bundle();
+        args.putInt(DummySectionFragment.CALENDAR_OFFSET_DAY_PROP, diff);
+        fragment.setArguments(args);
+        return fragment;
+
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return MAX_PAGE_NUM;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        calendar.add(Calendar.DAY_OF_MONTH, position);
-        return sdf.format(calendar.getTime());
+        return "page " + position;
     }
 }
