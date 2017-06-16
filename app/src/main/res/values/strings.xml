@@ -3,4 +3,14 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
+
+    <string name="menu.day_view">Day View</string>
+    <string name="menu.weekly_view">Weekly View</string>
+    <string name="menu.member_list">Member List</string>
+    <string name="menu.add_member">Add Member</string>
+    <string name="menu.add_lesson">Add Lesson</string>
+    <string name="menu.add_timetable">Add Timetable</string>
+    <string name="menu.add_private_day">Add Private Day</string>
+    <string name="menu.settings">Settings</string>
+    <string name="menu.info">Info</string>
 </resources>

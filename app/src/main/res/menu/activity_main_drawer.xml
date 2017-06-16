@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/item_group_view_conversion">
+
+        <item
+            android:id="@+id/nav_view"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu.day_view"/>
+        <item
+            android:id="@+id/nav_member_list"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu.member_list"/>
+
+    </group>
+
+    <group android:id="@+id/item_group_addition">
+
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import"/>
+            android:title="@string/menu.add_member"/>
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
+            android:title="@string/menu.add_lesson"/>
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
+            android:title="@string/menu.add_timetable"/>
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"/>
-    </group>
+            android:title="@string/menu.add_private_day"/>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
-        </menu>
-    </item>
+    </group>
 
 </menu>
