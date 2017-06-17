@@ -13,9 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.support.v4.view.ViewPager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ViewPager viewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,36 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new MyFragmentStatePagerAdapter(
+                getSupportFragmentManager()
+        ));
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+                switch (state) {
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        break;
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                        break;
+                    case ViewPager.SCROLL_STATE_SETTLING:
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -91,5 +125,11 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        viewPager.setCurrentItem(MyFragmentStatePagerAdapter.MAX_PAGE_NUM/2);
     }
 }
