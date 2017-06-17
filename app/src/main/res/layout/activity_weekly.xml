@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:stretchColumns="1,2,3,4,5">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/origin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/week0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Mo"/>
+
+        <TextView
+            android:id="@+id/week1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Tu"/>
+
+        <TextView
+            android:id="@+id/week2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="We"/>
+
+        <TextView
+            android:id="@+id/week3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Th"/>
+
+        <TextView
+            android:id="@+id/week4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Fr"/>
+
+        <TextView
+            android:id="@+id/weekNull"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=""/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_weight="1"
+        android:background="@color/lightGray">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/time0_begin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="17:00"
+                />
+
+            <TextView
+                android:id="@+id/lessonNo0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="1"
+                android:textColor="@color/firebrick"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/time0_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="18dp"
+                android:text="18:20"/>
+        </RelativeLayout>
+
+        <include
+            layout="@layout/activity_weekly_lesson"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/lightPink"
+            android:gravity="center"
+            android:text="MATH"/>
+
+        <TextView
+            android:id="@+id/textView30"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/lightPink"
+            android:gravity="center"
+            android:text="MATH"/>
+
+        <TextView
+            android:id="@+id/textView40"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/lightPink"
+            android:gravity="center"
+            android:text="MATH"/>
+
+        <TextView
+            android:id="@+id/textView50"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/lightPink"
+            android:gravity="center"
+            android:text="MATH"/>
+
+        <TextView
+            android:id="@+id/textView60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=""/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_weight="1"
+        android:background="@color/lightGray">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/time1_begin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="18:30"/>
+
+            <TextView
+                android:id="@+id/lessonNo1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="2"
+                android:textColor="@color/firebrick"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/time1_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="18dp"
+                android:text="19:50"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/lightSkyBlue"
+            android:gravity="center"
+            android:text="ENG"/>
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/lightSkyBlue"
+            android:gravity="center"
+            android:text="ENG"/>
+
+        <TextView
+            android:id="@+id/textView31"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:gravity="center"
+            android:text="ENG"
+            tools:background="@color/lightSkyBlue"/>
+
+        <TextView
+            android:id="@+id/textView41"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/lightSkyBlue"
+            android:gravity="center"
+            android:text="ENG"/>
+
+        <TextView
+            android:id="@+id/textView51"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/lightSkyBlue"
+            android:gravity="center"
+            android:text="ENG"/>
+
+        <TextView
+            android:id="@+id/textView61"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=""/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_weight="1"
+        android:background="@color/lightGray"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/time2_begin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="20:00"/>
+
+            <TextView
+                android:id="@+id/lessonNo2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="3"
+                android:textColor="@color/firebrick"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/time2_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="18dp"
+                android:text="21:20"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/lightSkyBlue"
+            android:gravity="center"
+            android:text="ENG"/>
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/textView32"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/textView42"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:background="@color/gold"
+            android:gravity="center"
+            android:text="EXAM"/>
+
+        <TextView
+            android:id="@+id/textView52"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_weekly_lesson_margin"
+            android:gravity="center"
+            android:text=""/>
+    </TableRow>
+
+</TableLayout>
