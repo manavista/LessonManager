@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="timetable">
+
+        <ListPreference
+            android:key="start_view"
+            android:title="START VIEW"
+            android:summary="select stating view mode"
+            android:entries="@array/entries_start_view"
+            android:entryValues="@array/entry_values_start_view"
+            android:dialogTitle="select view"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
