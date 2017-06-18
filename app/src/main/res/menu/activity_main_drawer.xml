@@ -6,7 +6,7 @@
         <item
             android:id="@+id/nav_view"
             android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu.day_view"/>
+            android:title="@string/menu.daily_view"/>
         <item
             android:id="@+id/nav_member_list"
             android:icon="@drawable/ic_menu_camera"
@@ -14,25 +14,28 @@
 
     </group>
 
-    <group android:id="@+id/item_group_addition">
+    <item android:title="@string/menu.add">
 
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu.add_member"/>
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu.add_lesson"/>
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu.add_timetable"/>
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu.add_private_day"/>
+        <menu>
 
-    </group>
+            <item
+                android:id="@+id/nav_camera"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="@string/menu.add_member"/>
+            <item
+                android:id="@+id/nav_gallery"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="@string/menu.add_lesson"/>
+            <item
+                android:id="@+id/nav_slideshow"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="@string/menu.add_timetable"/>
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/menu.add_private_day"/>
+
+        </menu>
+    </item>
 
 </menu>

@@ -8,16 +8,6 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/textDummy"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="24sp"
-        android:padding="32dp"
-        />
-
     <include
         android:id="@+id/weeklyContainer"
         layout="@layout/activity_weekly_container"/>

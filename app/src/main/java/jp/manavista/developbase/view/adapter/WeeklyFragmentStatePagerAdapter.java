@@ -1,20 +1,21 @@
-package jp.manavista.developbase;
+package jp.manavista.developbase.view.adapter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import jp.manavista.developbase.view.fragment.WeeklyFragment;
+
 /**
  * Created by atsushi on 2017/06/13.
  */
 
-public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
+public class WeeklyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
     public static final int MAX_PAGE_NUM = 1000;
-    private static final int OBJECT_NUM = 3;
 
-    public MyFragmentStatePagerAdapter(FragmentManager fm) {
+    public WeeklyFragmentStatePagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -23,9 +24,9 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
         int diff = (position - (MAX_PAGE_NUM / 2));
 
-        Fragment fragment = new DummySectionFragment();
+        Fragment fragment = new WeeklyFragment();
         Bundle args = new Bundle();
-        args.putInt(DummySectionFragment.CALENDAR_OFFSET_DAY_PROP, diff);
+        args.putInt(WeeklyFragment.CALENDAR_OFFSET_DAY_PROP, diff);
         fragment.setArguments(args);
         return fragment;
 
