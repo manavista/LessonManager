@@ -15,6 +15,8 @@ import jp.manavista.developbase.R;
 public class SettingFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    public static final String KEY_START_VIEW = "start_view";
+
     public static SettingFragment newInstance() {
         return new SettingFragment();
     }

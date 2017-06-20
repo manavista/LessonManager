@@ -4,7 +4,11 @@
     <group android:id="@+id/item_group_view_conversion">
 
         <item
-            android:id="@+id/nav_view"
+            android:id="@+id/nav_view_weekly"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu.weekly_view"/>
+        <item
+            android:id="@+id/nav_view_daily"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu.daily_view"/>
         <item
