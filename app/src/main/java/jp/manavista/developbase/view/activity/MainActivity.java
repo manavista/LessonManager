@@ -1,7 +1,9 @@
 package jp.manavista.developbase.view.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -112,6 +114,10 @@ public class MainActivity extends AppCompatActivity
                 viewPager.setCurrentItem(position, true);
             }
         });
+
+
+        // preference setting
+        PreferenceManager.setDefaultValues(activity, R.xml.preferences, false);
     }
 
     @Override
@@ -126,6 +132,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(activity, SettingActivity.class);
+            activity.startActivity(intent);
             return true;
         }
 
