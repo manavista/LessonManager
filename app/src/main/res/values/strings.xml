@@ -18,6 +18,7 @@
     <string name="button_previous_label">&lt;</string>
     <string name="button_next_label">&gt;</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="entry_start_view_default">Weekly</string>
+
+
 </resources>

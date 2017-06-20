@@ -11,7 +11,16 @@
             android:summary="select stating view mode"
             android:entries="@array/entries_start_view"
             android:entryValues="@array/entry_values_start_view"
+            android:defaultValue="@string/entry_start_view_default"
             android:dialogTitle="select view"/>
+
+        <MultiSelectListPreference
+            android:key="display_day_of_week"
+            android:title="DISPLAY DAY OF WEEK"
+            android:summary="multi select display days"
+            android:entries="@array/entries_day_of_week"
+            android:entryValues="@array/entry_values_day_of_week"
+            android:dialogTitle="select display days"/>
 
     </PreferenceCategory>
 
