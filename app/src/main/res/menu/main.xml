@@ -7,10 +7,5 @@
         android:icon="@drawable/ic_menu_manage"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_info"
-        android:orderInCategory="200"
-        android:icon="@android:drawable/ic_menu_info_details"
-        android:title="@string/menu.info"
-        app:showAsAction="never"/>
+
 </menu>
