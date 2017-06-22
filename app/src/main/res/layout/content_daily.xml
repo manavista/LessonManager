@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="1">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/origin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/dayOfWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="date here"/>
+
+        <include
+            layout="@layout/content_null_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_weight="1"
+        android:background="@color/lightGray">
+
+        <include
+            layout="@layout/content_timetable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            layout="@layout/content_daily_lesson"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+        <include
+            layout="@layout/content_null_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_weight="1"
+        android:background="@color/lightGray">
+
+        <include
+            layout="@layout/content_timetable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            layout="@layout/content_daily_lesson"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <include
+            layout="@layout/content_null_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_weekly_row_horizontal_margin"
+        android:layout_weight="1"
+        android:background="@color/lightGray">
+
+        <include
+            layout="@layout/content_timetable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            layout="@layout/content_daily_lesson"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <include
+            layout="@layout/content_null_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </TableRow>
+
+</TableLayout>
