@@ -15,7 +15,10 @@ import jp.manavista.developbase.R;
 public class SettingFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    /** preference key: start view mode */
     public static final String KEY_START_VIEW = "start_view";
+    /** preference key: start day of week */
+    public static final String KEY_DISPLAY_DAY_OF_WEEK = "display_day_of_week";
 
     public static SettingFragment newInstance() {
         return new SettingFragment();
@@ -49,12 +52,21 @@ public class SettingFragment extends PreferenceFragment
         updateSummary();
     }
 
+    /**
+     *
+     * Update Preference Summary
+     *
+     * <p>
+     * Overview:<br>
+     *
+     * </p>
+     */
     private void updateSummary() {
 
         ListAdapter listAdapter  = getPreferenceScreen().getRootAdapter();
         for( int i = 0 ; i < listAdapter.getCount() ; i++ ) {
 
-            Object item = listAdapter.getItem(i);
+            final Object item = listAdapter.getItem(i);
 
             if (item instanceof ListPreference) {
 
@@ -71,7 +83,7 @@ public class SettingFragment extends PreferenceFragment
                     if (sb.length() > 0) {
                         sb.append(", ");
                     }
-                    sb.append(entries[Integer.valueOf(value)]);
+                    sb.append(entries[Integer.valueOf(value) - 1]);
                 }
 
                 preference.setSummary(preference.getValues().size() == 0 ? "no data" : sb.toString());

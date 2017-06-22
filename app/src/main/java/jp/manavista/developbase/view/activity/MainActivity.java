@@ -15,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +27,12 @@ import java.util.Locale;
 import java.util.Objects;
 
 import jp.manavista.developbase.R;
+import jp.manavista.developbase.dto.PreferenceSettingDao;
 import jp.manavista.developbase.util.DateUtil;
 import jp.manavista.developbase.view.adapter.DailyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.fragment.SettingFragment;
+import lombok.val;
 
 import static jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter.MAX_PAGE_NUM;
 
@@ -40,7 +41,9 @@ public class MainActivity extends AppCompatActivity
 
     private ViewPager viewPager;
     final private Activity activity = this;
-    private String viewMode;
+
+    /** preference data access object */
+    private PreferenceSettingDao preferenceSettingDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +65,11 @@ public class MainActivity extends AppCompatActivity
 
         viewPager = (ViewPager) findViewById(R.id.pager);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        this.viewMode = sharedPreferences.getString(SettingFragment.KEY_START_VIEW, "");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferenceSettingDao = PreferenceSettingDao.builder()
+                .viewMode(preferences.getString(SettingFragment.KEY_START_VIEW, ""))
+                .displayDaySet(preferences.getStringSet(SettingFragment.KEY_DISPLAY_DAY_OF_WEEK, null))
+                .build();
 
         setUpViewPagerAdapter();
         setUpViewPagerListener();
@@ -106,8 +112,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 
@@ -120,12 +124,12 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(activity, SettingActivity.class);
             activity.startActivity(intent);
         } else if( id == R.id.nav_view_daily ) {
-            this.viewMode = "Daily";
+            preferenceSettingDao.setViewMode("Daily");
             setUpViewPagerAdapter();
             setUpNavigationItem();
             viewPager.setCurrentItem(MAX_PAGE_NUM/2);
         } else if( id == R.id.nav_view_weekly ) {
-            this.viewMode = "Weekly";
+            preferenceSettingDao.setViewMode("Weekly");
             setUpViewPagerAdapter();
             setUpNavigationItem();
             viewPager.setCurrentItem(MAX_PAGE_NUM/2);
@@ -167,7 +171,7 @@ public class MainActivity extends AppCompatActivity
         FragmentStatePagerAdapter adapter;
         FragmentManager fm = getSupportFragmentManager();
 
-        adapter = Objects.equals("Weekly", this.viewMode)
+        adapter = Objects.equals("Weekly", preferenceSettingDao.getViewMode())
                 ? new WeeklyFragmentStatePagerAdapter(fm)
                 : new DailyFragmentStatePagerAdapter(fm);
 
@@ -202,12 +206,15 @@ public class MainActivity extends AppCompatActivity
                 final int diff = position - ( MAX_PAGE_NUM / 2 );
                 TextView displayWeek = activity.findViewById(R.id.displayWeek);
 
-                if( Objects.equals("Weekly", viewMode) ){
+                if( Objects.equals("Weekly", preferenceSettingDao.getViewMode()) ){
 
                     calendar.add(Calendar.WEEK_OF_YEAR, diff);
-                    Calendar[] calendars = DateUtil.getWeekRangeOfMonth(calendar.getTime(), Calendar.MONDAY, Calendar.SATURDAY);
 
-                    final String date = sdf.format(calendars[0].getTime()) + " - " + sdf.format(calendars[1].getTime());
+                    final int startDayOfWeek = preferenceSettingDao.getStartDisplayDay();
+                    final int endDayOfWeek = preferenceSettingDao.getEndDisplayDay();
+
+                    val pair = DateUtil.getWeekRange(calendar.getTime(), startDayOfWeek, endDayOfWeek);
+                    final String date = sdf.format(pair.first.getTime()) + " - " + sdf.format(pair.second.getTime());
                     displayWeek.setText(date);
 
                 } else {
@@ -245,7 +252,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
 
-        menu.findItem(R.id.nav_view_daily).setVisible(Objects.equals("Weekly", viewMode));
-        menu.findItem(R.id.nav_view_weekly).setVisible(Objects.equals("Daily", viewMode));
+        menu.findItem(R.id.nav_view_daily).setVisible(Objects.equals("Weekly", preferenceSettingDao.getViewMode()));
+        menu.findItem(R.id.nav_view_weekly).setVisible(Objects.equals("Daily", preferenceSettingDao.getViewMode()));
     }
 }
