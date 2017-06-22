@@ -6,30 +6,53 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import jp.manavista.developbase.R;
 
 /**
+ *
+ * Daily Fragment
+ *
+ * <p>
+ * Overview:<br>
+ *
+ * </p>
+ *
  * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
  */
 public final class DailyFragment extends Fragment {
 
+    public static final String CALENDAR_OFFSET_DAY_PROP = "calendarOffsetDay";
+
+    /** Default Constructor */
     public DailyFragment() {
-        // Required empty public constructor
+        // Every fragment must have an empty constructor.
+        // https://developer.android.com/reference/android/app/Fragment.html#Fragment()
     }
 
     /**
+     *
+     * New Instance
+     *
+     * <p>
+     * Overview:<br>
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     * </p>
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param offset Calendar offset of offset.
      * @return A new instance of fragment DailyFragment.
      */
-    public static DailyFragment newInstance(String param1, String param2) {
+    public static DailyFragment newInstance(int offset) {
         DailyFragment fragment = new DailyFragment();
         Bundle args = new Bundle();
+        args.putInt(CALENDAR_OFFSET_DAY_PROP, offset);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,7 +62,32 @@ public final class DailyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_daily, container, false);
+
+        View rootView = inflater.inflate(R.layout.fragment_daily, container, false);
+        Bundle args = getArguments();
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        final SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, args.getInt(CALENDAR_OFFSET_DAY_PROP));
+
+        TextView dayOfWeek = rootView.findViewById(R.id.dayOfWeek);
+        dayOfWeek.setText(dayOfWeekFormat.format(calendar.getTime()));
+
+        if( container != null ){
+
+            ViewGroup parentGroup = (ViewGroup) container.getParent();
+            for( int i = 0 ; i < parentGroup.getChildCount() ; i++) {
+                View view = parentGroup.getChildAt(i);
+                if( view instanceof RelativeLayout ) {
+                    TextView textView = ((RelativeLayout) view).findViewById(R.id.displayWeek);
+                    textView.setText(dateFormat.format(calendar.getTime()));
+                }
+            }
+        }
+
+        return rootView;
     }
 
 }

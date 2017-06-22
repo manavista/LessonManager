@@ -15,20 +15,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.Objects;
 
 import jp.manavista.developbase.R;
-import jp.manavista.developbase.util.DateUtil;
 import jp.manavista.developbase.view.adapter.DailyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.fragment.SettingFragment;
@@ -170,49 +164,6 @@ public class MainActivity extends AppCompatActivity
                 : new DailyFragmentStatePagerAdapter(fm);
 
         viewPager.setAdapter(adapter);
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                Calendar calendar = Calendar.getInstance();
-                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
-                final int diff = position - ( MAX_PAGE_NUM / 2 );
-                TextView displayWeek = activity.findViewById(R.id.displayWeek);
-
-                if( Objects.equals("Weekly", viewMode) ){
-
-                    calendar.add(Calendar.WEEK_OF_YEAR, diff);
-                    Calendar[] calendars = DateUtil.getWeekRangeOfMonth(calendar.getTime(), Calendar.MONDAY, Calendar.SATURDAY);
-
-                    final String date = sdf.format(calendars[0].getTime()) + " - " + sdf.format(calendars[1].getTime());
-                    displayWeek.setText(date);
-
-                } else {
-                    calendar.add(Calendar.DAY_OF_MONTH, diff);
-                    displayWeek.setText(sdf.format(calendar.getTime()));
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-                switch (state) {
-                    case ViewPager.SCROLL_STATE_IDLE:
-                        break;
-                    case ViewPager.SCROLL_STATE_DRAGGING:
-                        break;
-                    case ViewPager.SCROLL_STATE_SETTLING:
-                        break;
-                }
-            }
-        });
     }
 
     /**
