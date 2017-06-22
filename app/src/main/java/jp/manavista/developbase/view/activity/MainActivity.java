@@ -15,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +27,12 @@ import java.util.Locale;
 import java.util.Objects;
 
 import jp.manavista.developbase.R;
+import jp.manavista.developbase.dto.PreferenceSettingDao;
 import jp.manavista.developbase.util.DateUtil;
 import jp.manavista.developbase.view.adapter.DailyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.fragment.SettingFragment;
+import lombok.val;
 
 import static jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter.MAX_PAGE_NUM;
 
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity
 
     private ViewPager viewPager;
     final private Activity activity = this;
+
+    /** preference data access object */
+    private PreferenceSettingDao preferenceSettingDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +65,15 @@ public class MainActivity extends AppCompatActivity
 
         viewPager = (ViewPager) findViewById(R.id.pager);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String startView = sharedPreferences.getString(SettingFragment.KEY_START_VIEW, "");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferenceSettingDao = PreferenceSettingDao.builder()
+                .viewMode(preferences.getString(SettingFragment.KEY_START_VIEW, ""))
+                .displayDaySet(preferences.getStringSet(SettingFragment.KEY_DISPLAY_DAY_OF_WEEK, null))
+                .build();
 
-        setUpViewPager(startView);
-        setUpNavigationItem(startView);
+        setUpViewPagerAdapter();
+        setUpViewPagerListener();
+        setUpNavigationItem();
 
         Button nextButton = (Button) findViewById(R.id.btnNextWeek);
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +112,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 
@@ -118,12 +124,14 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(activity, SettingActivity.class);
             activity.startActivity(intent);
         } else if( id == R.id.nav_view_daily ) {
-            setUpViewPager("Daily");
-            setUpNavigationItem("Daily");
+            preferenceSettingDao.setViewMode("Daily");
+            setUpViewPagerAdapter();
+            setUpNavigationItem();
             viewPager.setCurrentItem(MAX_PAGE_NUM/2);
         } else if( id == R.id.nav_view_weekly ) {
-            setUpViewPager("Weekly");
-            setUpNavigationItem("Weekly");
+            preferenceSettingDao.setViewMode("Weekly");
+            setUpViewPagerAdapter();
+            setUpNavigationItem();
             viewPager.setCurrentItem(MAX_PAGE_NUM/2);
         }
 
@@ -150,26 +158,38 @@ public class MainActivity extends AppCompatActivity
 
     /**
      *
-     * Setup ViewPager
+     * Setup Viewpager Adapter
      *
      * <p>
      * Overview:<br>
-     * Setup ViewPager adapter, page change listener.<br>
+     * Setup ViewPager page adapter.<br>
      * When change view mode, use this method.
      * </p>
-     *
-     * @param viewMode view mode 'Weekly'|'Daily'
      */
-    private void setUpViewPager(final String viewMode) {
+    private void setUpViewPagerAdapter(){
 
         FragmentStatePagerAdapter adapter;
         FragmentManager fm = getSupportFragmentManager();
 
-        adapter = Objects.equals("Weekly", viewMode)
+        adapter = Objects.equals("Weekly", preferenceSettingDao.getViewMode())
                 ? new WeeklyFragmentStatePagerAdapter(fm)
                 : new DailyFragmentStatePagerAdapter(fm);
 
         viewPager.setAdapter(adapter);
+    }
+
+    /**
+     *
+     * Setup ViewPager Listener
+     *
+     * <p>
+     * Overview:<br>
+     * Setup ViewPager page change listener.<br>
+     * When change view mode, use this method.
+     * </p>
+     *
+     */
+    private void setUpViewPagerListener() {
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -186,12 +206,15 @@ public class MainActivity extends AppCompatActivity
                 final int diff = position - ( MAX_PAGE_NUM / 2 );
                 TextView displayWeek = activity.findViewById(R.id.displayWeek);
 
-                if( Objects.equals("Weekly", viewMode) ){
+                if( Objects.equals("Weekly", preferenceSettingDao.getViewMode()) ){
 
                     calendar.add(Calendar.WEEK_OF_YEAR, diff);
-                    Calendar[] calendars = DateUtil.getWeekRangeOfMonth(calendar.getTime(), Calendar.MONDAY, Calendar.SATURDAY);
 
-                    final String date = sdf.format(calendars[0].getTime()) + " - " + sdf.format(calendars[1].getTime());
+                    final int startDayOfWeek = preferenceSettingDao.getStartDisplayDay();
+                    final int endDayOfWeek = preferenceSettingDao.getEndDisplayDay();
+
+                    val pair = DateUtil.getWeekRange(calendar.getTime(), startDayOfWeek, endDayOfWeek);
+                    final String date = sdf.format(pair.first.getTime()) + " - " + sdf.format(pair.second.getTime());
                     displayWeek.setText(date);
 
                 } else {
@@ -212,8 +235,7 @@ public class MainActivity extends AppCompatActivity
                         break;
                 }
             }
-        });
-    }
+        });    }
 
     /**
      *
@@ -224,15 +246,13 @@ public class MainActivity extends AppCompatActivity
      * Set up navigation menu item.<br>
      * Switch display to Daily and Weekly.
      * </p>
-     *
-     * @param viewMode view mode 'Weekly'|'Daily'
      */
-    private void setUpNavigationItem(final String viewMode) {
+    private void setUpNavigationItem() {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
 
-        menu.findItem(R.id.nav_view_daily).setVisible(Objects.equals("Weekly", viewMode));
-        menu.findItem(R.id.nav_view_weekly).setVisible(Objects.equals("Daily", viewMode));
+        menu.findItem(R.id.nav_view_daily).setVisible(Objects.equals("Weekly", preferenceSettingDao.getViewMode()));
+        menu.findItem(R.id.nav_view_weekly).setVisible(Objects.equals("Daily", preferenceSettingDao.getViewMode()));
     }
 }
