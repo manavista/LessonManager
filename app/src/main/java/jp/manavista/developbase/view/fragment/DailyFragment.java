@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -66,7 +65,6 @@ public final class DailyFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_daily, container, false);
         Bundle args = getArguments();
 
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         final SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
 
         Calendar calendar = Calendar.getInstance();
@@ -74,18 +72,6 @@ public final class DailyFragment extends Fragment {
 
         TextView dayOfWeek = rootView.findViewById(R.id.dayOfWeek);
         dayOfWeek.setText(dayOfWeekFormat.format(calendar.getTime()));
-
-        if( container != null ){
-
-            ViewGroup parentGroup = (ViewGroup) container.getParent();
-            for( int i = 0 ; i < parentGroup.getChildCount() ; i++) {
-                View view = parentGroup.getChildAt(i);
-                if( view instanceof RelativeLayout ) {
-                    TextView textView = ((RelativeLayout) view).findViewById(R.id.displayWeek);
-                    textView.setText(dateFormat.format(calendar.getTime()));
-                }
-            }
-        }
 
         return rootView;
     }

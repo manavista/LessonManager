@@ -3,6 +3,7 @@ package jp.manavista.developbase.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,28 +53,6 @@ public final class WeeklyFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_weekly, container, false);
-        Bundle args = getArguments();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.WEEK_OF_YEAR, args.getInt(CALENDAR_OFFSET_WEEK_PROP));
-
-        Calendar[] calendars = DateUtil.getWeekRangeOfMonth(calendar.getTime(), Calendar.MONDAY, Calendar.SATURDAY);
-
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
-        final String date = sdf.format(calendars[0].getTime()) + " - " + sdf.format(calendars[1].getTime());
-
-        if( container != null ){
-
-            ViewGroup parentGroup = (ViewGroup) container.getParent();
-            for( int i = 0 ; i < parentGroup.getChildCount() ; i++) {
-                View view = parentGroup.getChildAt(i);
-                if( view instanceof RelativeLayout) {
-                    TextView textView = ((RelativeLayout) view).findViewById(R.id.displayWeek);
-                    textView.setText(date);
-                }
-            }
-        }
-        return rootView;
+        return inflater.inflate(R.layout.fragment_weekly, container, false);
     }
 }
