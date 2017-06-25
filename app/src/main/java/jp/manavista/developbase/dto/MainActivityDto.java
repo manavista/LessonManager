@@ -1,5 +1,7 @@
 package jp.manavista.developbase.dto;
 
+import android.support.v4.view.ViewPager;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Collections;
@@ -10,17 +12,26 @@ import lombok.Data;
 
 /**
  *
- * Preference Setting Dao
+ * Main Activity Dto
  *
  * <p>
  * Overview:<br>
- *
+ * Use Main Activity properties and utility methods.
  * </p>
  *
  */
 @Builder
 @Data
-public class PreferenceSettingDao implements Serializable {
+public class MainActivityDto implements Serializable {
+
+    /* view pager */
+
+    /** view pager object */
+    private ViewPager viewPager;
+    /** view pager position */
+    private int viewPosition;
+
+    /* preference */
 
     /** view mode */
     private String viewMode;
@@ -29,7 +40,17 @@ public class PreferenceSettingDao implements Serializable {
     /** start view day of week */
     private int displayStartDay;
 
-
+    /**
+     *
+     * Get start display day
+     *
+     * <p>
+     * Overview:<br>
+     *
+     * </p>
+     *
+     * @return
+     */
     public int getStartDisplayDay() {
 
         if( this.displayDaySet == null || this.displayDaySet.isEmpty() ) {
@@ -40,6 +61,17 @@ public class PreferenceSettingDao implements Serializable {
         return Integer.valueOf(day);
     }
 
+    /**
+     *
+     * Get end display day
+     *
+     * <p>
+     * Overview:<br>
+     *
+     * </p>
+     *
+     * @return
+     */
     public int getEndDisplayDay() {
 
         if( this.displayDaySet == null || this.displayDaySet.isEmpty() ) {
