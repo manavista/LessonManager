@@ -18,4 +18,8 @@
     <color name="lightCyan">#e0ffff</color>
     <color name="gold">#ffd700</color>
     <color name="lightSalmon">#ffa07a</color>
+
+    <color name="dimGray">#696969</color>
+    <color name="gray">#808080</color>
+    <color name="darkGray">#a9a9a9</color>
 </resources>
