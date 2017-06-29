@@ -114,7 +114,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/activity_weekly_row_horizontal_margin"
         android:layout_marginTop="@dimen/activity_weekly_row_horizontal_margin"
-        android:layout_weight="1"
+        android:layout_weight="1.0"
         android:background="@color/lightGray">
 
         <include
@@ -161,7 +161,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/activity_weekly_row_horizontal_margin"
         android:layout_marginTop="@dimen/activity_weekly_row_horizontal_margin"
-        android:layout_weight="1"
+        android:layout_weight="1.0"
         android:background="@color/lightGray">
 
         <include
@@ -203,6 +203,7 @@
 
     </TableRow>
 
+    <!--
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -250,6 +251,6 @@
             android:gravity="center"
             android:text=""/>
     </TableRow>
-
+    -->
 
 </TableLayout>
