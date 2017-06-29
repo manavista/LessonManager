@@ -2,9 +2,13 @@ package jp.manavista.developbase.dto;
 
 import android.support.v4.view.ViewPager;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import lombok.Builder;
@@ -18,7 +22,6 @@ import lombok.Data;
  * Overview:<br>
  * Use Main Activity properties and utility methods.
  * </p>
- *
  */
 @Builder
 @Data
@@ -35,7 +38,7 @@ public class MainActivityDto implements Serializable {
 
     /** view mode */
     private String viewMode;
-    /** display days of week */
+    /** display days of week (SUNDAY:1, ... SATURDAY:7) */
     private Set<String> displayDaySet;
     /** start view day of week */
     private int displayStartDay;
@@ -46,10 +49,11 @@ public class MainActivityDto implements Serializable {
      *
      * <p>
      * Overview:<br>
-     *
+     * Get start day of week code.
      * </p>
      *
-     * @return
+     * @see Calendar calendar static code.
+     * @return start day of week code
      */
     public int getStartDisplayDay() {
 
@@ -67,10 +71,10 @@ public class MainActivityDto implements Serializable {
      *
      * <p>
      * Overview:<br>
-     *
+     * Get end day of week code.
      * </p>
      *
-     * @return
+     * @return end day of week code
      */
     public int getEndDisplayDay() {
 
@@ -82,5 +86,42 @@ public class MainActivityDto implements Serializable {
 
         final String day = Collections.max(this.displayDaySet);
         return Integer.valueOf(day);
+    }
+
+    /**
+     *
+     * Get display days of week array
+     *
+     * <p>
+     * Overview:<br>
+     * Get display days of week in array.<br>
+     * Guarantee the order of the days of the week to display.
+     * </p>
+     *
+     * @return the days of the week in array
+     */
+    public String[] getDisplayDaysOfWeek() {
+
+        if( this.displayStartDay == 0 ) {
+            setDisplayStartDay(Calendar.SUNDAY);
+        }
+
+        List<String> days1 = new ArrayList<>();
+        List<String> days2 = new ArrayList<>();
+
+        for( String day : getDisplayDaySet() ) {
+            if( Integer.valueOf(day) >= this.displayStartDay ) {
+                days1.add(day);
+            } else {
+                days2.add(day);
+            }
+        }
+
+        Collections.sort(days1);
+        Collections.sort(days2);
+
+        days1.addAll(days2);
+
+        return days1.toArray(new String[0]);
     }
 }

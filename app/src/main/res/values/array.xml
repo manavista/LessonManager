@@ -19,6 +19,15 @@
         <item>Fri</item>
         <item>Sat</item>
     </string-array>
+    <string-array name="entries_day_of_week_full_name">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
     <string-array name="entry_values_day_of_week">
         <item>1</item>
         <item>2</item>
