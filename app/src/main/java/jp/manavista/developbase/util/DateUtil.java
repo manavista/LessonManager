@@ -2,10 +2,16 @@ package jp.manavista.developbase.util;
 
 import android.util.Pair;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 public class DateUtil {
+
+    public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
 
     /**
      *
@@ -30,6 +36,15 @@ public class DateUtil {
         final Calendar last = getDayOfWeek(targetDate, firstDayOfWeek, lastDayOfWeek);
 
         return Pair.create(first, last);
+    }
+
+    // TODO: List ? 指定した Calendar のコレクションを返す。
+    public static Set<Calendar> getWeekCalendarSet(Date targetDate, Set<String> displayDaysSet) {
+
+        Set<Calendar> set = new HashSet<>();
+
+
+        return set;
     }
 
     /**

@@ -21,8 +21,10 @@ public class SettingFragment extends PreferenceFragment
 
     /** preference key: start view mode */
     public static final String KEY_START_VIEW = "start_view";
-    /** preference key: start day of week */
+    /** preference key: display day of week */
     public static final String KEY_DISPLAY_DAY_OF_WEEK = "display_day_of_week";
+    /** preference key: start day of week */
+    public static final String KEY_START_DAY_OF_WEEK = "start_day_of_week";
 
     public static SettingFragment newInstance() {
         return new SettingFragment();
@@ -52,10 +54,11 @@ public class SettingFragment extends PreferenceFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
-
-
     }
 
     @Override

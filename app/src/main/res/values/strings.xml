@@ -18,6 +18,8 @@
     <string name="button_previous_label">&lt;</string>
     <string name="button_next_label">&gt;</string>
 
+    <string name="text_image.member">Member</string>
+
     <string name="entry_start_view_default">Weekly</string>
 
 

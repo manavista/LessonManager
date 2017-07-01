@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
 
         setUpViewPagerAdapter();
         setUpViewPagerListener();
-        setUpNavigationItem();
+        updateNavigationItem();
 
         Button nextButton = (Button) findViewById(R.id.btnNextWeek);
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -128,12 +128,12 @@ public class MainActivity extends AppCompatActivity
         } else if( id == R.id.nav_view_daily ) {
             dto.setViewMode("Daily");
             setUpViewPagerAdapter();
-            setUpNavigationItem();
+            updateNavigationItem();
             viewPager.setCurrentItem(MAX_PAGE_NUM/2);
         } else if( id == R.id.nav_view_weekly ) {
             dto.setViewMode("Weekly");
             setUpViewPagerAdapter();
-            setUpNavigationItem();
+            updateNavigationItem();
             viewPager.setCurrentItem(MAX_PAGE_NUM/2);
         }
 
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity
         final int position = dto.getViewPosition();
         viewPager.setCurrentItem(position);
 
-        setUpDisplayWeek(position);
+        updateDisplayWeek(position);
     }
 
     @Override
@@ -192,11 +192,9 @@ public class MainActivity extends AppCompatActivity
      */
     private void setUpViewPagerAdapter(){
 
-        FragmentStatePagerAdapter adapter;
         FragmentManager fm = getSupportFragmentManager();
-
-        adapter = Objects.equals("Weekly", dto.getViewMode())
-                ? new WeeklyFragmentStatePagerAdapter(fm)
+        FragmentStatePagerAdapter adapter = Objects.equals("Weekly", dto.getViewMode())
+                ? new WeeklyFragmentStatePagerAdapter(fm, dto)
                 : new DailyFragmentStatePagerAdapter(fm);
 
         val viewPager = dto.getViewPager();
@@ -226,7 +224,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onPageSelected(int position) {
-                setUpDisplayWeek(position);
+                updateDisplayWeek(position);
             }
 
             @Override
@@ -246,19 +244,19 @@ public class MainActivity extends AppCompatActivity
 
     /**
      *
-     * Setup Display Week
+     * Update Display Week
      *
      * <p>
      * Overview:<br>
-     * set day or between day to day label to screen.
+     * update day or between day to day label to screen.
      * </p>
      *
      * @param position viewPager page position
      */
-    private void setUpDisplayWeek(int position) {
+    private void updateDisplayWeek(int position) {
 
         Calendar calendar = Calendar.getInstance();
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        final SimpleDateFormat sdf = DateUtil.DATE_FORMAT_YYYYMMDD;
         final int diff = position - ( MAX_PAGE_NUM / 2 );
         TextView displayWeek = activity.findViewById(R.id.displayWeek);
 
@@ -281,15 +279,15 @@ public class MainActivity extends AppCompatActivity
 
     /**
      *
-     * Setup Navigation Item
+     * Update Navigation Item
      *
      * <p>
      * Overview:<br>
-     * Set up navigation menu item.<br>
+     * Update navigation menu item.<br>
      * Switch display to Daily and Weekly.
      * </p>
      */
-    private void setUpNavigationItem() {
+    private void updateNavigationItem() {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
