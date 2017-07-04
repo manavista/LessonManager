@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-public class DateUtil {
+public final class DateUtil {
 
     public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
 

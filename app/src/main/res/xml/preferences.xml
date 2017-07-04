@@ -4,12 +4,12 @@
 
     <PreferenceCategory
         android:layout="@layout/preferences_category"
-        android:title="timetable">
+        android:title="@string/menu.weekly_view">
 
         <ListPreference
             android:key="start_view"
             android:title="START VIEW"
-            android:summary="select stating view mode"
+            android:summary="@string/summary.start_view"
             android:entries="@array/entries_start_view"
             android:entryValues="@array/entry_values_start_view"
             android:defaultValue="@string/entry_start_view_default"
@@ -18,10 +18,19 @@
         <MultiSelectListPreference
             android:key="display_day_of_week"
             android:title="DISPLAY DAY OF WEEK"
-            android:summary="multi select display days"
+            android:summary="@string/summary.display_day_of_week"
             android:entries="@array/entries_day_of_week"
             android:entryValues="@array/entry_values_day_of_week"
             android:dialogTitle="select display days"/>
+
+        <ListPreference
+            android:key="@string/key.first_day_of_week"
+            android:title="@string/title.first_day_of_week"
+            android:summary="@string/summary.first_day_of_week"
+            android:entries="@array/entries_day_of_week_full_name"
+            android:entryValues="@array/entry_values_day_of_week"
+            android:dialogTitle="@string/summary.first_day_of_week"
+            android:defaultValue="@string/default.value.first_day_of_week"/>
 
     </PreferenceCategory>
 

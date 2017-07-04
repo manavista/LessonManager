@@ -21,9 +21,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Objects;
 
 import jp.manavista.developbase.R;
@@ -65,9 +66,10 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         dto = MainActivityDto.builder()
                 .viewPager((ViewPager) findViewById(R.id.pager))
-                .viewMode(preferences.getString(SettingFragment.KEY_START_VIEW, ""))
+                .viewMode(preferences.getString(SettingFragment.KEY_START_VIEW, StringUtils.EMPTY))
                 .viewPosition(MAX_PAGE_NUM / 2)
                 .displayDaySet(preferences.getStringSet(SettingFragment.KEY_DISPLAY_DAY_OF_WEEK, null))
+                .displayFirstDay(Integer.valueOf(preferences.getString(SettingFragment.KEY_FIRST_DAY_OF_WEEK, "0")))
                 .build();
 
         setUpViewPagerAdapter();
@@ -158,7 +160,14 @@ public class MainActivity extends AppCompatActivity
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         val daySet = preferences.getStringSet(SettingFragment.KEY_DISPLAY_DAY_OF_WEEK, null);
+        val firstDay = preferences.getString(SettingFragment.KEY_FIRST_DAY_OF_WEEK, String.valueOf(Calendar.SUNDAY));
         dto.setDisplayDaySet(daySet);
+        dto.setDisplayFirstDay(Integer.valueOf(firstDay));
+
+        // Update already created View.
+        // Due to the possibility that the day of the week and the start date have been changed.
+        dto.getViewPager().getAdapter().notifyDataSetChanged();
+
     }
 
     @Override

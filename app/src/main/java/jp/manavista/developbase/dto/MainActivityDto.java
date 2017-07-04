@@ -2,15 +2,15 @@ package jp.manavista.developbase.dto;
 
 import android.support.v4.view.ViewPager;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jp.manavista.developbase.util.CollectionUtil;
 import lombok.Builder;
 import lombok.Data;
 
@@ -40,8 +40,8 @@ public class MainActivityDto implements Serializable {
     private String viewMode;
     /** display days of week (SUNDAY:1, ... SATURDAY:7) */
     private Set<String> displayDaySet;
-    /** start view day of week */
-    private int displayStartDay;
+    /** first day of week  (SUNDAY:1, ... SATURDAY:7) */
+    private int displayFirstDay;
 
     /**
      *
@@ -49,7 +49,7 @@ public class MainActivityDto implements Serializable {
      *
      * <p>
      * Overview:<br>
-     * Get start day of week code.
+     * Get start day of week code in display day set.
      * </p>
      *
      * @see Calendar calendar static code.
@@ -57,12 +57,20 @@ public class MainActivityDto implements Serializable {
      */
     public int getStartDisplayDay() {
 
-        if( this.displayDaySet == null || this.displayDaySet.isEmpty() ) {
-            return this.displayStartDay;
+        if( this.displayFirstDay == 0 ) {
+            this.displayFirstDay = Calendar.SUNDAY;
         }
 
-        final String day = Collections.min(this.displayDaySet);
-        return Integer.valueOf(day);
+        if( this.displayDaySet == null || this.displayDaySet.isEmpty() ) {
+            return this.displayFirstDay;
+        }
+
+        Set<Integer> set = new HashSet<>();
+        for( String val : this.getDisplayDaySet() ) {
+            set.add(Integer.valueOf(val));
+        }
+
+        return CollectionUtil.minRatherThanEqual(set, this.displayFirstDay);
     }
 
     /**
@@ -79,13 +87,19 @@ public class MainActivityDto implements Serializable {
     public int getEndDisplayDay() {
 
         if( this.displayDaySet == null || this.displayDaySet.isEmpty() ) {
-            return this.displayStartDay == Calendar.SUNDAY
+            return this.displayFirstDay == Calendar.SUNDAY
                     ? Calendar.SATURDAY
-                    : this.displayStartDay - 1;
+                    : this.displayFirstDay - 1;
         }
 
-        final String day = Collections.max(this.displayDaySet);
-        return Integer.valueOf(day);
+        Set<Integer> set = new HashSet<>();
+        for( String val : this.getDisplayDaySet() ) {
+            set.add(Integer.valueOf(val));
+        }
+
+        return this.displayFirstDay == Calendar.SUNDAY
+                ? CollectionUtil.maxLessThanEqual(set, Calendar.SATURDAY)
+                : CollectionUtil.maxLessThan(set, this.displayFirstDay);
     }
 
     /**
@@ -102,15 +116,15 @@ public class MainActivityDto implements Serializable {
      */
     public String[] getDisplayDaysOfWeek() {
 
-        if( this.displayStartDay == 0 ) {
-            setDisplayStartDay(Calendar.SUNDAY);
+        if( this.displayFirstDay == 0 ) {
+            setDisplayFirstDay(Calendar.SUNDAY);
         }
 
         List<String> days1 = new ArrayList<>();
         List<String> days2 = new ArrayList<>();
 
         for( String day : getDisplayDaySet() ) {
-            if( Integer.valueOf(day) >= this.displayStartDay ) {
+            if( Integer.valueOf(day) >= this.displayFirstDay) {
                 days1.add(day);
             } else {
                 days2.add(day);
