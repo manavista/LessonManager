@@ -1,6 +1,7 @@
 package jp.manavista.developbase;
 
 import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +12,18 @@ import java.util.Calendar;
 import jp.manavista.developbase.entity.OrmaDatabase;
 import jp.manavista.developbase.entity.Timetable;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DB_NAME = "main.db";
 
     private OrmaDatabase database;
+
+
+    @Inject
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,5 +72,10 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "row start time: " + row.startTime);
             Log.d(TAG, "row end time: " + row.endTime);
         }
+        ((ThisApplication) getApplication()).getAppComponent().inject(this);
+
+        String val = preferences.getString("start_view","null");
+
+        Log.d("preference", val);
     }
 }
