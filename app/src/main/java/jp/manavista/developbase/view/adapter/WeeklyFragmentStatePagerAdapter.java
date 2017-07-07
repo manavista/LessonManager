@@ -7,10 +7,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import jp.manavista.developbase.dto.MainActivityDto;
 import jp.manavista.developbase.view.fragment.WeeklyFragment;
@@ -67,7 +65,7 @@ public class WeeklyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
         Calendar cal = Calendar.getInstance(Locale.getDefault());
         cal.setTime(target.getTime());
 
-        final int index = dto.getDisplayStartDay() < 1 ? 0 : dto.getDisplayStartDay() - 1;
+        final int index = dto.getDisplayFirstDay() < 1 ? 0 : dto.getDisplayFirstDay() - 1;
         cal.setFirstDayOfWeek(calendarDay[index]);
 
         SimpleDateFormat format = new SimpleDateFormat("dd",Locale.getDefault());
@@ -80,5 +78,10 @@ public class WeeklyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
         }
 
         return dayList.toArray(new String[0]);
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 }

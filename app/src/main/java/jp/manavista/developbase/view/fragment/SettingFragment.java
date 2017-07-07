@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.TreeSet;
 
 import jp.manavista.developbase.R;
@@ -23,8 +25,8 @@ public class SettingFragment extends PreferenceFragment
     public static final String KEY_START_VIEW = "start_view";
     /** preference key: display day of week */
     public static final String KEY_DISPLAY_DAY_OF_WEEK = "display_day_of_week";
-    /** preference key: start day of week */
-    public static final String KEY_START_DAY_OF_WEEK = "start_day_of_week";
+    /** preference key: first day of week */
+    public static final String KEY_FIRST_DAY_OF_WEEK = "first_day_of_week";
 
     public static SettingFragment newInstance() {
         return new SettingFragment();
@@ -89,7 +91,8 @@ public class SettingFragment extends PreferenceFragment
      *
      * <p>
      * Overview:<br>
-     *
+     * Update all summary string.<br>
+     * Dynamically change when setting is start or update.
      * </p>
      */
     private void updateSummary() {
@@ -102,7 +105,7 @@ public class SettingFragment extends PreferenceFragment
             if (item instanceof ListPreference) {
 
                 ListPreference preference = (ListPreference) item;
-                preference.setSummary(preference.getEntry() == null ? "" : preference.getEntry());
+                preference.setSummary(preference.getEntry() == null ? StringUtils.EMPTY : preference.getEntry());
 
             } else if (item instanceof MultiSelectListPreference) {
 
@@ -117,7 +120,8 @@ public class SettingFragment extends PreferenceFragment
                     sb.append(entries[Integer.valueOf(value) - 1]);
                 }
 
-                preference.setSummary(preference.getValues().size() == 0 ? "no data" : sb.toString());
+                final String noData = getResources().getString(R.string.summary_no_data);
+                preference.setSummary(preference.getValues().size() == 0 ? noData : sb.toString());
             }
         }
     }

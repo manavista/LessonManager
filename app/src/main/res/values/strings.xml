@@ -20,7 +20,19 @@
 
     <string name="text_image.member">Member</string>
 
-    <string name="entry_start_view_default">Weekly</string>
 
+    <!-- preference -->
+
+    <string name="entry_start_view_default">Weekly</string>
+    <string name="entry_first_day_of_week_default">Weekly</string>
+
+    <string name="summary.start_view">Select week and day display</string>
+    <string name="summary.display_day_of_week">Select the day of the week to display</string>
+
+    <string name="key.first_day_of_week">first_day_of_week</string>
+    <string name="title.first_day_of_week">FIRST DAY OF WEEK</string>
+    <string name="summary.first_day_of_week">Select the first day of the week</string>
+    <string name="default.value.first_day_of_week">1</string>
+    <string name="summary.no_data">No data</string>
 
 </resources>
