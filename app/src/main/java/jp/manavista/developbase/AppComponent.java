@@ -3,7 +3,9 @@ package jp.manavista.developbase;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import jp.manavista.developbase.module.AppModule;
 import jp.manavista.developbase.module.RepositoryModule;
+import jp.manavista.developbase.module.ServiceModule;
 
 /**
  * <p>
@@ -11,9 +13,8 @@ import jp.manavista.developbase.module.RepositoryModule;
  * </p>
  */
 @Singleton
-@Component(modules = {AppModule.class, RepositoryModule.class})
+@Component(modules = {AppModule.class, ServiceModule.class, RepositoryModule.class})
 public interface AppComponent {
-
 
     /*
      * TODO: inject argument

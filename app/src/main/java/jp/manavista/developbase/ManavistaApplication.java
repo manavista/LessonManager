@@ -2,7 +2,7 @@ package jp.manavista.developbase;
 
 import android.app.Application;
 
-import jp.manavista.developbase.module.RepositoryModule;
+import jp.manavista.developbase.module.AppModule;
 
 /**
  * <p>
@@ -10,7 +10,7 @@ import jp.manavista.developbase.module.RepositoryModule;
  * </p>
  */
 
-public class ThisApplication extends Application {
+public class ManavistaApplication extends Application {
 
     private AppComponent appComponent;
 

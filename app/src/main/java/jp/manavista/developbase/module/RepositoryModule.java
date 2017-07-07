@@ -4,11 +4,15 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.github.gfx.android.orma.AccessThreadConstraint;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import jp.manavista.developbase.entity.OrmaDatabase;
+import jp.manavista.developbase.repository.TimeTableRepository;
+import jp.manavista.developbase.repository.impl.TimetableRepositoryImpl;
 
 /**
  * <p>
@@ -31,6 +35,14 @@ public class RepositoryModule {
     OrmaDatabase provideOrmaDatabase(Application application) {
         return OrmaDatabase.builder(application)
                 .name(DB_NAME)
+                .readOnMainThread(AccessThreadConstraint.NONE)
+                .writeOnMainThread(AccessThreadConstraint.NONE)
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    TimeTableRepository provideTimetableRepository(OrmaDatabase database) {
+        return new TimetableRepositoryImpl(database);
     }
 }
