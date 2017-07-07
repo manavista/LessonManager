@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,12 +24,18 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import jp.manavista.developbase.ManavistaApplication;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.dto.MainActivityDto;
+import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.util.DateUtil;
 import jp.manavista.developbase.view.adapter.DailyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter;
@@ -40,7 +47,14 @@ import static jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdap
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     final private Activity activity = this;
+
+    @Inject
+    SharedPreferences preferences;
+    @Inject
+    TimetableService timetableService;
 
     /** preference data access object */
     private MainActivityDto dto;
@@ -50,6 +64,8 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ((ManavistaApplication) getApplication()).getAppComponent().inject(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,6 +78,28 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        Calendar cal = Calendar.getInstance();
+        Timetable timetable = new Timetable();
+        timetable.lessonNo = 1;
+        timetable.startTime = new Time(cal.getTimeInMillis());
+        timetable.endTime = new Time(cal.getTimeInMillis());
+
+//        timetableService.save(timetable);
+
+        String val = preferences.getString("start_view","null");
+
+        Log.d("preference", val);
+
+        for( Timetable row : timetableService.getTimetablesAll() ) {
+            Log.d(TAG, "row id: " + row.id);
+            Log.d(TAG, "row lessonNo: " + row.lessonNo);
+            Log.d(TAG, "row start time: " + row.startTime);
+            Log.d(TAG, "row end time: " + row.endTime);
+        }
+
+
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         dto = MainActivityDto.builder()
