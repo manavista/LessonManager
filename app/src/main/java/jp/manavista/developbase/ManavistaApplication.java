@@ -2,6 +2,7 @@ package jp.manavista.developbase;
 
 import android.app.Application;
 
+import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.module.AppModule;
 
 /**
@@ -12,24 +13,22 @@ import jp.manavista.developbase.module.AppModule;
 
 public class ManavistaApplication extends Application {
 
-    private AppComponent appComponent;
+//    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
+//        appComponent = DaggerAppComponent.builder()
+//                .appModule(new AppModule(this))
+//                .build();
 
-                /*
-                 * It is not necessary to describe
-                 * when Module is a constructor without arguments.
-                 */
-//                .repositoryModule(new RepositoryModule())
-                .build();
+        DependencyInjector.init(this);
+        DependencyInjector.appComponent().inject(this);
+
     }
 
-    public AppComponent getAppComponent() {
-        return appComponent;
-    }
+//    public AppComponent getAppComponent() {
+//        return appComponent;
+//    }
 }

@@ -35,6 +35,7 @@ import jp.manavista.developbase.ManavistaApplication;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.dto.MainActivityDto;
 import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.util.DateUtil;
 import jp.manavista.developbase.view.adapter.DailyFragmentStatePagerAdapter;
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ((ManavistaApplication) getApplication()).getAppComponent().inject(this);
+//        ((ManavistaApplication) getApplication()).getAppComponent().inject(this);
+        DependencyInjector.appComponent().inject(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

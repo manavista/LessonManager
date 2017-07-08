@@ -21,11 +21,10 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
 
-import jp.manavista.developbase.ManavistaApplication;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
-import jp.manavista.developbase.view.activity.MainActivity;
 
 /**
  *
@@ -44,7 +43,8 @@ public final class WeeklyFragment extends Fragment {
     public static final String DISPLAY_DAYS_PROP = "displayDays";
     public static final String DISPLAY_DAYS_OF_WEEK_PROP = "displayDaysOfWeek";
 
-//    TimetableService timetableService;
+    @Inject
+    TimetableService timetableService;
 
     /** Default Constructor */
     public WeeklyFragment() {
@@ -79,6 +79,15 @@ public final class WeeklyFragment extends Fragment {
         return weeklyFragment;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Log.d(TAG, "This is activity created");
+
+//        DependencyInjector.appComponent().inject(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView (
@@ -88,6 +97,8 @@ public final class WeeklyFragment extends Fragment {
     {
         View rootView = inflater.inflate(R.layout.fragment_weekly, container, false);
         Bundle args = getArguments();
+
+        DependencyInjector.appComponent().inject(this);
 
         String[] displayDays = args.getStringArray(DISPLAY_DAYS_PROP);
         String[] displayDaysOfWeek = args.getStringArray(DISPLAY_DAYS_OF_WEEK_PROP);
@@ -190,11 +201,10 @@ public final class WeeklyFragment extends Fragment {
 
         // TODO: First, create timetable structure.
 
-
-//        for( Timetable row : timetableService.getTimetablesAll() ) {
-//            Log.d(TAG, "row id: " + row.id + " lessonNo: " +
-//                    row.lessonNo + " start time: " + row.startTime + " end time: " + row.endTime);
-//        }
+        for( Timetable row : timetableService.getTimetablesAll() ) {
+            Log.d(TAG, "row id: " + row.id + " lessonNo: " +
+                    row.lessonNo + " start time: " + row.startTime + " end time: " + row.endTime);
+        }
 
 
         TableRow row = new TableRow(context);
