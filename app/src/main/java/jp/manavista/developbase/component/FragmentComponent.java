@@ -1,5 +1,6 @@
 package jp.manavista.developbase.component;
 
+import jp.manavista.developbase.view.fragment.BaseFragment;
 import jp.manavista.developbase.view.fragment.WeeklyFragment;
 
 /**
@@ -9,5 +10,6 @@ import jp.manavista.developbase.view.fragment.WeeklyFragment;
  */
 
 public interface FragmentComponent {
+    void inject(BaseFragment baseFragment);
     void inject(WeeklyFragment weeklyFragment);
 }
