@@ -2,6 +2,7 @@ package jp.manavista.developbase.repository.impl;
 
 import jp.manavista.developbase.entity.OrmaDatabase;
 import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.entity.Timetable_Deleter;
 import jp.manavista.developbase.entity.Timetable_Relation;
 import jp.manavista.developbase.entity.Timetable_Selector;
 import jp.manavista.developbase.repository.TimeTableRepository;
@@ -21,6 +22,16 @@ public class TimetableRepositoryImpl extends RepositoryBaseImpl implements TimeT
     @Override
     public Timetable_Selector getAll() {
         return database.selectFromTimetable();
+    }
+
+    @Override
+    public Timetable_Relation getRelation() {
+        return database.relationOfTimetable();
+    }
+
+    @Override
+    public Timetable_Deleter getDeleter() {
+        return database.deleteFromTimetable();
     }
 
     @Override

@@ -27,10 +27,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.ManavistaApplication;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.dto.MainActivityDto;
@@ -96,12 +98,17 @@ public class MainActivity extends AppCompatActivity
 //        timetableService.deleteAll();
 //        timetableService.save(timetable);
 
-        for( Timetable row : timetableService.getTimetablesAll() ) {
-            Log.d(TAG, "row id: " + row.id);
-            Log.d(TAG, "row lessonNo: " + row.lessonNo);
-            Log.d(TAG, "row start time: " + row.startTime);
-            Log.d(TAG, "row end time: " + row.endTime);
-        }
+        timetableService.getListAll().subscribe(new Consumer<List<Timetable>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull List<Timetable> timetables) throws Exception {
+                for( Timetable row : timetables ) {
+                    Log.d(TAG, "row id: " + row.id);
+                    Log.d(TAG, "row lessonNo: " + row.lessonNo);
+                    Log.d(TAG, "row start time: " + row.startTime);
+                    Log.d(TAG, "row end time: " + row.endTime);
+                }
+            }
+        });
 
 
         dto = MainActivityDto.builder()

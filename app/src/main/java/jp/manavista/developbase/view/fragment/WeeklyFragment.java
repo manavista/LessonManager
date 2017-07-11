@@ -20,8 +20,12 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.injector.DependencyInjector;
@@ -200,68 +204,74 @@ public final class WeeklyFragment extends Fragment {
         return tableRow;
     }
 
-    private void buildContents(TableLayout layout, Context context, String[] displayDays) {
+    private void buildContents(final TableLayout layout, final Context context, final String[] displayDays) {
 
-        for( Timetable timetable : timetableService.getTimetablesAll() ) {
+        timetableService.getListAll().subscribe(new Consumer<List<Timetable>>() {
+            @Override
+            public void accept(@NonNull List<Timetable> timetables) throws Exception {
 
-            Log.d(TAG, "row id: " + timetable.id + " lessonNo: " +
-                    timetable.lessonNo + " start: " + timetable.startTime + " end: " + timetable.endTime);
+            for( Timetable timetable : timetables ) {
 
-            TableRow row = new TableRow(context);
-            TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-            row.setBackgroundResource(R.color.lightGray);
+                Log.d(TAG, "row id: " + timetable.id + " lessonNo: " +
+                        timetable.lessonNo + " start: " + timetable.startTime + " end: " + timetable.endTime);
 
-            // add row to timetable
+                TableRow row = new TableRow(context);
+                TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(
+                        TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+                row.setBackgroundResource(R.color.lightGray);
 
-            RelativeLayout timetableLayout = new RelativeLayout(context);
-            timetableLayout.setLayoutParams(tableRowParams);
+                // add row to timetable
 
-            final int margin4dp = getResources().getDimensionPixelSize(R.dimen.margin_4dp);
+                RelativeLayout timetableLayout = new RelativeLayout(context);
+                timetableLayout.setLayoutParams(tableRowParams);
 
-            TextView begin = new TextView(context);
-            begin.setPadding(0, margin4dp, 0, 0);
+                final int margin4dp = getResources().getDimensionPixelSize(R.dimen.margin_4dp);
 
-            begin.setText(DateUtil.TIME_FORMAT_HHMM.format(timetable.startTime));
-            timetableLayout.addView(begin);
+                TextView begin = new TextView(context);
+                begin.setPadding(0, margin4dp, 0, 0);
 
-            TextView lessonNo = new TextView(context);
-            RelativeLayout.LayoutParams lessonNoParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lessonNoParams.addRule(RelativeLayout.CENTER_HORIZONTAL, lessonNo.getId());
-            lessonNoParams.addRule(RelativeLayout.CENTER_VERTICAL, lessonNo.getId());
-            lessonNo.setLayoutParams(lessonNoParams);
-            lessonNo.setText(String.valueOf(timetable.lessonNo));
-            lessonNo.setTextColor(ContextCompat.getColor(context, R.color.firebrick));
-            lessonNo.setTypeface(lessonNo.getTypeface(), Typeface.BOLD);
-            timetableLayout.addView(lessonNo);
+                begin.setText(DateUtil.TIME_FORMAT_HHMM.format(timetable.startTime));
+                timetableLayout.addView(begin);
 
-            TextView end = new TextView(context);
-            RelativeLayout.LayoutParams endParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            endParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, end.getId());
-            endParams.addRule(RelativeLayout.ALIGN_PARENT_START, end.getId());
+                TextView lessonNo = new TextView(context);
+                RelativeLayout.LayoutParams lessonNoParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                lessonNoParams.addRule(RelativeLayout.CENTER_HORIZONTAL, lessonNo.getId());
+                lessonNoParams.addRule(RelativeLayout.CENTER_VERTICAL, lessonNo.getId());
+                lessonNo.setLayoutParams(lessonNoParams);
+                lessonNo.setText(String.valueOf(timetable.lessonNo));
+                lessonNo.setTextColor(ContextCompat.getColor(context, R.color.firebrick));
+                lessonNo.setTypeface(lessonNo.getTypeface(), Typeface.BOLD);
+                timetableLayout.addView(lessonNo);
 
-            end.setPadding(0, 0, 0, margin4dp);
-            end.setText(DateUtil.TIME_FORMAT_HHMM.format(timetable.endTime));
-            end.setLayoutParams(endParams);
-            timetableLayout.addView(end);
+                TextView end = new TextView(context);
+                RelativeLayout.LayoutParams endParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                endParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, end.getId());
+                endParams.addRule(RelativeLayout.ALIGN_PARENT_START, end.getId());
 
-            row.addView(timetableLayout);
+                end.setPadding(0, 0, 0, margin4dp);
+                end.setText(DateUtil.TIME_FORMAT_HHMM.format(timetable.endTime));
+                end.setLayoutParams(endParams);
+                timetableLayout.addView(end);
 
-            // add row to lesson data (loop)
-            buildContentsLesson(row, context, displayDays);
+                row.addView(timetableLayout);
 
-            // add row to null value
-            TextView nullDay = new TextView(context);
-            row.addView(nullDay);
+                // add row to lesson data (loop)
+                buildContentsLesson(row, context, displayDays);
 
-            TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT, 1.0f);
-            tableLayoutParams.setMargins(0, margin4dp, 0, margin4dp);
+                // add row to null value
+                TextView nullDay = new TextView(context);
+                row.addView(nullDay);
 
-            layout.addView(row, tableLayoutParams);
-        }
+                TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams(
+                        TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT, 1.0f);
+                tableLayoutParams.setMargins(0, margin4dp, 0, margin4dp);
+
+                layout.addView(row, tableLayoutParams);
+            }
+            }
+        });
     }
 
     private void buildContentsLesson(TableRow row, Context context, String[] displayDays) {
