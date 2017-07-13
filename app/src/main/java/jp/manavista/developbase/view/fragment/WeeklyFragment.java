@@ -20,11 +20,11 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.entity.Timetable;
@@ -52,7 +52,10 @@ public final class WeeklyFragment extends Fragment {
     @Inject
     TimetableService timetableService;
 
+    /** RootView object */
     private View rootView;
+    /** Timetable list disposable */
+    private Disposable timetableDisposable = Disposables.empty();
 
     /** Default Constructor */
     public WeeklyFragment() {
@@ -204,13 +207,25 @@ public final class WeeklyFragment extends Fragment {
         return tableRow;
     }
 
+    /**
+     *
+     * Build Contents
+     *
+     * <p>
+     * Overview:<br>
+     * Generate screen content that is the center of Weekly fragment.<br>
+     * Asynchronously retrieve data from the database.
+     * </p>
+     *
+     * @param layout table layout
+     * @param context context
+     * @param displayDays display days code array
+     */
     private void buildContents(final TableLayout layout, final Context context, final String[] displayDays) {
 
-        timetableService.getListAll().subscribe(new Consumer<List<Timetable>>() {
+        timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
             @Override
-            public void accept(@NonNull List<Timetable> timetables) throws Exception {
-
-            for( Timetable timetable : timetables ) {
+            public void accept(@NonNull Timetable timetable) throws Exception {
 
                 Log.d(TAG, "row id: " + timetable.id + " lessonNo: " +
                         timetable.lessonNo + " start: " + timetable.startTime + " end: " + timetable.endTime);
@@ -269,11 +284,24 @@ public final class WeeklyFragment extends Fragment {
                 tableLayoutParams.setMargins(0, margin4dp, 0, margin4dp);
 
                 layout.addView(row, tableLayoutParams);
-            }
+
             }
         });
     }
 
+    /**
+     *
+     * Build Contents Lesson Data
+     *
+     * <p>
+     * Overview:<br>
+     * Generate screen content that is the lesson description.<br>
+     * </p>
+     *
+     * @param row lesson table row
+     * @param context context
+     * @param displayDays display days code array
+     */
     private void buildContentsLesson(TableRow row, Context context, String[] displayDays) {
 
         final int margin4dp = getResources().getDimensionPixelSize(R.dimen.margin_4dp);
@@ -313,6 +341,12 @@ public final class WeeklyFragment extends Fragment {
 
             row.addView(lessonLayout);
         }
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        timetableDisposable.dispose();
     }
 }

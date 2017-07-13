@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        ((ManavistaApplication) getApplication()).getAppComponent().inject(this);
         DependencyInjector.appComponent().inject(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -98,17 +97,17 @@ public class MainActivity extends AppCompatActivity
 //        timetableService.deleteAll();
 //        timetableService.save(timetable);
 
-        timetableService.getListAll().subscribe(new Consumer<List<Timetable>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull List<Timetable> timetables) throws Exception {
-                for( Timetable row : timetables ) {
-                    Log.d(TAG, "row id: " + row.id);
-                    Log.d(TAG, "row lessonNo: " + row.lessonNo);
-                    Log.d(TAG, "row start time: " + row.startTime);
-                    Log.d(TAG, "row end time: " + row.endTime);
-                }
-            }
-        });
+//        timetableService.getListAll().subscribe(new Consumer<List<Timetable>>() {
+//            @Override
+//            public void accept(@io.reactivex.annotations.NonNull List<Timetable> timetables) throws Exception {
+//                for( Timetable row : timetables ) {
+//                    Log.d(TAG, "row id: " + row.id);
+//                    Log.d(TAG, "row lessonNo: " + row.lessonNo);
+//                    Log.d(TAG, "row start time: " + row.startTime);
+//                    Log.d(TAG, "row end time: " + row.endTime);
+//                }
+//            }
+//        });
 
 
         dto = MainActivityDto.builder()

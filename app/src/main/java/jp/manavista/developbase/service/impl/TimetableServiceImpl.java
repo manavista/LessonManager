@@ -1,17 +1,17 @@
 package jp.manavista.developbase.service.impl;
 
-import java.util.List;
-
-import io.reactivex.Single;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import jp.manavista.developbase.entity.Timetable;
-import jp.manavista.developbase.entity.Timetable_Selector;
 import jp.manavista.developbase.repository.TimeTableRepository;
 import jp.manavista.developbase.service.TimetableService;
 
 /**
+ *
+ * Timetable Service Implements
+ *
  * <p>
  * Overview:<br>
  * </p>
@@ -27,20 +27,27 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
-    public Single<List<Timetable>> getListAll() {
+    public Observable<Timetable> getListAll() {
         return repository.getAll()
                 .executeAsObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .toList();
+                .subscribeOn(Schedulers.io());
     }
+//    @Override
+//    public Single<List<Timetable>> getListAll() {
+//        return repository.getAll()
+//                .executeAsObservable()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .toList();
+//    }
 
     @Override
     public Disposable save(final Timetable timetable) {
         return repository.getRelation()
                 .upsertAsSingle(timetable)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe();
     }
 
@@ -49,7 +56,7 @@ public class TimetableServiceImpl implements TimetableService {
         repository.getDeleter()
                 .executeAsSingle()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe();
     }
 }
