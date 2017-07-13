@@ -97,9 +97,9 @@ public class MainActivityDto implements Serializable {
             set.add(Integer.valueOf(val));
         }
 
-        return this.displayFirstDay == Calendar.SUNDAY
-                ? CollectionUtil.maxLessThanEqual(set, Calendar.SATURDAY)
-                : CollectionUtil.maxLessThan(set, this.displayFirstDay);
+        return CollectionUtil.containsLessThan(set, this.displayFirstDay)
+                ? CollectionUtil.maxLessThan(set, this.displayFirstDay)
+                : CollectionUtil.maxLessThanEqual(set, Calendar.SATURDAY);
     }
 
     /**

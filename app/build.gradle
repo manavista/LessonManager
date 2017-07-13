@@ -38,6 +38,7 @@ dependencies {
     provided 'javax.annotation:jsr250-api:1.0'
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
     compile 'com.github.gfx.android.orma:orma:4.2.5'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.1'
     testCompile 'junit:junit:4.12'
     provided 'org.projectlombok:lombok:1.16.16'
 }

@@ -35,8 +35,6 @@ public class RepositoryModule {
     OrmaDatabase provideOrmaDatabase(Application application) {
         return OrmaDatabase.builder(application)
                 .name(DB_NAME)
-                .readOnMainThread(AccessThreadConstraint.NONE)
-                .writeOnMainThread(AccessThreadConstraint.NONE)
                 .build();
     }
 

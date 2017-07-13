@@ -49,6 +49,29 @@ public final class CollectionUtil {
 
     /**
      *
+     * Contain a value smaller than the value
+     *
+     * <p>
+     * Overview:<br>
+     * Determination of a value smaller than the target value.
+     * </p>
+     *
+     * @param set target value set
+     * @param target target value
+     * @return contains result
+     */
+    public static boolean containsLessThan(Set<Integer> set, int target) {
+
+        for ( int val : set ) {
+            if( val < target ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
      * Get a min value
      *
      * <p>

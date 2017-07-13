@@ -27,14 +27,17 @@ import org.apache.commons.lang3.StringUtils;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.ManavistaApplication;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.dto.MainActivityDto;
 import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.util.DateUtil;
 import jp.manavista.developbase.view.adapter.DailyFragmentStatePagerAdapter;
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ((ManavistaApplication) getApplication()).getAppComponent().inject(this);
+        DependencyInjector.appComponent().inject(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,28 +83,33 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        Calendar cal = Calendar.getInstance();
-        Timetable timetable = new Timetable();
-        timetable.lessonNo = 1;
-        timetable.startTime = new Time(cal.getTimeInMillis());
-        timetable.endTime = new Time(cal.getTimeInMillis());
 
+        Calendar cal1 = Calendar.getInstance();
+        cal1.set(2017,7,1,20,0,0);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.set(2017,7,1,21,20,0);
+
+        Timetable timetable = new Timetable();
+        timetable.lessonNo = 3;
+        timetable.startTime = new Time(cal1.getTimeInMillis());
+        timetable.endTime = new Time(cal2.getTimeInMillis());
+
+//        timetableService.deleteAll();
 //        timetableService.save(timetable);
 
-        String val = preferences.getString("start_view","null");
+//        timetableService.getListAll().subscribe(new Consumer<List<Timetable>>() {
+//            @Override
+//            public void accept(@io.reactivex.annotations.NonNull List<Timetable> timetables) throws Exception {
+//                for( Timetable row : timetables ) {
+//                    Log.d(TAG, "row id: " + row.id);
+//                    Log.d(TAG, "row lessonNo: " + row.lessonNo);
+//                    Log.d(TAG, "row start time: " + row.startTime);
+//                    Log.d(TAG, "row end time: " + row.endTime);
+//                }
+//            }
+//        });
 
-        Log.d("preference", val);
 
-        for( Timetable row : timetableService.getTimetablesAll() ) {
-            Log.d(TAG, "row id: " + row.id);
-            Log.d(TAG, "row lessonNo: " + row.lessonNo);
-            Log.d(TAG, "row start time: " + row.startTime);
-            Log.d(TAG, "row end time: " + row.endTime);
-        }
-
-
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         dto = MainActivityDto.builder()
                 .viewPager((ViewPager) findViewById(R.id.pager))
                 .viewMode(preferences.getString(SettingFragment.KEY_START_VIEW, StringUtils.EMPTY))
@@ -196,7 +204,6 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         val daySet = preferences.getStringSet(SettingFragment.KEY_DISPLAY_DAY_OF_WEEK, null);
         val firstDay = preferences.getString(SettingFragment.KEY_FIRST_DAY_OF_WEEK, String.valueOf(Calendar.SUNDAY));
         dto.setDisplayDaySet(daySet);
