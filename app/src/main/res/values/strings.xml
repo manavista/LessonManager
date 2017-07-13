@@ -35,7 +35,8 @@
     <string name="default.value.first_day_of_week">1</string>
     <string name="summary.no_data">No data</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Timetable -->
+    <string name="toolbar.title">Timetable</string>
+    <string name="toolbar.option.add">add</string>
 
 </resources>

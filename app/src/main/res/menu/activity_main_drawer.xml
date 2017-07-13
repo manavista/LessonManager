@@ -32,7 +32,7 @@
                 android:title="@string/menu.lesson"/>
             <item
                 android:id="@+id/nav_timetable"
-                android:icon="@drawable/ic_menu_slideshow"
+                android:icon="@drawable/ic_event_black_black"
                 android:title="@string/menu.timetable"/>
             <item
                 android:id="@+id/nav_private"
