@@ -96,18 +96,15 @@ public class MainActivity extends AppCompatActivity
 
 //        timetableService.deleteAll();
 //        timetableService.save(timetable);
+//        timetableService.deleteById(14).subscribe();
 
-//        timetableService.getListAll().subscribe(new Consumer<List<Timetable>>() {
-//            @Override
-//            public void accept(@io.reactivex.annotations.NonNull List<Timetable> timetables) throws Exception {
-//                for( Timetable row : timetables ) {
-//                    Log.d(TAG, "row id: " + row.id);
-//                    Log.d(TAG, "row lessonNo: " + row.lessonNo);
-//                    Log.d(TAG, "row start time: " + row.startTime);
-//                    Log.d(TAG, "row end time: " + row.endTime);
-//                }
-//            }
-//        });
+        timetableService.getListAll().subscribe(new Consumer<Timetable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Timetable timetable) throws Exception {
+                Log.d(TAG, "row id: " + timetable.id + " lessonNo: " +
+                        timetable.lessonNo + " start: " + timetable.startTime + " end: " + timetable.endTime);
+            }
+        });
 
 
         dto = MainActivityDto.builder()
@@ -167,11 +164,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        int id = item.getItemId();
+        final int id = item.getItemId();
         val viewPager = dto.getViewPager();
 
         if ( id == R.id.nav_settings ) {
             Intent intent = new Intent(activity, SettingActivity.class);
+            activity.startActivity(intent);
+        } else if( id == R.id.nav_timetable ) {
+            Intent intent = new Intent(activity, TimetableActivity.class);
             activity.startActivity(intent);
         } else if( id == R.id.nav_view_daily ) {
             dto.setViewMode("Daily");

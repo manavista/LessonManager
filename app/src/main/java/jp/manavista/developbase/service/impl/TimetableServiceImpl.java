@@ -1,6 +1,7 @@
 package jp.manavista.developbase.service.impl;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -49,6 +50,15 @@ public class TimetableServiceImpl implements TimetableService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe();
+    }
+
+    @Override
+    public Single<Integer> deleteById(int id) {
+        return repository.getDeleter()
+                .idEq(id)
+                .executeAsSingle()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
     }
 
     @Override

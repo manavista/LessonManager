@@ -34,7 +34,5 @@ public interface TimeTableRepository {
 
     Timetable_Deleter getDeleter();
 
-    void save(Timetable timetable);
 
-    void deleteAll();
 }

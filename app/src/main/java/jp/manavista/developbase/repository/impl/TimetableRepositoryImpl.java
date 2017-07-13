@@ -34,14 +34,4 @@ public class TimetableRepositoryImpl extends RepositoryBaseImpl implements TimeT
         return database.deleteFromTimetable();
     }
 
-    @Override
-    public void save(Timetable timetable) {
-        database.insertIntoTimetable(timetable);
-    }
-
-    @Override
-    public void deleteAll() {
-        Timetable_Relation relation = database.relationOfTimetable();
-        relation.deleter().execute();
-    }
 }
