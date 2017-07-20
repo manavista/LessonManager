@@ -2,6 +2,7 @@ package jp.manavista.developbase.util;
 
 import android.util.Pair;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,7 +10,10 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-public final class DateUtil {
+public final class DateTimeUtil {
+
+    public static String COLON = ":";
+    public static String SLASH = "/";
 
     public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
     public static SimpleDateFormat TIME_FORMAT_HHMM = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -40,13 +44,18 @@ public final class DateUtil {
         return Pair.create(first, last);
     }
 
-    // TODO: List ? 指定した Calendar のコレクションを返す。
-    public static Set<Calendar> getWeekCalendarSet(Date targetDate, Set<String> displayDaysSet) {
+    public static Time parseTime(int hourOfDay, int minute) {
+        return parseTime(hourOfDay, minute, 0);
+    }
 
-        Set<Calendar> set = new HashSet<>();
+    public static Time parseTime(int hourOfDay, int minute, int second) {
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, second);
 
-        return set;
+        return new Time(calendar.getTime().getTime());
     }
 
     /**

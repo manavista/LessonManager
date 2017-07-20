@@ -1,18 +1,23 @@
 package jp.manavista.developbase.view.adapter;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
-import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
-
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.dto.TimetableDto;
+import jp.manavista.developbase.util.DateTimeUtil;
 
 /**
  *
@@ -24,6 +29,8 @@ import jp.manavista.developbase.dto.TimetableDto;
  * </p>
  */
 public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
+
+    private static final String TAG = TimetableAdapter.class.getSimpleName();
 
     /** Context */
     private final Context context;
@@ -61,7 +68,62 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
         holder.viewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                delete(position);
+                delete(holder.getAdapterPosition());
+            }
+        });
+
+        holder.lessonNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final TextView textView = (TextView) view;
+                Log.d(TAG, String.valueOf(textView.getText()));
+
+                List<Integer> list = new ArrayList<>();
+                for(int i = 1 ; i <= 10 ; i++ ) {
+                    list.add(i);
+                }
+
+                ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(context,
+                        android.R.layout.simple_spinner_dropdown_item,list);
+
+
+
+            }
+        });
+
+        holder.startTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final TextView textView = (TextView) view;
+                String[] times = String.valueOf(textView.getText()).split(DateTimeUtil.COLON);
+
+                TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                        Time time = DateTimeUtil.parseTime(hourOfDay, minute);
+                        textView.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(time));
+                    }
+                }, Integer.valueOf(times[0]), Integer.valueOf(times[1]), false);
+                dialog.show();
+            }
+        });
+
+        holder.endTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final TextView textView = (TextView) view;
+                String[] times = String.valueOf(textView.getText()).split(DateTimeUtil.COLON);
+
+                TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                        Time time = DateTimeUtil.parseTime(hourOfDay, minute);
+                        textView.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(time));
+                    }
+                }, Integer.valueOf(times[0]), Integer.valueOf(times[1]), false);
+                dialog.show();
             }
         });
     }

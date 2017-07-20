@@ -27,19 +27,17 @@ import org.apache.commons.lang3.StringUtils;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
 import io.reactivex.functions.Consumer;
-import jp.manavista.developbase.ManavistaApplication;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.dto.MainActivityDto;
 import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
-import jp.manavista.developbase.util.DateUtil;
+import jp.manavista.developbase.util.DateTimeUtil;
 import jp.manavista.developbase.view.adapter.DailyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.fragment.SettingFragment;
@@ -310,7 +308,7 @@ public class MainActivity extends AppCompatActivity
     private void updateDisplayWeek(int position) {
 
         Calendar calendar = Calendar.getInstance();
-        final SimpleDateFormat sdf = DateUtil.DATE_FORMAT_YYYYMMDD;
+        final SimpleDateFormat sdf = DateTimeUtil.DATE_FORMAT_YYYYMMDD;
         final int diff = position - ( MAX_PAGE_NUM / 2 );
         TextView displayWeek = activity.findViewById(R.id.displayWeek);
 
@@ -321,7 +319,7 @@ public class MainActivity extends AppCompatActivity
             final int startDayOfWeek = dto.getStartDisplayDay();
             final int endDayOfWeek = dto.getEndDisplayDay();
 
-            val pair = DateUtil.getWeekRange(calendar.getTime(), startDayOfWeek, endDayOfWeek);
+            val pair = DateTimeUtil.getWeekRange(calendar.getTime(), startDayOfWeek, endDayOfWeek);
             final String date = sdf.format(pair.first.getTime()) + " - " + sdf.format(pair.second.getTime());
             displayWeek.setText(date);
 

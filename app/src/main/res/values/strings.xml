@@ -38,5 +38,7 @@
     <!-- Timetable -->
     <string name="toolbar.title">Timetable</string>
     <string name="toolbar.option.add">add</string>
+    <string name="timetable.label.setting">Setting Timetable</string>
+    <string name="timetable.label.hyphen_spaces"> - </string>
 
 </resources>

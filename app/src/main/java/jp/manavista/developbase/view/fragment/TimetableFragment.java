@@ -20,10 +20,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.dto.TimetableDto;
+import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
+import jp.manavista.developbase.util.CollectionUtil;
 import jp.manavista.developbase.view.adapter.TimetableAdapter;
 import jp.manavista.developbase.view.adapter.TimetableTouchHelperCallback;
 
@@ -79,43 +84,48 @@ public final class TimetableFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
 
         DependencyInjector.appComponent().inject(this);
-        Activity contents = getActivity();
-        
-        int[] lessonNo = {1,2,3,4,5};
-        Time[] startTime = {new Time(17,0,0),new Time(17,0,0),new Time(17,0,0),new Time(17,0,0),new Time(17,0,0)};
-        Time[] endTime = {new Time(19,0,0),new Time(19,0,0),new Time(19,0,0),new Time(19,0,0),new Time(19,0,0)};
+        final Activity contents = getActivity();
 
-        List<TimetableDto> list = new ArrayList<>();
-        for( int i = 0 ; i < lessonNo.length ; i++ ) {
-            TimetableDto dto = new TimetableDto();
-            dto.setLessonNo(lessonNo[i]);
-            dto.setStartTime(startTime[i]);
-            dto.setEndTime(endTime[i]);
-            list.add(dto);
-        }
+        final List<TimetableDto> list = new ArrayList<>();
 
-        RecyclerView view = contents.findViewById(R.id.rv);
+        final RecyclerView view = contents.findViewById(R.id.rv);
         view.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(contents);
         view.setLayoutManager(manager);
 
-        TimetableAdapter adapter = TimetableAdapter.newInstance(contents);
-        adapter.setList(list);
-        view.setAdapter(adapter);
-
         ItemTouchHelperExtension.Callback callback = new TimetableTouchHelperCallback();
         ItemTouchHelperExtension itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.attachToRecyclerView(view);
+
+        timetableService.getListAll().subscribe(new Consumer<Timetable>() {
+            @Override
+            public void accept(@NonNull Timetable timetable) throws Exception {
+                list.add(TimetableDto.copy(timetable));
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                TimetableAdapter adapter = TimetableAdapter.newInstance(contents);
+                adapter.setList(list);
+                view.setAdapter(adapter);
+            }
+        });
+
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override

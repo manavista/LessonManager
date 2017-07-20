@@ -30,7 +30,7 @@ import jp.manavista.developbase.R;
 import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
-import jp.manavista.developbase.util.DateUtil;
+import jp.manavista.developbase.util.DateTimeUtil;
 
 /**
  *
@@ -245,7 +245,7 @@ public final class WeeklyFragment extends Fragment {
                 TextView begin = new TextView(context);
                 begin.setPadding(0, margin4dp, 0, 0);
 
-                begin.setText(DateUtil.TIME_FORMAT_HHMM.format(timetable.startTime));
+                begin.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(timetable.startTime));
                 timetableLayout.addView(begin);
 
                 TextView lessonNo = new TextView(context);
@@ -266,7 +266,7 @@ public final class WeeklyFragment extends Fragment {
                 endParams.addRule(RelativeLayout.ALIGN_PARENT_START, end.getId());
 
                 end.setPadding(0, 0, 0, margin4dp);
-                end.setText(DateUtil.TIME_FORMAT_HHMM.format(timetable.endTime));
+                end.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(timetable.endTime));
                 end.setLayoutParams(endParams);
                 timetableLayout.addView(end);
 
