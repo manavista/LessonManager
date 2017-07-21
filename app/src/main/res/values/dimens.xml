@@ -7,7 +7,10 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="activity_weekly_row_horizontal_margin">4dp</dimen>
     <dimen name="activity_weekly_lesson_margin">4dp</dimen>
+
     <dimen name="margin_4dp">4dp</dimen>
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="margin_16dp">16dp</dimen>
+
+    <dimen name="text_size_26sp">26sp</dimen>
 </resources>

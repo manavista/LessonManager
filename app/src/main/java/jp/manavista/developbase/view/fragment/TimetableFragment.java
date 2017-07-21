@@ -14,13 +14,14 @@ import android.view.ViewGroup;
 
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
@@ -28,7 +29,6 @@ import jp.manavista.developbase.dto.TimetableDto;
 import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
-import jp.manavista.developbase.util.CollectionUtil;
 import jp.manavista.developbase.view.adapter.TimetableAdapter;
 import jp.manavista.developbase.view.adapter.TimetableTouchHelperCallback;
 
@@ -36,12 +36,16 @@ public final class TimetableFragment extends Fragment {
 
     private static final String TAG = TimetableFragment.class.getSimpleName();
 
+    /** RootView object */
+    private View rootView;
+    /** Timetable list disposable */
+    private Disposable timetableDisposable = Disposables.empty();
+
     @Inject
     TimetableService timetableService;
 
-    /** RootView object */
-    private View rootView;
 
+    /** constructor */
     public TimetableFragment() {
         // Required empty public constructor
     }
@@ -101,7 +105,7 @@ public final class TimetableFragment extends Fragment {
         ItemTouchHelperExtension itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.attachToRecyclerView(view);
 
-        timetableService.getListAll().subscribe(new Consumer<Timetable>() {
+        timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
             @Override
             public void accept(@NonNull Timetable timetable) throws Exception {
                 list.add(TimetableDto.copy(timetable));
@@ -126,6 +130,12 @@ public final class TimetableFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        timetableDisposable.dispose();
     }
 
     @Override

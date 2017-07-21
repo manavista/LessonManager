@@ -61,7 +61,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
     @Override
     public void onBindViewHolder(final TimetableHolder holder, final int position) {
 
-        holder.lessonNo.setText(String.valueOf(list.get(position).getLessonNo()));
+        holder.lessonNo.setText(String.valueOf(list.get(position).getLessonNo()), TextView.BufferType.NORMAL);
         holder.startTime.setText(list.get(position).getStartTimeFormatted());
         holder.endTime.setText(list.get(position).getEndTimeFormatted());
 
@@ -69,25 +69,6 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
             @Override
             public void onClick(View view) {
                 delete(holder.getAdapterPosition());
-            }
-        });
-
-        holder.lessonNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final TextView textView = (TextView) view;
-                Log.d(TAG, String.valueOf(textView.getText()));
-
-                List<Integer> list = new ArrayList<>();
-                for(int i = 1 ; i <= 10 ; i++ ) {
-                    list.add(i);
-                }
-
-                ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(context,
-                        android.R.layout.simple_spinner_dropdown_item,list);
-
-
-
             }
         });
 

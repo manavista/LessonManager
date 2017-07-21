@@ -2,11 +2,13 @@ package jp.manavista.developbase.view.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.loopeer.itemtouchhelperextension.Extension;
 
 import jp.manavista.developbase.R;
+import lombok.Value;
 
 /**
  *
@@ -24,7 +26,7 @@ public class TimetableHolder extends RecyclerView.ViewHolder implements Extensio
     View viewContainer;
     View viewDelete;
 
-    TextView lessonNo;
+    EditText lessonNo;
     TextView startTime;
     TextView endTime;
 
@@ -36,9 +38,9 @@ public class TimetableHolder extends RecyclerView.ViewHolder implements Extensio
         this.viewContainer = itemView.findViewById(R.id.view_list_repo_action_container);
         this.viewDelete = itemView.findViewById(R.id.view_list_repo_action_delete);
 
-        this.lessonNo = (TextView) itemView.findViewById(R.id.lesson_no);
-        this.startTime = (TextView) itemView.findViewById(R.id.start_time);
-        this.endTime = (TextView) itemView.findViewById(R.id.end_time);
+        this.lessonNo = itemView.findViewById(R.id.lesson_no);
+        this.startTime = itemView.findViewById(R.id.start_time);
+        this.endTime = itemView.findViewById(R.id.end_time);
     }
 
     @Override
