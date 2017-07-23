@@ -21,6 +21,9 @@ import jp.manavista.developbase.view.fragment.TimetableFragment;
  */
 public class TimetableActivity extends AppCompatActivity {
 
+    /** Timetable Fragment */
+    private TimetableFragment timetableFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -31,9 +34,10 @@ public class TimetableActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        timetableFragment = TimetableFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_timetable, TimetableFragment.newInstance())
+                .replace(R.id.content_timetable, timetableFragment)
                 .commit();
     }
 
@@ -52,6 +56,7 @@ public class TimetableActivity extends AppCompatActivity {
             case R.id.option_add:
                 // TODO: add timetable lesson row
                 Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                timetableFragment.addTimetable();
                 break;
         }
 

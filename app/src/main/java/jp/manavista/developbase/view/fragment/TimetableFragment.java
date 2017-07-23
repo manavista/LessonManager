@@ -31,13 +31,29 @@ import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.view.adapter.TimetableAdapter;
 import jp.manavista.developbase.view.adapter.TimetableTouchHelperCallback;
+import jp.manavista.developbase.view.operation.TimetableOperation;
 
+/**
+ *
+ * Timetable Fragment
+ *
+ * <p>
+ * Overview:<br>
+ * Timetable control fragment.<br>
+ * Handling of timetable select, insert and update (database control) is defined in this class.
+ * </p>
+ */
 public final class TimetableFragment extends Fragment {
 
+    /** Logger tag */
     private static final String TAG = TimetableFragment.class.getSimpleName();
 
     /** RootView object */
     private View rootView;
+
+    /** Timetable recycler view adapter */
+    private TimetableAdapter adapter;
+
     /** Timetable list disposable */
     private Disposable timetableDisposable = Disposables.empty();
 
@@ -101,6 +117,9 @@ public final class TimetableFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(contents);
         view.setLayoutManager(manager);
 
+        adapter = TimetableAdapter.newInstance(contents, timetableOperation);
+        view.setAdapter(adapter);
+
         ItemTouchHelperExtension.Callback callback = new TimetableTouchHelperCallback();
         ItemTouchHelperExtension itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.attachToRecyclerView(view);
@@ -113,19 +132,97 @@ public final class TimetableFragment extends Fragment {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@NonNull Throwable throwable) throws Exception {
-
+                throw new RuntimeException(throwable.toString());
             }
         }, new Action() {
             @Override
             public void run() throws Exception {
-                TimetableAdapter adapter = TimetableAdapter.newInstance(contents);
                 adapter.setList(list);
-                view.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
         });
 
     }
 
+    /**
+     *
+     * Add Timetable
+     *
+     * <p>
+     * Overview:<br>
+     * Add new Timetable row.<br>
+     * Default lesson no, start time and end time is automatic formed.
+     * </p>
+     *
+     */
+    public void addTimetable() {
+
+        final List<TimetableDto> list = new ArrayList<>();
+
+        timetableDisposable = timetableService.add().subscribe(new Consumer<Timetable>() {
+            @Override
+            public void accept(@NonNull Timetable timetable) throws Exception {
+                list.add(TimetableDto.copy(timetable));
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+                throw new RuntimeException(throwable.toString());
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                adapter.setList(list);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private TimetableOperation timetableOperation = new TimetableOperation() {
+        @Override
+        public void delete(int id) {
+            final List<TimetableDto> list = new ArrayList<>();
+            timetableDisposable = timetableService.delete(id).subscribe(new Consumer<Timetable>() {
+                @Override
+                public void accept(@NonNull Timetable timetable) throws Exception {
+                    list.add(TimetableDto.copy(timetable));
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(@NonNull Throwable throwable) throws Exception {
+                    throw new RuntimeException(throwable.toString());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    adapter.setList(list);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
+
+        @Override
+        public void update(Timetable timetable) {
+            final List<TimetableDto> list = new ArrayList<>();
+            timetableDisposable = timetableService.update(timetable).subscribe(new Consumer<Timetable>() {
+                @Override
+                public void accept(@NonNull Timetable timetable) throws Exception {
+                    list.add(TimetableDto.copy(timetable));
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(@NonNull Throwable throwable) throws Exception {
+                    throw new RuntimeException(throwable.toString());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    adapter.setList(list);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
+    };
 
     @Override
     public void onAttach(Context context) {

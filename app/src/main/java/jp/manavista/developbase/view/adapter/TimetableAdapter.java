@@ -7,17 +7,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.dto.TimetableDto;
+import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.util.DateTimeUtil;
+import jp.manavista.developbase.view.operation.TimetableOperation;
 
 /**
  *
@@ -30,20 +30,24 @@ import jp.manavista.developbase.util.DateTimeUtil;
  */
 public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
 
+    /** Logger tag */
     private static final String TAG = TimetableAdapter.class.getSimpleName();
 
     /** Context */
     private final Context context;
+    /** Operation Timetable interface */
+    private final TimetableOperation timetableOperation;
     /** Timetable data list */
     private List<TimetableDto> list;
 
-    /** Constructor */
-    private TimetableAdapter(Context context) {
+    /** Private Constructor */
+    private TimetableAdapter(Context context, TimetableOperation timetableOperation) {
         this.context = context;
+        this.timetableOperation = timetableOperation;
     }
 
-    public static TimetableAdapter newInstance(Context context) {
-        return new TimetableAdapter(context);
+    public static TimetableAdapter newInstance(Context context, TimetableOperation timetableOperation) {
+        return new TimetableAdapter(context, timetableOperation);
     }
 
     public void setList(List<TimetableDto> list) {
@@ -68,9 +72,16 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
         holder.viewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                delete(holder.getAdapterPosition());
+
+                TimetableDto dto = list.get(holder.getAdapterPosition());
+                Log.d(TAG, "getAdapterPosition: " + holder.getAdapterPosition() + " TimetableDto id: " + dto.getId());
+
+                timetableOperation.delete(dto.getId());
             }
         });
+
+        // TODO: lessonNo のイベント定義 addTextChangedListener, setOnFocusChangeListener は利用しない。
+
 
         holder.startTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,8 +93,14 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
                 TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+
                         Time time = DateTimeUtil.parseTime(hourOfDay, minute);
-                        textView.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(time));
+                        TimetableDto dto = list.get(holder.getAdapterPosition());
+                        dto.setStartTime(time);
+
+                        Log.d(TAG, "changed row: " + holder.getAdapterPosition() + "changed dto: " + dto.toString());
+
+                        timetableOperation.update(Timetable.convert(dto));
                     }
                 }, Integer.valueOf(times[0]), Integer.valueOf(times[1]), false);
                 dialog.show();
@@ -100,8 +117,15 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
                 TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+
                         Time time = DateTimeUtil.parseTime(hourOfDay, minute);
-                        textView.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(time));
+                        TimetableDto dto = list.get(holder.getAdapterPosition());
+                        dto.setEndTime(time);
+
+                        Log.d(TAG, "changed row: " + holder.getAdapterPosition() + "changed dto: " + dto.toString());
+
+                        timetableOperation.update(Timetable.convert(dto));
+
                     }
                 }, Integer.valueOf(times[0]), Integer.valueOf(times[1]), false);
                 dialog.show();
@@ -111,11 +135,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
 
     @Override
     public int getItemCount() {
-        return this.list.size();
+        return this.list == null ? 0 : this.list.size();
     }
 
-    private void delete(int position) {
-        list.remove(position);
-        notifyItemRemoved(position);
-    }
 }

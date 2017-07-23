@@ -1,6 +1,5 @@
 package jp.manavista.developbase.repository;
 
-import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.entity.Timetable_Deleter;
 import jp.manavista.developbase.entity.Timetable_Relation;
 import jp.manavista.developbase.entity.Timetable_Selector;
@@ -19,20 +18,19 @@ public interface TimeTableRepository {
 
     /**
      *
-     * get all
+     * Get selector
      *
      * <p>
      * Overview:<br>
-     * Get all Timetable data
+     * Get Timetable selector
      * </p>
      *
      * @return Timetable Selector
      */
-    Timetable_Selector getAll();
+    Timetable_Selector getSelector();
 
     Timetable_Relation getRelation();
 
     Timetable_Deleter getDeleter();
-
 
 }

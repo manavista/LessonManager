@@ -8,8 +8,12 @@ import jp.manavista.developbase.entity.Timetable_Selector;
 import jp.manavista.developbase.repository.TimeTableRepository;
 
 /**
+ *
+ * Timetable repository implements
+ *
  * <p>
  * Overview:<br>
+ *
  * </p>
  */
 public class TimetableRepositoryImpl extends RepositoryBaseImpl implements TimeTableRepository {
@@ -20,7 +24,7 @@ public class TimetableRepositoryImpl extends RepositoryBaseImpl implements TimeT
     }
 
     @Override
-    public Timetable_Selector getAll() {
+    public Timetable_Selector getSelector() {
         return database.selectFromTimetable();
     }
 
