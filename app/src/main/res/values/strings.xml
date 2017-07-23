@@ -40,8 +40,7 @@
     <string name="toolbar.option.add">add</string>
     <string name="timetable.label.setting">Setting Timetable</string>
     <string name="timetable.label.hyphen_spaces"> - </string>
+    <string name="timetable.label.lesson_no.select">Select Lesson No</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

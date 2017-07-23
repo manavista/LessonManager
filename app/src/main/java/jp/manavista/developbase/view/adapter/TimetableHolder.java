@@ -3,6 +3,7 @@ package jp.manavista.developbase.view.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.loopeer.itemtouchhelperextension.Extension;
@@ -26,7 +27,7 @@ public class TimetableHolder extends RecyclerView.ViewHolder implements Extensio
     View viewContainer;
     View viewDelete;
 
-    EditText lessonNo;
+    Spinner lessonNo;
     TextView startTime;
     TextView endTime;
 

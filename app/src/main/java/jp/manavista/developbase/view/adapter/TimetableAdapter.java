@@ -7,10 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.manavista.developbase.R;
@@ -18,6 +23,7 @@ import jp.manavista.developbase.dto.TimetableDto;
 import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.util.DateTimeUtil;
 import jp.manavista.developbase.view.operation.TimetableOperation;
+import lombok.val;
 
 /**
  *
@@ -39,11 +45,19 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
     private final TimetableOperation timetableOperation;
     /** Timetable data list */
     private List<TimetableDto> list;
+    /** Lesson No select list */
+    private final List<Integer> lessonNoList;
 
     /** Private Constructor */
     private TimetableAdapter(Context context, TimetableOperation timetableOperation) {
+
         this.context = context;
         this.timetableOperation = timetableOperation;
+
+        this.lessonNoList = new ArrayList<>();
+        for( int i = 1 ; i <= 10 ; i++ ) {
+            this.lessonNoList.add(i);
+        }
     }
 
     public static TimetableAdapter newInstance(Context context, TimetableOperation timetableOperation) {
@@ -65,7 +79,15 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
     @Override
     public void onBindViewHolder(final TimetableHolder holder, final int position) {
 
-        holder.lessonNo.setText(String.valueOf(list.get(position).getLessonNo()), TextView.BufferType.NORMAL);
+        val adapter = new ArrayAdapter<Integer>(context, R.layout.timetable_spinner_item, lessonNoList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holder.lessonNo.setAdapter(adapter);
+        holder.lessonNo.setPrompt(context.getString(R.string.timetable_label_lesson_no_select));
+
+        final int lessonPosition = adapter.getPosition(list.get(position).getLessonNo());
+        holder.lessonNo.setSelection(lessonPosition);
+        holder.lessonNo.setTag(lessonPosition);
+
         holder.startTime.setText(list.get(position).getStartTimeFormatted());
         holder.endTime.setText(list.get(position).getEndTimeFormatted());
 
@@ -80,8 +102,24 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
             }
         });
 
-        // TODO: lessonNo のイベント定義 addTextChangedListener, setOnFocusChangeListener は利用しない。
+        holder.lessonNo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
+                if( (int) holder.lessonNo.getTag() == i ) {
+                    return;
+                }
+                holder.lessonNo.setTag(i);
+
+                Spinner spinner = (Spinner) adapterView;
+                Toast.makeText(context, "selected lesson no is " + spinner.getSelectedItem(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                /* no description */
+            }
+        });
 
         holder.startTime.setOnClickListener(new View.OnClickListener() {
             @Override

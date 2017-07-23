@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.view.fragment.TimetableFragment;
@@ -50,12 +49,8 @@ public class TimetableActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        // option menu (add button) selected.
-
         switch (item.getItemId()) {
             case R.id.option_add:
-                // TODO: add timetable lesson row
-                Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 timetableFragment.addTimetable();
                 break;
         }
