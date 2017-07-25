@@ -35,4 +35,12 @@
     <string name="default.value.first_day_of_week">1</string>
     <string name="summary.no_data">No data</string>
 
+    <!-- Timetable -->
+    <string name="toolbar.title">Timetable</string>
+    <string name="toolbar.option.add">add</string>
+    <string name="timetable.label.setting">Setting Timetable</string>
+    <string name="timetable.label.hyphen_spaces"> - </string>
+    <string name="timetable.label.lesson_no.select">Select Lesson No</string>
+
+
 </resources>

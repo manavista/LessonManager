@@ -27,19 +27,17 @@ import org.apache.commons.lang3.StringUtils;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
 import io.reactivex.functions.Consumer;
-import jp.manavista.developbase.ManavistaApplication;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.dto.MainActivityDto;
 import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
-import jp.manavista.developbase.util.DateUtil;
+import jp.manavista.developbase.util.DateTimeUtil;
 import jp.manavista.developbase.view.adapter.DailyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.fragment.SettingFragment;
@@ -96,18 +94,15 @@ public class MainActivity extends AppCompatActivity
 
 //        timetableService.deleteAll();
 //        timetableService.save(timetable);
+//        timetableService.deleteById(14).subscribe();
 
-//        timetableService.getListAll().subscribe(new Consumer<List<Timetable>>() {
-//            @Override
-//            public void accept(@io.reactivex.annotations.NonNull List<Timetable> timetables) throws Exception {
-//                for( Timetable row : timetables ) {
-//                    Log.d(TAG, "row id: " + row.id);
-//                    Log.d(TAG, "row lessonNo: " + row.lessonNo);
-//                    Log.d(TAG, "row start time: " + row.startTime);
-//                    Log.d(TAG, "row end time: " + row.endTime);
-//                }
-//            }
-//        });
+        timetableService.getListAll().subscribe(new Consumer<Timetable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Timetable timetable) throws Exception {
+                Log.d(TAG, "row id: " + timetable.id + " lessonNo: " +
+                        timetable.lessonNo + " start: " + timetable.startTime + " end: " + timetable.endTime);
+            }
+        });
 
 
         dto = MainActivityDto.builder()
@@ -167,11 +162,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        int id = item.getItemId();
+        final int id = item.getItemId();
         val viewPager = dto.getViewPager();
 
         if ( id == R.id.nav_settings ) {
             Intent intent = new Intent(activity, SettingActivity.class);
+            activity.startActivity(intent);
+        } else if( id == R.id.nav_timetable ) {
+            Intent intent = new Intent(activity, TimetableActivity.class);
             activity.startActivity(intent);
         } else if( id == R.id.nav_view_daily ) {
             dto.setViewMode("Daily");
@@ -310,7 +308,7 @@ public class MainActivity extends AppCompatActivity
     private void updateDisplayWeek(int position) {
 
         Calendar calendar = Calendar.getInstance();
-        final SimpleDateFormat sdf = DateUtil.DATE_FORMAT_YYYYMMDD;
+        final SimpleDateFormat sdf = DateTimeUtil.DATE_FORMAT_YYYYMMDD;
         final int diff = position - ( MAX_PAGE_NUM / 2 );
         TextView displayWeek = activity.findViewById(R.id.displayWeek);
 
@@ -321,7 +319,7 @@ public class MainActivity extends AppCompatActivity
             final int startDayOfWeek = dto.getStartDisplayDay();
             final int endDayOfWeek = dto.getEndDisplayDay();
 
-            val pair = DateUtil.getWeekRange(calendar.getTime(), startDayOfWeek, endDayOfWeek);
+            val pair = DateTimeUtil.getWeekRange(calendar.getTime(), startDayOfWeek, endDayOfWeek);
             final String date = sdf.format(pair.first.getTime()) + " - " + sdf.format(pair.second.getTime());
             displayWeek.setText(date);
 

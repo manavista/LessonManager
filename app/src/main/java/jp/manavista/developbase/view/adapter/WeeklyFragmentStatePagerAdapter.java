@@ -29,7 +29,7 @@ public class WeeklyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
     private MainActivityDto dto;
 
-    private final  int[] calendarDay = {
+    private final int[] calendarDay = {
             Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
             Calendar.TUESDAY, Calendar.FRIDAY, Calendar.SATURDAY};
 
