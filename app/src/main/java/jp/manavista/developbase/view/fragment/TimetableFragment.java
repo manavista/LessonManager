@@ -8,14 +8,24 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
+import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -31,6 +41,7 @@ import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.view.adapter.TimetableAdapter;
 import jp.manavista.developbase.view.adapter.TimetableTouchHelperCallback;
+import jp.manavista.developbase.view.decoration.TimetableItemDecoration;
 import jp.manavista.developbase.view.operation.TimetableOperation;
 
 /**
@@ -116,6 +127,7 @@ public final class TimetableFragment extends Fragment {
         view.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(contents);
         view.setLayoutManager(manager);
+        view.addItemDecoration(new TimetableItemDecoration(contents));
 
         adapter = TimetableAdapter.newInstance(contents, timetableOperation);
         view.setAdapter(adapter);
@@ -221,6 +233,38 @@ public final class TimetableFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                 }
             });
+        }
+
+        @Override
+        public void inputLessonNo(final View view, final int position) {
+
+            final TextView textView = (TextView) view;
+            final int lessonNo = Integer.valueOf(textView.getText().toString());
+
+            NumberPickerBuilder builder = new NumberPickerBuilder()
+                    .setFragmentManager(getFragmentManager())
+                    .setStyleResId(R.style.BetterPickersDialogFragment)
+                    .setPlusMinusVisibility(View.INVISIBLE)
+                    .setDecimalVisibility(View.INVISIBLE)
+                    .setMinNumber(BigDecimal.ONE)
+                    .setMaxNumber(BigDecimal.TEN)
+                    .setCurrentNumber(lessonNo)
+                    .setLabelText(StringUtils.EMPTY);
+
+            builder.addNumberPickerDialogHandler(new NumberPickerDialogFragment.NumberPickerDialogHandlerV2() {
+                @Override
+                public void onDialogNumberSet(int reference, BigInteger number, double decimal,
+                                              boolean isNegative, BigDecimal fullNumber) {
+
+                    TimetableDto row = adapter.getList().get(position);
+                    row.setLessonNo(fullNumber.intValue());
+                    Log.d(TAG, "change Timetable row position: " + position + " row: " + row);
+
+                    update(Timetable.convert(row));
+                }
+            });
+
+            builder.show();
         }
     };
 

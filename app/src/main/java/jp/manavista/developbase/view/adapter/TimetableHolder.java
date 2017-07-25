@@ -27,7 +27,7 @@ public class TimetableHolder extends RecyclerView.ViewHolder implements Extensio
     View viewContainer;
     View viewDelete;
 
-    Spinner lessonNo;
+    TextView lessonNo;
     TextView startTime;
     TextView endTime;
 
