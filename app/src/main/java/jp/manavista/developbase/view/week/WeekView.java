@@ -2102,4 +2102,45 @@ public class WeekView extends View {
          */
         void onFirstVisibleDayChanged(Calendar newFirstVisibleDay, Calendar oldFirstVisibleDay);
     }
+
+
+    /* add takahagi */
+
+    /////////////////////////////////////////////////////////////////
+    //
+    //      Protected functions
+    //
+    /////////////////////////////////////////////////////////////////
+
+    protected float getHeaderHeight() {
+        return this.mHeaderHeight;
+    }
+
+    protected float getHeaderColumnWidth() {
+        return this.mHeaderColumnWidth;
+    }
+
+    protected PointF getCurrentOrigin() {
+        return this.mCurrentOrigin;
+    }
+
+    protected float getHeaderMarginBottom() {
+        return this.mHeaderMarginBottom;
+    }
+
+    protected int getStartTime() {
+        return this.mStartTime;
+    }
+
+    protected int getEndTime() {
+        return this.mEndTime;
+    }
+
+    protected float getTimeTextHeight() {
+        return this.mTimeTextHeight;
+    }
+
+    protected float getTimeTextWidth() {
+        return this.mTimeTextWidth;
+    }
 }

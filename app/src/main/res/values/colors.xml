@@ -11,4 +11,23 @@
     <color name="toolbar">#efefef</color>
     <color name="toolbar_text">#8f000000</color>
     <color name="accent">#2789e4</color>
+
+    <!-- color map  http://www.colordic.org/ -->
+
+    <color name="lightGray">#dcdcdc</color>
+    <color name="whiteSmoke">#f6f6f6</color>
+    <color name="crimson">#dc143c</color>
+    <color name="firebrick">#b22222</color>
+    <color name="lightSkyBlue">#87cefa</color>
+    <color name="lightPink">#ffb6c1</color>
+    <color name="lightGreen">#90ee90</color>
+    <color name="lightCoral">#f08080</color>
+    <color name="lightYellow">#ffffe0</color>
+    <color name="lightCyan">#e0ffff</color>
+    <color name="gold">#ffd700</color>
+    <color name="lightSalmon">#ffa07a</color>
+
+    <color name="dimGray">#696969</color>
+    <color name="gray">#808080</color>
+    <color name="darkGray">#a9a9a9</color>
 </resources>
