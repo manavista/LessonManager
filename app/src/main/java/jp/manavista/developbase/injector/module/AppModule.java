@@ -1,4 +1,4 @@
-package jp.manavista.developbase.module;
+package jp.manavista.developbase.injector.module;
 
 import android.app.Application;
 

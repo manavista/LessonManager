@@ -3,7 +3,6 @@ package jp.manavista.developbase;
 import android.app.Application;
 
 import jp.manavista.developbase.injector.DependencyInjector;
-import jp.manavista.developbase.module.AppModule;
 
 /**
  * <p>

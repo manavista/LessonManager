@@ -7,15 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 
 import jp.manavista.developbase.R;
@@ -25,7 +20,6 @@ import jp.manavista.developbase.util.DateTimeUtil;
 import jp.manavista.developbase.view.operation.TimetableOperation;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 /**
  *

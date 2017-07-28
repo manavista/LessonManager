@@ -5,15 +5,19 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import jp.manavista.developbase.component.ActivityComponent;
-import jp.manavista.developbase.component.FragmentComponent;
-import jp.manavista.developbase.module.AppModule;
-import jp.manavista.developbase.module.RepositoryModule;
-import jp.manavista.developbase.module.ServiceModule;
+import jp.manavista.developbase.injector.component.ActivityComponent;
+import jp.manavista.developbase.injector.component.FragmentComponent;
+import jp.manavista.developbase.injector.module.AppModule;
+import jp.manavista.developbase.injector.module.RepositoryModule;
+import jp.manavista.developbase.injector.module.ServiceModule;
 
 /**
+ *
+ * Application Component
+ *
  * <p>
  * Overview:<br>
+ *
  * </p>
  */
 @Singleton

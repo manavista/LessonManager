@@ -3,7 +3,7 @@ package jp.manavista.developbase.injector;
 import jp.manavista.developbase.AppComponent;
 import jp.manavista.developbase.DaggerAppComponent;
 import jp.manavista.developbase.ManavistaApplication;
-import jp.manavista.developbase.module.AppModule;
+import jp.manavista.developbase.injector.module.AppModule;
 
 /**
  * <p>

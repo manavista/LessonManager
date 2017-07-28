@@ -1,4 +1,4 @@
-package jp.manavista.developbase.view.activity;
+package jp.manavista.developbase.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import jp.manavista.developbase.R;
-import jp.manavista.developbase.view.fragment.TimetableFragment;
+import jp.manavista.developbase.fragment.TimetableFragment;
 
 /**
  *

@@ -1,4 +1,4 @@
-package jp.manavista.developbase.view.activity;
+package jp.manavista.developbase.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -40,7 +40,7 @@ import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.util.DateTimeUtil;
 import jp.manavista.developbase.view.adapter.DailyFragmentStatePagerAdapter;
 import jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter;
-import jp.manavista.developbase.view.fragment.SettingFragment;
+import jp.manavista.developbase.fragment.SettingFragment;
 import lombok.val;
 
 import static jp.manavista.developbase.view.adapter.WeeklyFragmentStatePagerAdapter.MAX_PAGE_NUM;

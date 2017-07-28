@@ -1,4 +1,4 @@
-package jp.manavista.developbase.view.fragment;
+package jp.manavista.developbase.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

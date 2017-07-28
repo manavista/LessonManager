@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import jp.manavista.developbase.view.fragment.DailyFragment;
+import jp.manavista.developbase.fragment.DailyFragment;
 
 
 public class DailyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {

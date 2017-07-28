@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 
 import jp.manavista.developbase.dto.MainActivityDto;
-import jp.manavista.developbase.view.fragment.WeeklyFragment;
+import jp.manavista.developbase.fragment.WeeklyFragment;
 
 /**
  *

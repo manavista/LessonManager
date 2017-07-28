@@ -1,4 +1,4 @@
-package jp.manavista.developbase.view.fragment;
+package jp.manavista.developbase.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,13 +19,11 @@ import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 

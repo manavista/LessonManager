@@ -1,4 +1,4 @@
-package jp.manavista.developbase.view.fragment;
+package jp.manavista.developbase.fragment;
 
 import android.app.Activity;
 import android.content.Context;

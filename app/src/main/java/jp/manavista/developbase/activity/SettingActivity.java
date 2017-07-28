@@ -1,11 +1,11 @@
-package jp.manavista.developbase.view.activity;
+package jp.manavista.developbase.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import jp.manavista.developbase.R;
-import jp.manavista.developbase.view.fragment.SettingFragment;
+import jp.manavista.developbase.fragment.SettingFragment;
 
 /**
  *

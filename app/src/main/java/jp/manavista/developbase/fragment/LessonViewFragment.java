@@ -1,4 +1,4 @@
-package jp.manavista.developbase.view.fragment;
+package jp.manavista.developbase.fragment;
 
 import android.graphics.RectF;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import jp.manavista.developbase.view.week.WeekViewEvent;
  *
  *
  */
-public class LessonViewFragment extends Fragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
+public final class LessonViewFragment extends Fragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
 
 
     public LessonViewFragment() {
