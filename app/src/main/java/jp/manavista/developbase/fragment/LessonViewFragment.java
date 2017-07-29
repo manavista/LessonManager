@@ -19,13 +19,34 @@ import jp.manavista.developbase.view.week.WeekViewEvent;
 
 /**
  *
+ * LessonView fragment
  *
+ * <p>
+ * Overview:<br>
+ *
+ * </p>
  */
-public final class LessonViewFragment extends Fragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
+public final class LessonViewFragment extends Fragment implements WeekView.EventClickListener,
+        MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
 
-
+    /** Constructor */
     public LessonViewFragment() {
         // Required empty public constructor
+    }
+
+    /**
+     *
+     * New Instance
+     *
+     * <p>
+     * Overview:<br>
+     * Create new {@code LessonViewFragment} object.
+     * </p>
+     *
+     * @return {@code LessonViewFragment} object
+     */
+    public static LessonViewFragment newInstance() {
+        return new LessonViewFragment();
     }
 
 
