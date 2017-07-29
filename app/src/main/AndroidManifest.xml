@@ -20,6 +20,8 @@
         <activity android:name=".activity.SettingActivity"/>
         <activity android:name=".activity.TimetableActivity">
         </activity>
+        <activity android:name=".activity.LessonViewActivity">
+        </activity>
     </application>
 
 </manifest>

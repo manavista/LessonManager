@@ -1,5 +1,6 @@
 package jp.manavista.developbase.injector.component;
 
+import jp.manavista.developbase.activity.LessonViewActivity;
 import jp.manavista.developbase.activity.MainActivity;
 
 /**
@@ -16,4 +17,5 @@ import jp.manavista.developbase.activity.MainActivity;
  */
 public interface ActivityComponent {
     void inject(MainActivity mainActivity);
+    void inject(LessonViewActivity lessonViewActivity);
 }
