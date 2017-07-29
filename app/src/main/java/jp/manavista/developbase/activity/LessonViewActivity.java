@@ -35,9 +35,12 @@ public class LessonViewActivity extends AppCompatActivity
     private static final String TAG = LessonViewActivity.class.getSimpleName();
     /** Activity of this */
     final private Activity activity = this;
+    /** Lesson View Fragment */
+    private LessonViewFragment lessonViewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson_view);
 
@@ -58,7 +61,7 @@ public class LessonViewActivity extends AppCompatActivity
         // preference setting
         PreferenceManager.setDefaultValues(activity, R.xml.preferences, false);
 
-        LessonViewFragment lessonViewFragment = LessonViewFragment.newInstance();
+        lessonViewFragment = LessonViewFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.activity_lesson_view_content, lessonViewFragment)
@@ -73,6 +76,22 @@ public class LessonViewActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        final int id = item.getItemId();
+
+        switch (id) {
+
+            case R.id.item_goto_today:
+                lessonViewFragment.goToday();
+                break;
+            case R.id.item_view_weekly:
+                lessonViewFragment.changeVisibleDays(7);
+                break;
+            case R.id.item_view_daily:
+                lessonViewFragment.changeVisibleDays(1);
+                break;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -87,10 +106,8 @@ public class LessonViewActivity extends AppCompatActivity
         } else if( id == R.id.nav_timetable ) {
             Intent intent = new Intent(activity, TimetableActivity.class);
             activity.startActivity(intent);
-//        } else if( id == R.id.nav_view_daily ) {
-//        } else if( id == R.id.nav_view_weekly ) {
         }
-//
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

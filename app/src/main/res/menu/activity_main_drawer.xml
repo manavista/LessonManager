@@ -4,16 +4,8 @@
     <group android:id="@+id/item_group_view_conversion">
 
         <item
-            android:id="@+id/nav_view_weekly"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu.weekly_view"/>
-        <item
-            android:id="@+id/nav_view_daily"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu.daily_view"/>
-        <item
             android:id="@+id/nav_member_list"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_people_black"
             android:title="@string/menu.member_list"/>
 
     </group>
@@ -28,11 +20,11 @@
                 android:title="@string/menu.member"/>
             <item
                 android:id="@+id/nav_lesson"
-                android:icon="@drawable/ic_menu_gallery"
+                android:icon="@drawable/ic_school_black"
                 android:title="@string/menu.lesson"/>
             <item
                 android:id="@+id/nav_timetable"
-                android:icon="@drawable/ic_event_black_black"
+                android:icon="@drawable/ic_schedule_black"
                 android:title="@string/menu.timetable"/>
             <item
                 android:id="@+id/nav_private"
