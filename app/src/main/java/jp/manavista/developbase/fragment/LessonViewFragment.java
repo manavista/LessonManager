@@ -29,6 +29,9 @@ import jp.manavista.developbase.view.week.WeekViewEvent;
 public final class LessonViewFragment extends Fragment implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
 
+    /** LessonView */
+    private LessonView lessonView;
+
     /** Constructor */
     public LessonViewFragment() {
         // Required empty public constructor
@@ -56,11 +59,11 @@ public final class LessonViewFragment extends Fragment implements WeekView.Event
         // Inflate the layout for this fragment
 
         View rootView = inflater.inflate(R.layout.fragment_lesson_view, container, false);
-        LessonView view = (LessonView) rootView.findViewById(R.id.weekView);
-        view.setOnEventClickListener(this);
-        view.setMonthChangeListener(this);
-        view.setEventLongPressListener(this);
-        view.setEmptyViewLongPressListener(this);
+        lessonView = rootView.findViewById(R.id.weekView);
+        lessonView.setOnEventClickListener(this);
+        lessonView.setMonthChangeListener(this);
+        lessonView.setEventLongPressListener(this);
+        lessonView.setEmptyViewLongPressListener(this);
         //view.setLimitTime(9, 21);
 
         return rootView;
@@ -225,6 +228,35 @@ public final class LessonViewFragment extends Fragment implements WeekView.Event
     @Override
     public void onEmptyViewLongPress(Calendar time) {
 
+    }
+
+    /**
+     *
+     * Change Visible Days
+     *
+     * <p>
+     * Overview:<br>
+     * Change the number of days displayed in the schedule
+     * to the number of days set in the argument.
+     * </p>
+     *
+     * @param days Visible days
+     */
+    public void changeVisibleDays(int days) {
+        lessonView.setNumberOfVisibleDays(days);
+    }
+
+    /**
+     *
+     * Go to Today
+     *
+     * <p>
+     * Overview:<br>
+     * Scroll the screen to show today's schedule.
+     * </p>
+     */
+    public void goToday() {
+        lessonView.goToToday();
     }
 
     protected String getEventTitle(Calendar time) {

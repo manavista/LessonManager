@@ -18,6 +18,15 @@ import java.util.TreeSet;
 
 import jp.manavista.developbase.R;
 
+/**
+ *
+ * Setting Fragment
+ *
+ * <p>
+ * Overview:<br>
+ *
+ * </p>
+ */
 public class SettingFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 

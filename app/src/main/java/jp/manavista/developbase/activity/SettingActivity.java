@@ -15,12 +15,14 @@ import jp.manavista.developbase.fragment.SettingFragment;
  * Overview:<br>
  * Define the screen action when the setting menu is selected.
  * </p>
- * @see SettingFragment
+ *
+ * @see SettingFragment Setting Fragment
  */
 public class SettingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_setting);

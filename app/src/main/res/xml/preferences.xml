@@ -34,4 +34,11 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/preference.category.lesson_week_view">
+
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
