@@ -16,8 +16,13 @@ public final class DateTimeUtil {
     public static String SLASH = "/";
 
     public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+    public static SimpleDateFormat DATE_FORMAT_MMDD = new SimpleDateFormat("MM/dd", Locale.getDefault());
+    public static SimpleDateFormat DATE_FORMAT_MMDDE = new SimpleDateFormat("MM/dd E", Locale.getDefault());
+    public static SimpleDateFormat DATE_FORMAT_E = new SimpleDateFormat("E", Locale.getDefault());
     public static SimpleDateFormat TIME_FORMAT_HHMM = new SimpleDateFormat("HH:mm", Locale.getDefault());
     public static SimpleDateFormat TIME_FORMAT_hhMM = new SimpleDateFormat("hh:mm", Locale.getDefault());
+    public static SimpleDateFormat TIME_FORMAT_H = new SimpleDateFormat("H", Locale.getDefault());
+    public static SimpleDateFormat TIME_FORMAT_m = new SimpleDateFormat("m", Locale.getDefault());
 
     /**
      *

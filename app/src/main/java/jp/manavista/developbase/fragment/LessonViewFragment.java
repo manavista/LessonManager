@@ -2,6 +2,7 @@ package jp.manavista.developbase.fragment;
 
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
+import jp.manavista.developbase.dto.TimetableDto;
+import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.injector.DependencyInjector;
+import jp.manavista.developbase.service.TimetableService;
+import jp.manavista.developbase.util.DateTimeUtil;
+import jp.manavista.developbase.view.week.DateTimeInterpreter;
 import jp.manavista.developbase.view.week.LessonView;
 import jp.manavista.developbase.view.week.MonthLoader;
 import jp.manavista.developbase.view.week.WeekView;
@@ -23,14 +37,26 @@ import jp.manavista.developbase.view.week.WeekViewEvent;
  *
  * <p>
  * Overview:<br>
- *
+ * LessonView control fragment.<br>
+ * Handing lesson view days, timetable, and other events.
  * </p>
  */
-public final class LessonViewFragment extends Fragment implements WeekView.EventClickListener,
-        MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
+public final class LessonViewFragment extends Fragment
+        implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener,
+        WeekView.EmptyViewLongPressListener, DateTimeInterpreter {
 
     /** LessonView */
     private LessonView lessonView;
+    /** RootView */
+    private View rootView;
+
+    /** Timetable service */
+    @Inject
+    TimetableService timetableService;
+
+    /** Timetable list disposable */
+    private Disposable timetableDisposable = Disposables.empty();
+
 
     /** Constructor */
     public LessonViewFragment() {
@@ -56,17 +82,46 @@ public final class LessonViewFragment extends Fragment implements WeekView.Event
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_lesson_view, container, false);
+        rootView = inflater.inflate(R.layout.fragment_lesson_view, container, false);
+
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+        super.onActivityCreated(savedInstanceState);
+
+        DependencyInjector.appComponent().inject(this);
+
         lessonView = rootView.findViewById(R.id.weekView);
         lessonView.setOnEventClickListener(this);
         lessonView.setMonthChangeListener(this);
         lessonView.setEventLongPressListener(this);
         lessonView.setEmptyViewLongPressListener(this);
+        lessonView.setDateTimeInterpreter(this);
         //view.setLimitTime(9, 21);
 
-        return rootView;
+        final List<TimetableDto> timetableList = new ArrayList<>();
+
+        timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
+            @Override
+            public void accept(@NonNull Timetable timetable) throws Exception {
+                timetableList.add(TimetableDto.copy(timetable));
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                lessonView.setLessonTableList(timetableList);
+            }
+        });
+
     }
 
     @Override
@@ -230,6 +285,16 @@ public final class LessonViewFragment extends Fragment implements WeekView.Event
 
     }
 
+    @Override
+    public String interpretDate(Calendar date) {
+        return DateTimeUtil.DATE_FORMAT_MMDDE.format(date.getTime());
+    }
+
+    @Override
+    public String interpretTime(int hour) {
+        return hour + ":00";
+    }
+
     /**
      *
      * Change Visible Days
@@ -262,4 +327,6 @@ public final class LessonViewFragment extends Fragment implements WeekView.Event
     protected String getEventTitle(Calendar time) {
         return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }
+
+
 }

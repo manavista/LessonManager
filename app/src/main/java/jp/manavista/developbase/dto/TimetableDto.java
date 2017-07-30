@@ -1,6 +1,8 @@
 package jp.manavista.developbase.dto;
 
 import java.sql.Time;
+import java.text.DateFormat;
+import java.util.Calendar;
 
 import jp.manavista.developbase.entity.Timetable;
 import jp.manavista.developbase.util.DateTimeUtil;
@@ -54,5 +56,27 @@ public class TimetableDto {
 
     public String getEndTimeFormatted() {
         return DateTimeUtil.TIME_FORMAT_HHMM.format(endTime);
+    }
+
+    public int getStartTime(int timeField) {
+
+        if( timeField == DateFormat.HOUR_OF_DAY0_FIELD ) {
+            return Integer.valueOf(DateTimeUtil.TIME_FORMAT_H.format(startTime));
+        } else if (  timeField == DateFormat.MINUTE_FIELD ) {
+            return Integer.valueOf(DateTimeUtil.TIME_FORMAT_m.format(startTime));
+        } else {
+            throw new RuntimeException("undefined field argument.");
+        }
+    }
+
+    public int getEndTime(int timeField) {
+
+        if( timeField == DateFormat.HOUR_OF_DAY0_FIELD ) {
+            return Integer.valueOf(DateTimeUtil.TIME_FORMAT_H.format(endTime));
+        } else if (  timeField == DateFormat.MINUTE_FIELD ) {
+            return Integer.valueOf(DateTimeUtil.TIME_FORMAT_m.format(endTime));
+        } else {
+            throw new RuntimeException("undefined field argument.");
+        }
     }
 }

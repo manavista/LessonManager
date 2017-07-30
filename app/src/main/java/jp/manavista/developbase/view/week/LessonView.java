@@ -7,24 +7,49 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import java.text.DateFormat;
+import java.util.List;
+
+import jp.manavista.developbase.dto.TimetableDto;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
+ *
+ * LessonView
+ *
  * <p>
  * Overview:<br>
+ * Definition of view to display lesson schedule week by vertical date.
  * </p>
+ *
+ * @see WeekView WeekView
  */
 public final class LessonView extends WeekView {
 
-    private Paint lessonTimePaint;
-    private Paint lessonNoPaint;
-    private Paint lessonNoBackgroundPaint;
-    private int lessonNoBackgroundColor = Color.LTGRAY;
+    private static final String TAG = LessonView.class.getSimpleName();
 
+    /** Lesson time paint */
+    private Paint lessonTimePaint;
+    /** Lesson no paint */
+    private Paint lessonNoPaint;
+    /** Lesson no color */
+    private int lessonNoColor;
+    /** Lesson background paint */
+    private Paint lessonNoBackgroundPaint;
+    /** Lesson background color */
+    @Getter @Setter
+    private int lessonNoBackgroundColor = Color.LTGRAY;
+    /** Lesson no margin width */
+    @Getter @Setter
     private int lessonNoPaintMarginWidth = 4;
+
+    /** Lesson timetable data transfer object list */
+    private List<TimetableDto> lessonTableList;
+
 
     /** Constructor */
     public LessonView(Context context) {
@@ -38,9 +63,24 @@ public final class LessonView extends WeekView {
 
     /** Constructor */
     public LessonView(Context context, AttributeSet attrs, int defStyleAttr) {
-
         super(context, attrs, defStyleAttr);
         init();
+    }
+
+    /**
+     *
+     * Set lesson timetable list
+     *
+     * <p>
+     * Overview:<br>
+     * set lesson timetable dto list.
+     * </p>
+     *
+     * @param lessonTableList lesson timetable dto list
+     */
+    public void setLessonTableList(List<TimetableDto> lessonTableList) {
+        this.lessonTableList = lessonTableList;
+        invalidate();
     }
 
     @Override
@@ -62,6 +102,8 @@ public final class LessonView extends WeekView {
      * </p>
      */
     private void init() {
+
+        // TODO: set lesson no paint and background color in xml
 
         lessonNoPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         lessonNoPaint.setTextAlign(Paint.Align.CENTER);
@@ -91,22 +133,9 @@ public final class LessonView extends WeekView {
      */
     private void drawLessonColumn(Canvas canvas) {
 
-//        int startHour = 9;
-//        int startMinute = 0;
-//        int endHour = 10;
-//        int endMinute = 30;
-
-        String lessonNo = "1";
-
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 9);
-        startTime.set(Calendar.MINUTE, 30);
-
-        Calendar endTime = Calendar.getInstance();
-        endTime.set(Calendar.HOUR_OF_DAY, 11);
-        endTime.set(Calendar.MINUTE, 45);
-
-        // TODO: lesson start 9:00 - end 10:30 rect, lessonNo and time.
+        if( lessonTableList == null || lessonTableList.isEmpty() ) {
+            return;
+        }
 
         float headerHeight = super.getHeaderHeight();
         int headerRowPadding = super.getHeaderRowPadding();
@@ -122,53 +151,41 @@ public final class LessonView extends WeekView {
 
         int marginTop = hourHeight * startHour;
 
-        // eventRect.top = eventRect.event.getStartTime().get(Calendar.HOUR_OF_DAY) * 60 +
-        // eventRect.event.getStartTime().get(Calendar.MINUTE);
+        for( TimetableDto dto : lessonTableList ) {
 
-        // float top = mHourHeight * 24 * mEventRects.get(i).top / 1440 + mCurrentOrigin.y + mHeaderHeight +
-        // mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 + mEventMarginVertical - marginTop;
+            // LessonNo rect
 
-        // eventRect.bottom = eventRect.event.getEndTime().get(Calendar.HOUR_OF_DAY) * 60 +
-        // eventRect.event.getEndTime().get(Calendar.MINUTE);
+            float startTimeHeight = dto.getStartTime(DateFormat.HOUR_OF_DAY0_FIELD) * 60 + dto.getStartTime(DateFormat.MINUTE_FIELD);
+            float top = hourHeight * 24 * startTimeHeight / 1440 + currentOrigin.y + headerHeight + headerRowPadding * 2
+                    + headerMarginBottom + timeTextHeight / 2 + eventMarginVertical - marginTop;
 
-        // bottom = mHourHeight * 24 * bottom / 1440 + mCurrentOrigin.y + mHeaderHeight +
-        // mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - mEventMarginVertical - marginTop;
+            float endTimeHeight = dto.getEndTime(DateFormat.HOUR_OF_DAY0_FIELD) * 60 + dto.getEndTime(DateFormat.MINUTE_FIELD);
+            float bottom = hourHeight * 24 * endTimeHeight / 1440 + currentOrigin.y + headerHeight + headerRowPadding * 2
+                    + headerMarginBottom + timeTextHeight / 2 + eventMarginVertical - marginTop;
 
-        // LessonNo rect
+            float left = lessonNoPaintMarginWidth;
+            float right = headerColumnWidth - lessonNoPaintMarginWidth;
+            canvas.drawRect(left, top, right, bottom, lessonNoBackgroundPaint);
 
-        float startTimeHeight = startTime.get(Calendar.HOUR_OF_DAY) * 60 + startTime.get(Calendar.MINUTE);
-        float top = hourHeight * 24 * startTimeHeight / 1440 + currentOrigin.y + headerHeight + headerRowPadding * 2
-                + headerMarginBottom + timeTextHeight / 2 + eventMarginVertical - marginTop;
+            // LessonNo start time
 
-        float endTimeHeight = endTime.get(Calendar.HOUR_OF_DAY) * 60 + endTime.get(Calendar.MINUTE);
-        float bottom = hourHeight * 24 * endTimeHeight / 1440 + currentOrigin.y + headerHeight + headerRowPadding * 2
-                + headerMarginBottom + timeTextHeight / 2 + eventMarginVertical - marginTop;
+            float startTimeX = timeTextWidth + headerColumnPadding;
+            float startTimeY = top + timeTextHeight + (timeTextHeight / 2);
+            canvas.drawText(dto.getStartTimeFormatted(), startTimeX, startTimeY, lessonTimePaint);
 
-        float left = lessonNoPaintMarginWidth;
-//        float top = headerHeight + headerRowPadding * 2 + currentOrigin.y + hourHeight * 9 + headerMarginBottom;
-        float right = headerColumnWidth - lessonNoPaintMarginWidth;
-        canvas.drawRect(left, top, right, bottom, lessonNoBackgroundPaint);
+            // LessonNo end time
 
+            float endTimeX = timeTextWidth + headerColumnPadding;
+            float endTimeY = bottom - (timeTextHeight / 2);
+            canvas.drawText(dto.getEndTimeFormatted(), endTimeX, endTimeY, lessonTimePaint);
 
-        // LessonNo start time
+            // LessonNo
+            float lessonNoX = headerColumnWidth / 2;
+            float lessonNoY = top + ((bottom - top) / 2);
+            canvas.drawText(String.valueOf(dto.getLessonNo()), lessonNoX, lessonNoY, lessonNoPaint);
 
-        SimpleDateFormat format = new SimpleDateFormat("hh a", Locale.getDefault());
-        String startTimeLabel = format.format(startTime.getTime());
-        float startTimeX = timeTextWidth + headerColumnPadding;
-        float startTimeY = top + timeTextHeight + (timeTextHeight / 2);
-        canvas.drawText(startTimeLabel, startTimeX, startTimeY, lessonTimePaint);
-
-        // LessonNo end time
-
-        String endTimeLabel = format.format(endTime.getTime());
-        float endTimeX = timeTextWidth + headerColumnPadding;
-        float endTimeY = bottom - (timeTextHeight / 2);
-        canvas.drawText(endTimeLabel, endTimeX, endTimeY, lessonTimePaint);
-
-        // LessonNo
-        float lessonNoX = headerColumnWidth / 2;
-        float lessonNoY = top + ((bottom - top) / 2);
-        canvas.drawText(lessonNo, lessonNoX, lessonNoY, lessonNoPaint);
+        }
 
     }
+
 }
