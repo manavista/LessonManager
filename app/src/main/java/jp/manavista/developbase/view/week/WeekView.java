@@ -532,7 +532,7 @@ public class WeekView extends View {
         }
     }
 
-    private void drawTimeColumnAndAxes(Canvas canvas) {
+    protected void drawTimeColumnAndAxes(Canvas canvas) {
         // Draw the background color for the header column.
         canvas.drawRect(0, mHeaderHeight + mHeaderRowPadding * 2, mHeaderColumnWidth, getHeight(), mHeaderColumnBackgroundPaint);
 
@@ -2142,5 +2142,13 @@ public class WeekView extends View {
 
     protected float getTimeTextWidth() {
         return this.mTimeTextWidth;
+    }
+
+    protected Paint getTimeTextPaint() {
+        return this.mTimeTextPaint;
+    }
+
+    protected Paint getHeaderColumnBackgroundPaint() {
+        return this.mHeaderColumnBackgroundPaint;
     }
 }

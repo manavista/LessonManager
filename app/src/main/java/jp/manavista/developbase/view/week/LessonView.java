@@ -1,30 +1,57 @@
 package jp.manavista.developbase.view.week;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Region;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import java.text.DateFormat;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import jp.manavista.developbase.R;
+import jp.manavista.developbase.dto.TimetableDto;
 
 /**
+ *
+ * LessonView
+ *
  * <p>
  * Overview:<br>
+ * Definition of view to display lesson schedule week by vertical date.
  * </p>
+ *
+ * @see WeekView WeekView
  */
 public final class LessonView extends WeekView {
 
-    private Paint lessonTimePaint;
-    private Paint lessonNoPaint;
-    private Paint lessonNoBackgroundPaint;
-    private int lessonNoBackgroundColor = Color.LTGRAY;
+    /** Logger tag string */
+    private static final String TAG = LessonView.class.getSimpleName();
 
+    /** Lesson time paint */
+    private Paint lessonTimePaint;
+    /** Lesson no paint */
+    private Paint lessonNoPaint;
+    /** Lesson background paint */
+    private Paint lessonNoBackgroundPaint;
+    /** Lesson no color */
+    private int lessonNoColor = Color.RED;
+    /** Lesson background color */
+    private int lessonNoBackgroundColor = Color.LTGRAY;
+    /** Lesson no margin width */
     private int lessonNoPaintMarginWidth = 4;
+
+    /** Lesson timetable data transfer object list */
+    private List<TimetableDto> lessonTableList;
+    /** Except draw hour set */
+    private Set<Integer> exceptDrawHourSet;
 
     /** Constructor */
     public LessonView(Context context) {
@@ -40,7 +67,36 @@ public final class LessonView extends WeekView {
     public LessonView(Context context, AttributeSet attrs, int defStyleAttr) {
 
         super(context, attrs, defStyleAttr);
+
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.WeekView, 0, 0);
+
+        try {
+
+            lessonNoColor = a.getColor(R.styleable.WeekView_lessonNoColor, lessonNoColor);
+            lessonNoBackgroundColor = a.getColor(R.styleable.WeekView_lessonNoBackgroundColor, lessonNoBackgroundColor);
+
+        } finally {
+            a.recycle();
+        }
+
         init();
+    }
+
+    /**
+     *
+     * Set lesson timetable list
+     *
+     * <p>
+     * Overview:<br>
+     * set lesson timetable dto list.
+     * </p>
+     *
+     * @param lessonTableList lesson timetable dto list
+     */
+    public void setLessonTableList(List<TimetableDto> lessonTableList) {
+        this.lessonTableList = lessonTableList;
+        calcExceptDrawHourSet();
+        invalidate();
     }
 
     @Override
@@ -49,6 +105,45 @@ public final class LessonView extends WeekView {
         super.onDraw(canvas);
 
         drawLessonColumn(canvas);
+    }
+
+    @Override
+    protected void drawTimeColumnAndAxes(Canvas canvas) {
+
+        float headerHeight = super.getHeaderHeight();
+        int headerRowPadding = super.getHeaderRowPadding();
+        PointF currentOrigin = super.getCurrentOrigin();
+        int hourHeight = super.getHourHeight();
+        int startHour = super.getStartTime();
+        int endHour = super.getEndTime();
+        float headerMarginBottom = super.getHeaderMarginBottom();
+
+        float timeTextWidth = super.getTimeTextWidth();
+        float timeTextHeight = super.getTimeTextHeight();
+        int headerColumnPadding = super.getHeaderColumnPadding();
+        float headerColumnWidth = super.getHeaderColumnWidth();
+
+        canvas.drawRect(0, headerHeight + headerColumnPadding * 2, headerColumnWidth, getHeight(), super.getHeaderColumnBackgroundPaint());
+        canvas.clipRect(0, headerHeight + headerColumnPadding * 2, headerColumnWidth, getHeight(), Region.Op.REPLACE);
+//        canvas.clipOutRect(0, headerHeight + headerColumnPadding * 2, headerColumnWidth, getHeight());
+
+
+        for ( int i = startHour ; i < endHour ; i++ ) {
+
+            if ( exceptDrawHourSet.contains(i) ) {
+                continue;
+            }
+
+            float top = headerHeight + headerRowPadding * 2 + currentOrigin.y
+                    + hourHeight * (i - startHour) + headerMarginBottom;
+            String time = getDateTimeInterpreter().interpretTime(i);
+
+            if ( top < getHeight() ) {
+                float x = timeTextWidth + headerColumnPadding;
+                float y = top + timeTextHeight;
+                canvas.drawText(time, x, y, super.getTimeTextPaint());
+            }
+        }
     }
 
     /**
@@ -67,7 +162,7 @@ public final class LessonView extends WeekView {
         lessonNoPaint.setTextAlign(Paint.Align.CENTER);
         lessonNoPaint.setTextSize(super.getTextSize());
         lessonNoPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        lessonNoPaint.setColor(super.getHeaderColumnTextColor());
+        lessonNoPaint.setColor(lessonNoColor);
 
         lessonTimePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         lessonTimePaint.setTextAlign(Paint.Align.RIGHT);
@@ -76,6 +171,8 @@ public final class LessonView extends WeekView {
 
         lessonNoBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         lessonNoBackgroundPaint.setColor(lessonNoBackgroundColor);
+
+        exceptDrawHourSet = new HashSet<>();
     }
 
     /**
@@ -91,22 +188,9 @@ public final class LessonView extends WeekView {
      */
     private void drawLessonColumn(Canvas canvas) {
 
-//        int startHour = 9;
-//        int startMinute = 0;
-//        int endHour = 10;
-//        int endMinute = 30;
-
-        String lessonNo = "1";
-
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 9);
-        startTime.set(Calendar.MINUTE, 30);
-
-        Calendar endTime = Calendar.getInstance();
-        endTime.set(Calendar.HOUR_OF_DAY, 11);
-        endTime.set(Calendar.MINUTE, 45);
-
-        // TODO: lesson start 9:00 - end 10:30 rect, lessonNo and time.
+        if( lessonTableList == null || lessonTableList.isEmpty() ) {
+            return;
+        }
 
         float headerHeight = super.getHeaderHeight();
         int headerRowPadding = super.getHeaderRowPadding();
@@ -122,53 +206,84 @@ public final class LessonView extends WeekView {
 
         int marginTop = hourHeight * startHour;
 
-        // eventRect.top = eventRect.event.getStartTime().get(Calendar.HOUR_OF_DAY) * 60 +
-        // eventRect.event.getStartTime().get(Calendar.MINUTE);
+        for( TimetableDto dto : lessonTableList ) {
 
-        // float top = mHourHeight * 24 * mEventRects.get(i).top / 1440 + mCurrentOrigin.y + mHeaderHeight +
-        // mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 + mEventMarginVertical - marginTop;
+            // LessonNo rect
 
-        // eventRect.bottom = eventRect.event.getEndTime().get(Calendar.HOUR_OF_DAY) * 60 +
-        // eventRect.event.getEndTime().get(Calendar.MINUTE);
+            float startTimeHeight = dto.getStartTime(DateFormat.HOUR_OF_DAY0_FIELD) * 60 + dto.getStartTime(DateFormat.MINUTE_FIELD);
+            float top = hourHeight * 24 * startTimeHeight / 1440 + currentOrigin.y + headerHeight + headerRowPadding * 2
+                    + headerMarginBottom + timeTextHeight / 2 + eventMarginVertical - marginTop;
 
-        // bottom = mHourHeight * 24 * bottom / 1440 + mCurrentOrigin.y + mHeaderHeight +
-        // mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - mEventMarginVertical - marginTop;
+            float endTimeHeight = dto.getEndTime(DateFormat.HOUR_OF_DAY0_FIELD) * 60 + dto.getEndTime(DateFormat.MINUTE_FIELD);
+            float bottom = hourHeight * 24 * endTimeHeight / 1440 + currentOrigin.y + headerHeight + headerRowPadding * 2
+                    + headerMarginBottom + timeTextHeight / 2 + eventMarginVertical - marginTop;
 
-        // LessonNo rect
+            float left = lessonNoPaintMarginWidth;
+            float right = headerColumnWidth - lessonNoPaintMarginWidth;
+            canvas.drawRect(left, top, right, bottom, lessonNoBackgroundPaint);
 
-        float startTimeHeight = startTime.get(Calendar.HOUR_OF_DAY) * 60 + startTime.get(Calendar.MINUTE);
-        float top = hourHeight * 24 * startTimeHeight / 1440 + currentOrigin.y + headerHeight + headerRowPadding * 2
-                + headerMarginBottom + timeTextHeight / 2 + eventMarginVertical - marginTop;
+            // LessonNo start time
 
-        float endTimeHeight = endTime.get(Calendar.HOUR_OF_DAY) * 60 + endTime.get(Calendar.MINUTE);
-        float bottom = hourHeight * 24 * endTimeHeight / 1440 + currentOrigin.y + headerHeight + headerRowPadding * 2
-                + headerMarginBottom + timeTextHeight / 2 + eventMarginVertical - marginTop;
+            float startTimeX = timeTextWidth + headerColumnPadding;
+            float startTimeY = top + timeTextHeight + (timeTextHeight / 2);
+            canvas.drawText(dto.getStartTimeFormatted(), startTimeX, startTimeY, lessonTimePaint);
 
-        float left = lessonNoPaintMarginWidth;
-//        float top = headerHeight + headerRowPadding * 2 + currentOrigin.y + hourHeight * 9 + headerMarginBottom;
-        float right = headerColumnWidth - lessonNoPaintMarginWidth;
-        canvas.drawRect(left, top, right, bottom, lessonNoBackgroundPaint);
+            // LessonNo end time
 
+            float endTimeX = timeTextWidth + headerColumnPadding;
+            float endTimeY = bottom - (timeTextHeight / 2);
+            canvas.drawText(dto.getEndTimeFormatted(), endTimeX, endTimeY, lessonTimePaint);
 
-        // LessonNo start time
-
-        SimpleDateFormat format = new SimpleDateFormat("hh a", Locale.getDefault());
-        String startTimeLabel = format.format(startTime.getTime());
-        float startTimeX = timeTextWidth + headerColumnPadding;
-        float startTimeY = top + timeTextHeight + (timeTextHeight / 2);
-        canvas.drawText(startTimeLabel, startTimeX, startTimeY, lessonTimePaint);
-
-        // LessonNo end time
-
-        String endTimeLabel = format.format(endTime.getTime());
-        float endTimeX = timeTextWidth + headerColumnPadding;
-        float endTimeY = bottom - (timeTextHeight / 2);
-        canvas.drawText(endTimeLabel, endTimeX, endTimeY, lessonTimePaint);
-
-        // LessonNo
-        float lessonNoX = headerColumnWidth / 2;
-        float lessonNoY = top + ((bottom - top) / 2);
-        canvas.drawText(lessonNo, lessonNoX, lessonNoY, lessonNoPaint);
+            // LessonNo
+            float lessonNoX = headerColumnWidth / 2;
+            float lessonNoY = top + ((bottom - top) / 2);
+            canvas.drawText(String.valueOf(dto.getLessonNo()), lessonNoX, lessonNoY, lessonNoPaint);
+        }
 
     }
+
+    /**
+     *
+     * Calculate Except draw hour Set
+     *
+     * <p>
+     * Overview:<br>
+     * Calculate a time set not displayed from timetable.<br>
+     * Delete the time display of the calendar when the calendar time display and
+     * the start and end time of the lesson overlap or near.
+     * </p>
+     *
+     */
+    private void calcExceptDrawHourSet() {
+
+        if( lessonTableList == null || lessonTableList.isEmpty() ) {
+            return;
+        }
+
+        exceptDrawHourSet.clear();
+
+        for ( TimetableDto dto : lessonTableList ) {
+
+            final int startHour = dto.getStartTime(DateFormat.HOUR_OF_DAY0_FIELD);
+            final int startMinute = dto.getStartTime(DateFormat.MINUTE_FIELD);
+
+            if( startMinute < 30 ) {
+                exceptDrawHourSet.add(startHour);
+            } else if ( startMinute > 30 ) {
+                exceptDrawHourSet.add(startHour + 1);
+            }
+
+            final int endHour = dto.getEndTime(DateFormat.HOUR_OF_DAY0_FIELD);
+            final int endMinute = dto.getEndTime(DateFormat.MINUTE_FIELD);
+
+            if( endMinute < 30 ) {
+                exceptDrawHourSet.add(endHour);
+            } else if ( endMinute > 30 ) {
+                exceptDrawHourSet.add(endHour + 1);
+            }
+        }
+
+        Log.d(TAG, "Except draw hour: " + exceptDrawHourSet.toString());
+    }
+
 }
