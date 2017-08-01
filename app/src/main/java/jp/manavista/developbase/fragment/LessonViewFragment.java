@@ -41,8 +41,8 @@ import jp.manavista.developbase.view.week.WeekViewEvent;
  * Handing lesson view days, timetable, and other events.
  * </p>
  */
-public final class LessonViewFragment extends Fragment
-        implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener,
+public final class LessonViewFragment extends Fragment implements
+        WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener,
         WeekView.EmptyViewLongPressListener, DateTimeInterpreter {
 
     /** LessonView */
@@ -113,7 +113,7 @@ public final class LessonViewFragment extends Fragment
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@NonNull Throwable throwable) throws Exception {
-
+                /* no description */
             }
         }, new Action() {
             @Override
@@ -293,6 +293,12 @@ public final class LessonViewFragment extends Fragment
     @Override
     public String interpretTime(int hour) {
         return hour + ":00";
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        timetableDisposable.dispose();
     }
 
     /**

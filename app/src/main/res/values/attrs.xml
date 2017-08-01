@@ -52,5 +52,8 @@
         <attr name="allDayEventHeight" format="dimension"/>
         <attr name="scrollDuration" format="integer"/>
         <attr name="autoLimitTime" format="boolean"/>
+
+        <attr name="lessonNoBackgroundColor" format="color"/>
+        <attr name="lessonNoColor" format="color" />
     </declare-styleable>
 </resources>
