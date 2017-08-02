@@ -38,6 +38,14 @@
     <string name="default.value.first_day_of_week">1</string>
     <string name="summary.no_data">No data</string>
 
+    <string name="preferences.key.display_start_time">display_start_time</string>
+    <string name="preferences.title.display_start_time">Display Start Time</string>
+    <string name="preferences.summary.display_start_time">Select display start time</string>
+    <string name="preferences.default.display_start_time">9:00</string>
+
+    <string name="key.display_end_time">display_end_time</string>
+    <string name="preferences.title.display_end_time">Display End Time</string>
+
     <!-- Timetable -->
     <string name="toolbar.title">Timetable</string>
     <string name="toolbar.option.add">add</string>

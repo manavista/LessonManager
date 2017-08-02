@@ -4,6 +4,7 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,10 +46,15 @@ public final class LessonViewFragment extends Fragment implements
         WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener,
         WeekView.EmptyViewLongPressListener, DateTimeInterpreter {
 
+    /** Logger Tag string  */
+    private static final String TAG = LessonViewFragment.class.getSimpleName();
+
     /** LessonView */
     private LessonView lessonView;
     /** RootView */
     private View rootView;
+    /** Timetable DTO List */
+    private List<TimetableDto> timetableList;
 
     /** Timetable service */
     @Inject
@@ -93,6 +99,8 @@ public final class LessonViewFragment extends Fragment implements
 
         super.onActivityCreated(savedInstanceState);
 
+        Log.d(TAG, "onActivityCreated");
+
         DependencyInjector.appComponent().inject(this);
 
         lessonView = rootView.findViewById(R.id.weekView);
@@ -103,24 +111,7 @@ public final class LessonViewFragment extends Fragment implements
         lessonView.setDateTimeInterpreter(this);
         //view.setLimitTime(9, 21);
 
-        final List<TimetableDto> timetableList = new ArrayList<>();
-
-        timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
-            @Override
-            public void accept(@NonNull Timetable timetable) throws Exception {
-                timetableList.add(TimetableDto.copy(timetable));
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@NonNull Throwable throwable) throws Exception {
-                /* no description */
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                lessonView.setLessonTableList(timetableList);
-            }
-        });
+        timetableList = new ArrayList<>();
 
     }
 
@@ -293,6 +284,34 @@ public final class LessonViewFragment extends Fragment implements
     @Override
     public String interpretTime(int hour) {
         return hour + ":00";
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.d(TAG, "onResume");
+
+        // TODO: preferences reload. start and end time refresh.
+
+        timetableList.clear();
+
+        timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
+            @Override
+            public void accept(@NonNull Timetable timetable) throws Exception {
+                timetableList.add(TimetableDto.copy(timetable));
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+                /* no description */
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                lessonView.setLessonTableList(timetableList);
+            }
+        });
     }
 
     @Override

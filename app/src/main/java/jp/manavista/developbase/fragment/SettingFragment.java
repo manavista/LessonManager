@@ -37,6 +37,22 @@ public class SettingFragment extends PreferenceFragment
     /** preference key: first day of week */
     public static final String KEY_FIRST_DAY_OF_WEEK = "first_day_of_week";
 
+    // TODO: Delete old preferences key.
+    // TODO: Add Lesson View preferences. start time, end time, and first day (or today?)
+
+    private static final String TIME_FORMAT_HHMM = "%02d:%02d";
+
+    /**
+     *
+     * New Instance
+     *
+     * <p>
+     * Overview:<br>
+     * Create new {@code SettingFragment} object.
+     * </p>
+     *
+     * @return {@code SettingFragment} object
+     */
     public static SettingFragment newInstance() {
         return new SettingFragment();
     }
