@@ -1,9 +1,11 @@
 package jp.manavista.developbase.fragment;
 
+import android.content.SharedPreferences;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +47,19 @@ public final class LessonViewFragment extends Fragment implements
         WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener,
         WeekView.EmptyViewLongPressListener, DateTimeInterpreter {
 
+    /** Logger Tag string  */
+    private static final String TAG = LessonViewFragment.class.getSimpleName();
+
     /** LessonView */
     private LessonView lessonView;
     /** RootView */
     private View rootView;
+    /** Timetable DTO List */
+    private List<TimetableDto> timetableList;
 
+    /** Shared preferences */
+    @Inject
+    SharedPreferences sharedPreferences;
     /** Timetable service */
     @Inject
     TimetableService timetableService;
@@ -101,26 +111,8 @@ public final class LessonViewFragment extends Fragment implements
         lessonView.setEventLongPressListener(this);
         lessonView.setEmptyViewLongPressListener(this);
         lessonView.setDateTimeInterpreter(this);
-        //view.setLimitTime(9, 21);
 
-        final List<TimetableDto> timetableList = new ArrayList<>();
-
-        timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
-            @Override
-            public void accept(@NonNull Timetable timetable) throws Exception {
-                timetableList.add(TimetableDto.copy(timetable));
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@NonNull Throwable throwable) throws Exception {
-                /* no description */
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                lessonView.setLessonTableList(timetableList);
-            }
-        });
+        timetableList = new ArrayList<>();
 
     }
 
@@ -148,6 +140,19 @@ public final class LessonViewFragment extends Fragment implements
         endTime = (Calendar) startTime.clone();
         endTime.set(Calendar.HOUR_OF_DAY, 4);
         endTime.set(Calendar.MINUTE, 30);
+        endTime.set(Calendar.MONTH, newMonth-1);
+        event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
+        event.setColor(getResources().getColor(R.color.event_color_02));
+        events.add(event);
+
+        startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, 17);
+        startTime.set(Calendar.MINUTE, 0);
+        startTime.set(Calendar.MONTH, newMonth-1);
+        startTime.set(Calendar.YEAR, newYear);
+        endTime = (Calendar) startTime.clone();
+        endTime.set(Calendar.HOUR_OF_DAY, 18);
+        endTime.set(Calendar.MINUTE, 20);
         endTime.set(Calendar.MONTH, newMonth-1);
         event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
         event.setColor(getResources().getColor(R.color.event_color_02));
@@ -226,47 +231,6 @@ public final class LessonViewFragment extends Fragment implements
         event.setColor(getResources().getColor(R.color.event_color_02));
         events.add(event);
 
-        //AllDay event
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 23);
-        event = new WeekViewEvent(7, getEventTitle(startTime),null, startTime, endTime, true);
-        event.setColor(getResources().getColor(R.color.event_color_04));
-        events.add(event);
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.DAY_OF_MONTH, 8);
-        startTime.set(Calendar.HOUR_OF_DAY, 2);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.DAY_OF_MONTH, 10);
-        endTime.set(Calendar.HOUR_OF_DAY, 23);
-        event = new WeekViewEvent(8, getEventTitle(startTime),null, startTime, endTime, true);
-        event.setColor(getResources().getColor(R.color.event_color_03));
-        events.add(event);
-
-        // All day event until 00:00 next day
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.DAY_OF_MONTH, 10);
-        startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.SECOND, 0);
-        startTime.set(Calendar.MILLISECOND, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.DAY_OF_MONTH, 11);
-        event = new WeekViewEvent(8, getEventTitle(startTime), null, startTime, endTime, true);
-        event.setColor(getResources().getColor(R.color.event_color_01));
-        events.add(event);
-
         return events;
     }
 
@@ -293,6 +257,38 @@ public final class LessonViewFragment extends Fragment implements
     @Override
     public String interpretTime(int hour) {
         return hour + ":00";
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        int startHour = sharedPreferences.getInt(getString(R.string.preferences_key_display_start_time), 9);
+        int endHour = sharedPreferences.getInt(getString(R.string.preferences_key_display_end_time), 21);
+        lessonView.setLimitTime(startHour, endHour);
+
+        Log.d(TAG, "set limit time start: " + startHour + " end: " + endHour);
+
+
+        timetableList.clear();
+
+        timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
+            @Override
+            public void accept(@NonNull Timetable timetable) throws Exception {
+                timetableList.add(TimetableDto.copy(timetable));
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+                /* no description */
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                lessonView.setLessonTableList(timetableList);
+            }
+        });
     }
 
     @Override
