@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:layout="@layout/preferences_category"
@@ -37,6 +38,22 @@
     <PreferenceCategory
         android:layout="@layout/preferences_category"
         android:title="@string/preference.category.lesson_week_view">
+
+        <jp.manavista.developbase.view.preference.NumberPickerPreference
+            android:key="@string/preferences.key.display_start_time"
+            android:title="@string/preferences.title.display_start_time"
+            android:summary="@string/preferences.summary.display_start_time"
+            app:minValue="0"
+            app:maxValue="23"
+            android:defaultValue="9" />
+
+        <jp.manavista.developbase.view.preference.NumberPickerPreference
+            android:key="@string/preferences.key.display_end_time"
+            android:title="@string/preferences.title.display_end_time"
+            android:summary="@string/preferences.summary.display_end_time"
+            app:minValue="0"
+            app:maxValue="23"
+            android:defaultValue="21" />
 
     </PreferenceCategory>
 

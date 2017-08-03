@@ -14,9 +14,11 @@ import android.widget.ListAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Locale;
 import java.util.TreeSet;
 
 import jp.manavista.developbase.R;
+import jp.manavista.developbase.view.preference.NumberPickerPreference;
 
 /**
  *
@@ -40,7 +42,7 @@ public class SettingFragment extends PreferenceFragment
     // TODO: Delete old preferences key.
     // TODO: Add Lesson View preferences. start time, end time, and first day (or today?)
 
-    private static final String TIME_FORMAT_HHMM = "%02d:%02d";
+    private static final String TIME_FORMAT_HMM = "%01d:00";
 
     /**
      *
@@ -147,6 +149,10 @@ public class SettingFragment extends PreferenceFragment
 
                 final String noData = getResources().getString(R.string.summary_no_data);
                 preference.setSummary(preference.getValues().size() == 0 ? noData : sb.toString());
+
+            } else if( item instanceof NumberPickerPreference ) {
+                NumberPickerPreference preference = (NumberPickerPreference) item;
+                preference.setSummary(String.format(Locale.getDefault(), TIME_FORMAT_HMM, preference.getSelectedValue()));
             }
         }
     }
