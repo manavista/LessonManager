@@ -1,0 +1,157 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="jp.manavista.developbase.fragment.MemberFragment">
+
+    <TextView
+        android:id="@+id/givenNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label.member.given_name"
+        android:labelFor="@+id/givenNameEditText"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:id="@+id/givenNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/givenNameLabel"
+        android:ems="10"
+        android:inputType="textPersonName"/>
+
+    <TextView
+        android:id="@+id/additionalNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:labelFor="@+id/additionalNameEditText"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/givenNameEditText"
+        android:text="@string/label.member.additional_name"/>
+
+    <EditText
+        android:id="@+id/additionalNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/additionalNameLabel"
+        android:ems="10"
+        android:inputType="textPersonName"/>
+
+    <TextView
+        android:id="@+id/familyNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:labelFor="@+id/familyNameEditText"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/additionalNameEditText"
+        android:text="@string/label.member.family_name"/>
+
+    <EditText
+        android:id="@+id/familyNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/familyNameLabel"
+        android:ems="10"
+        android:inputType="textPersonName"/>
+
+    <TextView
+        android:id="@+id/nickNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:labelFor="@+id/nickNameEditText"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/familyNameEditText"
+        android:text="@string/label.member.nick_name"/>
+
+    <EditText
+        android:id="@+id/nickNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/nickNameLabel"
+        android:ems="10"
+        android:inputType="textPersonName"
+        />
+
+    <TextView
+        android:id="@+id/phoneNumberLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:labelFor="@+id/phoneNumberEditText"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/nickNameEditText"
+        android:layout_marginTop="21dp"
+        android:text="@string/label.member.phone_number"/>
+
+    <EditText
+        android:id="@+id/phoneNumberEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="phone"
+        android:layout_below="@+id/phoneNumberLabel"
+        android:layout_toEndOf="@+id/additionalNameLabel"/>
+
+    <Spinner
+        android:id="@+id/phoneNumberTypeSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phoneNumberLabel"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/phoneNumberLabel"
+        android:entries="@array/items_member_phone_type"/>
+
+    <TextView
+        android:id="@+id/emailLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:labelFor="@+id/emailEditText"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/phoneNumberTypeSpinner"
+        android:layout_marginTop="24dp"
+        android:text="@string/label.member.email"/>
+
+    <Spinner
+        android:id="@+id/emailTypeSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailLabel"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/phoneNumberTypeSpinner"
+        android:entries="@array/items_member_email_type"/>
+
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:layout_alignTop="@+id/emailTypeSpinner"
+        android:layout_alignStart="@+id/phoneNumberEditText"/>
+
+    <TextView
+        android:id="@+id/birthdayLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:labelFor="@+id/birthdayEditText"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/emailTypeSpinner"
+        android:layout_marginTop="23dp"
+        android:text="@string/label.member.birthday"/>
+
+    <EditText
+        android:id="@+id/birthdayEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="date"
+        android:layout_below="@+id/birthdayLabel"
+        android:layout_alignParentStart="true"/>
+
+</RelativeLayout>

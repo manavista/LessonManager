@@ -1,10 +1,9 @@
-package jp.manavista.developbase.dto;
+package jp.manavista.developbase.model.dto;
 
 import java.sql.Time;
 import java.text.DateFormat;
-import java.util.Calendar;
 
-import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.model.entity.Timetable;
 import jp.manavista.developbase.util.DateTimeUtil;
 import lombok.Data;
 

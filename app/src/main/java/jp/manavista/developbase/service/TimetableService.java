@@ -2,8 +2,7 @@ package jp.manavista.developbase.service;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.disposables.Disposable;
-import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.model.entity.Timetable;
 
 /**
  *

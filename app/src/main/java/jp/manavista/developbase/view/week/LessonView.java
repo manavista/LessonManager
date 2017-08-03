@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import jp.manavista.developbase.R;
-import jp.manavista.developbase.dto.TimetableDto;
+import jp.manavista.developbase.model.dto.TimetableDto;
 
 /**
  *

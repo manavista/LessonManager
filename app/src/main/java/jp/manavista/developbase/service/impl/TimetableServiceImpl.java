@@ -7,7 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.model.entity.Timetable;
 import jp.manavista.developbase.repository.TimeTableRepository;
 import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.util.DateTimeUtil;

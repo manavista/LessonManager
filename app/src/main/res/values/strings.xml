@@ -9,7 +9,7 @@
     <string name="menu.weekly_view">Weekly View</string>
     <string name="menu.member_list">Member List</string>
     <string name="menu.add">Add</string>
-    <string name="menu.member">Member</string>
+    <string name="menu.subscriber">Member</string>
     <string name="menu.lesson">Lesson</string>
     <string name="menu.timetable">Timetable</string>
     <string name="menu.private_day">Private Day</string>
@@ -49,11 +49,34 @@
     <string name="preferences.default.display_end_time">21</string>
 
     <!-- Timetable -->
-    <string name="toolbar.title">Timetable</string>
-    <string name="toolbar.option.add">add</string>
+    <string name="toolbar.timetable.title">Timetable</string>
+    <string name="toolbar.timetable.option.add">add</string>
     <string name="timetable.label.setting">Setting Timetable</string>
     <string name="timetable.label.hyphen_spaces"> - </string>
     <string name="timetable.label.lesson_no.select">Select Lesson No</string>
 
+    <!-- Member -->
+    <string name="toolbar.member.title">Member</string>
+    <string name="toolbar.member.option.save">Save</string>
+    <string name="label.member.given_name">Given Name:</string>
+    <string name="label.member.additional_name">Additional Name:</string>
+    <string name="label.member.family_name">Family Name:</string>
+    <string name="label.member.nick_name">Nick Name:</string>
+    <string name="label.member.phone_number">Phone Number:</string>
+    <string name="label.member.email">Email:</string>
+    <string name="label.member.birthday">Birthday:</string>
+
+    <string-array name="items_member_phone_type">
+        <item>Mobile</item>
+        <item>Home</item>
+        <item>Work</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="items_member_email_type">
+        <item>Mobile</item>
+        <item>Home</item>
+        <item>Work</item>
+        <item>Other</item>
+    </string-array>
 
 </resources>

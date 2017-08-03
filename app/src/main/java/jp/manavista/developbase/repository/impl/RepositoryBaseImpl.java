@@ -1,6 +1,6 @@
 package jp.manavista.developbase.repository.impl;
 
-import jp.manavista.developbase.entity.OrmaDatabase;
+import jp.manavista.developbase.model.entity.OrmaDatabase;
 
 /**
  * <p>
