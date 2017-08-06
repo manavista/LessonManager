@@ -1,10 +1,12 @@
 package jp.manavista.developbase.model.entity;
 
+import android.support.annotation.Nullable;
+
 import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
 import com.github.gfx.android.orma.annotation.Table;
 
-import java.sql.Date;
+import lombok.ToString;
 
 /**
  *
@@ -17,6 +19,7 @@ import java.sql.Date;
  * </p>
  */
 @Table
+@ToString
 public class Member {
 
     @PrimaryKey(autoincrement = true)
@@ -24,21 +27,29 @@ public class Member {
     @Column
     public String givenName;
     @Column
+    @Nullable
     public String additionalName;
     @Column
     public String familyName;
     @Column
+    @Nullable
     public String nickName;
     @Column
-    public Date birthday;
+    @Nullable
+    public String birthday;
     @Column
-    public int gender;
+    @Nullable
+    public Integer gender;
     @Column
-    public int phoneType;
+    @Nullable
+    public Integer phoneType;
     @Column
+    @Nullable
     public String phoneNumber;
     @Column
-    public int emailType;
+    @Nullable
+    public Integer emailType;
     @Column
+    @Nullable
     public String email;
 }

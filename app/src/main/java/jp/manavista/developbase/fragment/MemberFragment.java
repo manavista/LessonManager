@@ -4,15 +4,29 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-import java.sql.Date;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.injector.DependencyInjector;
+import jp.manavista.developbase.model.dto.MemberFragmentDto;
+import jp.manavista.developbase.model.entity.Member;
+import jp.manavista.developbase.service.MemberService;
 
 /**
  *
@@ -24,21 +38,31 @@ import jp.manavista.developbase.injector.DependencyInjector;
  * Handling of Member insert and update (database control) is defined in this class.
  * </p>
  */
-public final class MemberFragment extends Fragment {
+public final class MemberFragment extends Fragment implements Validator.ValidationListener {
 
-    private EditText givenName;
-    private EditText additionalName;
-    private EditText familyName;
-    private EditText nickName;
-    private int phoneType;
-    private String phoneNumber;
-    private int emailType;
-    private String email;
-    private Date birthday;
+    /** Logger tag string */
+    public static final String TAG = MemberFragment.class.getSimpleName();
+
+    /** Root view(R.layout.fragment_member) */
+    private View rootView;
+    /** Activity Contents */
+    private final Activity contents;
+    /** DTO */
+    private final MemberFragmentDto dto;
+    /** input validator */
+    private Validator validator;
+    /** Member disposable */
+    private Disposable memberDisposable;
+
+    @Inject
+    MemberService memberService;
+
 
     /** Constructor */
     public MemberFragment() {
-        // Required empty public constructor
+        this.dto = new MemberFragmentDto();
+        this.memberDisposable = Disposables.empty();
+        this.contents = getActivity();
     }
 
     /**
@@ -71,7 +95,20 @@ public final class MemberFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_member, container, false);
+
+        rootView = inflater.inflate(R.layout.fragment_member, container, false);
+
+        dto.setGivenName((EditText) rootView.findViewById(R.id.givenNameEditText));
+        dto.setAdditionalName((EditText) rootView.findViewById(R.id.additionalNameEditText));
+        dto.setFamilyName((EditText) rootView.findViewById(R.id.familyNameEditText));
+        dto.setNickName((EditText) rootView.findViewById(R.id.nickNameEditText));
+        dto.setPhoneType((Spinner) rootView.findViewById(R.id.phoneNumberTypeSpinner));
+        dto.setPhoneNumber((EditText) rootView.findViewById(R.id.phoneNumberEditText));
+        dto.setEmailType((Spinner) rootView.findViewById(R.id.emailTypeSpinner));
+        dto.setEmail((EditText) rootView.findViewById(R.id.emailEditText));
+        dto.setBirthday((EditText) rootView.findViewById(R.id.birthdayEditText));
+
+        return rootView;
     }
 
     @Override
@@ -79,13 +116,15 @@ public final class MemberFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         DependencyInjector.appComponent().inject(this);
-        final Activity contents = getActivity();
 
+        validator = new Validator(dto);
+        validator.setValidationListener(this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        this.memberDisposable.dispose();
     }
 
     /**
@@ -94,11 +133,46 @@ public final class MemberFragment extends Fragment {
      *
      * <p>
      * Overview:<br>
-     * Save the information on the member you entered on the screen.
+     * Save the information on the member you entered on the screen.<br>
+     * First, validate the input value. Perform processing with another
+     * function according to the result.
      * </p>
      */
     public void saveMember() {
-
-        // TODO: input data validation.
+        validator.validate();
     }
+
+    @Override
+    public void onValidationSucceeded() {
+
+        memberDisposable = memberService.save(dto.convert()).subscribe(new Consumer<Member>() {
+            @Override
+            public void accept(Member member) throws Exception {
+                Log.d(TAG, member.toString());
+                contents.finish();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.e(TAG, "can not save member", throwable);
+            }
+        });
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+
+        for( ValidationError error : errors ) {
+
+            final String message = error.getCollatedErrorMessage(contents);
+            final View view = error.getView();
+
+            if( view instanceof EditText ) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(contents, message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

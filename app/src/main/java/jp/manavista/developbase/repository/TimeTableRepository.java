@@ -13,7 +13,6 @@ import jp.manavista.developbase.model.entity.Timetable_Selector;
  * Manipulate repository on Timetable data.
  * </p>
  */
-
 public interface TimeTableRepository {
 
     /**
@@ -29,8 +28,30 @@ public interface TimeTableRepository {
      */
     Timetable_Selector getSelector();
 
+    /**
+     *
+     * Get relation
+     *
+     * <p>
+     * Overview:<br>
+     * Get Timetable relation object.
+     * </p>
+     *
+     * @return Timetable relation
+     */
     Timetable_Relation getRelation();
 
+    /**
+     *
+     * Get deleter
+     *
+     * <p>
+     * Overview:<br>
+     * Get Timetable deleter object.
+     * </p>
+     *
+     * @return Timetable deleter
+     */
     Timetable_Deleter getDeleter();
 
 }

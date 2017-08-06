@@ -39,6 +39,7 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.1.2'
     compile 'com.loopeer.library:itemtouchhelperextension:1.0.5'
     compile 'com.code-troopers.betterpickers:library:3.1.0'
+    compile 'com.mobsandgeeks:android-saripaar:2.1.0-SNAPSHOT'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'

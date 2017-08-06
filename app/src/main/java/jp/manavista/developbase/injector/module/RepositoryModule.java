@@ -9,10 +9,15 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import jp.manavista.developbase.model.entity.OrmaDatabase;
+import jp.manavista.developbase.repository.MemberRepository;
 import jp.manavista.developbase.repository.TimeTableRepository;
+import jp.manavista.developbase.repository.impl.MemberRepositoryImpl;
 import jp.manavista.developbase.repository.impl.TimetableRepositoryImpl;
 
 /**
+ *
+ * Repository Module
+ *
  * <p>
  * Overview:<br>
  * </p>
@@ -20,6 +25,7 @@ import jp.manavista.developbase.repository.impl.TimetableRepositoryImpl;
 @Module
 public class RepositoryModule {
 
+    /** Database Name */
     private static final String DB_NAME = "main.db";
 
     @Provides
@@ -40,5 +46,11 @@ public class RepositoryModule {
     @Singleton
     TimeTableRepository provideTimetableRepository(OrmaDatabase database) {
         return new TimetableRepositoryImpl(database);
+    }
+
+    @Provides
+    @Singleton
+    MemberRepository provideMemberRepository(OrmaDatabase database) {
+        return new MemberRepositoryImpl(database);
     }
 }
