@@ -14,4 +14,6 @@ public interface TimetableService {
     Timetable_Selector getTimetablesAll();
 
     void save(Timetable timetable);
+
+    void deleteAll();
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,13 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import javax.inject.Inject;
+
+import jp.manavista.developbase.ManavistaApplication;
 import jp.manavista.developbase.R;
+import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.service.TimetableService;
+import jp.manavista.developbase.view.activity.MainActivity;
 
 /**
  *
@@ -31,9 +38,13 @@ import jp.manavista.developbase.R;
  */
 public final class WeeklyFragment extends Fragment {
 
+    private static final String TAG = WeeklyFragment.class.getSimpleName();
+
     public static final String CALENDAR_OFFSET_WEEK_PROP = "calendarOffsetWeek";
     public static final String DISPLAY_DAYS_PROP = "displayDays";
     public static final String DISPLAY_DAYS_OF_WEEK_PROP = "displayDaysOfWeek";
+
+//    TimetableService timetableService;
 
     /** Default Constructor */
     public WeeklyFragment() {
@@ -112,19 +123,7 @@ public final class WeeklyFragment extends Fragment {
 
         TableRow tableRow = new TableRow(context);
 
-//        TableRow.LayoutParams params = new TableRow.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//        tableRow.setLayoutParams(params);
-
         TextView originDay = new TextView(context);
-
-        /*
-         * Do not set layout params.
-         * If params sets, do not show TextView. I do not know this reason.
-         */
-//        ViewGroup.LayoutParams originDayParams = new ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        originDay.setLayoutParams(originDayParams);
 
         tableRow.addView(originDay);
 
@@ -190,6 +189,13 @@ public final class WeeklyFragment extends Fragment {
     private void buildContents(TableLayout layout, Context context, View rootView) {
 
         // TODO: First, create timetable structure.
+
+
+//        for( Timetable row : timetableService.getTimetablesAll() ) {
+//            Log.d(TAG, "row id: " + row.id + " lessonNo: " +
+//                    row.lessonNo + " start time: " + row.startTime + " end time: " + row.endTime);
+//        }
+
 
         TableRow row = new TableRow(context);
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(

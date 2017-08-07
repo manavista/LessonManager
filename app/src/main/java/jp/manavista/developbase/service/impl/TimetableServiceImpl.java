@@ -12,8 +12,10 @@ import jp.manavista.developbase.service.TimetableService;
  */
 public class TimetableServiceImpl implements TimetableService {
 
+    /** Timetable Repository */
     private final TimeTableRepository repository;
 
+    /** Constructor */
     public TimetableServiceImpl(TimeTableRepository timeTableRepository) {
         this.repository = timeTableRepository;
     }
@@ -25,6 +27,11 @@ public class TimetableServiceImpl implements TimetableService {
 
     @Override
     public void save(final Timetable timetable) {
-//        database.insertIntoTimetable(timetable);
+        repository.save(timetable);
+    }
+
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
     }
 }

@@ -80,17 +80,19 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        Calendar cal = Calendar.getInstance();
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.set(2017,7,1,20,0,0);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.set(2017,7,1,21,20,0);
+
         Timetable timetable = new Timetable();
-        timetable.lessonNo = 1;
-        timetable.startTime = new Time(cal.getTimeInMillis());
-        timetable.endTime = new Time(cal.getTimeInMillis());
+        timetable.lessonNo = 3;
+        timetable.startTime = new Time(cal1.getTimeInMillis());
+        timetable.endTime = new Time(cal2.getTimeInMillis());
 
+//        timetableService.deleteAll();
 //        timetableService.save(timetable);
-
-        String val = preferences.getString("start_view","null");
-
-        Log.d("preference", val);
 
         for( Timetable row : timetableService.getTimetablesAll() ) {
             Log.d(TAG, "row id: " + row.id);
@@ -100,8 +102,6 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         dto = MainActivityDto.builder()
                 .viewPager((ViewPager) findViewById(R.id.pager))
                 .viewMode(preferences.getString(SettingFragment.KEY_START_VIEW, StringUtils.EMPTY))
@@ -196,7 +196,6 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         val daySet = preferences.getStringSet(SettingFragment.KEY_DISPLAY_DAY_OF_WEEK, null);
         val firstDay = preferences.getString(SettingFragment.KEY_FIRST_DAY_OF_WEEK, String.valueOf(Calendar.SUNDAY));
         dto.setDisplayDaySet(daySet);
