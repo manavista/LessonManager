@@ -1,6 +1,7 @@
 package jp.manavista.developbase.fragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,21 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.model.dto.MemberFragmentDto;
+import jp.manavista.developbase.model.entity.Member;
 import jp.manavista.developbase.service.MemberService;
 import jp.manavista.developbase.util.DateTimeUtil;
 
@@ -45,7 +52,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     /** Root view(R.layout.fragment_member) */
     private View rootView;
     /** Activity Contents */
-    private final Activity contents;
+    private Activity contents;
     /** DTO */
     private MemberFragmentDto dto;
     /** input validator */
@@ -60,7 +67,6 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     /** Constructor */
     public MemberFragment() {
         this.memberDisposable = Disposables.empty();
-        this.contents = getActivity();
     }
 
     /**
@@ -106,6 +112,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
                 .emailType((Spinner) rootView.findViewById(R.id.emailTypeSpinner))
                 .email((EditText) rootView.findViewById(R.id.emailEditText))
                 .birthday((EditText) rootView.findViewById(R.id.birthdayEditText))
+                .birthdayCalendar((ImageView) rootView.findViewById(R.id.birthdayCalenderIcon))
                 .gender((Spinner) rootView.findViewById(R.id.genderSpinner))
 
                 .phoneTypeValue(getResources().getIntArray(R.array.values_member_phone_type))
@@ -119,12 +126,22 @@ public final class MemberFragment extends Fragment implements Validator.Validati
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
+        this.contents = getActivity();
 
         DependencyInjector.appComponent().inject(this);
 
         validator = new Validator(dto);
         validator.setValidationListener(this);
+
+        dto.getBirthdayCalendar().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(contents, dto.birthdaySetListener, 1980, Calendar.JANUARY, 1).show();
+            }
+        });
+
     }
 
     @Override
@@ -154,23 +171,25 @@ public final class MemberFragment extends Fragment implements Validator.Validati
         Log.d(TAG, dto.convert().toString());
 
         final String birthday = dto.getBirthday().getText().toString();
-        if( !DateTimeUtil.parseDateStrictly(birthday, DateTimeUtil.DATE_PATTERN_YYYYMMDD) ) {
-            dto.getBirthday().setError(getString(R.string.message_member_birthday_input_invalid_date));
-            return;
+        if( StringUtils.isNotEmpty(birthday) ) {
+            if( !DateTimeUtil.parseDateStrictly(birthday, DateTimeUtil.DATE_PATTERN_YYYYMMDD) ) {
+                dto.getBirthday().setError(getString(R.string.message_member_birthday_input_invalid_date));
+                return;
+            }
         }
 
-//        memberDisposable = memberService.save(dto.convert()).subscribe(new Consumer<Member>() {
-//            @Override
-//            public void accept(Member member) throws Exception {
-//                Log.d(TAG, member.toString());
-//                contents.finish();
-//            }
-//        }, new Consumer<Throwable>() {
-//            @Override
-//            public void accept(Throwable throwable) throws Exception {
-//                Log.e(TAG, "can not save member", throwable);
-//            }
-//        });
+        memberDisposable = memberService.save(dto.convert()).subscribe(new Consumer<Member>() {
+            @Override
+            public void accept(Member member) throws Exception {
+                Log.d(TAG, member.toString());
+                contents.finish();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.e(TAG, "can not save member", throwable);
+            }
+        });
     }
 
     @Override
