@@ -17,19 +17,19 @@
             <item
                 android:id="@+id/nav_subscriber"
                 android:icon="@drawable/ic_person_black"
-                android:title="@string/menu.subscriber"/>
+                android:title="@string/drawable.menu.member"/>
             <item
                 android:id="@+id/nav_lesson"
                 android:icon="@drawable/ic_school_black"
-                android:title="@string/menu.lesson"/>
+                android:title="@string/drawable.menu.lesson"/>
             <item
                 android:id="@+id/nav_timetable"
                 android:icon="@drawable/ic_schedule_black"
-                android:title="@string/menu.timetable"/>
+                android:title="@string/drawable.menu.timetable"/>
             <item
                 android:id="@+id/nav_private"
                 android:icon="@drawable/ic_free_breakfast_black"
-                android:title="@string/menu.private_day"/>
+                android:title="@string/drawable.menu.private_day"/>
 
         </menu>
     </item>
@@ -38,11 +38,11 @@
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black"
-            android:title="@string/menu.settings"/>
+            android:title="@string/drawable.menu.settings"/>
         <item
             android:id="@+id/nav_info"
             android:icon="@drawable/ic_info_black"
-            android:title="@string/menu.info"/>
+            android:title="@string/drawable.menu.info"/>
     </group>
 
 </menu>

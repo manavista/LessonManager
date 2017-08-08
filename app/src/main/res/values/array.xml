@@ -58,4 +58,22 @@
         <item>Other</item>
     </string-array>
 
+    <integer-array name="values_member_phone_type">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>9</item>
+    </integer-array>
+    <integer-array name="values_member_email_type">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>9</item>
+    </integer-array>
+    <integer-array name="values_member_gender_type">
+        <item>1</item>
+        <item>2</item>
+        <item>9</item>
+    </integer-array>
+
 </resources>

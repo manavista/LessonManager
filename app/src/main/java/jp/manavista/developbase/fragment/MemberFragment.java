@@ -21,12 +21,11 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.model.dto.MemberFragmentDto;
-import jp.manavista.developbase.model.entity.Member;
 import jp.manavista.developbase.service.MemberService;
+import jp.manavista.developbase.util.DateTimeUtil;
 
 /**
  *
@@ -48,7 +47,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     /** Activity Contents */
     private final Activity contents;
     /** DTO */
-    private final MemberFragmentDto dto;
+    private MemberFragmentDto dto;
     /** input validator */
     private Validator validator;
     /** Member disposable */
@@ -60,7 +59,6 @@ public final class MemberFragment extends Fragment implements Validator.Validati
 
     /** Constructor */
     public MemberFragment() {
-        this.dto = new MemberFragmentDto();
         this.memberDisposable = Disposables.empty();
         this.contents = getActivity();
     }
@@ -98,15 +96,23 @@ public final class MemberFragment extends Fragment implements Validator.Validati
 
         rootView = inflater.inflate(R.layout.fragment_member, container, false);
 
-        dto.setGivenName((EditText) rootView.findViewById(R.id.givenNameEditText));
-        dto.setAdditionalName((EditText) rootView.findViewById(R.id.additionalNameEditText));
-        dto.setFamilyName((EditText) rootView.findViewById(R.id.familyNameEditText));
-        dto.setNickName((EditText) rootView.findViewById(R.id.nickNameEditText));
-        dto.setPhoneType((Spinner) rootView.findViewById(R.id.phoneNumberTypeSpinner));
-        dto.setPhoneNumber((EditText) rootView.findViewById(R.id.phoneNumberEditText));
-        dto.setEmailType((Spinner) rootView.findViewById(R.id.emailTypeSpinner));
-        dto.setEmail((EditText) rootView.findViewById(R.id.emailEditText));
-        dto.setBirthday((EditText) rootView.findViewById(R.id.birthdayEditText));
+        dto = MemberFragmentDto.builder()
+                .givenName((EditText) rootView.findViewById(R.id.givenNameEditText))
+                .additionalName((EditText) rootView.findViewById(R.id.additionalNameEditText))
+                .familyName((EditText) rootView.findViewById(R.id.familyNameEditText))
+                .nickName((EditText) rootView.findViewById(R.id.nickNameEditText))
+                .phoneType((Spinner) rootView.findViewById(R.id.phoneNumberTypeSpinner))
+                .phoneNumber((EditText) rootView.findViewById(R.id.phoneNumberEditText))
+                .emailType((Spinner) rootView.findViewById(R.id.emailTypeSpinner))
+                .email((EditText) rootView.findViewById(R.id.emailEditText))
+                .birthday((EditText) rootView.findViewById(R.id.birthdayEditText))
+                .gender((Spinner) rootView.findViewById(R.id.genderSpinner))
+
+                .phoneTypeValue(getResources().getIntArray(R.array.values_member_phone_type))
+                .emailTypeValue(getResources().getIntArray(R.array.values_member_email_type))
+                .genderTypeValue(getResources().getIntArray(R.array.values_member_gender_type))
+
+                .build();
 
         return rootView;
     }
@@ -145,18 +151,26 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     @Override
     public void onValidationSucceeded() {
 
-        memberDisposable = memberService.save(dto.convert()).subscribe(new Consumer<Member>() {
-            @Override
-            public void accept(Member member) throws Exception {
-                Log.d(TAG, member.toString());
-                contents.finish();
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Log.e(TAG, "can not save member", throwable);
-            }
-        });
+        Log.d(TAG, dto.convert().toString());
+
+        final String birthday = dto.getBirthday().getText().toString();
+        if( !DateTimeUtil.parseDateStrictly(birthday, DateTimeUtil.DATE_PATTERN_YYYYMMDD) ) {
+            dto.getBirthday().setError(getString(R.string.message_member_birthday_input_invalid_date));
+            return;
+        }
+
+//        memberDisposable = memberService.save(dto.convert()).subscribe(new Consumer<Member>() {
+//            @Override
+//            public void accept(Member member) throws Exception {
+//                Log.d(TAG, member.toString());
+//                contents.finish();
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(Throwable throwable) throws Exception {
+//                Log.e(TAG, "can not save member", throwable);
+//            }
+//        });
     }
 
     @Override

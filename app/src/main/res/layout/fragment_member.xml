@@ -1,5 +1,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="jp.manavista.developbase.fragment.MemberFragment"
     android:layout_width="match_parent"
@@ -205,19 +206,40 @@
                 android:labelFor="@+id/birthdayEditText"
                 android:text="@string/label.member.birthday"/>
 
+            <ImageView
+                android:id="@+id/birthdayCalenderIconDummy"
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="@dimen/margin_8dp"
+                android:contentDescription="@string/description.member.birthday.dummy"
+                app:srcCompat="@drawable/bp_material_button_background"
+                android:layout_below="@+id/birthdayLabel"
+                android:layout_alignParentStart="true"/>
+
             <EditText
                 android:id="@+id/birthdayEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/birthdayLabel"
                 android:ems="10"
-                android:inputType="date"/>
+                android:hint="@string/hint.member.birthday"
+                android:inputType="date"
+                android:layout_below="@+id/birthdayLabel"
+                android:layout_toEndOf="@+id/birthdayCalenderIconDummy"/>
+
+            <ImageView
+                android:id="@+id/birthdayCalenderIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/description.member.birthday.icon"
+                app:srcCompat="@drawable/ic_event_black"
+                android:layout_alignTop="@+id/birthdayCalenderIconDummy"
+                android:layout_toEndOf="@+id/birthdayEditText"/>
 
             <TextView
                 android:id="@+id/genderLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/birthdayEditText"
                 android:layout_marginTop="12dp"

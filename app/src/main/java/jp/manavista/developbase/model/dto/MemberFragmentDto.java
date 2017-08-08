@@ -1,16 +1,19 @@
 package jp.manavista.developbase.model.dto;
 
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.Length;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Optional;
+import com.mobsandgeeks.saripaar.annotation.Past;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 import java.io.Serializable;
 
 import jp.manavista.developbase.model.entity.Member;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -23,11 +26,20 @@ import lombok.Data;
  * </p>
  */
 @Data
+@Builder
 public final class MemberFragmentDto implements Serializable {
+
+    /** phone type Spinner value */
+    private int[] phoneTypeValue;
+    /** email type Spinner value */
+    private int[] emailTypeValue;
+    /** gender type Spinner value */
+    private int[] genderTypeValue;
+
 
     /** Given Name(FirstName) */
 //    @BindView(R.id.givenNameEditText)
-    @NotEmpty
+//    @NotEmpty
     @Length(max = 50)
     private EditText givenName;
 
@@ -39,7 +51,7 @@ public final class MemberFragmentDto implements Serializable {
 
     /** Family Name(LastName) */
 //    @BindView(R.id.familyNameEditText)
-    @NotEmpty
+//    @NotEmpty
     @Length(max = 50)
     private EditText familyName;
 
@@ -72,7 +84,14 @@ public final class MemberFragmentDto implements Serializable {
     /** Birthday */
 //    @BindView(R.id.birthdayEditText)
     @Optional
+    @Pattern(regex = "^\\d{4}/\\d{2}/\\d{2}$")
+    @Past(dateFormat = "yyyy/MM/dd")
     private EditText birthday;
+
+    /** Gender */
+    @Optional
+    private Spinner gender;
+
 
     /**
      *
@@ -94,12 +113,15 @@ public final class MemberFragmentDto implements Serializable {
         member.familyName = this.familyName.getText().toString();
         member.nickName = this.nickName.getText().toString();
 
-        member.phoneType = 0;
+        member.phoneType = getPhoneTypeValue()[phoneType.getSelectedItemPosition()];
         member.phoneNumber = this.phoneNumber.getText().toString();
-        member.emailType = 0;
+        member.emailType = getEmailTypeValue()[emailType.getSelectedItemPosition()];
         member.email = this.email.getText().toString();
 
-        member.birthday = null;
+        // TODO: input datePicker and save birthday.
+        Log.d("birthday", this.birthday.getText().toString());
+        member.birthday = this.birthday.getText().toString();
+        member.gender = getGenderTypeValue()[gender.getSelectedItemPosition()];
 
         return member;
     }

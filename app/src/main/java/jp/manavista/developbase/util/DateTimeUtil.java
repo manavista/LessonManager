@@ -2,20 +2,24 @@ package jp.manavista.developbase.util;
 
 import android.util.Pair;
 
+import org.apache.commons.lang3.time.DateUtils;
+
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 public final class DateTimeUtil {
 
     public static String COLON = ":";
     public static String SLASH = "/";
 
-    public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+    public static String DATE_PATTERN_YYYYMMDD = "yyyy/MM/dd";
+    public static String DATE_PATTERN_YYYYMD = "yyyy/M/d";
+
+    public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat(DATE_PATTERN_YYYYMMDD, Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_MMDD = new SimpleDateFormat("MM/dd", Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_MMDDE = new SimpleDateFormat("MM/dd E", Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_E = new SimpleDateFormat("E", Locale.getDefault());
@@ -61,6 +65,16 @@ public final class DateTimeUtil {
         calendar.set(Calendar.SECOND, second);
 
         return new Time(calendar.getTime().getTime());
+    }
+
+    public static boolean parseDateStrictly(final String str, final String... patterns) {
+
+        try {
+            DateUtils.parseDateStrictly(str, Locale.getDefault(), patterns);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 
     /**
