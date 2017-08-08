@@ -1,10 +1,9 @@
 package jp.manavista.developbase.repository.impl;
 
-import jp.manavista.developbase.entity.OrmaDatabase;
-import jp.manavista.developbase.entity.Timetable;
-import jp.manavista.developbase.entity.Timetable_Deleter;
-import jp.manavista.developbase.entity.Timetable_Relation;
-import jp.manavista.developbase.entity.Timetable_Selector;
+import jp.manavista.developbase.model.entity.OrmaDatabase;
+import jp.manavista.developbase.model.entity.Timetable_Deleter;
+import jp.manavista.developbase.model.entity.Timetable_Relation;
+import jp.manavista.developbase.model.entity.Timetable_Selector;
 import jp.manavista.developbase.repository.TimeTableRepository;
 
 /**

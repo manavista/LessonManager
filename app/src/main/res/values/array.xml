@@ -38,4 +38,42 @@
         <item>7</item>
     </string-array>
 
+    <!-- Member -->
+
+    <string-array name="items_member_phone_type">
+        <item>Mobile</item>
+        <item>Home</item>
+        <item>Work</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="items_member_email_type">
+        <item>Mobile</item>
+        <item>Home</item>
+        <item>Work</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="items_member_gender_type">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+
+    <integer-array name="values_member_phone_type">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>9</item>
+    </integer-array>
+    <integer-array name="values_member_email_type">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>9</item>
+    </integer-array>
+    <integer-array name="values_member_gender_type">
+        <item>1</item>
+        <item>2</item>
+        <item>9</item>
+    </integer-array>
+
 </resources>

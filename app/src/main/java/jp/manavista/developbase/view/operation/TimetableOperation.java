@@ -2,7 +2,7 @@ package jp.manavista.developbase.view.operation;
 
 import android.view.View;
 
-import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.model.entity.Timetable;
 
 /**
  *

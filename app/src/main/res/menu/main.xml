@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/item_goto_today"
-        android:title="@string/menu.today"
+        android:title="@string/drawable.menu.today"
         android:icon="@drawable/ic_event_white"
         app:showAsAction="ifRoom" />
 

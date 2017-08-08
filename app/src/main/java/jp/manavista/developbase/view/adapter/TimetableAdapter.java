@@ -14,8 +14,8 @@ import java.sql.Time;
 import java.util.List;
 
 import jp.manavista.developbase.R;
-import jp.manavista.developbase.dto.TimetableDto;
-import jp.manavista.developbase.entity.Timetable;
+import jp.manavista.developbase.model.dto.TimetableDto;
+import jp.manavista.developbase.model.entity.Timetable;
 import jp.manavista.developbase.util.DateTimeUtil;
 import jp.manavista.developbase.view.operation.TimetableOperation;
 import lombok.Getter;
