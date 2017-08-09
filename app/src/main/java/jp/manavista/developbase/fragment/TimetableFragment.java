@@ -14,14 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
-import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +27,14 @@ import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
+import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.model.dto.TimetableDto;
 import jp.manavista.developbase.model.entity.Timetable;
-import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.view.adapter.TimetableAdapter;
 import jp.manavista.developbase.view.adapter.TimetableTouchHelperCallback;
 import jp.manavista.developbase.view.decoration.TimetableItemDecoration;
+import jp.manavista.developbase.view.dialog.NumberPickerDialogFragment;
 import jp.manavista.developbase.view.operation.TimetableOperation;
 
 /**
@@ -188,7 +183,7 @@ public final class TimetableFragment extends Fragment {
         });
     }
 
-    private TimetableOperation timetableOperation = new TimetableOperation() {
+    private final TimetableOperation timetableOperation = new TimetableOperation() {
         @Override
         public void delete(int id) {
             final List<TimetableDto> list = new ArrayList<>();
@@ -239,30 +234,17 @@ public final class TimetableFragment extends Fragment {
             final TextView textView = (TextView) view;
             final int lessonNo = Integer.valueOf(textView.getText().toString());
 
-            NumberPickerBuilder builder = new NumberPickerBuilder()
-                    .setFragmentManager(getFragmentManager())
-                    .setStyleResId(R.style.BetterPickersDialogFragment)
-                    .setPlusMinusVisibility(View.INVISIBLE)
-                    .setDecimalVisibility(View.INVISIBLE)
-                    .setMinNumber(BigDecimal.ONE)
-                    .setMaxNumber(BigDecimal.TEN)
-                    .setCurrentNumber(lessonNo)
-                    .setLabelText(StringUtils.EMPTY);
-
-            builder.addNumberPickerDialogHandler(new NumberPickerDialogFragment.NumberPickerDialogHandlerV2() {
+            final NumberPickerDialogFragment dialog = NumberPickerDialogFragment.newInstance(new NumberPickerDialogFragment.OnSetListener() {
                 @Override
-                public void onDialogNumberSet(int reference, BigInteger number, double decimal,
-                                              boolean isNegative, BigDecimal fullNumber) {
-
+                public void onNumberSet(int value) {
                     TimetableDto row = adapter.getList().get(position);
-                    row.setLessonNo(fullNumber.intValue());
+                    row.setLessonNo(value);
                     Log.d(TAG, "change Timetable row position: " + position + " row: " + row);
-
                     update(Timetable.convert(row));
                 }
-            });
+            }, 1, 20, lessonNo, getString(R.string.label_timetable_lesson_no_dialog_title));
+            dialog.show(getFragmentManager(), "LESSON_NO_DIALOG");
 
-            builder.show();
         }
     };
 

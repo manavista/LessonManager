@@ -51,7 +51,7 @@
     <string name="toolbar.timetable.option.add">add</string>
     <string name="label.timetable.setting">Setting Timetable</string>
     <string name="label.timetable.hyphen_spaces"> - </string>
-    <string name="label.timetable.lesson_no.select">Select Lesson No</string>
+    <string name="label.timetable.lesson_no.dialog.title">Select Lesson No</string>
 
     <!-- Member -->
     <string name="toolbar.member.title">Member</string>
