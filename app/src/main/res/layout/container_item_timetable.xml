@@ -23,6 +23,6 @@
 
     </LinearLayout>
 
-    <include layout="@layout/timetable_item"/>
+    <include layout="@layout/item_timetable"/>
 
 </FrameLayout>

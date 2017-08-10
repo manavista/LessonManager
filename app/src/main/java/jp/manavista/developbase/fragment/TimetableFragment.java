@@ -32,9 +32,9 @@ import jp.manavista.developbase.model.dto.TimetableDto;
 import jp.manavista.developbase.model.entity.Timetable;
 import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.view.adapter.TimetableAdapter;
-import jp.manavista.developbase.view.adapter.TimetableTouchHelperCallback;
 import jp.manavista.developbase.view.decoration.TimetableItemDecoration;
 import jp.manavista.developbase.view.dialog.NumberPickerDialogFragment;
+import jp.manavista.developbase.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.developbase.view.operation.TimetableOperation;
 
 /**
@@ -71,8 +71,14 @@ public final class TimetableFragment extends Fragment {
     }
 
     /**
+     *
+     * New Instance
+     *
+     * <p>
+     * Overview:
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     * </p>
      *
      * @return A new instance of fragment TimetableFragment.
      */
@@ -125,7 +131,7 @@ public final class TimetableFragment extends Fragment {
         adapter = TimetableAdapter.newInstance(contents, timetableOperation);
         view.setAdapter(adapter);
 
-        ItemTouchHelperExtension.Callback callback = new TimetableTouchHelperCallback();
+        ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
         ItemTouchHelperExtension itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.attachToRecyclerView(view);
 

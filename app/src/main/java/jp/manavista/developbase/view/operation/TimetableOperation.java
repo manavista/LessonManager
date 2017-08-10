@@ -10,6 +10,8 @@ import jp.manavista.developbase.model.entity.Timetable;
  *
  * <p>
  * Overview:<br>
+ * Operation timetable entity.<br>
+ * Interface for executing listeners defined by adapters with fragment.
  * </p>
  */
 public interface TimetableOperation {

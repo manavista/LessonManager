@@ -6,8 +6,12 @@ import jp.manavista.developbase.ManavistaApplication;
 import jp.manavista.developbase.injector.module.AppModule;
 
 /**
+ *
+ * DependencyInjector
+ *
  * <p>
  * Overview:<br>
+ *
  * </p>
  */
 

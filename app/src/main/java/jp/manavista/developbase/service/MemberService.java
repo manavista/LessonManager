@@ -10,6 +10,7 @@ import jp.manavista.developbase.model.entity.Member;
  *
  * <p>
  * Overview:<br>
+ * For the data of {@link Member}, define actions related to acquisition and processing.
  * </p>
  */
 public interface MemberService {
@@ -40,4 +41,18 @@ public interface MemberService {
      * @return {@link Single} observable object
      */
     Single<Member> save(Member member);
+
+    /**
+     *
+     * Delete
+     *
+     * <p>
+     * Overview:<br>
+     * Delete by entity row id.
+     * </p>
+     *
+     * @param id row id
+     * @return transaction row count
+     */
+    Single<Integer> deleteById(int id);
 }

@@ -17,6 +17,7 @@ import jp.manavista.developbase.R;
 import jp.manavista.developbase.model.dto.TimetableDto;
 import jp.manavista.developbase.model.entity.Timetable;
 import jp.manavista.developbase.util.DateTimeUtil;
+import jp.manavista.developbase.view.holder.TimetableHolder;
 import jp.manavista.developbase.view.operation.TimetableOperation;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,7 +59,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
     public TimetableHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.timetable_item_container, parent, false);
+                .inflate(R.layout.container_item_timetable, parent, false);
         return new TimetableHolder(view);
     }
 
