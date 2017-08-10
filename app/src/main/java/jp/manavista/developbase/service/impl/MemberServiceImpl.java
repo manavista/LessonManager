@@ -42,4 +42,13 @@ public class MemberServiceImpl implements MemberService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }
+
+    @Override
+    public Single<Integer> deleteById(int id) {
+        return repository.getDeleter()
+                .idEq(id)
+                .executeAsSingle()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
 }

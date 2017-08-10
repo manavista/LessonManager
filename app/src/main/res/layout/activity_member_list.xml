@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jp.manavista.developbase.activity.MemberActivity">
+    tools:context="jp.manavista.developbase.activity.MemberListActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -17,14 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:title="@string/toolbar.member.title"
+            app:title="@string/toolbar.member_list.title"
             app:navigationIcon="@drawable/ic_menu_arrow_back"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
-        android:id="@+id/content_member"
+        android:id="@+id/content_member_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">

@@ -1,4 +1,4 @@
-package jp.manavista.developbase.view.adapter;
+package jp.manavista.developbase.view.helper;
 
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
@@ -6,17 +6,18 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
+import jp.manavista.developbase.view.holder.SwipeDeleteHolder;
+
 /**
  *
- * Timetable list item touch helper extension
+ * Swipe Delete Helper Callback
  *
  * <p>
  * Overview:<br>
- * Define a callback event when Timetable item is moved.
+ *
  * </p>
  */
-public class TimetableTouchHelperCallback extends ItemTouchHelperExtension.Callback {
-
+public class SwipeDeleteTouchHelperCallback extends ItemTouchHelperExtension.Callback {
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         return makeMovementFlags(ItemTouchHelper.UP|ItemTouchHelper.DOWN, ItemTouchHelper.START);
@@ -39,13 +40,13 @@ public class TimetableTouchHelperCallback extends ItemTouchHelperExtension.Callb
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
 
-        TimetableHolder holder = (TimetableHolder) viewHolder;
+        SwipeDeleteHolder holder = (SwipeDeleteHolder) viewHolder;
 
-        // if no spring swipe, remove comment.
-//        if( dX < -holder.viewContainer.getWidth() ) {
+
+        if( dX < -holder.viewContainer.getWidth() ) {
+            // if no spring swipe, remove comment.
 //            dX = -holder.viewContainer.getWidth();
-//        }
+        }
 
         holder.view.setTranslationX(dX);
-    }
-}
+    }}

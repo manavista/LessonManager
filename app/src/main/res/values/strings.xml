@@ -74,4 +74,9 @@
 
     <string name="message.member.birthday.input_invalid_date">Input invalid date</string>
 
+    <!-- Member List -->
+    <string name="toolbar.member_list.title">Member List</string>
+    <string name="toolbar.member_list.option.add">Add</string>
+    <string name="label.member_list.delete">Delete</string>
+
 </resources>

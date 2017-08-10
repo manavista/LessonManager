@@ -35,6 +35,8 @@ public class LessonViewActivity extends AppCompatActivity
     private static final String TAG = LessonViewActivity.class.getSimpleName();
     /** Activity of this */
     final private Activity activity = this;
+    /** drawer layout menu */
+    private DrawerLayout drawer;
     /** Lesson View Fragment */
     private LessonViewFragment lessonViewFragment;
 
@@ -49,7 +51,7 @@ public class LessonViewActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -100,26 +102,26 @@ public class LessonViewActivity extends AppCompatActivity
 
         final int id = item.getItemId();
 
-        if ( id == R.id.nav_settings ) {
+        if( id == R.id.nav_member_list ) {
+            Intent intent = new Intent(activity, MemberListActivity.class);
+            activity.startActivity(intent);
+        } else if ( id == R.id.nav_settings ) {
             Intent intent = new Intent(activity, SettingActivity.class);
             activity.startActivity(intent);
         } else if( id == R.id.nav_timetable ) {
             Intent intent = new Intent(activity, TimetableActivity.class);
             activity.startActivity(intent);
-        } else if( id == R.id.nav_subscriber) {
+        } else if( id == R.id.nav_member) {
             Intent intent = new Intent(activity, MemberActivity.class);
             activity.startActivity(intent);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onBackPressed() {
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if ( drawer.isDrawerOpen(GravityCompat.START) ) {
             drawer.closeDrawer(GravityCompat.START);
