@@ -1,5 +1,6 @@
 package jp.manavista.developbase.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,9 @@ import jp.manavista.developbase.R;
 import jp.manavista.developbase.fragment.MemberFragment;
 
 public class MemberActivity extends AppCompatActivity {
+
+    /** activity put extra argument: member id */
+    public static final String EXTRA_MEMBER_ID = "MEMBER_ID";
 
     /** MemberFragment */
     private MemberFragment memberFragment;
@@ -31,7 +35,10 @@ public class MemberActivity extends AppCompatActivity {
             }
         });
 
-        memberFragment = MemberFragment.newInstance();
+        final Intent intent = getIntent();
+        final int id = intent.getIntExtra(EXTRA_MEMBER_ID, 0);
+
+        memberFragment = MemberFragment.newInstance(id);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_member, memberFragment)

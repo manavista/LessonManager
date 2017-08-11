@@ -17,6 +17,20 @@ public interface MemberOperation {
 
     /**
      *
+     * Edit
+     *
+     * <p>
+     * Overview:<br>
+     * Edit Member row
+     * </p>
+     *
+     * @param id target row id
+     * @param position target adapter position
+     */
+    void edit(final int id, final int position);
+
+    /**
+     *
      * Delete
      *
      * <p>

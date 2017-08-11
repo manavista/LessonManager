@@ -77,6 +77,19 @@ public final class DateTimeUtil {
         return true;
     }
 
+    public static Calendar parserCalendar(final String date, final String format) {
+
+        final Calendar calendar = Calendar.getInstance();
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.getDefault());
+
+        try {
+            calendar.setTime(dateFormat.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return calendar;
+    }
+
     /**
      * 対象日付の同一週の指定曜日の日付を取得する。
      *

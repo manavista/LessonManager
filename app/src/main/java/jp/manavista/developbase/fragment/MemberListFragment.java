@@ -1,6 +1,7 @@
 package jp.manavista.developbase.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
+import jp.manavista.developbase.activity.MemberActivity;
 import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.model.dto.MemberDto;
 import jp.manavista.developbase.model.entity.Member;
@@ -50,6 +52,8 @@ public final class MemberListFragment extends Fragment {
     private Activity contents;
     /** Member Adapter */
     private MemberAdapter adapter;
+    /** Item Touch Helper */
+    ItemTouchHelperExtension itemTouchHelper;
     /** Member list disposable */
     private Disposable disposable;
 
@@ -110,7 +114,8 @@ public final class MemberListFragment extends Fragment {
         view.setAdapter(adapter);
 
         ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
-        ItemTouchHelperExtension itemTouchHelper = new ItemTouchHelperExtension(callback);
+        itemTouchHelper = new ItemTouchHelperExtension(callback);
+        itemTouchHelper.setClickToRecoverAnimation(false);
         itemTouchHelper.attachToRecyclerView(view);
     }
 
@@ -147,8 +152,18 @@ public final class MemberListFragment extends Fragment {
     }
 
     private MemberOperation memberOperation = new MemberOperation() {
+
+        @Override
+        public void edit(int id, int position) {
+            Intent intent = new Intent(contents, MemberActivity.class);
+            intent.putExtra(MemberActivity.EXTRA_MEMBER_ID, id);
+            contents.startActivity(intent);
+        }
+
         @Override
         public void delete(final int id, final int position) {
+
+            itemTouchHelper.closeOpened();
 
             disposable = memberService.deleteById(id).subscribe(new Consumer<Integer>() {
                 @Override

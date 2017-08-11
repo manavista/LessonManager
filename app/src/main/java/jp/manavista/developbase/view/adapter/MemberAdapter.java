@@ -70,15 +70,24 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final MemberHolder holder, int position) {
+    public void onBindViewHolder(final MemberHolder holder, final int position) {
 
         holder.displayName.setText(list.get(position).getDisplayName());
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "click position: " + holder.getAdapterPosition());
+                MemberDto dto = list.get(holder.getAdapterPosition());
+                Log.d(TAG, dto.toString());
+                operation.edit(dto.getId(), holder.getAdapterPosition());
+            }
+        });
 
         holder.viewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MemberDto dto = list.get(holder.getAdapterPosition());
-                Log.d(TAG, "delete: " + dto.toString());
                 operation.delete(dto.getId(), holder.getAdapterPosition());
             }
         });
