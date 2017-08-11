@@ -10,6 +10,7 @@
     <string name="menu.daily_view">Daily View</string>
     <string name="menu.weekly_view">Weekly View</string>
     <string name="menu.member_list">Member List</string>
+    <string name="drawable.label.member_lesson_list">Lesson List</string>
     <string name="menu.add">Add</string>
     <string name="drawable.menu.member">Member</string>
     <string name="drawable.menu.lesson">Lesson</string>
@@ -78,5 +79,15 @@
     <string name="toolbar.member_list.title">Member List</string>
     <string name="toolbar.member_list.option.add">Add</string>
     <string name="label.member_list.delete">Delete</string>
+    <string name="label.member_list.dialog.title">Selected Member</string>
+    <string name="label.member_list.dialog.edit">Edit</string>
+    <string name="label.member_list.dialog.lesson">Lesson</string>
+    <string name="label.member_list.dialog.schedule">Schedule</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Member Lesson List -->
+    <string name="toolbar.member_lesson_list.title">Member List</string>
+    <string name="toolbar.member_lesson_list.option.add">Add</string>
 </resources>

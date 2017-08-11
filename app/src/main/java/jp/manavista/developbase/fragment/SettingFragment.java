@@ -29,7 +29,7 @@ import jp.manavista.developbase.view.preference.NumberPickerPreference;
  *
  * </p>
  */
-public class SettingFragment extends PreferenceFragment
+public final class SettingFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     /** preference key: start view mode */

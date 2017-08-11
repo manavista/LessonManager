@@ -26,6 +26,8 @@
         </activity>
         <activity android:name=".activity.MemberListActivity">
         </activity>
+        <activity android:name=".activity.MemberLessonListActivity">
+        </activity>
     </application>
 
 </manifest>
