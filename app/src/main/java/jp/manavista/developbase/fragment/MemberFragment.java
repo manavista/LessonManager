@@ -48,6 +48,8 @@ public final class MemberFragment extends Fragment implements Validator.Validati
 
     /** Logger tag string */
     public static final String TAG = MemberFragment.class.getSimpleName();
+    /** bundle key: member id */
+    public static final String KEY_MEMBER_ID = "MEMBER_ID";
 
     /** Root view(R.layout.fragment_member) */
     private View rootView;
@@ -55,10 +57,12 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     private Activity contents;
     /** DTO */
     private MemberFragmentDto dto;
+    /** member id */
+    private int memberId;
     /** input validator */
     private Validator validator;
     /** Member disposable */
-    private Disposable memberDisposable;
+    private Disposable disposable;
 
     @Inject
     MemberService memberService;
@@ -66,7 +70,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
 
     /** Constructor */
     public MemberFragment() {
-        this.memberDisposable = Disposables.empty();
+        this.disposable = Disposables.empty();
     }
 
     /**
@@ -79,13 +83,14 @@ public final class MemberFragment extends Fragment implements Validator.Validati
      * this fragment using the provided parameters.
      * </p>
      *
+     * @param id display member id
      * @return A new instance of fragment MemberFragment.
      */
-    public static MemberFragment newInstance() {
+    public static MemberFragment newInstance(final int id) {
 
         MemberFragment fragment = new MemberFragment();
         Bundle args = new Bundle();
-
+        args.putInt(KEY_MEMBER_ID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,7 +98,8 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Bundle args = getArguments();
+        memberId = args.getInt(KEY_MEMBER_ID);
     }
 
     @Override
@@ -112,12 +118,14 @@ public final class MemberFragment extends Fragment implements Validator.Validati
                 .emailType((Spinner) rootView.findViewById(R.id.emailTypeSpinner))
                 .email((EditText) rootView.findViewById(R.id.emailEditText))
                 .birthday((EditText) rootView.findViewById(R.id.birthdayEditText))
-                .birthdayCalendar((ImageView) rootView.findViewById(R.id.birthdayCalenderIcon))
+                .birthdayIconImage((ImageView) rootView.findViewById(R.id.birthdayCalenderIcon))
                 .gender((Spinner) rootView.findViewById(R.id.genderSpinner))
 
-                .phoneTypeValue(getResources().getIntArray(R.array.values_member_phone_type))
-                .emailTypeValue(getResources().getIntArray(R.array.values_member_email_type))
-                .genderTypeValue(getResources().getIntArray(R.array.values_member_gender_type))
+                .phoneTypeValues(getResources().getIntArray(R.array.values_member_phone_type))
+                .emailTypeValues(getResources().getIntArray(R.array.values_member_email_type))
+                .genderTypeValues(getResources().getIntArray(R.array.values_member_gender_type))
+
+                .dateFormat(DateTimeUtil.DATE_PATTERN_YYYYMMDD)
 
                 .build();
 
@@ -135,19 +143,33 @@ public final class MemberFragment extends Fragment implements Validator.Validati
         validator = new Validator(dto);
         validator.setValidationListener(this);
 
-        dto.getBirthdayCalendar().setOnClickListener(new View.OnClickListener() {
+        dto.getBirthdayIconImage().setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(contents, dto.birthdaySetListener, 1980, Calendar.JANUARY, 1).show();
+
+                int year = 1980;
+                int month = Calendar.JANUARY;
+                int day = 1;
+
+                if( dto.getBirthdayCalendar() != null ) {
+                    year = dto.getBirthdayCalendar().get(Calendar.YEAR);
+                    month = dto.getBirthdayCalendar().get(Calendar.MONTH);
+                    day = dto.getBirthdayCalendar().get(Calendar.DAY_OF_MONTH);
+                }
+                new DatePickerDialog(contents, dto.birthdaySetListener, year, month, day).show();
             }
         });
 
+        if( memberId > 0 ) {
+            storeEntityToDto(memberId);
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        this.memberDisposable.dispose();
+        this.disposable.dispose();
     }
 
     /**
@@ -168,9 +190,8 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     @Override
     public void onValidationSucceeded() {
 
-        Log.d(TAG, dto.convert().toString());
-
         final String birthday = dto.getBirthday().getText().toString();
+
         if( StringUtils.isNotEmpty(birthday) ) {
             if( !DateTimeUtil.parseDateStrictly(birthday, DateTimeUtil.DATE_PATTERN_YYYYMMDD) ) {
                 dto.getBirthday().setError(getString(R.string.message_member_birthday_input_invalid_date));
@@ -178,7 +199,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
             }
         }
 
-        memberDisposable = memberService.save(dto.convert()).subscribe(new Consumer<Member>() {
+        disposable = memberService.save(dto.convert()).subscribe(new Consumer<Member>() {
             @Override
             public void accept(Member member) throws Exception {
                 Log.d(TAG, member.toString());
@@ -206,6 +227,32 @@ public final class MemberFragment extends Fragment implements Validator.Validati
                 Toast.makeText(contents, message, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    /**
+     *
+     * Store
+     *
+     * <p>
+     * Get {@link Member} entity by default id,
+     * then store data to fragment data transfer object.
+     * </p>
+     *
+     * @param memberId target member id
+     */
+    private void storeEntityToDto(final int memberId) {
+
+        disposable = memberService.getById(memberId).subscribe(new Consumer<Member>() {
+            @Override
+            public void accept(Member member) throws Exception {
+                dto.store(member);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throw new RuntimeException("can not select member by " + memberId, throwable);
+            }
+        });
     }
 
 }

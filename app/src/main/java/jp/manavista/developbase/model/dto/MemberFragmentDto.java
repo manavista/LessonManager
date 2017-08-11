@@ -1,6 +1,7 @@
 package jp.manavista.developbase.model.dto;
 
 import android.app.DatePickerDialog;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -14,10 +15,15 @@ import com.mobsandgeeks.saripaar.annotation.Optional;
 import com.mobsandgeeks.saripaar.annotation.Past;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Locale;
 
 import jp.manavista.developbase.model.entity.Member;
+import jp.manavista.developbase.util.DateTimeUtil;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -41,12 +47,16 @@ public final class MemberFragmentDto implements Serializable {
     public static final String TAG = MemberFragmentDto.class.getSimpleName();
 
     /** phone type Spinner value */
-    private int[] phoneTypeValue;
+    private int[] phoneTypeValues;
     /** email type Spinner value */
-    private int[] emailTypeValue;
+    private int[] emailTypeValues;
     /** gender type Spinner value */
-    private int[] genderTypeValue;
+    private int[] genderTypeValues;
+    /** birthday string format */
+    private String dateFormat;
 
+    /** entity id */
+    private int id;
 
     /** Given Name(FirstName) */
 //    @BindView(R.id.givenNameEditText)
@@ -100,7 +110,7 @@ public final class MemberFragmentDto implements Serializable {
     private EditText birthday;
 
     /** Image icon for input Birthday date */
-    private ImageView birthdayCalendar;
+    private ImageView birthdayIconImage;
 
     /** Gender */
     @Optional
@@ -122,20 +132,58 @@ public final class MemberFragmentDto implements Serializable {
 
         Member member = new Member();
 
+        member.id = id;
         member.givenName = this.givenName.getText().toString();
         member.additionalName = this.additionalName.getText().toString();
         member.familyName = this.familyName.getText().toString();
         member.nickName = this.nickName.getText().toString();
 
-        member.phoneType = getPhoneTypeValue()[phoneType.getSelectedItemPosition()];
+        member.phoneType = getPhoneTypeValues()[phoneType.getSelectedItemPosition()];
         member.phoneNumber = this.phoneNumber.getText().toString();
-        member.emailType = getEmailTypeValue()[emailType.getSelectedItemPosition()];
+        member.emailType = getEmailTypeValues()[emailType.getSelectedItemPosition()];
         member.email = this.email.getText().toString();
 
         member.birthday = this.birthday.getText().toString();
-        member.gender = getGenderTypeValue()[gender.getSelectedItemPosition()];
+        member.gender = getGenderTypeValues()[gender.getSelectedItemPosition()];
 
         return member;
+    }
+
+    public void store(@NonNull Member entity) {
+
+        id = entity.id;
+
+        givenName.setText(entity.givenName);
+        additionalName.setText(entity.additionalName);
+        familyName.setText(entity.familyName);
+        nickName.setText(entity.nickName);
+
+        phoneType.setSelection(ArrayUtils.indexOf(phoneTypeValues, entity.phoneType != null ? entity.phoneType : 1));
+        phoneNumber.setText(entity.phoneNumber);
+        emailType.setSelection(ArrayUtils.indexOf(emailTypeValues, entity.emailType != null ? entity.emailType : 1));
+        email.setText(entity.email);
+
+        // TODO: raw to format data YYYY/MM/DD
+        birthday.setText(entity.birthday);
+        gender.setSelection(ArrayUtils.indexOf(genderTypeValues, entity.gender != null ? entity.gender : 1));
+    }
+
+    /**
+     *
+     * Birthday Calendar
+     *
+     * <p>
+     * Overview:<br>
+     * Get a Calendar object of a birthday date.
+     * </p>
+     *
+     * @return Birthday Calendar object
+     */
+    public Calendar getBirthdayCalendar() {
+        final String date = birthday.getText().toString();
+        return StringUtils.isNotEmpty(date)
+                ? DateTimeUtil.parserCalendar(date, dateFormat)
+                : null;
     }
 
     @Setter(AccessLevel.NONE)

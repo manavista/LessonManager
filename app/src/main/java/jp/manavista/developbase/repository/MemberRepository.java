@@ -5,6 +5,9 @@ import jp.manavista.developbase.model.entity.Member_Relation;
 import jp.manavista.developbase.model.entity.Member_Selector;
 
 /**
+ *
+ * Member Repository
+ *
  * <p>
  * Overview:<br>
  * </p>

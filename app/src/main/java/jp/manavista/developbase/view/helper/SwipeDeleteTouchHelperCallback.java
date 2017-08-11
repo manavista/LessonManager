@@ -49,4 +49,6 @@ public class SwipeDeleteTouchHelperCallback extends ItemTouchHelperExtension.Cal
         }
 
         holder.view.setTranslationX(dX);
-    }}
+    }
+
+}

@@ -17,6 +17,20 @@ public interface MemberService {
 
     /**
      *
+     * Get
+     *
+     * <p>
+     * Overview:<br>
+     * Get a Member entity by id.
+     * </p>
+     *
+     * @param id Member id
+     * @return {@link Member} entity
+     */
+    Single<Member> getById(final int id);
+
+    /**
+     *
      * Get All List
      *
      * <p>
