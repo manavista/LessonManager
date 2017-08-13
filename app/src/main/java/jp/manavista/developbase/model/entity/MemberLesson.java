@@ -14,6 +14,7 @@ import lombok.ToString;
  *
  * <p>
  * Overview:<br>
+ * Define the regular lesson data of member.
  * </p>
  */
 @Table
@@ -43,11 +44,7 @@ public class MemberLesson {
     @Column
     public Time endTime;
     @Column
-    public int repeatType;
-    @Column
     public String dayOfWeeks;
-    @Column
-    public boolean setTimePeriod;
     @Column
     public String periodFrom;
     @Column

@@ -9,8 +9,10 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import jp.manavista.developbase.model.entity.OrmaDatabase;
+import jp.manavista.developbase.repository.MemberLessonRepository;
 import jp.manavista.developbase.repository.MemberRepository;
 import jp.manavista.developbase.repository.TimeTableRepository;
+import jp.manavista.developbase.repository.impl.MemberLessonRepositoryImpl;
 import jp.manavista.developbase.repository.impl.MemberRepositoryImpl;
 import jp.manavista.developbase.repository.impl.TimetableRepositoryImpl;
 
@@ -52,5 +54,11 @@ public class RepositoryModule {
     @Singleton
     MemberRepository provideMemberRepository(OrmaDatabase database) {
         return new MemberRepositoryImpl(database);
+    }
+
+    @Provides
+    @Singleton
+    MemberLessonRepository provideMemberLessonRepository(OrmaDatabase database) {
+        return new MemberLessonRepositoryImpl(database);
     }
 }

@@ -57,7 +57,7 @@ public final class MemberListFragment extends Fragment {
     /** Member Adapter */
     private MemberAdapter adapter;
     /** Item Touch Helper */
-    ItemTouchHelperExtension itemTouchHelper;
+    private ItemTouchHelperExtension itemTouchHelper;
     /** Member list disposable */
     private Disposable disposable;
 
@@ -117,6 +117,7 @@ public final class MemberListFragment extends Fragment {
         adapter = MemberAdapter.newInstance(contents, memberOperation);
         view.setAdapter(adapter);
 
+        // TODO: Stop using swipe delete. Because the motion is not stable.
         ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
         itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.setClickToRecoverAnimation(false);
@@ -162,7 +163,8 @@ public final class MemberListFragment extends Fragment {
 
             final String[] items = {getString(R.string.label_member_list_dialog_edit),
                     getString(R.string.label_member_list_dialog_lesson),
-                    getString(R.string.label_member_list_dialog_schedule)};
+                    getString(R.string.label_member_list_dialog_schedule),
+                    getString(R.string.label_member_list_dialog_delete)};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(contents);
             builder.setTitle(getString(R.string.label_member_list_dialog_title))
@@ -185,6 +187,8 @@ public final class MemberListFragment extends Fragment {
                                     contents.startActivity(intent);
                                     break;
                                 case 2:
+                                    break;
+                                case 3:
                                     break;
                             }
                         }
