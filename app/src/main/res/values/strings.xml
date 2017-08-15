@@ -112,6 +112,7 @@
     <string name="label.member_lesson.preview_color_string">Sample ABC</string>
     <string name="label.member_lesson.text_color">Text Color</string>
     <string name="label.member_lesson_background_color">Background Color</string>
+    <string name="tag.member_lesson.preview.color">TAG_SELECTED_COLOR</string>
 
     <!-- Member Lesson List -->
     <string name="toolbar.member_lesson_list.title">Lesson List</string>

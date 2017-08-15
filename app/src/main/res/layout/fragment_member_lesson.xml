@@ -26,10 +26,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/label.member_lesson.hint.member"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/member_icon_image2"/>
+                android:layout_toStartOf="@+id/member_icon_image"/>
 
             <ImageView
-                android:id="@+id/member_icon_image2"
+                android:id="@+id/member_icon_image"
                 android:src="@drawable/ic_person_black"
                 android:contentDescription="@string/label.member_lesson.hint.member"
                 android:layout_alignParentEnd="true"
@@ -57,21 +57,22 @@
             android:layout_marginBottom="@dimen/margin_8dp">
 
             <ImageView
+                android:id="@+id/name_image"
                 android:src="@drawable/ic_import_contacts_black"
                 android:contentDescription="@string/label.member_lesson.hint.name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageView3"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"/>
 
             <EditText
+                android:id="@+id/name"
                 android:hint="@string/label.member_lesson.hint.name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/imageView3"/>
+                android:layout_toEndOf="@+id/name_image"/>
 
         </RelativeLayout>
         <RelativeLayout
@@ -83,21 +84,22 @@
             android:layout_marginBottom="@dimen/margin_8dp">
 
             <ImageView
+                android:id="@+id/abbr_image"
                 android:src="@drawable/bp_material_button_background"
                 android:contentDescription="@string/label.member_lesson.hint.abbr"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:id="@+id/abbr_dummy"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"/>
 
             <EditText
+                android:id="@+id/abbr"
                 android:hint="@string/label.member_lesson.hint.abbr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/abbr_dummy"/>
+                android:layout_toEndOf="@+id/abbr_image"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -108,21 +110,22 @@
             android:layout_marginBottom="@dimen/margin_8dp">
 
             <ImageView
+                android:id="@+id/type_image"
                 android:src="@drawable/ic_bookmark_black"
                 android:contentDescription="@string/label.member_lesson.hint.type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/type_icon_image"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"/>
 
             <EditText
+                android:id="@+id/type"
                 android:hint="@string/label.member_lesson.hint.type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/type_icon_image"/>
+                android:layout_toEndOf="@+id/type_image"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -133,21 +136,22 @@
             android:layout_marginBottom="@dimen/margin_8dp">
 
             <ImageView
+                android:id="@+id/location_image"
                 android:src="@drawable/ic_room_black"
                 android:contentDescription="@string/label.member_lesson.hint.location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/location_icon_image"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"/>
 
             <EditText
+                android:id="@+id/location"
                 android:hint="@string/label.member_lesson.hint.location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/location_icon_image"/>
+                android:layout_toEndOf="@+id/location_image"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -158,21 +162,22 @@
             android:layout_marginBottom="@dimen/margin_8dp">
 
             <ImageView
+                android:id="@+id/presenter_image"
                 android:src="@drawable/ic_face_black"
                 android:contentDescription="@string/label.member_lesson.hint.presenter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/presenter_icon_image"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"/>
 
             <EditText
+                android:id="@+id/presenter"
                 android:hint="@string/label.member_lesson.hint.presenter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/presenter_icon_image"/>
+                android:layout_toEndOf="@+id/presenter_image"/>
         </RelativeLayout>
 
 
@@ -217,6 +222,7 @@
                         android:id="@+id/start_time"
                         android:text="10:00"
                         android:inputType="time"
+                        android:focusable="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -236,6 +242,7 @@
                         android:id="@+id/end_time"
                         android:text="12:00"
                         android:inputType="time"
+                        android:focusable="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -246,12 +253,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:src="@drawable/ic_event_black"
+                <ImageButton
+                    android:id="@+id/timetable_image_button"
+                    android:src="@drawable/button_event_black"
+                    android:background="@drawable/background_image_button"
                     android:contentDescription="@string/label.member_lesson.select_timetable"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/timetable_icon_image"/>
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:text="@string/label.member_lesson.select_timetable"
@@ -259,7 +267,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/margin_4dp"
-                    android:layout_toEndOf="@+id/timetable_icon_image"/>
+                    android:layout_toEndOf="@+id/timetable_image_button"/>
 
             </RelativeLayout>
 
@@ -295,6 +303,7 @@
                 android:id="@+id/day_of_week"
                 android:text="Mon, Thr"
                 android:inputType="text"
+                android:focusable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -342,8 +351,10 @@
                         android:layout_height="wrap_content"/>
 
                     <EditText
+                        android:id="@+id/start_period"
                         android:text="2017/01/01"
                         android:inputType="date"
+                        android:focusable="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -359,8 +370,10 @@
                         android:layout_height="wrap_content"/>
 
                     <EditText
+                        android:id="@+id/end_period"
                         android:text="2017/12/31"
                         android:inputType="date"
+                        android:focusable="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -398,25 +411,27 @@
                 android:layout_height="40dp"
                 android:id="@+id/preview_text"/>
 
-            <ImageView
-                android:id="@+id/font_color_icon_image"
+            <ImageButton
+                android:id="@+id/text_color_image_button"
                 android:contentDescription="@string/label.member_lesson.text_color"
-                android:src="@drawable/ic_format_color_text_black"
+                android:src="@drawable/button_format_color_text_black"
+                android:background="@drawable/background_image_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/preview_text"/>
 
-            <ImageView
-                android:id="@+id/background_color_icon_image"
+            <ImageButton
+                android:id="@+id/background_color_image_button"
                 android:contentDescription="@string/label.member_lesson_background_color"
-                android:src="@drawable/ic_format_color_fill_black"
+                android:src="@drawable/button_format_color_fill_black"
+                android:background="@drawable/background_image_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/font_color_icon_image"/>
+                android:layout_toEndOf="@+id/text_color_image_button"/>
 
         </RelativeLayout>
 
