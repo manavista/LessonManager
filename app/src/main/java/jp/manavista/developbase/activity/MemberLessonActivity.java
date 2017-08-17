@@ -1,5 +1,6 @@
 package jp.manavista.developbase.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,11 @@ import jp.manavista.developbase.fragment.MemberLessonFragment;
  */
 public class MemberLessonActivity extends AppCompatActivity {
 
+    /** activity put extra argument: member id */
+    public static final String EXTRA_MEMBER_ID = "MEMBER_ID";
+    /** activity put extra argument: member lesson id */
+    public static final String EXTRA_MEMBER_LESSON_ID = "MEMBER_LESSON_ID";
+
     /** fragment */
     private MemberLessonFragment fragment;
 
@@ -39,7 +45,11 @@ public class MemberLessonActivity extends AppCompatActivity {
             }
         });
 
-        fragment = MemberLessonFragment.newInstance(0);
+        final Intent intent = getIntent();
+        final int memberId = intent.getIntExtra(EXTRA_MEMBER_ID, 0);
+        final int memberLessonId = intent.getIntExtra(EXTRA_MEMBER_LESSON_ID, 0);
+
+        fragment = MemberLessonFragment.newInstance(memberId, memberLessonId);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_member_lesson, fragment)
@@ -56,8 +66,8 @@ public class MemberLessonActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.option_add:
-//                fragment.save();
+            case R.id.option_save:
+                fragment.save();
                 break;
         }
 

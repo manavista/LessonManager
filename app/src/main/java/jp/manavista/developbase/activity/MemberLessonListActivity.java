@@ -25,6 +25,11 @@ public class MemberLessonListActivity extends AppCompatActivity {
     /** Logger tag string */
     private static final String TAG = MemberLessonListActivity.class.getSimpleName();
 
+    /** activity put extra argument: member id */
+    public static final String EXTRA_MEMBER_ID = "MEMBER_ID";
+
+    private int memberId;
+
     /** fragment */
     private MemberLessonListFragment fragment;
 
@@ -44,6 +49,8 @@ public class MemberLessonListActivity extends AppCompatActivity {
             }
         });
 
+        final Intent intent = getIntent();
+        memberId = intent.getIntExtra(EXTRA_MEMBER_ID, 0);
 
         fragment = MemberLessonListFragment.newInstance();
         getSupportFragmentManager()
@@ -64,6 +71,8 @@ public class MemberLessonListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.option_add:
                 Intent intent = new Intent(this, MemberLessonActivity.class);
+                intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, memberId);
+                intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, 0);
                 this.startActivity(intent);
                 break;
         }

@@ -184,6 +184,7 @@ public final class MemberListFragment extends Fragment {
                                     break;
                                 case 1:
                                     intent = new Intent(contents, MemberLessonListActivity.class);
+                                    intent.putExtra(MemberLessonListActivity.EXTRA_MEMBER_ID, id);
                                     contents.startActivity(intent);
                                     break;
                                 case 2:

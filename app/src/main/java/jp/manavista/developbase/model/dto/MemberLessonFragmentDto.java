@@ -10,12 +10,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Optional;
+
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.List;
 import java.util.Locale;
 
 import jp.manavista.developbase.fragment.MemberLessonFragment;
+import jp.manavista.developbase.model.entity.MemberLesson;
 import jp.manavista.developbase.util.DateTimeUtil;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -48,26 +53,43 @@ public final class MemberLessonFragmentDto implements Serializable {
 
     /** entity id */
     private int id;
+    /** memberId */
+    private int memberId;
 
     private TextView memberName;
 
+    @NotEmpty
+    @Length(max = 50)
     private EditText name;
+    @Optional
+    @Length(max = 50)
     private EditText abbr;
+    @Optional
+    @Length(max = 50)
     private EditText type;
+    @Optional
+    @Length(max = 50)
     private EditText location;
+    @Optional
+    @Length(max = 50)
     private EditText presenter;
 
+    @NotEmpty
     private EditText startTimeText;
+    @NotEmpty
     private EditText endTimeText;
     private ImageButton timetableIcon;
 
     private Time startTime;
     private Time endTime;
 
+    @NotEmpty
     private EditText dayOfWeek;
     private String dayOfWeekValue;
 
+    @NotEmpty
     private EditText startPeriod;
+    @NotEmpty
     private EditText endPeriod;
 
     private TextView previewText;
@@ -76,8 +98,8 @@ public final class MemberLessonFragmentDto implements Serializable {
     @ColorInt
     private int backgroundColor;
 
-    private ImageButton textColorIcon;
-    private ImageButton backgroundColorIcon;
+    private ImageButton textColorImageButton;
+    private ImageButton backgroundColorImageButton;
 
 
     @Setter(AccessLevel.NONE)
@@ -148,4 +170,36 @@ public final class MemberLessonFragmentDto implements Serializable {
         }
     };
 
+    /**
+     *
+     * Convert
+     *
+     * <p>
+     * Overview:<br>
+     * Convert DTO to entity.
+     * </p>
+     *
+     * @return {@link MemberLesson} entity.
+     */
+    public MemberLesson convert() {
+
+        final MemberLesson memberLesson = new MemberLesson();
+
+        memberLesson.id = id;
+        memberLesson.memberId = memberId;
+        memberLesson.name = name.getText().toString();
+        memberLesson.abbr = abbr.getText().toString();
+        memberLesson.type = type.getText().toString();
+        memberLesson.location = location.getText().toString();
+        memberLesson.presenter = presenter.getText().toString();
+        memberLesson.textColor = textColor;
+        memberLesson.backgroundColor = backgroundColor;
+        memberLesson.startTime = DateTimeUtil.parseTime(DateTimeUtil.TIME_FORMAT_HHMM, startTimeText.getText().toString());
+        memberLesson.endTime = DateTimeUtil.parseTime(DateTimeUtil.TIME_FORMAT_HHMM, endTimeText.getText().toString());
+        memberLesson.dayOfWeeks = dayOfWeekValue;
+        memberLesson.periodFrom = startPeriod.getText().toString();
+        memberLesson.periodTo = endPeriod.getText().toString();
+
+        return memberLesson;
+    }
 }

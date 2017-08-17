@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -17,10 +18,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
 import com.thebluealliance.spectrum.SpectrumDialog;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,12 +42,15 @@ import jp.manavista.developbase.model.dto.MemberDto;
 import jp.manavista.developbase.model.dto.MemberLessonFragmentDto;
 import jp.manavista.developbase.model.dto.TimetableDto;
 import jp.manavista.developbase.model.entity.Member;
+import jp.manavista.developbase.model.entity.MemberLesson;
 import jp.manavista.developbase.model.entity.Timetable;
 import jp.manavista.developbase.service.MemberLessonService;
 import jp.manavista.developbase.service.MemberService;
 import jp.manavista.developbase.service.TimetableService;
 import jp.manavista.developbase.util.ArrayUtil;
 import jp.manavista.developbase.util.DateTimeUtil;
+
+import static jp.manavista.developbase.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD;
 
 /**
  *
@@ -51,15 +61,19 @@ import jp.manavista.developbase.util.DateTimeUtil;
  *
  * </p>
  */
-public final class MemberLessonFragment extends Fragment {
+public final class MemberLessonFragment extends Fragment implements Validator.ValidationListener {
 
     /** Logger tag string */
     public static final String TAG = MemberLessonFragment.class.getSimpleName();
     /** bundle key: member id */
     public static final String KEY_MEMBER_ID = "MEMBER_ID";
+    /** bundle key: member lesson id */
+    public static final String KEY_MEMBER_LESSON_ID = "MEMBER_LESSON_ID";
 
     /** member id */
     private int memberId;
+    /** member lesson id */
+    private int id;
     /** DTO */
     private MemberLessonFragmentDto dto;
     /** Activity Contents */
@@ -72,6 +86,8 @@ public final class MemberLessonFragment extends Fragment {
     @Inject
     TimetableService timetableService;
 
+    /** input validator */
+    private Validator validator;
     /** Member disposable */
     private Disposable disposable;
 
@@ -90,13 +106,14 @@ public final class MemberLessonFragment extends Fragment {
      * this fragment using the provided parameters.
      * </p>
      *
-     * @param id display member id
+     * @param memberId display member id
      * @return A new instance of fragment MemberLessonFragment.
      */
-    public static MemberLessonFragment newInstance(final int id) {
+    public static MemberLessonFragment newInstance(final int memberId, final int memberLessonId) {
         MemberLessonFragment fragment = new MemberLessonFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_MEMBER_ID, id);
+        args.putInt(KEY_MEMBER_ID, memberId);
+        args.putInt(KEY_MEMBER_LESSON_ID, memberLessonId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -107,6 +124,7 @@ public final class MemberLessonFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             memberId = args.getInt(KEY_MEMBER_ID);
+            id = args.getInt(KEY_MEMBER_LESSON_ID);
         }
 
         this.disposable = Disposables.empty();
@@ -119,6 +137,8 @@ public final class MemberLessonFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_member_lesson, container, false);
 
         dto = MemberLessonFragmentDto.builder()
+                .id(id)
+                .memberId(memberId)
                 .memberName((TextView) rootView.findViewById(R.id.member_name))
                 .name((EditText) rootView.findViewById(R.id.name))
                 .abbr((EditText) rootView.findViewById(R.id.abbr))
@@ -132,8 +152,8 @@ public final class MemberLessonFragment extends Fragment {
                 .startPeriod((EditText) rootView.findViewById(R.id.start_period))
                 .endPeriod((EditText) rootView.findViewById(R.id.end_period))
                 .previewText((TextView) rootView.findViewById(R.id.preview_text))
-                .textColorIcon((ImageButton) rootView.findViewById(R.id.text_color_image_button))
-                .backgroundColorIcon((ImageButton) rootView.findViewById(R.id.background_color_image_button))
+                .textColorImageButton((ImageButton) rootView.findViewById(R.id.text_color_image_button))
+                .backgroundColorImageButton((ImageButton) rootView.findViewById(R.id.background_color_image_button))
 
                 .dateFormat("%04d/%02d/%02d")
 
@@ -150,6 +170,15 @@ public final class MemberLessonFragment extends Fragment {
 
         DependencyInjector.appComponent().inject(this);
 
+        validator = new Validator(dto);
+        validator.setValidationListener(this);
+
+        if( id > 0 ) {
+            storeEntityToDto(id);
+        } else {
+            storeInitValueToDto();
+        }
+
         displayMemberName();
         prepareButtonListener();
     }
@@ -158,6 +187,54 @@ public final class MemberLessonFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         this.disposable.dispose();
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+
+        disposable = memberLessonService.save(dto.convert()).subscribe(new Consumer<MemberLesson>() {
+            @Override
+            public void accept(MemberLesson memberLesson) throws Exception {
+                Log.d(TAG, memberLesson.toString());
+                contents.finish();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throw new RuntimeException("can not save MemberLesson entity", throwable);
+            }
+        });
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+
+        for( ValidationError error : errors ) {
+
+            final String message = error.getCollatedErrorMessage(contents);
+            final View view = error.getView();
+
+            if( view instanceof EditText ) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(contents, message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /**
+     *
+     * Save Member Lesson
+     *
+     * <p>
+     * Overview:<br>
+     * Save the information on the member lesson you entered on the screen.<br>
+     * First, validate the input value. Perform processing with another
+     * function according to the result.
+     * </p>
+     */
+    public void save() {
+        validator.validate();
     }
 
     /**
@@ -250,6 +327,9 @@ public final class MemberLessonFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
                                 index[which] = isChecked;
+                                ((AlertDialog) dialogInterface)
+                                        .getButton(AlertDialog.BUTTON_POSITIVE)
+                                        .setEnabled(ArrayUtils.contains(index, true));
                             }
                         })
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -293,7 +373,7 @@ public final class MemberLessonFragment extends Fragment {
             }
         });
 
-        dto.getTextColorIcon().setOnClickListener(new View.OnClickListener() {
+        dto.getTextColorImageButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
 
@@ -317,7 +397,7 @@ public final class MemberLessonFragment extends Fragment {
             }
         });
 
-        dto.getBackgroundColorIcon().setOnClickListener(new View.OnClickListener() {
+        dto.getBackgroundColorImageButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -358,15 +438,65 @@ public final class MemberLessonFragment extends Fragment {
             @Override
             public void accept(Member member) throws Exception {
                 final String displayName = MemberDto.copy(member).getDisplayName();
-                Log.d(TAG, displayName);
                 dto.getMemberName().setText(displayName);
             }
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-
+                throw new RuntimeException("can not get member entity", throwable);
             }
         });
+    }
 
+    /**
+     *
+     * Store Initial Value to DTO
+     *
+     * <p>
+     * Overview:<br>
+     *
+     * </p>
+     *
+     */
+    private void storeInitValueToDto() {
+
+        /* dayOfWeek (default: Monday) */
+        final String dayOfWeek = "2";
+        final String[] dayOfWeeks = getResources().getStringArray(R.array.entries_day_of_week);
+
+        dto.setDayOfWeekValue(dayOfWeek);
+        dto.getDayOfWeek().setText(dayOfWeeks[1]);
+
+        /* Period */
+        final Calendar calendar = DateTimeUtil.today();
+        dto.getStartPeriod().setText(DateTimeUtil.format(DATE_PATTERN_YYYYMMDD, calendar));
+        calendar.add(Calendar.MONTH, 3);
+        dto.getEndPeriod().setText(DateTimeUtil.format(DATE_PATTERN_YYYYMMDD, calendar));
+
+        /* Color (default text: @color/black, background: @color/amber_500) */
+        final int textColor = dto.getPreviewText().getCurrentTextColor();
+        final int backgroundColor = ((ColorDrawable) dto.getPreviewText().getBackground()).getColor();
+        final int tag = R.string.tag_member_lesson_preview_color;
+
+        dto.setTextColor(textColor);
+        dto.getTextColorImageButton().setTag(tag, textColor);
+
+        dto.setBackgroundColor(backgroundColor);
+        dto.getBackgroundColorImageButton().setTag(tag, backgroundColor);
+    }
+
+    /**
+     *
+     * Store Entity to DTO
+     *
+     * <p>
+     * Overview:<br>
+     *
+     * </p>
+     * 
+     * @param memberLessonId member lesson id
+     */
+    private void storeEntityToDto(final int memberLessonId) {
+        // TODO: 2017/08/17 Get MemberLesson entity and copy dto
     }
 }

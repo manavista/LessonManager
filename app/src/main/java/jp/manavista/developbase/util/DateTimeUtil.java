@@ -1,5 +1,6 @@
 package jp.manavista.developbase.util;
 
+import android.support.annotation.NonNull;
 import android.util.Pair;
 
 import org.apache.commons.lang3.time.DateUtils;
@@ -53,6 +54,19 @@ public final class DateTimeUtil {
         return Pair.create(first, last);
     }
 
+    public static String today(final SimpleDateFormat format) {
+        Calendar calendar = Calendar.getInstance();
+        return format.format(calendar.getTime());
+    }
+
+    public static Calendar today() {
+        return Calendar.getInstance();
+    }
+
+    public static String format(final String format, final Calendar calendar) {
+        return new SimpleDateFormat(format, Locale.getDefault()).format(calendar.getTime());
+    }
+
     public static Time parseTime(int hourOfDay, int minute) {
         return parseTime(hourOfDay, minute, 0);
     }
@@ -65,6 +79,15 @@ public final class DateTimeUtil {
         calendar.set(Calendar.SECOND, second);
 
         return new Time(calendar.getTime().getTime());
+    }
+
+    public static Time parseTime(@NonNull SimpleDateFormat format, @NonNull String time) {
+
+        try {
+            return new Time(format.parse(time).getTime());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static boolean parseDateStrictly(final String str, final String... patterns) {
