@@ -65,6 +65,7 @@ public final class MemberLessonFragmentDto implements Serializable {
     private Time endTime;
 
     private EditText dayOfWeek;
+    private String dayOfWeekValue;
 
     private EditText startPeriod;
     private EditText endPeriod;

@@ -39,6 +39,7 @@ import jp.manavista.developbase.model.entity.Timetable;
 import jp.manavista.developbase.service.MemberLessonService;
 import jp.manavista.developbase.service.MemberService;
 import jp.manavista.developbase.service.TimetableService;
+import jp.manavista.developbase.util.ArrayUtil;
 import jp.manavista.developbase.util.DateTimeUtil;
 
 /**
@@ -232,27 +233,35 @@ public final class MemberLessonFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                final String[] arrays = getResources().getStringArray(R.array.entries_day_of_week);
+                /* full name: Sunday, Monday, Tuesday... */
+                final String[] daysFull = getResources().getStringArray(R.array.entries_day_of_week_full_name);
+                /* short name: Sun, Mon, Tue, Wed... */
+                final String[] days = getResources().getStringArray(R.array.entries_day_of_week);
+                /* day decimal string value: 1, 2, 3... */
+                final String[] dayValues = getResources().getStringArray(R.array.entry_values_day_of_week);
 
-                // TODO: e.g. String dayOfWeek = "1,3" -> true, false, true...
-                final boolean[] values = {false, false, false,false, false, false, false};
+                final String dayOfWeek = dto.getDayOfWeekValue();
+                final boolean[] index = ArrayUtil.convertIndexFromArray(dayOfWeek, dayValues, ",");
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(contents);
-                builder.setTitle("Select day of week")
+                builder.setTitle(R.string.label_member_lesson_day_of_week_dialog_title)
                         .setIcon(R.drawable.ic_event_black)
-                        .setMultiChoiceItems(arrays, values, new DialogInterface.OnMultiChoiceClickListener() {
+                        .setMultiChoiceItems(daysFull, index, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                                values[which] = isChecked;
+                                index[which] = isChecked;
                             }
                         })
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // TODO: change edit text day of week.
+                                final String label = ArrayUtil.concatIndexOfArray(days, index, ", ");
+                                final String dayOfWeekValue = ArrayUtil.concatIndexOfArray(dayValues, index, ",");
+                                dto.getDayOfWeek().setText(label);
+                                dto.setDayOfWeekValue(dayOfWeekValue);
                             }
                         })
-                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
