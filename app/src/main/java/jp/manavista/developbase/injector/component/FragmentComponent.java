@@ -3,6 +3,8 @@ package jp.manavista.developbase.injector.component;
 import jp.manavista.developbase.fragment.BaseFragment;
 import jp.manavista.developbase.fragment.LessonViewFragment;
 import jp.manavista.developbase.fragment.MemberFragment;
+import jp.manavista.developbase.fragment.MemberLessonFragment;
+import jp.manavista.developbase.fragment.MemberLessonListFragment;
 import jp.manavista.developbase.fragment.MemberListFragment;
 import jp.manavista.developbase.fragment.TimetableFragment;
 
@@ -23,5 +25,7 @@ public interface FragmentComponent {
     void inject(TimetableFragment timetableFragment);
     void inject(MemberFragment memberFragment);
     void inject(MemberListFragment memberListFragment);
+    void inject(MemberLessonFragment memberLessonFragment);
+    void inject(MemberLessonListFragment memberLessonListFragment);
     void inject(LessonViewFragment lessonViewFragment);
 }

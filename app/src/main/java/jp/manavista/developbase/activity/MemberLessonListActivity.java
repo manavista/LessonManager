@@ -9,30 +9,35 @@ import android.view.MenuItem;
 import android.view.View;
 
 import jp.manavista.developbase.R;
-import jp.manavista.developbase.fragment.MemberListFragment;
+import jp.manavista.developbase.fragment.MemberLessonListFragment;
 
 /**
  *
- * Member List Fragment
+ * MemberLesson list Activity
  *
  * <p>
  * Overview:<br>
- * Display a list of members. <br>
- * Provide interface for editing and creating new.
+ *
  * </p>
  */
-public class MemberListActivity extends AppCompatActivity {
+public class MemberLessonListActivity extends AppCompatActivity {
 
     /** Logger tag string */
-    private static final String TAG = MemberListActivity.class.getSimpleName();
+    private static final String TAG = MemberLessonListActivity.class.getSimpleName();
 
-    /** MemberList fragment */
-    private MemberListFragment memberListFragment;
+    /** activity put extra argument: member id */
+    public static final String EXTRA_MEMBER_ID = "MEMBER_ID";
+
+    private int memberId;
+
+    /** fragment */
+    private MemberLessonListFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_member_list);
+        setContentView(R.layout.activity_member_lesson_list);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,16 +49,19 @@ public class MemberListActivity extends AppCompatActivity {
             }
         });
 
-        memberListFragment = MemberListFragment.newInstance();
+        final Intent intent = getIntent();
+        memberId = intent.getIntExtra(EXTRA_MEMBER_ID, 0);
+
+        fragment = MemberLessonListFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_member_list, memberListFragment)
+                .replace(R.id.content_member_lesson_list, fragment)
                 .commit();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_member_list, menu);
+        getMenuInflater().inflate(R.menu.toolbar_member_lesson_list, menu);
         return true;
     }
 
@@ -62,7 +70,9 @@ public class MemberListActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.option_add:
-                Intent intent = new Intent(this, MemberActivity.class);
+                Intent intent = new Intent(this, MemberLessonActivity.class);
+                intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, memberId);
+                intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, 0);
                 this.startActivity(intent);
                 break;
         }

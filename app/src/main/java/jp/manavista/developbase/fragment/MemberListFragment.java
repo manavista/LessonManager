@@ -1,12 +1,15 @@
 package jp.manavista.developbase.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.developbase.R;
 import jp.manavista.developbase.activity.MemberActivity;
+import jp.manavista.developbase.activity.MemberLessonListActivity;
 import jp.manavista.developbase.injector.DependencyInjector;
 import jp.manavista.developbase.model.dto.MemberDto;
 import jp.manavista.developbase.model.entity.Member;
@@ -46,14 +50,14 @@ import jp.manavista.developbase.view.operation.MemberOperation;
 public final class MemberListFragment extends Fragment {
 
     /** Logger tag string */
-    public static final String TAG = MemberListFragment.class.getSimpleName();
+    private static final String TAG = MemberListFragment.class.getSimpleName();
 
     /** Activity Contents */
     private Activity contents;
     /** Member Adapter */
     private MemberAdapter adapter;
     /** Item Touch Helper */
-    ItemTouchHelperExtension itemTouchHelper;
+    private ItemTouchHelperExtension itemTouchHelper;
     /** Member list disposable */
     private Disposable disposable;
 
@@ -113,6 +117,7 @@ public final class MemberListFragment extends Fragment {
         adapter = MemberAdapter.newInstance(contents, memberOperation);
         view.setAdapter(adapter);
 
+        // TODO: Stop using swipe delete. Because the motion is not stable.
         ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
         itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.setClickToRecoverAnimation(false);
@@ -154,10 +159,42 @@ public final class MemberListFragment extends Fragment {
     private MemberOperation memberOperation = new MemberOperation() {
 
         @Override
-        public void edit(int id, int position) {
-            Intent intent = new Intent(contents, MemberActivity.class);
-            intent.putExtra(MemberActivity.EXTRA_MEMBER_ID, id);
-            contents.startActivity(intent);
+        public void edit(final int id, final int position) {
+
+            final String[] items = {getString(R.string.label_member_list_dialog_edit),
+                    getString(R.string.label_member_list_dialog_lesson),
+                    getString(R.string.label_member_list_dialog_schedule),
+                    getString(R.string.label_member_list_dialog_delete)};
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(contents);
+            builder.setTitle(getString(R.string.label_member_list_dialog_title))
+                    .setIcon(R.drawable.ic_person_black)
+                    .setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, final int which) {
+
+                            Log.d(TAG, "which: " + which);
+                            Intent intent;
+
+                            switch (which) {
+                                case 0:
+                                    intent = new Intent(contents, MemberActivity.class);
+                                    intent.putExtra(MemberActivity.EXTRA_MEMBER_ID, id);
+                                    contents.startActivity(intent);
+                                    break;
+                                case 1:
+                                    intent = new Intent(contents, MemberLessonListActivity.class);
+                                    intent.putExtra(MemberLessonListActivity.EXTRA_MEMBER_ID, id);
+                                    contents.startActivity(intent);
+                                    break;
+                                case 2:
+                                    break;
+                                case 3:
+                                    break;
+                            }
+                        }
+                    })
+                    .show();
         }
 
         @Override

@@ -8,6 +8,11 @@
             android:icon="@drawable/ic_people_black"
             android:title="@string/menu.member_list"/>
 
+        <item
+            android:id="@+id/nav_member_lesson_list"
+            android:icon="@drawable/ic_event_note_black"
+            android:title="@string/drawable.label.member_lesson_list"/>
+
     </group>
 
     <item android:title="@string/menu.add">

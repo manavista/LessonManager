@@ -40,7 +40,7 @@ import jp.manavista.developbase.util.DateTimeUtil;
  *
  * <p>
  * Overview:<br>
- * Timetable control fragment.<br>
+ * Member control fragment.<br>
  * Handling of Member insert and update (database control) is defined in this class.
  * </p>
  */
@@ -70,7 +70,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
 
     /** Constructor */
     public MemberFragment() {
-        this.disposable = Disposables.empty();
+
     }
 
     /**
@@ -100,6 +100,8 @@ public final class MemberFragment extends Fragment implements Validator.Validati
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         memberId = args.getInt(KEY_MEMBER_ID);
+
+        this.disposable = Disposables.empty();
     }
 
     @Override

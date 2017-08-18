@@ -2,10 +2,13 @@ package jp.manavista.developbase.injector.module;
 
 import dagger.Module;
 import dagger.Provides;
+import jp.manavista.developbase.repository.MemberLessonRepository;
 import jp.manavista.developbase.repository.MemberRepository;
 import jp.manavista.developbase.repository.TimeTableRepository;
+import jp.manavista.developbase.service.MemberLessonService;
 import jp.manavista.developbase.service.MemberService;
 import jp.manavista.developbase.service.TimetableService;
+import jp.manavista.developbase.service.impl.MemberLessonServiceImpl;
 import jp.manavista.developbase.service.impl.MemberServiceImpl;
 import jp.manavista.developbase.service.impl.TimetableServiceImpl;
 
@@ -29,5 +32,10 @@ public class ServiceModule {
     @Provides
     MemberService providerMemberService(MemberRepository memberRepository) {
         return new MemberServiceImpl(memberRepository);
+    }
+
+    @Provides
+    MemberLessonService provideMemberLessonService(MemberLessonRepository memberLessonRepository) {
+        return new MemberLessonServiceImpl(memberLessonRepository);
     }
 }
