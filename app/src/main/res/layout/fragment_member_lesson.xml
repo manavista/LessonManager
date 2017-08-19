@@ -1,7 +1,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="jp.manavista.developbase.fragment.MemberLessonFragment"
+    tools:context="jp.manavista.lessonmanager.fragment.MemberLessonFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 

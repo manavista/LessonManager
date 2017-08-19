@@ -39,7 +39,7 @@
         android:layout="@layout/preferences_category"
         android:title="@string/preference.category.lesson_week_view">
 
-        <jp.manavista.developbase.view.preference.NumberPickerPreference
+        <jp.manavista.lessonmanager.view.preference.NumberPickerPreference
             android:key="@string/preferences.key.display_start_time"
             android:title="@string/preferences.title.display_start_time"
             android:summary="@string/preferences.summary.display_start_time"
@@ -47,7 +47,7 @@
             app:maxValue="23"
             android:defaultValue="9" />
 
-        <jp.manavista.developbase.view.preference.NumberPickerPreference
+        <jp.manavista.lessonmanager.view.preference.NumberPickerPreference
             android:key="@string/preferences.key.display_end_time"
             android:title="@string/preferences.title.display_end_time"
             android:summary="@string/preferences.summary.display_end_time"
