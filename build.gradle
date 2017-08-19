@@ -19,6 +19,9 @@ allprojects {
             // for 'com.mobsandgeeks:android-saripaar:2.1.0-SNAPSHOT'
             url "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            url "https://maven.google.com"
+        }
     }
 }
 
