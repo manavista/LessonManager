@@ -22,9 +22,11 @@ import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Timetable;
-import jp.manavista.lessonmanager.injector.DependencyInjector;
+import jp.manavista.lessonmanager.service.MemberLessonService;
+import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.service.TimetableService;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
 import jp.manavista.lessonmanager.view.week.DateTimeInterpreter;
@@ -63,6 +65,12 @@ public final class LessonViewFragment extends Fragment implements
     /** Timetable service */
     @Inject
     TimetableService timetableService;
+
+    // TODO: 2017/08/20 after delete
+    @Inject
+    MemberService memberService;
+    @Inject
+    MemberLessonService memberLessonService;
 
     /** Timetable list disposable */
     private Disposable timetableDisposable = Disposables.empty();
@@ -114,6 +122,9 @@ public final class LessonViewFragment extends Fragment implements
 
         timetableList = new ArrayList<>();
 
+        // TODO: 2017/08/20
+//        timetableDisposable = memberLessonService.deleteAll().subscribe();
+//        memberService.deleteAll();
     }
 
     @Override

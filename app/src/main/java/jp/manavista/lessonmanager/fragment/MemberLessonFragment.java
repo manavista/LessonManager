@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.gfx.android.orma.SingleAssociation;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.thebluealliance.spectrum.SpectrumDialog;
@@ -32,10 +33,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.SingleSource;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.MemberDto;
@@ -71,7 +75,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     public static final String KEY_MEMBER_LESSON_ID = "MEMBER_LESSON_ID";
 
     /** member id */
-    private int memberId;
+    private long memberId;
     /** member lesson id */
     private int id;
     /** DTO */
@@ -109,10 +113,10 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      * @param memberId display member id
      * @return A new instance of fragment MemberLessonFragment.
      */
-    public static MemberLessonFragment newInstance(final int memberId, final int memberLessonId) {
+    public static MemberLessonFragment newInstance(final long memberId, final int memberLessonId) {
         MemberLessonFragment fragment = new MemberLessonFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_MEMBER_ID, memberId);
+        args.putLong(KEY_MEMBER_ID, memberId);
         args.putInt(KEY_MEMBER_LESSON_ID, memberLessonId);
         fragment.setArguments(args);
         return fragment;
@@ -123,7 +127,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            memberId = args.getInt(KEY_MEMBER_ID);
+            memberId = args.getLong(KEY_MEMBER_ID);
             id = args.getInt(KEY_MEMBER_LESSON_ID);
         }
 
@@ -179,7 +183,10 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
             storeInitValueToDto();
         }
 
-        displayMemberName();
+        if( memberId > 0 ) {
+            displayMemberName();
+        }
+
         prepareButtonListener();
     }
 
@@ -192,7 +199,19 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     @Override
     public void onValidationSucceeded() {
 
-        disposable = memberLessonService.save(dto.convert()).subscribe(new Consumer<MemberLesson>() {
+        final MemberLesson entity = dto.convert();
+//        Member member = new Member();
+//        member.id = 2;
+//        entity.member = SingleAssociation.just(member);
+        disposable = memberService.getById(dto.getMemberId()).flatMap(new Function<Member, SingleSource<? extends MemberLesson>>() {
+            @Override
+            public SingleSource<? extends MemberLesson> apply(@NonNull Member member) throws Exception {
+
+                entity.member = SingleAssociation.just(member);
+
+                return memberLessonService.save(entity);
+            }
+        }).subscribe(new Consumer<MemberLesson>() {
             @Override
             public void accept(MemberLesson memberLesson) throws Exception {
                 Log.d(TAG, memberLesson.toString());
@@ -204,6 +223,19 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
                 throw new RuntimeException("can not save MemberLesson entity", throwable);
             }
         });
+
+//        disposable = memberLessonService.save(dto.convert()).subscribe(new Consumer<MemberLesson>() {
+//            @Override
+//            public void accept(MemberLesson memberLesson) throws Exception {
+//                Log.d(TAG, memberLesson.toString());
+//                contents.finish();
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(Throwable throwable) throws Exception {
+//                throw new RuntimeException("can not save MemberLesson entity", throwable);
+//            }
+//        });
     }
 
     @Override

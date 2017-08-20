@@ -27,7 +27,7 @@ public interface MemberOperation {
      * @param id target row id
      * @param position target adapter position
      */
-    void edit(final int id, final int position);
+    void edit(final long id, final int position);
 
     /**
      *
@@ -41,5 +41,5 @@ public interface MemberOperation {
      * @param id target row id
      * @param position target adapter position
      */
-    void delete(final int id, final int position);
+    void delete(final long id, final int position);
 }

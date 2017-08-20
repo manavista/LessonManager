@@ -54,7 +54,7 @@ public final class MemberLessonFragmentDto implements Serializable {
     /** entity id */
     private int id;
     /** memberId */
-    private int memberId;
+    private long memberId;
 
     private TextView memberName;
 

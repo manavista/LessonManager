@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 public class MemberDto {
 
-    private int id;
+    private long id;
     private String givenName;
     private String additionalName;
     private String familyName;

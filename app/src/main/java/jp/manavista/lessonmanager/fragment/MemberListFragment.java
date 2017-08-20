@@ -159,7 +159,7 @@ public final class MemberListFragment extends Fragment {
     private MemberOperation memberOperation = new MemberOperation() {
 
         @Override
-        public void edit(final int id, final int position) {
+        public void edit(final long id, final int position) {
 
             final String[] items = {getString(R.string.label_member_list_dialog_edit),
                     getString(R.string.label_member_list_dialog_lesson),
@@ -198,7 +198,7 @@ public final class MemberListFragment extends Fragment {
         }
 
         @Override
-        public void delete(final int id, final int position) {
+        public void delete(final long id, final int position) {
 
             itemTouchHelper.closeOpened();
 

@@ -21,9 +21,6 @@ import jp.manavista.lessonmanager.R;
  */
 public class MemberHolder extends SwipeDeleteHolder {
 
-//    public TextView givenName;
-//    public TextView additionalName;
-//    public TextView familyName;
     public TextView displayName;
 
     public MemberHolder(View itemView) {
@@ -32,9 +29,6 @@ public class MemberHolder extends SwipeDeleteHolder {
 
         super.view = itemView.findViewById(R.id.item_member);
 
-//        this.givenName = itemView.findViewById(R.id.member_given_name);
-//        this.additionalName = itemView.findViewById(R.id.member_additional_name);
-//        this.familyName = itemView.findViewById(R.id.member_family_name);
         this.displayName = itemView.findViewById(R.id.member_display_name);
     }
 
