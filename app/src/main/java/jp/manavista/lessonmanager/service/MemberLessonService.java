@@ -30,6 +30,22 @@ public interface MemberLessonService {
 
     /**
      *
+     * Get List By Id
+     *
+     * <p>
+     * Overview:<br>
+     * Acquire {@code MemberLesson} entity list
+     * associated with the member id specified in the argument.
+     * </p>
+     *
+     * @param memberId target member id
+     * @return {@code MemberLesson} entity of Observable
+     */
+    Observable<MemberLesson> getListByMemberId(long memberId);
+
+
+    /**
+     *
      * Save
      *
      * <p>

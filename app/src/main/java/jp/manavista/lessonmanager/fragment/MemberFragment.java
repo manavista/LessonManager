@@ -58,7 +58,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     /** DTO */
     private MemberFragmentDto dto;
     /** member id */
-    private int memberId;
+    private long memberId;
     /** input validator */
     private Validator validator;
     /** Member disposable */
@@ -86,11 +86,11 @@ public final class MemberFragment extends Fragment implements Validator.Validati
      * @param id display member id
      * @return A new instance of fragment MemberFragment.
      */
-    public static MemberFragment newInstance(final int id) {
+    public static MemberFragment newInstance(final long id) {
 
         MemberFragment fragment = new MemberFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_MEMBER_ID, id);
+        args.putLong(KEY_MEMBER_ID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -99,7 +99,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        memberId = args.getInt(KEY_MEMBER_ID);
+        memberId = args.getLong(KEY_MEMBER_ID);
 
         this.disposable = Disposables.empty();
     }
@@ -242,7 +242,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
      *
      * @param memberId target member id
      */
-    private void storeEntityToDto(final int memberId) {
+    private void storeEntityToDto(final long memberId) {
 
         disposable = memberService.getById(memberId).subscribe(new Consumer<Member>() {
             @Override

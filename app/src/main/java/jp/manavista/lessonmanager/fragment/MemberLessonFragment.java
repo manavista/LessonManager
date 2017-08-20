@@ -200,15 +200,11 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     public void onValidationSucceeded() {
 
         final MemberLesson entity = dto.convert();
-//        Member member = new Member();
-//        member.id = 2;
-//        entity.member = SingleAssociation.just(member);
+        // TODO: create facade, some service integration
         disposable = memberService.getById(dto.getMemberId()).flatMap(new Function<Member, SingleSource<? extends MemberLesson>>() {
             @Override
             public SingleSource<? extends MemberLesson> apply(@NonNull Member member) throws Exception {
-
                 entity.member = SingleAssociation.just(member);
-
                 return memberLessonService.save(entity);
             }
         }).subscribe(new Consumer<MemberLesson>() {
@@ -223,19 +219,6 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
                 throw new RuntimeException("can not save MemberLesson entity", throwable);
             }
         });
-
-//        disposable = memberLessonService.save(dto.convert()).subscribe(new Consumer<MemberLesson>() {
-//            @Override
-//            public void accept(MemberLesson memberLesson) throws Exception {
-//                Log.d(TAG, memberLesson.toString());
-//                contents.finish();
-//            }
-//        }, new Consumer<Throwable>() {
-//            @Override
-//            public void accept(Throwable throwable) throws Exception {
-//                throw new RuntimeException("can not save MemberLesson entity", throwable);
-//            }
-//        });
     }
 
     @Override

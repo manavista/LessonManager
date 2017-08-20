@@ -25,7 +25,7 @@ public class MemberActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -36,7 +36,7 @@ public class MemberActivity extends AppCompatActivity {
         });
 
         final Intent intent = getIntent();
-        final int id = intent.getIntExtra(EXTRA_MEMBER_ID, 0);
+        final long id = intent.getLongExtra(EXTRA_MEMBER_ID, 0);
 
         memberFragment = MemberFragment.newInstance(id);
         getSupportFragmentManager()

@@ -1,5 +1,7 @@
 package jp.manavista.lessonmanager.model.dto;
 
+import android.support.annotation.ColorInt;
+
 import java.io.Serializable;
 
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
@@ -32,6 +34,9 @@ public final class MemberLessonDto implements Serializable {
     private String startTime;
     private String endTime;
 
+    @ColorInt
+    private int accentColor;
+
     public static MemberLessonDto copy(MemberLesson entity) {
 
         final MemberLessonDto dto = new MemberLessonDto();
@@ -49,6 +54,8 @@ public final class MemberLessonDto implements Serializable {
         dto.setDayOfWeek(entity.dayOfWeeks);
         dto.setStartTime(DateTimeUtil.TIME_FORMAT_HHMM.format(entity.startTime));
         dto.setEndTime(DateTimeUtil.TIME_FORMAT_HHMM.format(entity.endTime));
+
+        dto.setAccentColor(entity.backgroundColor);
 
         return dto;
     }

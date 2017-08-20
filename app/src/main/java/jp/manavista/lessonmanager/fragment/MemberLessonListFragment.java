@@ -115,7 +115,7 @@ public final class MemberLessonListFragment extends Fragment {
         view.setLayoutManager(manager);
         view.addItemDecoration(new ItemDecoration(contents));
 
-        adapter = MemberLessonAdapter.newInstance();
+        adapter = MemberLessonAdapter.newInstance(contents);
         view.setAdapter(adapter);
 
         ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
@@ -130,7 +130,7 @@ public final class MemberLessonListFragment extends Fragment {
 
         final List<MemberLessonDto> list = new ArrayList<>();
 
-        disposable = memberLessonService.getListAll().subscribe(new Consumer<MemberLesson>() {
+        disposable = memberLessonService.getListByMemberId(memberId).subscribe(new Consumer<MemberLesson>() {
             @Override
             public void accept(MemberLesson memberLesson) throws Exception {
                 list.add(MemberLessonDto.copy(memberLesson));

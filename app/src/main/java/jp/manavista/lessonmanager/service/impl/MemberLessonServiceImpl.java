@@ -36,6 +36,16 @@ public class MemberLessonServiceImpl implements MemberLessonService {
     }
 
     @Override
+    public Observable<MemberLesson> getListByMemberId(long memberId) {
+        return repository.getRelation()
+                .selector()
+                .memberIdEq(memberId)
+                .executeAsObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
     public Single<MemberLesson> save(MemberLesson memberLesson) {
         return repository.getRelation()
                 .upsertAsSingle(memberLesson)
