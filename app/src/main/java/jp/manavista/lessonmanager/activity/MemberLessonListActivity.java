@@ -28,7 +28,7 @@ public class MemberLessonListActivity extends AppCompatActivity {
     /** activity put extra argument: member id */
     public static final String EXTRA_MEMBER_ID = "MEMBER_ID";
 
-    private int memberId;
+    private long memberId;
 
     /** fragment */
     private MemberLessonListFragment fragment;
@@ -39,7 +39,7 @@ public class MemberLessonListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_lesson_list);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -50,9 +50,9 @@ public class MemberLessonListActivity extends AppCompatActivity {
         });
 
         final Intent intent = getIntent();
-        memberId = intent.getIntExtra(EXTRA_MEMBER_ID, 0);
+        memberId = intent.getLongExtra(EXTRA_MEMBER_ID, 0);
 
-        fragment = MemberLessonListFragment.newInstance();
+        fragment = MemberLessonListFragment.newInstance(memberId);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_member_lesson_list, fragment)

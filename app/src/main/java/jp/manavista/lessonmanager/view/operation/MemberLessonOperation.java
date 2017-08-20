@@ -2,18 +2,15 @@ package jp.manavista.lessonmanager.view.operation;
 
 /**
  *
- * Member Operation
+ * Member Lesson Operation
  *
  * <p>
  * Overview:<br>
- * Operation Member entity.<br>
+ * Operation MemberLesson entity.<br>
  * Interface for executing listeners defined by adapters with fragment.
  * </p>
- *
- * @see jp.manavista.lessonmanager.view.adapter.MemberAdapter MemberAdapter
- * @see jp.manavista.lessonmanager.fragment.MemberFragment MemberFragment
  */
-public interface MemberOperation {
+public interface MemberLessonOperation {
 
     /**
      *
@@ -21,7 +18,7 @@ public interface MemberOperation {
      *
      * <p>
      * Overview:<br>
-     * Edit Member row
+     * Edit MemberLesson row
      * </p>
      *
      * @param id target row id
@@ -35,7 +32,7 @@ public interface MemberOperation {
      *
      * <p>
      * Overview:<br>
-     * Delete Member row.
+     * Delete MemberLesson row.
      * </p>
      *
      * @param id target row id

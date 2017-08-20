@@ -23,7 +23,7 @@ import lombok.ToString;
 public class Member {
 
     @PrimaryKey(autoincrement = true)
-    public int id;
+    public long id;
     @Column
     public String givenName;
     @Column

@@ -56,7 +56,7 @@ public final class MemberFragmentDto implements Serializable {
     private String dateFormat;
 
     /** entity id */
-    private int id;
+    private long id;
 
     /** Given Name(FirstName) */
 //    @BindView(R.id.givenNameEditText)

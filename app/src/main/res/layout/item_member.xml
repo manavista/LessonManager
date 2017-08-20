@@ -23,24 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!--<TextView-->
-                <!--android:id="@+id/member_given_name"-->
-                <!--android:text="Given"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"/>-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/member_additional_name"-->
-                <!--android:text="Additional"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"/>-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/member_family_name"-->
-                <!--android:text="Family Name"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"/>-->
-
             <TextView
                 android:id="@+id/member_display_name"
                 android:layout_width="wrap_content"

@@ -1,5 +1,6 @@
 package jp.manavista.lessonmanager.model.entity;
 
+import com.github.gfx.android.orma.SingleAssociation;
 import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
 import com.github.gfx.android.orma.annotation.Table;
@@ -22,9 +23,9 @@ import lombok.ToString;
 public class MemberLesson {
 
     @PrimaryKey(autoincrement = true)
-    public int id;
-    @Column
-    public int memberId;
+    public long id;
+    @Column(indexed = true)
+    public long memberId;
     @Column
     public String name;
     @Column
@@ -49,4 +50,7 @@ public class MemberLesson {
     public String periodFrom;
     @Column
     public String periodTo;
+
+    @Column(indexed = true)
+    public SingleAssociation<Member> member;
 }

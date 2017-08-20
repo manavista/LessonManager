@@ -35,7 +35,7 @@ public class MemberLessonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_lesson);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -46,7 +46,7 @@ public class MemberLessonActivity extends AppCompatActivity {
         });
 
         final Intent intent = getIntent();
-        final int memberId = intent.getIntExtra(EXTRA_MEMBER_ID, 0);
+        final long memberId = intent.getLongExtra(EXTRA_MEMBER_ID, 0);
         final int memberLessonId = intent.getIntExtra(EXTRA_MEMBER_LESSON_ID, 0);
 
         fragment = MemberLessonFragment.newInstance(memberId, memberLessonId);

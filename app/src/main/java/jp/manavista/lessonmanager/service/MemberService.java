@@ -27,7 +27,7 @@ public interface MemberService {
      * @param id Member id
      * @return {@link Member} entity
      */
-    Single<Member> getById(final int id);
+    Single<Member> getById(final long id);
 
     /**
      *
@@ -68,5 +68,19 @@ public interface MemberService {
      * @param id row id
      * @return transaction row count
      */
-    Single<Integer> deleteById(int id);
+    Single<Integer> deleteById(long id);
+
+    /**
+     *
+     * Delete All
+     *
+     * <p>
+     * Overview:<br>
+     * Delete All rows in {@code Member}
+     * </p>
+     *
+     * @return {@link Single} observable object in deleted rows count
+     */
+
+    Single<Integer> deleteAll();
 }

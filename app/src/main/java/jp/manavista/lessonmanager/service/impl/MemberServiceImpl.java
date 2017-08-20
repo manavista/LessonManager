@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Single<Member> getById(int id) {
+    public Single<Member> getById(final long id) {
         return repository.getRelation()
                 .idEq(id)
                 .getAsSingle(0)
@@ -53,9 +53,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Single<Integer> deleteById(int id) {
+    public Single<Integer> deleteById(final long id) {
         return repository.getDeleter()
                 .idEq(id)
+                .executeAsSingle()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Single<Integer> deleteAll() {
+        return repository.getDeleter()
                 .executeAsSingle()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
