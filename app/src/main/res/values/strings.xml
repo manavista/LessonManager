@@ -1,7 +1,7 @@
 <resources>
 
     <!-- application -->
-    <string name="app_name">DevelopBase</string>
+    <string name="app_name">Lesson Manager</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
