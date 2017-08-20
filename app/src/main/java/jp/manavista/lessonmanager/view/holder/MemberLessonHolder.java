@@ -18,6 +18,9 @@ import jp.manavista.lessonmanager.R;
  */
 public final class MemberLessonHolder extends SwipeDeleteHolder {
 
+    public View viewOther;
+    public View viewEdit;
+
     public TextView accentBorder;
     public TextView memberName;
     public TextView dayOfWeek;
@@ -33,6 +36,7 @@ public final class MemberLessonHolder extends SwipeDeleteHolder {
         super(itemView);
 
         super.view = itemView.findViewById(R.id.item_member_lesson);
+        viewEdit = itemView.findViewById(R.id.view_list_repo_action_edit);
 
         accentBorder = itemView.findViewById(R.id.accent_border);
         memberName = itemView.findViewById(R.id.member_name);

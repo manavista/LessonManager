@@ -12,6 +12,7 @@ import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
 import jp.manavista.lessonmanager.util.ArrayUtil;
 import jp.manavista.lessonmanager.view.holder.MemberLessonHolder;
+import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,17 +31,28 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
 
     /** Context */
     private final Context context;
+    /** Operation */
+    private final MemberLessonOperation operation;
 
     @Getter
     @Setter
     private List<MemberLessonDto> list;
 
-    private MemberLessonAdapter(Context context) {
+    private MemberLessonAdapter(Context context, MemberLessonOperation operation) {
         this.context = context;
+        this.operation = operation;
     }
 
-    public static MemberLessonAdapter newInstance(Context context) {
-        return new MemberLessonAdapter(context);
+    /**
+     *
+     * New Instance
+     *
+     * @param context Context
+     * @param operation entity operation implementation
+     * @return new {@code MemberLessonAdapter} instance
+     */
+    public static MemberLessonAdapter newInstance(Context context, MemberLessonOperation operation) {
+        return new MemberLessonAdapter(context, operation);
     }
 
     @Override
@@ -66,18 +78,56 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
         holder.presenter.setText(dto.getPresenter());
         holder.timetable.setText(dto.getStartTime() + " - " + dto.getEndTime());
         holder.accentBorder.setBackgroundColor(dto.getAccentColor());
+        holder.dayOfWeek.setText(buildDayOfWeek(dto.getDayOfWeek()));
 
-        /* short name: Sun, Mon, Tue, Wed... */
-        final String[] days = context.getResources().getStringArray(R.array.entries_day_of_week);
-        /* day decimal string value: 1, 2, 3... */
-        final String[] dayValues = context.getResources().getStringArray(R.array.entry_values_day_of_week);
-
-        final boolean[] index = ArrayUtil.convertIndexFromArray(dto.getDayOfWeek(), dayValues, ",");
-        holder.dayOfWeek.setText(ArrayUtil.concatIndexOfArray(days, index, ", "));
+        prepareObjectLister(holder, position);
     }
 
     @Override
     public int getItemCount() {
         return this.list == null ? 0 : this.list.size();
+    }
+
+    /**
+     *
+     * Build Day of Week String
+     *
+     * @param dayOfWeek saved string (e.g. "3,5")
+     * @return converted display string (e.g. "Tue, Thr")
+     */
+    private String buildDayOfWeek(final String dayOfWeek) {
+
+        /* short name: Sun, Mon, Tue, Wed... */
+        final String[] days = context.getResources().getStringArray(R.array.entries_day_of_week);
+        /* day decimal string value: 1, 2, 3... */
+        final String[] dayValues = context.getResources().getStringArray(R.array.entry_values_day_of_week);
+        final boolean[] index = ArrayUtil.convertIndexFromArray(dayOfWeek, dayValues, ",");
+        return ArrayUtil.concatIndexOfArray(days, index, ", ");
+    }
+
+    private void prepareObjectLister(final MemberLessonHolder holder, final int position) {
+
+        holder.viewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final MemberLessonDto dto = list.get(holder.getAdapterPosition());
+                operation.delete(dto.getId(), position);
+            }
+        });
+
+        holder.viewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final MemberLessonDto dto = list.get(holder.getAdapterPosition());
+                operation.edit(dto.getId(), position);
+            }
+        });
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 }

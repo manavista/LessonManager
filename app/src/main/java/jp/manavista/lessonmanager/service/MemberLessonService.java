@@ -60,6 +60,20 @@ public interface MemberLessonService {
 
     /**
      *
+     * Delete
+     *
+     * <p>
+     * Overview:<br>
+     * Delete by entity row id.
+     * </p>
+     *
+     * @param id row id
+     * @return transaction row count
+     */
+    Single<Integer> deleteById(long id);
+
+    /**
+     *
      * Delete All
      *
      * <p>

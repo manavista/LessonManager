@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.view.adapter.MemberLessonAdapter;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
+import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
 
 /**
  *
@@ -115,7 +117,7 @@ public final class MemberLessonListFragment extends Fragment {
         view.setLayoutManager(manager);
         view.addItemDecoration(new ItemDecoration(contents));
 
-        adapter = MemberLessonAdapter.newInstance(contents);
+        adapter = MemberLessonAdapter.newInstance(contents, operation);
         view.setAdapter(adapter);
 
         ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
@@ -154,4 +156,25 @@ public final class MemberLessonListFragment extends Fragment {
         super.onDestroyView();
         disposable.dispose();
     }
+
+    private MemberLessonOperation operation = new MemberLessonOperation() {
+        @Override
+        public void edit(long id, final int position) {
+            Log.d(TAG, "Edit");
+
+        }
+
+        @Override
+        public void delete(long id, final int position) {
+            Log.d(TAG, "Delete");
+            itemTouchHelper.closeOpened();
+            disposable = memberLessonService.deleteById(id).subscribe(new Consumer<Integer>() {
+                @Override
+                public void accept(Integer integer) throws Exception {
+                    adapter.getList().remove(position);
+                    adapter.notifyItemRemoved(position);
+                }
+            });
+        }
+    };
 }

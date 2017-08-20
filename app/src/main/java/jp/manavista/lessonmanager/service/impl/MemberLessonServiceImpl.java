@@ -54,6 +54,15 @@ public class MemberLessonServiceImpl implements MemberLessonService {
     }
 
     @Override
+    public Single<Integer> deleteById(long id) {
+        return repository.getDeleter()
+                .idEq(id)
+                .executeAsSingle()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
     public Single<Integer> deleteAll() {
         return repository.getDeleter()
                 .executeAsSingle()
