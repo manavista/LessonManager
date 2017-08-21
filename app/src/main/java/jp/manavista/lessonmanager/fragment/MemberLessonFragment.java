@@ -77,7 +77,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     /** member id */
     private long memberId;
     /** member lesson id */
-    private int id;
+    private long id;
     /** DTO */
     private MemberLessonFragmentDto dto;
     /** Activity Contents */
@@ -113,11 +113,11 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      * @param memberId display member id
      * @return A new instance of fragment MemberLessonFragment.
      */
-    public static MemberLessonFragment newInstance(final long memberId, final int memberLessonId) {
+    public static MemberLessonFragment newInstance(final long memberId, final long memberLessonId) {
         MemberLessonFragment fragment = new MemberLessonFragment();
         Bundle args = new Bundle();
         args.putLong(KEY_MEMBER_ID, memberId);
-        args.putInt(KEY_MEMBER_LESSON_ID, memberLessonId);
+        args.putLong(KEY_MEMBER_LESSON_ID, memberLessonId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -128,7 +128,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         Bundle args = getArguments();
         if (args != null) {
             memberId = args.getLong(KEY_MEMBER_ID);
-            id = args.getInt(KEY_MEMBER_LESSON_ID);
+            id = args.getLong(KEY_MEMBER_LESSON_ID);
         }
 
         this.disposable = Disposables.empty();
@@ -177,17 +177,19 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         validator = new Validator(dto);
         validator.setValidationListener(this);
 
+        prepareButtonListener();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         if( id > 0 ) {
             storeEntityToDto(id);
         } else {
             storeInitValueToDto();
         }
 
-        if( memberId > 0 ) {
-            displayMemberName();
-        }
-
-        prepareButtonListener();
     }
 
     @Override
@@ -200,7 +202,6 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     public void onValidationSucceeded() {
 
         final MemberLesson entity = dto.convert();
-        // TODO: create facade, some service integration
         disposable = memberService.getById(dto.getMemberId()).flatMap(new Function<Member, SingleSource<? extends MemberLesson>>() {
             @Override
             public SingleSource<? extends MemberLesson> apply(@NonNull Member member) throws Exception {
@@ -498,6 +499,10 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
 
         dto.setBackgroundColor(backgroundColor);
         dto.getBackgroundColorImageButton().setTag(tag, backgroundColor);
+
+        if( memberId > 0 ) {
+            displayMemberName();
+        }
     }
 
     /**
@@ -511,7 +516,44 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      * 
      * @param memberLessonId member lesson id
      */
-    private void storeEntityToDto(final int memberLessonId) {
-        // TODO: 2017/08/17 Get MemberLesson entity and copy dto
+    private void storeEntityToDto(final long memberLessonId) {
+
+        disposable = memberLessonService.getById(memberLessonId).subscribe(new Consumer<MemberLesson>() {
+            @Override
+            public void accept(MemberLesson entity) throws Exception {
+                dto.copy(entity);
+                dto.getDayOfWeek().setText(buildDayOfWeek(dto.getDayOfWeekValue()));
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throw new RuntimeException("can not read MemberLesson by id:" + memberLessonId, throwable);
+            }
+        });
+    }
+
+    /**
+     *
+     * Build Day of Week String
+     *
+     * TODO: duplicate define. see MemberLessonAdapter. consider of integration.
+     *
+     * @param dayOfWeek saved string (e.g. "3,5")
+     * @return converted display string (e.g. "Tue, Thr")
+     */
+    private String buildDayOfWeek(final String dayOfWeek) {
+
+        /* short name: Sun, Mon, Tue, Wed... */
+        final String[] days = getResources().getStringArray(R.array.entries_day_of_week);
+        /* day decimal string value: 1, 2, 3... */
+        final String[] dayValues = getResources().getStringArray(R.array.entry_values_day_of_week);
+        final boolean[] index = ArrayUtil.convertIndexFromArray(dayOfWeek, dayValues, ",");
+
+//        /* All Day of week true is Everyday */
+//        if( !ArrayUtils.contains(index, false) ) {
+//            return "Everyday";
+//        }
+
+        return ArrayUtil.concatIndexOfArray(days, index, ", ");
     }
 }

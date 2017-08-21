@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -46,13 +47,13 @@ public final class MemberLessonFragmentDto implements Serializable {
 
     /** Tag argument: Set Color */
     public static final String TAG_SET_COLOR = "TAG_SET_COLOR";
-
+    @SuppressWarnings(value = "MismatchedQueryAndUpdateOfCollection")
     private List<TimetableDto> timetableDtoList;
 
     private String dateFormat;
 
     /** entity id */
-    private int id;
+    private long id;
     /** memberId */
     private long memberId;
 
@@ -201,5 +202,31 @@ public final class MemberLessonFragmentDto implements Serializable {
         memberLesson.periodTo = endPeriod.getText().toString();
 
         return memberLesson;
+    }
+
+    public void copy(@NonNull final MemberLesson entity) {
+
+        setId(entity.id);
+        getMemberName().setText(MemberDto.copy(entity.member.get()).getDisplayName());
+        getName().setText(entity.name);
+        getAbbr().setText(entity.abbr);
+        getType().setText(entity.type);
+        getLocation().setText(entity.location);
+        getPresenter().setText(entity.presenter);
+
+        setDayOfWeekValue(entity.dayOfWeeks);
+        setStartTime(entity.startTime);
+        setEndTime(entity.endTime);
+
+        startTime = entity.startTime;
+        endTime = entity.endTime;
+        startTimeText.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(startTime));
+        endTimeText.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(endTime));
+
+        textColor = entity.textColor;
+        backgroundColor = entity.backgroundColor;
+        getPreviewText().setTextColor(entity.textColor);
+        getPreviewText().setBackgroundColor(entity.backgroundColor);
+
     }
 }

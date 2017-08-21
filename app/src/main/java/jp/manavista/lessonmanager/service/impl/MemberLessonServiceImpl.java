@@ -28,6 +28,15 @@ public class MemberLessonServiceImpl implements MemberLessonService {
     }
 
     @Override
+    public Single<MemberLesson> getById(long id) {
+        return repository.getRelation()
+                .idEq(id)
+                .getAsSingle(0)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
     public Observable<MemberLesson> getListAll() {
         return repository.getSelector()
                 .executeAsObservable()

@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.List;
 
 import jp.manavista.lessonmanager.R;
@@ -102,6 +104,12 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
         /* day decimal string value: 1, 2, 3... */
         final String[] dayValues = context.getResources().getStringArray(R.array.entry_values_day_of_week);
         final boolean[] index = ArrayUtil.convertIndexFromArray(dayOfWeek, dayValues, ",");
+
+        /* All Day of week true is Everyday */
+        if( !ArrayUtils.contains(index, false) ) {
+            return "Everyday";
+        }
+
         return ArrayUtil.concatIndexOfArray(days, index, ", ");
     }
 
@@ -119,7 +127,7 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
             @Override
             public void onClick(View view) {
                 final MemberLessonDto dto = list.get(holder.getAdapterPosition());
-                operation.edit(dto.getId(), position);
+                operation.edit(dto, position);
             }
         });
 

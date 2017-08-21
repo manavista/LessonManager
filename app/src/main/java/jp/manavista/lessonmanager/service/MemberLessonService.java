@@ -17,6 +17,20 @@ public interface MemberLessonService {
 
     /**
      *
+     * Get
+     *
+     * <p>
+     * Overview:<br>
+     * Get a MemberLesson entity by id.
+     * </p>
+     *
+     * @param id Member id
+     * @return {@link MemberLesson} entity
+     */
+    Single<MemberLesson> getById(final long id);
+
+    /**
+     *
      * Get All List
      *
      * <p>
