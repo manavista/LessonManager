@@ -1,5 +1,7 @@
 package jp.manavista.lessonmanager.view.operation;
 
+import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
+
 /**
  *
  * Member Lesson Operation
@@ -21,10 +23,10 @@ public interface MemberLessonOperation {
      * Edit MemberLesson row
      * </p>
      *
-     * @param id target row id
+     * @param dto target row dto
      * @param position target adapter position
      */
-    void edit(final long id, final int position);
+    void edit(final MemberLessonDto dto, final int position);
 
     /**
      *

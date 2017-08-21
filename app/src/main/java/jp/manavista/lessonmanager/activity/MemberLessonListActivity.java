@@ -72,7 +72,7 @@ public class MemberLessonListActivity extends AppCompatActivity {
             case R.id.option_add:
                 Intent intent = new Intent(this, MemberLessonActivity.class);
                 intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, memberId);
-                intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, 0);
+                intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, 0L);
                 this.startActivity(intent);
                 break;
         }

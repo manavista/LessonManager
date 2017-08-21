@@ -47,7 +47,7 @@ public class MemberLessonActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         final long memberId = intent.getLongExtra(EXTRA_MEMBER_ID, 0);
-        final int memberLessonId = intent.getIntExtra(EXTRA_MEMBER_LESSON_ID, 0);
+        final long memberLessonId = intent.getLongExtra(EXTRA_MEMBER_LESSON_ID, 0);
 
         fragment = MemberLessonFragment.newInstance(memberId, memberLessonId);
         getSupportFragmentManager()

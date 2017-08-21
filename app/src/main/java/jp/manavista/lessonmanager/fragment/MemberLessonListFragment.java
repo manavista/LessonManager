@@ -1,6 +1,7 @@
 package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.MemberLessonActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
@@ -159,9 +161,13 @@ public final class MemberLessonListFragment extends Fragment {
 
     private MemberLessonOperation operation = new MemberLessonOperation() {
         @Override
-        public void edit(long id, final int position) {
+        public void edit(final MemberLessonDto dto, final int position) {
             Log.d(TAG, "Edit");
-
+            itemTouchHelper.closeOpened();
+            final Intent intent = new Intent(contents, MemberLessonActivity.class);
+            intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, dto.getMemberId());
+            intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, dto.getId());
+            contents.startActivity(intent);
         }
 
         @Override
