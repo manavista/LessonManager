@@ -35,7 +35,9 @@ public final class MemberLessonDto implements Serializable {
     private String endTime;
 
     @ColorInt
-    private int accentColor;
+    private int textColor;
+    @ColorInt
+    private int backgroundColor;
 
     public static MemberLessonDto copy(MemberLesson entity) {
 
@@ -55,7 +57,8 @@ public final class MemberLessonDto implements Serializable {
         dto.setStartTime(DateTimeUtil.TIME_FORMAT_HHMM.format(entity.startTime));
         dto.setEndTime(DateTimeUtil.TIME_FORMAT_HHMM.format(entity.endTime));
 
-        dto.setAccentColor(entity.backgroundColor);
+        dto.setTextColor(entity.textColor);
+        dto.setBackgroundColor(entity.backgroundColor);
 
         return dto;
     }

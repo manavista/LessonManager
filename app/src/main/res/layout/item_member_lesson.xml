@@ -5,47 +5,65 @@
     android:orientation="horizontal"
     android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="72dp">
 
-    <TextView
-        android:id="@+id/accent_border"
-        android:background="@color/amber_500"
-        android:layout_width="@dimen/margin_4dp"
-        android:layout_marginEnd="2dp"
-        android:layout_height="76dp"/>
+    <ImageView
+        android:id="@+id/lesson_icon_image"
+        android:src="@drawable/ic_event_note_black"
+        android:background="@drawable/circle"
+        android:alpha="0.6"
+        android:contentDescription="member lesson icon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/margin_4dp"
-        android:paddingEnd="@dimen/margin_4dp">
+        android:paddingTop="12dp"
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/margin_16dp">
 
-        <TextView
-            android:id="@+id/member_name"
-            android:text="Member name"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:paddingTop="@dimen/margin_4dp"
-            android:paddingBottom="@dimen/margin_4dp"
+        <RelativeLayout
+            android:layout_marginBottom="2dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lesson_name"
+                android:text="Lesson Name"
+                android:textColor="@color/black"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/lesson_type"
+                android:text="lesson type"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_toEndOf="@+id/lesson_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/day_of_week_icon_image"
                 android:src="@drawable/ic_event_black"
+                android:alpha="0.6"
                 android:contentDescription="day_of_week_icon_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/day_of_week"
-                android:text="Mon"
+                android:text="Day of Week"
                 android:layout_toEndOf="@+id/day_of_week_icon_image"
                 android:layout_marginStart="@dimen/margin_4dp"
                 android:layout_centerVertical="true"
@@ -55,6 +73,7 @@
             <ImageView
                 android:id="@+id/timetable_image_icon"
                 android:src="@drawable/ic_schedule_black"
+                android:alpha="0.6"
                 android:contentDescription="timetable_image_icon"
                 android:layout_toEndOf="@+id/day_of_week"
                 android:layout_marginStart="@dimen/margin_4dp"
@@ -67,78 +86,22 @@
                 android:layout_toEndOf="@+id/timetable_image_icon"
                 android:layout_marginStart="@dimen/margin_4dp"
                 android:text="17:00 - 18:30"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_height="wrap_content"/>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16dp">
-
-            <ImageView
-                android:id="@+id/lesson_name_icon_image"
-                android:src="@drawable/ic_import_contacts_black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/lesson_name"
-                android:text="English"
-                android:layout_toEndOf="@+id/lesson_name_icon_image"
-                android:layout_marginStart="@dimen/margin_4dp"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <ImageView
-                android:id="@+id/lesson_type_icon_image"
-                android:src="@drawable/ic_bookmark_black"
-                android:contentDescription="lesson_type_icon_image"
-                android:layout_toEndOf="@+id/lesson_name"
-                android:layout_marginStart="@dimen/margin_4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/lesson_type"
-                android:text="Exam"
-                android:layout_marginStart="@dimen/margin_4dp"
-                android:layout_toEndOf="@+id/lesson_type_icon_image"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <ImageView
-                android:id="@+id/presenter_icon_image"
-                android:src="@drawable/ic_face_black"
-                android:contentDescription="presenter_icon_image"
-                android:layout_toEndOf="@+id/lesson_type"
-                android:layout_marginStart="@dimen/margin_4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/presenter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Presenter Name"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/presenter_icon_image"
-                android:layout_marginStart="@dimen/margin_4dp"/>
-
-            <ImageView
-                android:id="@+id/info_icon_image"
-                android:contentDescription="repeat_icon_image"
+            <ImageButton
+                android:id="@+id/more_info_icon_image"
+                android:src="@drawable/ic_arrow_drop_down_black"
+                android:background="@color/bpTransparent"
+                android:contentDescription="more info icon image"
+                android:alpha="0.6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:src="@drawable/ic_repeat_black"/>
-        </RelativeLayout>
+                android:layout_alignParentTop="true"/>
 
+        </RelativeLayout>
 
     </LinearLayout>
 

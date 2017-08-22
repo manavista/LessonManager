@@ -1,6 +1,7 @@
 package jp.manavista.lessonmanager.view.adapter;
 
 import android.content.Context;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,13 +75,16 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
 
         final MemberLessonDto dto = list.get(position);
 
-        holder.memberName.setText(dto.getMemberName());
+//        holder.memberName.setText(dto.getMemberName());
         holder.lessonName.setText(dto.getName());
         holder.lessonType.setText(dto.getType());
-        holder.presenter.setText(dto.getPresenter());
+//        holder.presenter.setText(dto.getPresenter());
         holder.timetable.setText(dto.getStartTime() + " - " + dto.getEndTime());
-        holder.accentBorder.setBackgroundColor(dto.getAccentColor());
+//        holder.accentBorder.setBackgroundColor(dto.getBackgroundColor());
         holder.dayOfWeek.setText(buildDayOfWeek(dto.getDayOfWeek()));
+
+        holder.lessonIconImage.setColorFilter(dto.getTextColor());
+        DrawableCompat.setTint(holder.lessonIconImage.getBackground(), dto.getBackgroundColor());
 
         prepareObjectLister(holder, position);
     }
@@ -95,12 +99,12 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
      * Build Day of Week String
      *
      * @param dayOfWeek saved string (e.g. "3,5")
-     * @return converted display string (e.g. "Tue, Thr")
+     * @return converted display string (e.g. "Tu, Th")
      */
     private String buildDayOfWeek(final String dayOfWeek) {
 
-        /* short name: Sun, Mon, Tue, Wed... */
-        final String[] days = context.getResources().getStringArray(R.array.entries_day_of_week);
+        /* short name: Su, Mo, Tu, We... */
+        final String[] days = context.getResources().getStringArray(R.array.entries_day_of_week_short_name);
         /* day decimal string value: 1, 2, 3... */
         final String[] dayValues = context.getResources().getStringArray(R.array.entry_values_day_of_week);
         final boolean[] index = ArrayUtil.convertIndexFromArray(dayOfWeek, dayValues, ",");
@@ -110,7 +114,7 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
             return "Everyday";
         }
 
-        return ArrayUtil.concatIndexOfArray(days, index, ", ");
+        return ArrayUtil.concatIndexOfArray(days, index, ",");
     }
 
     private void prepareObjectLister(final MemberLessonHolder holder, final int position) {
