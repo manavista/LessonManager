@@ -19,6 +19,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
@@ -29,10 +30,10 @@ import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
 import jp.manavista.lessonmanager.service.MemberLessonService;
-import jp.manavista.lessonmanager.view.adapter.MemberLessonAdapter;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
+import jp.manavista.lessonmanager.view.section.MemberSection;
 
 /**
  *
@@ -57,7 +58,9 @@ public final class MemberLessonListFragment extends Fragment {
     /** Activity Contents */
     private Activity contents;
     /** Member Adapter */
-    private MemberLessonAdapter adapter;
+    private SectionedRecyclerViewAdapter sectionAdapter;
+    private MemberSection memberSection;
+
     /** Item Touch Helper */
     private ItemTouchHelperExtension itemTouchHelper;
 
@@ -119,8 +122,12 @@ public final class MemberLessonListFragment extends Fragment {
         view.setLayoutManager(manager);
         view.addItemDecoration(new ItemDecoration(contents));
 
-        adapter = MemberLessonAdapter.newInstance(contents, operation);
-        view.setAdapter(adapter);
+        sectionAdapter = new SectionedRecyclerViewAdapter();
+        memberSection = MemberSection.newInstance(contents, operation);
+        memberSection.setTitle("hoge"); // TODO: 2017/08/22 member name dynamic
+        sectionAdapter.addSection(memberSection);
+
+        view.setAdapter(sectionAdapter);
 
         ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
         itemTouchHelper = new ItemTouchHelperExtension(callback);
@@ -147,8 +154,8 @@ public final class MemberLessonListFragment extends Fragment {
         }, new Action() {
             @Override
             public void run() throws Exception {
-                adapter.setList(list);
-                adapter.notifyDataSetChanged();
+                memberSection.setList(list);
+                sectionAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -177,8 +184,8 @@ public final class MemberLessonListFragment extends Fragment {
             disposable = memberLessonService.deleteById(id).subscribe(new Consumer<Integer>() {
                 @Override
                 public void accept(Integer integer) throws Exception {
-                    adapter.getList().remove(position);
-                    adapter.notifyItemRemoved(position);
+                    memberSection.getList().remove(position);
+                    sectionAdapter.notifyItemRemoved(position);
                 }
             });
         }

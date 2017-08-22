@@ -1,47 +1,58 @@
-package jp.manavista.lessonmanager.view.adapter;
+package jp.manavista.lessonmanager.view.section;
 
 import android.content.Context;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
+import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
 import jp.manavista.lessonmanager.util.ArrayUtil;
 import jp.manavista.lessonmanager.view.holder.MemberLessonHolder;
+import jp.manavista.lessonmanager.view.holder.SectionTitleHolder;
 import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  *
- * Member Lesson Adapter
+ * Member Section
  *
  * <p>
  * Overview:<br>
+ * Define the internal section class of adapter used in section recycler view.<br>
  * </p>
+ *
+ * @see io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
  */
-public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder> {
+public class MemberSection extends StatelessSection {
 
-    /** Logger tag */
-    private static final String TAG = MemberLessonAdapter.class.getSimpleName();
+    /** Section Title */
+    @Getter
+    @Setter
+    private String title;
+
+    @Getter
+    @Setter
+    @SuppressWarnings(value = "MismatchedQueryAndUpdateOfCollection")
+    private List<MemberLessonDto> list;
 
     /** Context */
     private final Context context;
     /** Operation */
     private final MemberLessonOperation operation;
 
-    @Getter
-    @Setter
-    private List<MemberLessonDto> list;
+    private MemberSection(Context context, MemberLessonOperation operation) {
+        super(new SectionParameters.Builder(R.layout.container_item_member_lesson)
+            .headerResourceId(R.layout.section_item_header).build());
 
-    private MemberLessonAdapter(Context context, MemberLessonOperation operation) {
         this.context = context;
         this.operation = operation;
     }
@@ -52,46 +63,53 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
      *
      * @param context Context
      * @param operation entity operation implementation
-     * @return new {@code MemberLessonAdapter} instance
+     * @return new {@code MemberSection} instance
      */
-    public static MemberLessonAdapter newInstance(Context context, MemberLessonOperation operation) {
-        return new MemberLessonAdapter(context, operation);
+    public static MemberSection newInstance(Context context, MemberLessonOperation operation) {
+        return new MemberSection(context, operation);
     }
 
     @Override
-    public MemberLessonHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public int getContentItemsTotal() {
+        return this.list == null ? 0 : this.list.size();
+    }
 
-        final View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.container_item_member_lesson, parent, false);
+    @Override
+    public RecyclerView.ViewHolder getItemViewHolder(View view) {
         return new MemberLessonHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final MemberLessonHolder holder, final int position) {
+    public RecyclerView.ViewHolder getHeaderViewHolder(View view) {
+        return new SectionTitleHolder(view);
+    }
+
+    @Override
+    public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if( list == null ) {
             return;
         }
 
+        MemberLessonHolder itemHolder = (MemberLessonHolder) holder;
+
         final MemberLessonDto dto = list.get(position);
 
-//        holder.memberName.setText(dto.getMemberName());
-        holder.lessonName.setText(dto.getName());
-        holder.lessonType.setText(dto.getType());
-//        holder.presenter.setText(dto.getPresenter());
-        holder.timetable.setText(dto.getStartTime() + " - " + dto.getEndTime());
-//        holder.accentBorder.setBackgroundColor(dto.getBackgroundColor());
-        holder.dayOfWeek.setText(buildDayOfWeek(dto.getDayOfWeek()));
+        itemHolder.lessonName.setText(dto.getName());
+        itemHolder.lessonType.setText(dto.getType());
+        itemHolder.timetable.setText(dto.getStartTime() + " - " + dto.getEndTime());
+        itemHolder.dayOfWeek.setText(buildDayOfWeek(dto.getDayOfWeek()));
 
-        holder.lessonIconImage.setColorFilter(dto.getTextColor());
-        DrawableCompat.setTint(holder.lessonIconImage.getBackground(), dto.getBackgroundColor());
+        itemHolder.lessonIconImage.setColorFilter(dto.getTextColor());
+        DrawableCompat.setTint(itemHolder.lessonIconImage.getBackground(), dto.getBackgroundColor());
 
-        prepareObjectLister(holder, position);
+        prepareObjectLister(itemHolder, position);
     }
 
     @Override
-    public int getItemCount() {
-        return this.list == null ? 0 : this.list.size();
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder) {
+        final SectionTitleHolder itemHolder = (SectionTitleHolder) holder;
+        itemHolder.sectionTitle.setText(title);
     }
 
     /**
@@ -122,7 +140,10 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
         holder.viewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final MemberLessonDto dto = list.get(holder.getAdapterPosition());
+
+                Log.d("getAdapterPosition()", String.valueOf(holder.getAdapterPosition()) );
+//                final MemberLessonDto dto = list.get(holder.getAdapterPosition());
+                final MemberLessonDto dto = list.get(position);
                 operation.delete(dto.getId(), position);
             }
         });
@@ -130,7 +151,8 @@ public class MemberLessonAdapter extends RecyclerView.Adapter<MemberLessonHolder
         holder.viewEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final MemberLessonDto dto = list.get(holder.getAdapterPosition());
+//                final MemberLessonDto dto = list.get(holder.getAdapterPosition());
+                final MemberLessonDto dto = list.get(position);
                 operation.edit(dto, position);
             }
         });
