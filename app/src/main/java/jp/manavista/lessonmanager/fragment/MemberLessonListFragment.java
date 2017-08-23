@@ -124,7 +124,6 @@ public final class MemberLessonListFragment extends Fragment {
 
         sectionAdapter = new SectionedRecyclerViewAdapter();
         memberSection = MemberSection.newInstance(contents, operation);
-        memberSection.setTitle("hoge"); // TODO: 2017/08/22 member name dynamic
         sectionAdapter.addSection(memberSection);
 
         view.setAdapter(sectionAdapter);
@@ -154,6 +153,9 @@ public final class MemberLessonListFragment extends Fragment {
         }, new Action() {
             @Override
             public void run() throws Exception {
+                if( !list.isEmpty() ){
+                    memberSection.setTitle(list.get(0).getMemberName());
+                }
                 memberSection.setList(list);
                 sectionAdapter.notifyDataSetChanged();
             }
