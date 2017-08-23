@@ -34,13 +34,22 @@ public class SwipeDeleteTouchHelperCallback extends ItemTouchHelperExtension.Cal
     }
 
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                            float dX, float dY, int actionState, boolean isCurrentlyActive) {
 
         if( dY != 0 && dX == 0 ) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
 
-        SwipeDeleteHolder holder = (SwipeDeleteHolder) viewHolder;
+        /*
+         * For Section RecyclerView
+         * If section title swiped, try not to do anything.
+         */
+        if( !(viewHolder instanceof SwipeDeleteHolder) ) {
+            return;
+        }
+
+        final SwipeDeleteHolder holder = (SwipeDeleteHolder) viewHolder;
 
 
         if( dX < -holder.viewContainer.getWidth() ) {
