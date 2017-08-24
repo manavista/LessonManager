@@ -83,9 +83,7 @@ public final class TimetableFragment extends Fragment {
      * @return A new instance of fragment TimetableFragment.
      */
     public static TimetableFragment newInstance() {
-        TimetableFragment fragment = new TimetableFragment();
-        Bundle args = new Bundle();
-        return fragment;
+        return new TimetableFragment();
     }
 
     @Override

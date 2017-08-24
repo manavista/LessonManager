@@ -10,7 +10,7 @@ package jp.manavista.lessonmanager.view.operation;
  * Interface for executing listeners defined by adapters with fragment.
  * </p>
  *
- * @see jp.manavista.lessonmanager.view.adapter.MemberAdapter MemberAdapter
+ * @see jp.manavista.lessonmanager.view.section.MemberSection MemberSection
  * @see jp.manavista.lessonmanager.fragment.MemberFragment MemberFragment
  */
 public interface MemberOperation {

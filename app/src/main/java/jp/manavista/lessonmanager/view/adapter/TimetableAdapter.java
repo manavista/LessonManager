@@ -43,6 +43,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
     /** Timetable data list */
     @Getter
     @Setter
+    @SuppressWarnings(value = "MismatchedQueryAndUpdateOfCollection")
     private List<TimetableDto> list;
 
     /** Private Constructor */
@@ -70,13 +71,21 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
         holder.startTime.setText(list.get(position).getStartTimeFormatted());
         holder.endTime.setText(list.get(position).getEndTimeFormatted());
 
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*
+                 * no description
+                 * If there is no such definition, deletion processing is executed when clicking
+                 * (viewDelete OnClickListener)
+                 */
+            }
+        });
+
         holder.viewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                TimetableDto dto = list.get(holder.getAdapterPosition());
-                Log.d(TAG, "getAdapterPosition: " + holder.getAdapterPosition() + " TimetableDto id: " + dto.getId());
-
+                final TimetableDto dto = list.get(holder.getAdapterPosition());
                 timetableOperation.delete(dto.getId());
             }
         });
