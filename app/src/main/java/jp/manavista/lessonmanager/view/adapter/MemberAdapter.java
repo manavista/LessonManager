@@ -80,6 +80,14 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberHolder> {
                 Log.d(TAG, "click position: " + holder.getAdapterPosition());
                 MemberDto dto = list.get(holder.getAdapterPosition());
                 Log.d(TAG, dto.toString());
+                operation.lessonList(dto.getId(), holder.getAdapterPosition());
+            }
+        });
+
+        holder.viewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MemberDto dto = list.get(holder.getAdapterPosition());
                 operation.edit(dto.getId(), holder.getAdapterPosition());
             }
         });

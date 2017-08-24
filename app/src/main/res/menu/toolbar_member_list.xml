@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/option_add"
-        android:title="@string/toolbar.member_list.option.add"
-        android:icon="@drawable/ic_add_circle_white"
-        app:showAsAction="always">
-    </item>
+    <item android:id="@+id/action_search"
+          android:title="@string/toolbar.member_list.option.search"
+          app:actionViewClass="android.support.v7.widget.SearchView"
+          app:showAsAction="always"/>
 </menu>

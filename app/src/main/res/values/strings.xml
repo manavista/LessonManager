@@ -78,6 +78,7 @@
     <!-- Member List -->
     <string name="toolbar.member_list.title">Member List</string>
     <string name="toolbar.member_list.option.add">Add</string>
+    <string name="toolbar.member_list.option.search">Search</string>
     <string name="label.member_list.delete">Delete</string>
     <string name="label.member_list.dialog.title">Selected Member</string>
     <string name="label.member_list.dialog.edit">Edit</string>

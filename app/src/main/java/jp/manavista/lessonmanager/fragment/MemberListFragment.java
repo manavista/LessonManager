@@ -1,15 +1,12 @@
 package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +18,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
@@ -32,10 +30,11 @@ import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.MemberDto;
 import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.service.MemberService;
-import jp.manavista.lessonmanager.view.adapter.MemberAdapter;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.MemberOperation;
+import jp.manavista.lessonmanager.view.section.MemberSection;
+import lombok.Getter;
 
 /**
  *
@@ -54,8 +53,11 @@ public final class MemberListFragment extends Fragment {
 
     /** Activity Contents */
     private Activity contents;
-    /** Member Adapter */
-    private MemberAdapter adapter;
+    /** Member RecyclerView Adapter */
+    @Getter
+    private SectionedRecyclerViewAdapter sectionAdapter;
+    /** Member Adapter Section */
+    private MemberSection memberSection;
     /** Item Touch Helper */
     private ItemTouchHelperExtension itemTouchHelper;
     /** Member list disposable */
@@ -114,11 +116,12 @@ public final class MemberListFragment extends Fragment {
         view.setLayoutManager(manager);
         view.addItemDecoration(new ItemDecoration(contents));
 
-        adapter = MemberAdapter.newInstance(contents, memberOperation);
-        view.setAdapter(adapter);
+        sectionAdapter = new SectionedRecyclerViewAdapter();
+        memberSection = MemberSection.newInstance(contents, memberOperation);
+        sectionAdapter.addSection(memberSection);
+        view.setAdapter(sectionAdapter);
 
-        // TODO: Stop using swipe delete. Because the motion is not stable.
-        ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
+        final ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
         itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.setClickToRecoverAnimation(false);
         itemTouchHelper.attachToRecyclerView(view);
@@ -144,8 +147,8 @@ public final class MemberListFragment extends Fragment {
         }, new Action() {
             @Override
             public void run() throws Exception {
-                adapter.setList(list);
-                adapter.notifyDataSetChanged();
+                memberSection.setList(list);
+                sectionAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -159,42 +162,19 @@ public final class MemberListFragment extends Fragment {
     private MemberOperation memberOperation = new MemberOperation() {
 
         @Override
+        public void lessonList(long id, int position) {
+            itemTouchHelper.closeOpened();
+            final Intent intent = new Intent(contents, MemberLessonListActivity.class);
+            intent.putExtra(MemberLessonListActivity.EXTRA_MEMBER_ID, id);
+            contents.startActivity(intent);
+        }
+
+        @Override
         public void edit(final long id, final int position) {
-
-            final String[] items = {getString(R.string.label_member_list_dialog_edit),
-                    getString(R.string.label_member_list_dialog_lesson),
-                    getString(R.string.label_member_list_dialog_schedule),
-                    getString(R.string.label_member_list_dialog_delete)};
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(contents);
-            builder.setTitle(getString(R.string.label_member_list_dialog_title))
-                    .setIcon(R.drawable.ic_person_black)
-                    .setItems(items, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, final int which) {
-
-                            Log.d(TAG, "which: " + which);
-                            Intent intent;
-
-                            switch (which) {
-                                case 0:
-                                    intent = new Intent(contents, MemberActivity.class);
-                                    intent.putExtra(MemberActivity.EXTRA_MEMBER_ID, id);
-                                    contents.startActivity(intent);
-                                    break;
-                                case 1:
-                                    intent = new Intent(contents, MemberLessonListActivity.class);
-                                    intent.putExtra(MemberLessonListActivity.EXTRA_MEMBER_ID, id);
-                                    contents.startActivity(intent);
-                                    break;
-                                case 2:
-                                    break;
-                                case 3:
-                                    break;
-                            }
-                        }
-                    })
-                    .show();
+            itemTouchHelper.closeOpened();
+            final Intent intent = new Intent(contents, MemberActivity.class);
+            intent.putExtra(MemberActivity.EXTRA_MEMBER_ID, id);
+            contents.startActivity(intent);
         }
 
         @Override
@@ -205,8 +185,8 @@ public final class MemberListFragment extends Fragment {
             disposable = memberService.deleteById(id).subscribe(new Consumer<Integer>() {
                 @Override
                 public void accept(Integer integer) throws Exception {
-                    adapter.getList().remove(position);
-                    adapter.notifyItemRemoved(position);
+                    memberSection.getList().remove(position);
+                    sectionAdapter.notifyItemRemoved(position);
                 }
             }, new Consumer<Throwable>() {
                 @Override

@@ -33,7 +33,7 @@ import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
-import jp.manavista.lessonmanager.view.section.MemberSection;
+import jp.manavista.lessonmanager.view.section.MemberLessonSection;
 
 /**
  *
@@ -57,11 +57,12 @@ public final class MemberLessonListFragment extends Fragment {
 
     /** Activity Contents */
     private Activity contents;
-    /** Member Adapter */
-    private SectionedRecyclerViewAdapter sectionAdapter;
-    private MemberSection memberSection;
 
-    /** Item Touch Helper */
+    /** MemberLesson RecyclerView Adapter */
+    private SectionedRecyclerViewAdapter sectionAdapter;
+    /** MemberLesson Adapter Section */
+    private MemberLessonSection memberLessonSection;
+    /** MemberLesson RecyclerView Item Touch Helper */
     private ItemTouchHelperExtension itemTouchHelper;
 
     @Inject
@@ -86,8 +87,8 @@ public final class MemberLessonListFragment extends Fragment {
      * @return A new instance of fragment MemberLessonListFragment.
      */
     public static MemberLessonListFragment newInstance(final long memberId) {
-        MemberLessonListFragment fragment = new MemberLessonListFragment();
-        Bundle args = new Bundle();
+        final MemberLessonListFragment fragment = new MemberLessonListFragment();
+        final Bundle args = new Bundle();
         args.putLong(KEY_MEMBER_ID, memberId);
         fragment.setArguments(args);
         return fragment;
@@ -123,8 +124,8 @@ public final class MemberLessonListFragment extends Fragment {
         view.addItemDecoration(new ItemDecoration(contents));
 
         sectionAdapter = new SectionedRecyclerViewAdapter();
-        memberSection = MemberSection.newInstance(contents, operation);
-        sectionAdapter.addSection(memberSection);
+        memberLessonSection = MemberLessonSection.newInstance(contents, operation);
+        sectionAdapter.addSection(memberLessonSection);
 
         view.setAdapter(sectionAdapter);
 
@@ -154,9 +155,9 @@ public final class MemberLessonListFragment extends Fragment {
             @Override
             public void run() throws Exception {
                 if( !list.isEmpty() ){
-                    memberSection.setTitle(list.get(0).getMemberName());
+                    memberLessonSection.setTitle(list.get(0).getMemberName());
                 }
-                memberSection.setList(list);
+                memberLessonSection.setList(list);
                 sectionAdapter.notifyDataSetChanged();
             }
         });
@@ -186,7 +187,7 @@ public final class MemberLessonListFragment extends Fragment {
             disposable = memberLessonService.deleteById(id).subscribe(new Consumer<Integer>() {
                 @Override
                 public void accept(Integer integer) throws Exception {
-                    memberSection.getList().remove(position);
+                    memberLessonSection.getList().remove(position);
                     sectionAdapter.notifyItemRemoved(position);
                 }
             });
