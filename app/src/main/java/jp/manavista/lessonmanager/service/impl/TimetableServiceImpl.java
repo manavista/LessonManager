@@ -42,7 +42,7 @@ public class TimetableServiceImpl implements TimetableService {
     public Observable<Timetable> add() {
 
         Timetable timetable = new Timetable();
-        timetable.lessonNo = 0;
+        timetable.lessonNo = 0; // TODO: 2017/08/24 get max lessonNo in database
         timetable.startTime = DateTimeUtil.parseTime(12,0);
         timetable.endTime = DateTimeUtil.parseTime(13,0);
 
