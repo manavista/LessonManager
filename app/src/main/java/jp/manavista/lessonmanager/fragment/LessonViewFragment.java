@@ -72,7 +72,7 @@ public final class LessonViewFragment extends Fragment implements
     @Inject
     MemberLessonService memberLessonService;
 
-    /** Timetable list disposable */
+    /** Timetable categoriesList disposable */
     private Disposable timetableDisposable = Disposables.empty();
 
 

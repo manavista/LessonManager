@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Preferences -->
+
     <string-array name="entries_start_view">
         <item>Weekly</item>
         <item>Daily</item>
@@ -45,6 +47,17 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
+    </string-array>
+
+    <string-array name="entries_delete_category">
+        <item>Member</item>
+        <item>Lesson</item>
+        <item>Schedule</item>
+    </string-array>
+    <string-array name="values_delete_category">
+        <item>Member</item>
+        <item>Lesson</item>
+        <item>Schedule</item>
     </string-array>
 
     <!-- Member -->

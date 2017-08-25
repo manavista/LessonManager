@@ -58,7 +58,7 @@ public final class TimetableFragment extends Fragment {
     /** Timetable recycler view adapter */
     private TimetableAdapter adapter;
 
-    /** Timetable list disposable */
+    /** Timetable categoriesList disposable */
     private Disposable timetableDisposable = Disposables.empty();
 
     @Inject

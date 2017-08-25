@@ -41,7 +41,7 @@ import jp.manavista.lessonmanager.view.section.MemberLessonSection;
  *
  * <p>
  * Overview:<br>
- * Member Lesson list control fragment.<br>
+ * Member Lesson categoriesList control fragment.<br>
  * Handling of MemberLesson insert and update (database control) is defined in this class.
  * </p>
  */

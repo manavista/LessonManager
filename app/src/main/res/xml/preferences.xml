@@ -57,4 +57,15 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.delete">
+
+        <Preference
+            android:key="@string/preferences.key.delete_using_data"
+            android:title="@string/preferences.title.delete_using_data"
+            android:summary="@string/preferences.summary.delete_using_data"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

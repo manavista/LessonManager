@@ -1,12 +1,15 @@
 package jp.manavista.lessonmanager.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import java.util.Locale;
 import java.util.TreeSet;
 
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.SettingActivity;
 import jp.manavista.lessonmanager.view.preference.NumberPickerPreference;
 
 /**
@@ -32,17 +36,12 @@ import jp.manavista.lessonmanager.view.preference.NumberPickerPreference;
 public final class SettingFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    /** preference key: start view mode */
-    public static final String KEY_START_VIEW = "start_view";
-    /** preference key: display day of week */
-    public static final String KEY_DISPLAY_DAY_OF_WEEK = "display_day_of_week";
-    /** preference key: first day of week */
-    public static final String KEY_FIRST_DAY_OF_WEEK = "first_day_of_week";
-
-    // TODO: Delete old preferences key.
     // TODO: Add Lesson View preferences. start time, end time, and first day (or today?)
 
     private static final String TIME_FORMAT_HMM = "%01d:00";
+
+    /** Activity Contents */
+    private Activity contents;
 
     /**
      *
@@ -63,31 +62,38 @@ public final class SettingFragment extends PreferenceFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        final Preference preference = findPreference(getString(R.string.preferences_key_delete_using_data));
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Log.d("delete","click");
+                // TODO: 2017/08/24 intent activity
+
+                final Intent intent = new Intent(contents, SettingActivity.class);
+                intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, SettingActivity.FragmentType.DELETE);
+                contents.startActivity(intent);
+
+                return false;
+            }
+        });
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-
-        toolbar.setTitle(R.string.action_settings);
-        toolbar.setNavigationIcon(R.drawable.ic_menu_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().finish();
-            }
-        });
-
     }
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater,
-            @Nullable ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        contents = getActivity();
     }
 
     @Override
@@ -136,19 +142,25 @@ public final class SettingFragment extends PreferenceFragment
 
             } else if (item instanceof MultiSelectListPreference) {
 
-                MultiSelectListPreference preference = (MultiSelectListPreference) item;
-                CharSequence[] entries = preference.getEntries();
-                StringBuilder sb = new StringBuilder();
+                final MultiSelectListPreference preference = (MultiSelectListPreference) item;
+                final String key = preference.getKey();
 
-                for (String value : new TreeSet<>(preference.getValues())) {
-                    if (sb.length() > 0) {
-                        sb.append(", ");
+                if( key.equals("display_day_of_week") ) {
+
+                    CharSequence[] entries = preference.getEntries();
+                    StringBuilder sb = new StringBuilder();
+
+                    for (String value : new TreeSet<>(preference.getValues())) {
+                        if (sb.length() > 0) {
+                            sb.append(", ");
+                        }
+                        sb.append(entries[Integer.valueOf(value) - 1]);
                     }
-                    sb.append(entries[Integer.valueOf(value) - 1]);
-                }
 
-                final String noData = getResources().getString(R.string.summary_no_data);
-                preference.setSummary(preference.getValues().size() == 0 ? noData : sb.toString());
+                    final String noData = getResources().getString(R.string.summary_no_data);
+                    preference.setSummary(preference.getValues().size() == 0 ? noData : sb.toString());
+
+                }
 
             } else if( item instanceof NumberPickerPreference ) {
                 NumberPickerPreference preference = (NumberPickerPreference) item;

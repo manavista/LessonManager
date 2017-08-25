@@ -237,7 +237,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
      *
      * <p>
      * Get {@link Member} entity by default id,
-     * then store data to fragment data transfer object.
+     * then store categoriesList to fragment categoriesList transfer object.
      * </p>
      *
      * @param memberId target member id
