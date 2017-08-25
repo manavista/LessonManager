@@ -42,7 +42,7 @@ import lombok.Getter;
  *
  * <p>
  * Overview:<br>
- * Display a list of members. <br>
+ * Display a categoriesList of members. <br>
  * Provide interface for editing and creating new.
  * </p>
  */
@@ -60,7 +60,7 @@ public final class MemberListFragment extends Fragment {
     private MemberSection memberSection;
     /** Item Touch Helper */
     private ItemTouchHelperExtension itemTouchHelper;
-    /** Member list disposable */
+    /** Member categoriesList disposable */
     private Disposable disposable;
 
     @Inject
@@ -142,7 +142,7 @@ public final class MemberListFragment extends Fragment {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                throw new RuntimeException("Can not get member list all.", throwable);
+                throw new RuntimeException("Can not get member categoriesList all.", throwable);
             }
         }, new Action() {
             @Override

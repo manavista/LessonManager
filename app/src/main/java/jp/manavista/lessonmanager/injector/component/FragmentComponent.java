@@ -6,6 +6,7 @@ import jp.manavista.lessonmanager.fragment.MemberFragment;
 import jp.manavista.lessonmanager.fragment.MemberLessonFragment;
 import jp.manavista.lessonmanager.fragment.MemberLessonListFragment;
 import jp.manavista.lessonmanager.fragment.MemberListFragment;
+import jp.manavista.lessonmanager.fragment.SettingDeleteFragment;
 import jp.manavista.lessonmanager.fragment.TimetableFragment;
 
 /**
@@ -28,4 +29,5 @@ public interface FragmentComponent {
     void inject(MemberLessonFragment memberLessonFragment);
     void inject(MemberLessonListFragment memberLessonListFragment);
     void inject(LessonViewFragment lessonViewFragment);
+    void inject(SettingDeleteFragment settingDeleteFragment);
 }
