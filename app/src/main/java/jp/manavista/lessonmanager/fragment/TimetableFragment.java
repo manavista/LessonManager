@@ -133,6 +133,8 @@ public final class TimetableFragment extends Fragment {
         ItemTouchHelperExtension itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.attachToRecyclerView(view);
 
+
+        // TODO: 2017/08/27 implements onResume
         timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
             @Override
             public void accept(@NonNull Timetable timetable) throws Exception {

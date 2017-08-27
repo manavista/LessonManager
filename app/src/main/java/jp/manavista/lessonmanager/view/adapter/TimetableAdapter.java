@@ -58,7 +58,6 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
 
     @Override
     public TimetableHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.container_item_timetable, parent, false);
         return new TimetableHolder(view);

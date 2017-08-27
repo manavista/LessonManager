@@ -22,6 +22,9 @@
 
     <string name="text_image.member">Member</string>
 
+    <!-- Common List Action -->
+    <string name="label.common.list.action.edit">Edit</string>
+    <string name="label.common.list.action.delete">Delete</string>
 
     <!-- Preference -->
     <string name="toolbar.preference.title">Settings</string>
@@ -126,4 +129,10 @@
     <!-- Member Lesson List -->
     <string name="toolbar.member_lesson_list.title">Lesson List</string>
     <string name="toolbar.member_lesson_list.option.add">Add</string>
+
+    <!-- Member Lesson Schedule -->
+
+    <!-- Member Lesson Schedule List -->
+    <string name="toolbar.member_lesson_schedule_list.title">Schedule</string>
+
 </resources>

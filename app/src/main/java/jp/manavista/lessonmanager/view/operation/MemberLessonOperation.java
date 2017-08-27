@@ -41,4 +41,12 @@ public interface MemberLessonOperation {
      * @param position target adapter position
      */
     void delete(final long id, final int position);
+
+    /**
+     *
+     * Schedule List
+     *
+     * @param id lesson id
+     */
+    void scheduleList(final long id);
 }

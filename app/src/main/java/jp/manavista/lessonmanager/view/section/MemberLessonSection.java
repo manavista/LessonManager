@@ -160,7 +160,8 @@ public class MemberLessonSection extends StatelessSection {
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                final MemberLessonDto dto = list.get(position);
+                operation.scheduleList(dto.getId());
             }
         });
     }
