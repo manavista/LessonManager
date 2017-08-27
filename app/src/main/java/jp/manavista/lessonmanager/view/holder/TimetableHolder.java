@@ -15,7 +15,7 @@ import jp.manavista.lessonmanager.R;
  * Adding extension library to interface to define behavior at swipe.
  * </p>
  */
-public class TimetableHolder extends SwipeDeleteHolder {
+public final class TimetableHolder extends SwipeDeleteHolder {
 
     public TextView lessonNo;
     public TextView startTime;

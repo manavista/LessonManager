@@ -1,14 +1,19 @@
 package jp.manavista.lessonmanager.util;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
@@ -17,6 +22,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * </p>
  */
 public class DateTimeUtilTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void parseCalendarDate() throws Exception {
@@ -53,5 +61,65 @@ public class DateTimeUtilTest {
         final String actual = DateTimeUtil.today(DateTimeUtil.DATE_FORMAT_YYYYMMDD);
 
         assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void extractDate() {
+
+        final String startDate = "2017/08/28";
+        final String endDate = "2017/10/30";
+        final String[] dayOfWeek = {"2"}; // Monday
+
+        final List<String> actual = DateTimeUtil.extractTargetDates(
+                startDate, endDate, DateTimeUtil.DATE_PATTERN_YYYYMMDD, dayOfWeek);
+
+        assertThat(actual.size(), is(10));
+    }
+
+    @Test
+    public void extractDateNoArgument() throws Exception {
+
+        final String startDate = "2017/08/26";
+        final String endDate = "2017/10/30";
+        final String[] dayOfWeek = {"2"}; // Monday
+
+        expectedException.expect(IllegalArgumentException.class);
+
+        final List<String> actual = DateTimeUtil.extractTargetDates(
+                null, null, DateTimeUtil.DATE_PATTERN_YYYYMMDD, dayOfWeek);
+
+    }
+
+    @Test
+    public void compareCalendar() throws Exception {
+
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+
+        cal2.set(Calendar.YEAR, 2019);
+        cal2.set(Calendar.MONTH, 11);
+
+        boolean expected = true;
+        boolean actual = cal1.before(cal2);
+
+        assertThat(actual, is(expected));
+
+        Calendar cal3 = Calendar.getInstance();
+        cal3.add(Calendar.DAY_OF_MONTH, 1);
+
+        // cal1 > cal3 = 1, ca1 == cal2 = 0, cal1 < cal3 = -1
+        int actual2 = DateUtils.truncatedCompareTo(cal1, cal3, Calendar.DAY_OF_MONTH);
+        assertThat(actual2, is(-1));
+
+        int count = 0;
+        while (  cal1.before(cal2) ) {
+
+            if( cal1.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ) {
+                count++;
+            }
+            cal1.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        assertThat(count, is(not(0)));
     }
 }

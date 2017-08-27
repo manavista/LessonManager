@@ -7,8 +7,12 @@ import jp.manavista.lessonmanager.model.entity.OrmaDatabase;
 import jp.manavista.lessonmanager.repository.MemberLessonRepository;
 
 /**
+ *
+ * MemberLesson Repository Implement
+ *
  * <p>
  * Overview:<br>
+ *
  * </p>
  */
 public class MemberLessonRepositoryImpl extends RepositoryBaseImpl implements MemberLessonRepository {

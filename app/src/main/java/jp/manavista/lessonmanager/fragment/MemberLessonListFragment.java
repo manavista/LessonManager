@@ -26,6 +26,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberLessonActivity;
+import jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
@@ -191,6 +192,14 @@ public final class MemberLessonListFragment extends Fragment {
                     sectionAdapter.notifyItemRemoved(position);
                 }
             });
+        }
+
+        @Override
+        public void scheduleList(long id) {
+            itemTouchHelper.closeOpened();
+            final Intent intent = new Intent(contents, MemberLessonScheduleListActivity.class);
+            intent.putExtra(MemberLessonScheduleListActivity.EXTRA_LESSON_ID, id);
+            contents.startActivity(intent);
         }
     };
 }

@@ -19,7 +19,7 @@ import jp.manavista.lessonmanager.service.MemberLessonService;
  */
 public class MemberLessonServiceImpl implements MemberLessonService {
 
-    /** Member Repository */
+    /** MemberLesson Repository */
     private final MemberLessonRepository repository;
 
     /** Constructor */
