@@ -48,6 +48,7 @@ import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
 import jp.manavista.lessonmanager.model.entity.Timetable;
+import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.service.TimetableService;
@@ -58,11 +59,12 @@ import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD
 
 /**
  *
- * MemberLesson Fragment
+ * Member Lesson Fragment
  *
  * <p>
  * Overview:<br>
- *
+ * {@code MemberLesson} control fragment.<br>
+ * Handling of {@code MemberLesson} insert and update (database control) is defined in this class.
  * </p>
  */
 public final class MemberLessonFragment extends Fragment implements Validator.ValidationListener {
@@ -90,6 +92,10 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     @Inject
     TimetableService timetableService;
 
+    // FIXME: 2017/08/27 after delete
+    @Inject
+    MemberLessonScheduleService memberLessonScheduleService;
+
     /** input validator */
     private Validator validator;
     /** Member disposable */
@@ -114,8 +120,8 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      * @return A new instance of fragment MemberLessonFragment.
      */
     public static MemberLessonFragment newInstance(final long memberId, final long memberLessonId) {
-        MemberLessonFragment fragment = new MemberLessonFragment();
-        Bundle args = new Bundle();
+        final MemberLessonFragment fragment = new MemberLessonFragment();
+        final Bundle args = new Bundle();
         args.putLong(KEY_MEMBER_ID, memberId);
         args.putLong(KEY_MEMBER_LESSON_ID, memberLessonId);
         fragment.setArguments(args);
@@ -189,7 +195,6 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         } else {
             storeInitValueToDto();
         }
-
     }
 
     @Override
@@ -212,6 +217,13 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
             @Override
             public void accept(MemberLesson memberLesson) throws Exception {
                 Log.d(TAG, memberLesson.toString());
+
+                // FIXME: 2017/08/27 temporary implements
+
+                memberLessonScheduleService.createByLesson(memberLesson).subscribe();
+
+
+
                 contents.finish();
             }
         }, new Consumer<Throwable>() {
@@ -548,11 +560,6 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         /* day decimal string value: 1, 2, 3... */
         final String[] dayValues = getResources().getStringArray(R.array.entry_values_day_of_week);
         final boolean[] index = ArrayUtil.convertIndexFromArray(dayOfWeek, dayValues, ",");
-
-//        /* All Day of week true is Everyday */
-//        if( !ArrayUtils.contains(index, false) ) {
-//            return "Everyday";
-//        }
 
         return ArrayUtil.concatIndexOfArray(days, index, ", ");
     }

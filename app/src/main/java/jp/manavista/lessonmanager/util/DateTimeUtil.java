@@ -3,31 +3,56 @@ package jp.manavista.lessonmanager.util;
 import android.support.annotation.NonNull;
 import android.util.Pair;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+/**
+ *
+ * Date and Time Utility
+ *
+ * <p>
+ * Overview:<br>
+ * Define the utility function on date and time manipulation.
+ * </p>
+ */
 public final class DateTimeUtil {
 
-    public static String COLON = ":";
-    public static String SLASH = "/";
+    public static final String COLON = ":";
+    public static final String SLASH = "/";
 
-    public static String DATE_PATTERN_YYYYMMDD = "yyyy/MM/dd";
-    public static String DATE_PATTERN_YYYYMD = "yyyy/M/d";
+    public static final String DATE_PATTERN_YYYYMMDD = "yyyy/MM/dd";
+    public static final String DATE_PATTERN_YYYYMD = "yyyy/M/d";
 
     public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat(DATE_PATTERN_YYYYMMDD, Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_MMDD = new SimpleDateFormat("MM/dd", Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_MMDDE = new SimpleDateFormat("MM/dd E", Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_E = new SimpleDateFormat("E", Locale.getDefault());
+
     public static SimpleDateFormat TIME_FORMAT_HHMM = new SimpleDateFormat("HH:mm", Locale.getDefault());
     public static SimpleDateFormat TIME_FORMAT_hhMM = new SimpleDateFormat("hh:mm", Locale.getDefault());
     public static SimpleDateFormat TIME_FORMAT_H = new SimpleDateFormat("H", Locale.getDefault());
     public static SimpleDateFormat TIME_FORMAT_m = new SimpleDateFormat("m", Locale.getDefault());
+
+    private static final Map<String, Integer> dayOfWeekConvertMap = new HashMap<String, Integer>() {{
+        put("1", Calendar.SUNDAY);
+        put("2",Calendar.MONDAY);
+        put("3",Calendar.TUESDAY);
+        put("4",Calendar.WEDNESDAY);
+        put("5",Calendar.THURSDAY);
+        put("6",Calendar.FRIDAY);
+        put("7",Calendar.SATURDAY);
+    }};
 
     /**
      *
@@ -111,6 +136,70 @@ public final class DateTimeUtil {
             e.printStackTrace();
         }
         return calendar;
+    }
+
+    /**
+     *
+     * Extract Target Dates
+     *
+     * <p>
+     * Overview:<br>
+     * In the start and end period specified in the argument,
+     * extract the date character string list corresponding to the target day of the week.
+     * </p>
+     *
+     * @param startDate target start date
+     * @param endDate target end date
+     * @param format target date string format
+     * @param dayOfWeek target day of week argument (1:Sunday, 2:Monday,...)
+     * @return extracted date string list
+     */
+    public static List<String> extractTargetDates(@NonNull final String startDate, @NonNull final String endDate,
+            @NonNull final String format, @NonNull final String[] dayOfWeek) {
+
+        if( StringUtils.isAnyEmpty(startDate, endDate, format) ) {
+            throw new IllegalArgumentException("The arguments must not be null");
+        }
+
+        final List<Integer> dayOfWeekList = new ArrayList<>();
+        final List<String> dateList = new ArrayList<>();
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.getDefault());
+
+        try {
+
+            final Calendar start = DateUtils.toCalendar(dateFormat.parse(startDate));
+            final Calendar end = DateUtils.toCalendar(dateFormat.parse(endDate));
+
+            /*
+             * truncate
+             * 2017/08/27 15:34:56 -> 2017/08/27 00:00:00
+             * To become a comparison by only date
+             */
+            DateUtils.truncate(start, Calendar.DAY_OF_MONTH);
+            DateUtils.truncate(end, Calendar.DAY_OF_MONTH);
+
+            for( String day : dayOfWeek ) {
+                dayOfWeekList.add(dayOfWeekConvertMap.get(day));
+            }
+
+            if( dayOfWeekList.isEmpty() ) {
+                return dateList;
+            }
+
+            while( start.compareTo(end) <= 0 ) {
+
+                if( dayOfWeekList.contains(start.get(Calendar.DAY_OF_WEEK)) ) {
+                    dateList.add(dateFormat.format(start.getTime()));
+                }
+                start.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return dateList;
     }
 
     /**

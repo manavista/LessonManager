@@ -3,32 +3,36 @@
           package="jp.manavista.lessonmanager">
 
     <application
-        android:name="jp.manavista.lessonmanager.ManavistaApplication"
+        android:name=".ManavistaApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name="jp.manavista.lessonmanager.activity.MainActivity">
+        <activity android:name=".activity.MainActivity">
         </activity>
-        <activity android:name="jp.manavista.lessonmanager.activity.SettingActivity"/>
-        <activity android:name="jp.manavista.lessonmanager.activity.TimetableActivity">
+        <activity android:name=".activity.SettingActivity"/>
+        <activity android:name=".activity.TimetableActivity">
         </activity>
-        <activity android:name="jp.manavista.lessonmanager.activity.LessonViewActivity">
+        <activity android:name=".activity.LessonViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="jp.manavista.lessonmanager.activity.MemberActivity">
+        <activity android:name=".activity.MemberActivity">
         </activity>
-        <activity android:name="jp.manavista.lessonmanager.activity.MemberListActivity">
+        <activity android:name=".activity.MemberListActivity">
         </activity>
-        <activity android:name="jp.manavista.lessonmanager.activity.MemberLessonListActivity">
+        <activity android:name=".activity.MemberLessonListActivity">
         </activity>
-        <activity android:name="jp.manavista.lessonmanager.activity.MemberLessonActivity">
+        <activity android:name=".activity.MemberLessonActivity">
+        </activity>
+        <activity android:name=".activity.MemberLessonScheduleActivity">
+        </activity>
+        <activity android:name=".activity.MemberLessonScheduleListActivity">
         </activity>
     </application>
 

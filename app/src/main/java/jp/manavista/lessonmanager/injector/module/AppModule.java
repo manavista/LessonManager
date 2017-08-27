@@ -8,8 +8,12 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
+ *
+ * Application Module
+ *
  * <p>
  * Overview:<br>
+ *
  * </p>
  */
 @Module

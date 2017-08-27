@@ -3,11 +3,14 @@ package jp.manavista.lessonmanager.injector.module;
 import dagger.Module;
 import dagger.Provides;
 import jp.manavista.lessonmanager.repository.MemberLessonRepository;
+import jp.manavista.lessonmanager.repository.MemberLessonScheduleRepository;
 import jp.manavista.lessonmanager.repository.MemberRepository;
 import jp.manavista.lessonmanager.repository.TimeTableRepository;
+import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.service.TimetableService;
+import jp.manavista.lessonmanager.service.impl.MemberLessonScheduleServiceImpl;
 import jp.manavista.lessonmanager.service.impl.MemberLessonServiceImpl;
 import jp.manavista.lessonmanager.service.impl.MemberServiceImpl;
 import jp.manavista.lessonmanager.service.impl.TimetableServiceImpl;
@@ -37,5 +40,10 @@ public class ServiceModule {
     @Provides
     MemberLessonService provideMemberLessonService(MemberLessonRepository memberLessonRepository) {
         return new MemberLessonServiceImpl(memberLessonRepository);
+    }
+
+    @Provides
+    MemberLessonScheduleService provideMemberLessonScheduleService(MemberLessonScheduleRepository memberLessonScheduleRepository) {
+        return new MemberLessonScheduleServiceImpl(memberLessonScheduleRepository);
     }
 }
