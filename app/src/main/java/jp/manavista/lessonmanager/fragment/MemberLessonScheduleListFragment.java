@@ -1,35 +1,41 @@
 package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.MemberLessonActivity;
+import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
+import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
-import jp.manavista.lessonmanager.view.adapter.MemberLessonScheduleAdapter;
+import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
+import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
 import jp.manavista.lessonmanager.view.operation.MemberLessonScheduleOperation;
+import jp.manavista.lessonmanager.view.section.MemberLessonScheduleSection;
+import jp.manavista.lessonmanager.view.section.MemberLessonSection;
 
 /**
  *
@@ -41,19 +47,31 @@ import jp.manavista.lessonmanager.view.operation.MemberLessonScheduleOperation;
  */
 public class MemberLessonScheduleListFragment extends Fragment {
 
-    /** bundle key: member id */
-    public static final String KEY_LESSON_ID = "LESSON_ID";
+    private static final String TAG = MemberLessonScheduleListFragment.class.getSimpleName();
 
-    private long lessonId;
+    /** bundle key: member id */
+    public static final String KEY_MEMBER_ID = "MEMBER_ID";
+
+    private long memberId;
 
     /** Activity Contents */
     private Activity contents;
 
-    /** MemberLessonSchedule recycler view adapter */
-    private MemberLessonScheduleAdapter adapter;
+    /** MemberLesson RecyclerView Adapter */
+    private SectionedRecyclerViewAdapter sectionAdapter;
+    /** Adapter MemberLesson Section */
+    private MemberLessonSection memberLessonSection;
+    /** Adapter MemberLessonSchedule Section */
+    private MemberLessonScheduleSection memberLessonScheduleSection;
+    /** MemberLessonSchedule RecyclerView Item Touch Helper */
+    private ItemTouchHelperExtension itemTouchHelper;
 
     @Inject
+    MemberLessonService memberLessonService;
+    @Inject
     MemberLessonScheduleService memberLessonScheduleService;
+    @Inject
+    MemberLessonScheduleListFacade facade;
 
     /** MemberLesson disposable */
     private Disposable disposable;
@@ -63,16 +81,22 @@ public class MemberLessonScheduleListFragment extends Fragment {
     }
 
     /**
+     *
+     * New Instance
+     *
+     * <p>
+     * Overview:<br>
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     * </p>
      *
-     * @param lessonId MemberLesson Id
+     * @param memberId target MemberId
      * @return A new instance of fragment MemberLessonScheduleListFragment.
      */
-    public static MemberLessonScheduleListFragment newInstance(final long lessonId) {
+    public static MemberLessonScheduleListFragment newInstance(final long memberId) {
         final MemberLessonScheduleListFragment fragment = new MemberLessonScheduleListFragment();
         final Bundle args = new Bundle();
-        args.putLong(KEY_LESSON_ID, lessonId);
+        args.putLong(KEY_MEMBER_ID, memberId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,16 +104,17 @@ public class MemberLessonScheduleListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            lessonId = getArguments().getLong(KEY_LESSON_ID);
+        final Bundle bundle = getArguments();
+        if (bundle != null) {
+            memberId = bundle.getLong(KEY_MEMBER_ID);
+        } else {
+            Log.w(TAG, "bundle arguments is null");
         }
         this.disposable = Disposables.empty();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_member_lesson_schedule_list, container, false);
     }
 
@@ -106,11 +131,19 @@ public class MemberLessonScheduleListFragment extends Fragment {
         view.setLayoutManager(manager);
         view.addItemDecoration(new ItemDecoration(contents));
 
-        adapter = MemberLessonScheduleAdapter.newInstance(contents, operation);
-        view.setAdapter(adapter);
+        sectionAdapter = new SectionedRecyclerViewAdapter();
+        memberLessonSection = MemberLessonSection.newInstance(contents, memberLessonOperation);
+        memberLessonSection.setTitle("Lesson");
+        sectionAdapter.addSection(memberLessonSection);
+
+        memberLessonScheduleSection = MemberLessonScheduleSection.newInstance(contents, memberLessonScheduleOperation);
+        memberLessonScheduleSection.setTitle("Schedule");
+        sectionAdapter.addSection(memberLessonScheduleSection);
+
+        view.setAdapter(sectionAdapter);
 
         ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
-        ItemTouchHelperExtension itemTouchHelper = new ItemTouchHelperExtension(callback);
+        itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.attachToRecyclerView(view);
     }
 
@@ -119,23 +152,19 @@ public class MemberLessonScheduleListFragment extends Fragment {
 
         super.onResume();
 
-        final List<MemberLessonScheduleVo> list = new ArrayList<>();
+        disposable = memberLessonService.getSingleVoListByMemberId(memberId).subscribe(new Consumer<List<MemberLessonVo>>() {
+            @Override
+            public void accept(List<MemberLessonVo> voList) throws Exception {
+                memberLessonSection.setList(voList);
+                sectionAdapter.notifyDataSetChanged();
 
-        disposable = memberLessonScheduleService.getListByLessonId(lessonId).subscribe(new Consumer<MemberLessonSchedule>() {
-            @Override
-            public void accept(MemberLessonSchedule memberLessonSchedule) throws Exception {
-                list.add(MemberLessonScheduleVo.copy(memberLessonSchedule));
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                adapter.setList(list);
-                adapter.notifyDataSetChanged();
+                disposable = memberLessonScheduleService.getSingleVoListByMemberId(memberId).subscribe(new Consumer<List<MemberLessonScheduleVo>>() {
+                    @Override
+                    public void accept(List<MemberLessonScheduleVo> memberLessonScheduleVos) throws Exception {
+                        memberLessonScheduleSection.setList(memberLessonScheduleVos);
+                        sectionAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
     }
@@ -146,7 +175,7 @@ public class MemberLessonScheduleListFragment extends Fragment {
         disposable.dispose();
     }
 
-    private MemberLessonScheduleOperation operation = new MemberLessonScheduleOperation() {
+    final private MemberLessonScheduleOperation memberLessonScheduleOperation = new MemberLessonScheduleOperation() {
         @Override
         public void edit(long id, int position) {
 
@@ -154,6 +183,34 @@ public class MemberLessonScheduleListFragment extends Fragment {
 
         @Override
         public void delete(long id, int position) {
+
+        }
+    };
+
+    final private MemberLessonOperation memberLessonOperation = new MemberLessonOperation() {
+        @Override
+        public void edit(MemberLessonVo dto, int position) {
+            itemTouchHelper.closeOpened();
+            final Intent intent = new Intent(contents, MemberLessonActivity.class);
+            intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, dto.getMemberId());
+            intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, dto.getId());
+            contents.startActivity(intent);
+        }
+
+        @Override
+        public void delete(long id, final int position) {
+            itemTouchHelper.closeOpened();
+            disposable = memberLessonService.deleteById(id).subscribe(new Consumer<Integer>() {
+                @Override
+                public void accept(Integer integer) throws Exception {
+                    memberLessonSection.getList().remove(position);
+                    sectionAdapter.notifyItemRemovedFromSection(memberLessonSection, position);
+                }
+            });
+        }
+
+        @Override
+        public void scheduleList(long id) {
 
         }
     };

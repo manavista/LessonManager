@@ -42,7 +42,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.model.dto.MemberDto;
+import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.model.dto.MemberLessonFragmentDto;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Member;
@@ -220,11 +220,13 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
 
                 // FIXME: 2017/08/27 temporary implements
 
-                memberLessonScheduleService.createByLesson(memberLesson).subscribe();
+                memberLessonScheduleService.createByLesson(memberLesson.member.get(), memberLesson).subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        contents.finish();
+                    }
+                });
 
-
-
-                contents.finish();
             }
         }, new Consumer<Throwable>() {
             @Override
@@ -465,7 +467,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         disposable = memberService.getById(memberId).subscribe(new Consumer<Member>() {
             @Override
             public void accept(Member member) throws Exception {
-                final String displayName = MemberDto.copy(member).getDisplayName();
+                final String displayName = MemberVo.copy(member).getDisplayName();
                 dto.getMemberName().setText(displayName);
             }
         }, new Consumer<Throwable>() {

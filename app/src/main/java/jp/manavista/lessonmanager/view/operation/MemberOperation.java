@@ -1,5 +1,7 @@
 package jp.manavista.lessonmanager.view.operation;
 
+import jp.manavista.lessonmanager.model.vo.MemberVo;
+
 /**
  *
  * Member Operation
@@ -47,8 +49,8 @@ public interface MemberOperation {
      *
      * Lesson List
      *
-     * @param id target row id
+     * @param dto target row dto
      * @param position target adapter position
      */
-    void lessonList(final long id, final int position);
+    void lessonList(final MemberVo dto, final int position);
 }

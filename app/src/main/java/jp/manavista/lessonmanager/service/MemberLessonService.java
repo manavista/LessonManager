@@ -1,8 +1,11 @@
 package jp.manavista.lessonmanager.service;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
+import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 
 /**
  *
@@ -57,6 +60,22 @@ public interface MemberLessonService {
      */
     Observable<MemberLesson> getListByMemberId(long memberId);
 
+    /**
+     *
+     * Get Value Object List By MemberId
+     *
+     * <p>
+     * Overview:<br>
+     * Convert {@code MemberLesson} to {@code MemberLessonVo} list
+     * associated with the member id specified in the argument.
+     * </p>
+     *
+     * @param memberId target member id
+     * @return {@code MemberLessonVo} of Observable
+     */
+    Observable<MemberLessonVo> getVoListByMemberId(long memberId);
+
+    Single<List<MemberLessonVo>> getSingleVoListByMemberId(long memberId);
 
     /**
      *

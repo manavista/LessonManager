@@ -13,7 +13,7 @@ import java.util.List;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 import jp.manavista.lessonmanager.R;
-import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
+import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.util.ArrayUtil;
 import jp.manavista.lessonmanager.view.holder.MemberLessonHolder;
 import jp.manavista.lessonmanager.view.holder.SectionTitleHolder;
@@ -42,7 +42,7 @@ public class MemberLessonSection extends StatelessSection {
     @Getter
     @Setter
     @SuppressWarnings(value = "MismatchedQueryAndUpdateOfCollection")
-    private List<MemberLessonDto> list;
+    private List<MemberLessonVo> list;
 
     /** Context */
     private final Context context;
@@ -93,15 +93,15 @@ public class MemberLessonSection extends StatelessSection {
 
         MemberLessonHolder itemHolder = (MemberLessonHolder) holder;
 
-        final MemberLessonDto dto = list.get(position);
+        final MemberLessonVo vo = list.get(position);
 
-        itemHolder.lessonName.setText(dto.getName());
-        itemHolder.lessonType.setText(dto.getType());
-        itemHolder.timetable.setText(dto.getStartTime() + " - " + dto.getEndTime());
-        itemHolder.dayOfWeek.setText(buildDayOfWeek(dto.getDayOfWeek()));
+        itemHolder.lessonName.setText(vo.getName());
+        itemHolder.lessonType.setText(vo.getType());
+        itemHolder.timetable.setText(vo.getStartTime() + " - " + vo.getEndTime());
+        itemHolder.dayOfWeek.setText(buildDayOfWeek(vo.getDayOfWeek()));
 
-        itemHolder.lessonIconImage.setColorFilter(dto.getTextColor());
-        DrawableCompat.setTint(itemHolder.lessonIconImage.getBackground(), dto.getBackgroundColor());
+        itemHolder.lessonIconImage.setColorFilter(vo.getTextColor());
+        DrawableCompat.setTint(itemHolder.lessonIconImage.getBackground(), vo.getBackgroundColor());
 
         prepareObjectLister(itemHolder, position);
     }
@@ -141,27 +141,26 @@ public class MemberLessonSection extends StatelessSection {
             @Override
             public void onClick(View view) {
 
+                Log.d("position ", String.valueOf(position));
                 Log.d("getAdapterPosition()", String.valueOf(holder.getAdapterPosition()) );
-//                final MemberLessonDto dto = list.get(holder.getAdapterPosition());
-                final MemberLessonDto dto = list.get(position);
-                operation.delete(dto.getId(), position);
+                final MemberLessonVo vo = list.get(holder.getAdapterPosition()-1);
+                operation.delete(vo.getId(), holder.getAdapterPosition()-1);
             }
         });
 
         holder.viewEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                final MemberLessonDto dto = list.get(holder.getAdapterPosition());
-                final MemberLessonDto dto = list.get(position);
-                operation.edit(dto, position);
+                final MemberLessonVo vo = list.get(position);
+                operation.edit(vo, position);
             }
         });
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final MemberLessonDto dto = list.get(position);
-                operation.scheduleList(dto.getId());
+                final MemberLessonVo vo = list.get(position);
+                operation.scheduleList(vo.getId());
             }
         });
     }

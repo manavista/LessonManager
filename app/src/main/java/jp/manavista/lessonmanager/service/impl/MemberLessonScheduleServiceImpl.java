@@ -10,9 +10,13 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule;
+import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
 import jp.manavista.lessonmanager.repository.MemberLessonScheduleRepository;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
@@ -23,7 +27,8 @@ import jp.manavista.lessonmanager.util.DateTimeUtil;
  *
  * <p>
  * Overview:<br>
- *
+ * Define implements actions related to acquisition and processing
+ * for the {@code MemberLessonSchedule}.
  * </p>
  */
 public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleService {
@@ -59,7 +64,51 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
 
     @Override
     public Observable<MemberLessonSchedule> getListByMemberId(long memberId) {
-        return null;
+        return repository.getRelation()
+                .selector()
+                .memberEq(memberId)
+                .orderBy(repository.getSchema().lessonDate.orderInAscending())
+                .orderBy(repository.getSchema().lessonStartTime.orderInAscending())
+                .executeAsObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Observable<MemberLessonScheduleVo> getVoListByMemberId(long memberId) {
+        return repository.getRelation()
+                .selector()
+                .memberEq(memberId)
+                .orderBy(repository.getSchema().lessonDate.orderInAscending())
+                .orderBy(repository.getSchema().lessonStartTime.orderInAscending())
+                .executeAsObservable()
+                .map(new Function<MemberLessonSchedule, MemberLessonScheduleVo>() {
+                    @Override
+                    public MemberLessonScheduleVo apply(@NonNull MemberLessonSchedule entity) throws Exception {
+                        return MemberLessonScheduleVo.copy(entity);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Single<List<MemberLessonScheduleVo>> getSingleVoListByMemberId(long memberId) {
+        return repository.getRelation()
+                .selector()
+                .memberEq(memberId)
+                .orderBy(repository.getSchema().lessonDate.orderInAscending())
+                .orderBy(repository.getSchema().lessonStartTime.orderInAscending())
+                .executeAsObservable()
+                .map(new Function<MemberLessonSchedule, MemberLessonScheduleVo>() {
+                    @Override
+                    public MemberLessonScheduleVo apply(@NonNull MemberLessonSchedule entity) throws Exception {
+                        return MemberLessonScheduleVo.copy(entity);
+                    }
+                })
+                .toList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
@@ -71,7 +120,7 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
     }
 
     @Override
-    public Single<Long> createByLesson(final MemberLesson lesson) {
+    public Single<Long> createByLesson(final Member member, final MemberLesson lesson) {
 
         if( lesson == null ) {
             Log.e(TAG, "Argument entity is null");
@@ -87,6 +136,7 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
         for( String date : dateList ) {
             final MemberLessonSchedule schedule = new MemberLessonSchedule();
             schedule.lessonDate = date;
+            schedule.member = SingleAssociation.just(member);
             schedule.memberLesson = SingleAssociation.just(lesson);
             entityList.add(schedule);
         }

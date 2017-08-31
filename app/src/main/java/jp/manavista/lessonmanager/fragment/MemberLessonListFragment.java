@@ -28,7 +28,7 @@ import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberLessonActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
+import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
@@ -140,12 +140,12 @@ public final class MemberLessonListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        final List<MemberLessonDto> list = new ArrayList<>();
+        final List<MemberLessonVo> list = new ArrayList<>();
 
         disposable = memberLessonService.getListByMemberId(memberId).subscribe(new Consumer<MemberLesson>() {
             @Override
             public void accept(MemberLesson memberLesson) throws Exception {
-                list.add(MemberLessonDto.copy(memberLesson));
+                list.add(MemberLessonVo.copy(memberLesson));
             }
         }, new Consumer<Throwable>() {
             @Override
@@ -172,7 +172,7 @@ public final class MemberLessonListFragment extends Fragment {
 
     private MemberLessonOperation operation = new MemberLessonOperation() {
         @Override
-        public void edit(final MemberLessonDto dto, final int position) {
+        public void edit(final MemberLessonVo dto, final int position) {
             Log.d(TAG, "Edit");
             itemTouchHelper.closeOpened();
             final Intent intent = new Intent(contents, MemberLessonActivity.class);

@@ -14,7 +14,7 @@ import java.util.Locale;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 import jp.manavista.lessonmanager.R;
-import jp.manavista.lessonmanager.model.dto.MemberDto;
+import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.view.holder.MemberHolder;
 import jp.manavista.lessonmanager.view.operation.MemberOperation;
 
@@ -32,8 +32,8 @@ public class MemberSection extends StatelessSection implements FilterableSection
     /** Logger tag string */
     private static final String TAG = MemberSection.class.getSimpleName();
 
-    private List<MemberDto> list;
-    private List<MemberDto> filteredList;
+    private List<MemberVo> list;
+    private List<MemberVo> filteredList;
 
     /** Context */
     private final Context context;
@@ -78,25 +78,24 @@ public class MemberSection extends StatelessSection implements FilterableSection
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "click position: " + itemHolder.getAdapterPosition());
-                MemberDto dto = filteredList.get(itemHolder.getAdapterPosition());
-                Log.d(TAG, dto.toString());
-                operation.lessonList(dto.getId(), itemHolder.getAdapterPosition());
+                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
+                operation.lessonList(vo, itemHolder.getAdapterPosition());
             }
         });
 
         itemHolder.viewEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MemberDto dto = filteredList.get(itemHolder.getAdapterPosition());
-                operation.edit(dto.getId(), itemHolder.getAdapterPosition());
+                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
+                operation.edit(vo.getId(), itemHolder.getAdapterPosition());
             }
         });
 
         itemHolder.viewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MemberDto dto = filteredList.get(itemHolder.getAdapterPosition());
-                operation.delete(dto.getId(), itemHolder.getAdapterPosition());
+                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
+                operation.delete(vo.getId(), itemHolder.getAdapterPosition());
             }
         });
     }
@@ -108,21 +107,21 @@ public class MemberSection extends StatelessSection implements FilterableSection
             setVisible(true);
         } else {
             filteredList.clear();
-            for( MemberDto dto : list ) {
-                final String name = StringUtils.lowerCase(dto.getDisplayName(), Locale.getDefault());
+            for( MemberVo vo : list ) {
+                final String name = StringUtils.lowerCase(vo.getDisplayName(), Locale.getDefault());
                 if( name.contains(query.toLowerCase(Locale.getDefault())) ) {
-                    filteredList.add(dto);
+                    filteredList.add(vo);
                 }
             }
             setVisible(!filteredList.isEmpty());
         }
     }
 
-    public List<MemberDto> getList() {
+    public List<MemberVo> getList() {
         return this.filteredList;
     }
 
-    public void setList(List<MemberDto> list) {
+    public void setList(List<MemberVo> list) {
         this.list = list;
         this.filteredList = new ArrayList<>(list);
     }

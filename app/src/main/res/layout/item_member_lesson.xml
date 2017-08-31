@@ -19,33 +19,35 @@
         android:paddingEnd="@dimen/margin_16dp"/>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="12dp"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/margin_16dp"
         android:paddingStart="0dp"
-        android:paddingEnd="@dimen/margin_16dp">
+        android:paddingTop="14dp">
 
         <RelativeLayout
-            android:layout_marginBottom="2dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp">
 
             <TextView
                 android:id="@+id/lesson_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_4dp"
                 android:text="Lesson Name"
                 android:textColor="@color/black"
-                android:layout_marginStart="@dimen/margin_4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/lesson_type"
-                android:text="lesson type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_4dp"
                 android:layout_toEndOf="@+id/lesson_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_centerVertical="true"
+                android:text="lesson type"/>
 
         </RelativeLayout>
 
@@ -55,54 +57,76 @@
 
             <ImageView
                 android:id="@+id/day_of_week_icon_image"
-                android:src="@drawable/ic_event_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:alpha="0.6"
                 android:contentDescription="day_of_week_icon_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:src="@drawable/ic_event_black"/>
 
             <TextView
                 android:id="@+id/day_of_week"
-                android:text="Day of Week"
-                android:layout_toEndOf="@+id/day_of_week_icon_image"
-                android:layout_marginStart="@dimen/margin_4dp"
-                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_toEndOf="@+id/day_of_week_icon_image"
+                android:text="Day of Week"/>
 
             <ImageView
                 android:id="@+id/timetable_image_icon"
-                android:src="@drawable/ic_schedule_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_toEndOf="@+id/day_of_week"
                 android:alpha="0.6"
                 android:contentDescription="timetable_image_icon"
-                android:layout_toEndOf="@+id/day_of_week"
-                android:layout_marginStart="@dimen/margin_4dp"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:src="@drawable/ic_schedule_black"/>
 
             <TextView
                 android:id="@+id/timetable"
-                android:layout_toEndOf="@+id/timetable_image_icon"
-                android:layout_marginStart="@dimen/margin_4dp"
-                android:text="17:00 - 18:30"
-                android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_height="wrap_content"/>
-
-            <ImageButton
-                android:id="@+id/more_info_icon_image"
-                android:src="@drawable/ic_arrow_drop_down_black"
-                android:background="@color/bpTransparent"
-                android:contentDescription="more info icon image"
-                android:alpha="0.6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"/>
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_toEndOf="@+id/timetable_image_icon"
+                android:text="17:00 - 18:30"/>
 
         </RelativeLayout>
 
+
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end">
+
+        <ImageButton
+            android:id="@+id/expand_icon_image"
+            android:layout_width="42dp"
+            android:layout_height="72dp"
+            android:alpha="0.6"
+            android:background="@color/bpTransparent"
+            android:contentDescription="expand"
+            android:gravity="end"
+            android:src="@drawable/ic_expand_more_black"/>
+
+        <ImageButton
+            android:id="@+id/filter_icon_image"
+            android:layout_width="40dp"
+            android:layout_height="72dp"
+            android:alpha="0.6"
+            android:paddingEnd="@dimen/margin_16dp"
+            android:background="@color/bpTransparent"
+            android:contentDescription="filter"
+            android:gravity="end"
+            android:src="@drawable/ic_filter_list_black"/>
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

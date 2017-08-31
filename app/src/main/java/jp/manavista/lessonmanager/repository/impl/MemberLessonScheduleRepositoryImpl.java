@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.repository.impl;
 
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule_Deleter;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule_Relation;
+import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule_Schema;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule_Selector;
 import jp.manavista.lessonmanager.model.entity.OrmaDatabase;
 import jp.manavista.lessonmanager.repository.MemberLessonScheduleRepository;
@@ -20,6 +21,11 @@ public class MemberLessonScheduleRepositoryImpl extends RepositoryBaseImpl imple
     /** Constructor */
     public MemberLessonScheduleRepositoryImpl(OrmaDatabase database) {
         super(database);
+    }
+
+    @Override
+    public MemberLessonSchedule_Schema getSchema() {
+        return getRelation().getSchema();
     }
 
     @Override
