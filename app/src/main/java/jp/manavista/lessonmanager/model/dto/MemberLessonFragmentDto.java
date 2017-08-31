@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import jp.manavista.lessonmanager.fragment.MemberLessonFragment;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
+import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -207,7 +208,7 @@ public final class MemberLessonFragmentDto implements Serializable {
     public void copy(@NonNull final MemberLesson entity) {
 
         setId(entity.id);
-        getMemberName().setText(MemberDto.copy(entity.member.get()).getDisplayName());
+        getMemberName().setText(MemberVo.copy(entity.member.get()).getDisplayName());
         getName().setText(entity.name);
         getAbbr().setText(entity.abbr);
         getType().setText(entity.type);

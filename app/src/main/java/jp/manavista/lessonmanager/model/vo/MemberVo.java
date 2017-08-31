@@ -1,4 +1,4 @@
-package jp.manavista.lessonmanager.model.dto;
+package jp.manavista.lessonmanager.model.vo;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,7 +15,7 @@ import lombok.Data;
  * </p>
  */
 @Data
-public class MemberDto {
+public class MemberVo {
 
     private long id;
     private String givenName;
@@ -74,22 +74,22 @@ public class MemberDto {
      * @param entity Member entity object
      * @return Member data transfer object
      */
-    public static MemberDto copy(Member entity) {
+    public static MemberVo copy(Member entity) {
 
-        MemberDto dto = new MemberDto();
+        MemberVo vo = new MemberVo();
 
-        dto.setId(entity.id);
-        dto.setGivenName(entity.givenName);
-        dto.setAdditionalName(entity.additionalName);
-        dto.setFamilyName(entity.familyName);
-        dto.setNickName(entity.nickName);
-        dto.setBirthday(entity.birthday);
-        dto.setGender(entity.gender);
-        dto.setPhoneType(entity.phoneType);
-        dto.setPhoneNumber(entity.phoneNumber);
-        dto.setEmailType(entity.emailType);
-        dto.setEmail(entity.email);
+        vo.setId(entity.id);
+        vo.setGivenName(entity.givenName);
+        vo.setAdditionalName(entity.additionalName);
+        vo.setFamilyName(entity.familyName);
+        vo.setNickName(entity.nickName);
+        vo.setBirthday(entity.birthday);
+        vo.setGender(entity.gender);
+        vo.setPhoneType(entity.phoneType);
+        vo.setPhoneNumber(entity.phoneNumber);
+        vo.setEmailType(entity.emailType);
+        vo.setEmail(entity.email);
 
-        return dto;
+        return vo;
     }
 }

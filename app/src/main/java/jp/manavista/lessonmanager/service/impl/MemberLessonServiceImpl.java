@@ -1,10 +1,15 @@
 package jp.manavista.lessonmanager.service.impl;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
+import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.repository.MemberLessonRepository;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 
@@ -50,6 +55,39 @@ public class MemberLessonServiceImpl implements MemberLessonService {
                 .selector()
                 .memberIdEq(memberId)
                 .executeAsObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Observable<MemberLessonVo> getVoListByMemberId(long memberId) {
+        return repository.getRelation()
+                .selector()
+                .memberIdEq(memberId)
+                .executeAsObservable()
+                .map(new Function<MemberLesson, MemberLessonVo>() {
+                    @Override
+                    public MemberLessonVo apply(@NonNull MemberLesson entity) throws Exception {
+                        return MemberLessonVo.copy(entity);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Single<List<MemberLessonVo>> getSingleVoListByMemberId(long memberId) {
+        return repository.getRelation()
+                .selector()
+                .memberIdEq(memberId)
+                .executeAsObservable()
+                .map(new Function<MemberLesson, MemberLessonVo>() {
+                    @Override
+                    public MemberLessonVo apply(@NonNull MemberLesson entity) throws Exception {
+                        return MemberLessonVo.copy(entity);
+                    }
+                })
+                .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }

@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.repository;
 
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule_Deleter;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule_Relation;
+import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule_Schema;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule_Selector;
 
 /**
@@ -14,6 +15,19 @@ import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule_Selector;
  * </p>
  */
 public interface MemberLessonScheduleRepository {
+
+    /**
+     *
+     * Get schema
+     *
+     * <p>
+     * Overview:<br>
+     * Get MemberLessonSchedule schema
+     * </p>
+     *
+     * @return {@code MemberLessonSchedule} Schema
+     */
+    MemberLessonSchedule_Schema getSchema();
 
     /**
      *

@@ -1,9 +1,13 @@
 package jp.manavista.lessonmanager.service;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule;
+import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
 
 /**
  *
@@ -32,7 +36,7 @@ public interface MemberLessonScheduleService {
 
     /**
      *
-     * Get List By Id
+     * Get List
      *
      * <p>
      * Overview:<br>
@@ -47,7 +51,7 @@ public interface MemberLessonScheduleService {
 
     /**
      *
-     * Get List By Id
+     * Get List By MemberId
      *
      * <p>
      * Overview:<br>
@@ -55,10 +59,28 @@ public interface MemberLessonScheduleService {
      * associated with the member id specified in the argument.
      * </p>
      *
-     * @param memberId target lesson id
+     * @param memberId target member id
      * @return {@code MemberLesson} entity of Observable
      */
     Observable<MemberLessonSchedule> getListByMemberId(final long memberId);
+
+    /**
+     *
+     * Get Value Object List By MemberId
+     *
+     * <p>
+     * Overview:<br>
+     * Convert {@code MemberLessonSchedule} to {@code MemberLessonScheduleVo} list
+     * associated with the member id specified in the argument.
+     * </p>
+     *
+     * @param memberId target member id
+     * @return {@code MemberLessonScheduleVo} of Observable
+     */
+    Observable<MemberLessonScheduleVo> getVoListByMemberId(final long memberId);
+
+
+    Single<List<MemberLessonScheduleVo>> getSingleVoListByMemberId(final long memberId);
 
     /**
      *
@@ -83,10 +105,11 @@ public interface MemberLessonScheduleService {
      * Creates a series of schedule by {@code MemberLesson} entity.
      * </p>
      *
+     * @param member A key of {@code Member}
      * @param lesson A key of {@code MemberLesson}
      * @return {@link Single} observable object in create entity rows.
      */
-    Single<Long> createByLesson(MemberLesson lesson);
+    Single<Long> createByLesson(Member member, MemberLesson lesson);
 
     /**
      *

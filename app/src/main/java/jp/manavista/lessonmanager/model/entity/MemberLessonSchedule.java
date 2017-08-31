@@ -28,6 +28,9 @@ public class MemberLessonSchedule {
     public long id;
 
     @Column(indexed = true)
+    public SingleAssociation<Member> member;
+
+    @Column(indexed = true)
     public SingleAssociation<MemberLesson> memberLesson;
 
     /*

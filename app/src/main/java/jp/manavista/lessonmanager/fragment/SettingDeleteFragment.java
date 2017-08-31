@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
+import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.service.MemberService;
 import lombok.val;
@@ -44,6 +45,8 @@ public class SettingDeleteFragment extends Fragment {
     /** Activity Contents */
     private Activity contents;
 
+    @Inject
+    MemberLessonScheduleService memberLessonScheduleService;
     @Inject
     MemberLessonService memberLessonService;
     @Inject
@@ -115,7 +118,12 @@ public class SettingDeleteFragment extends Fragment {
             // TODO: 2017/08/25 define service class
 
             if( deleteSet.contains("Schedule") ) {
-                contents.finish();
+                memberLessonScheduleService.deleteAll().subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        contents.finish();
+                    }
+                });
             }
 
             if( deleteSet.contains("Lesson") ) {

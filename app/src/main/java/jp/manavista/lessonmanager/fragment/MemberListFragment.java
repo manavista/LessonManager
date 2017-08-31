@@ -25,9 +25,9 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberActivity;
-import jp.manavista.lessonmanager.activity.MemberLessonListActivity;
+import jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.model.dto.MemberDto;
+import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
@@ -132,12 +132,12 @@ public final class MemberListFragment extends Fragment {
 
         super.onResume();
 
-        final List<MemberDto> list = new ArrayList<>();
+        final List<MemberVo> list = new ArrayList<>();
 
         disposable = memberService.getListAll().subscribe(new Consumer<Member>() {
             @Override
             public void accept(Member member) throws Exception {
-                list.add(MemberDto.copy(member));
+                list.add(MemberVo.copy(member));
             }
         }, new Consumer<Throwable>() {
             @Override
@@ -162,10 +162,11 @@ public final class MemberListFragment extends Fragment {
     private MemberOperation memberOperation = new MemberOperation() {
 
         @Override
-        public void lessonList(long id, int position) {
+        public void lessonList(MemberVo dto, int position) {
             itemTouchHelper.closeOpened();
-            final Intent intent = new Intent(contents, MemberLessonListActivity.class);
-            intent.putExtra(MemberLessonListActivity.EXTRA_MEMBER_ID, id);
+            final Intent intent = new Intent(contents, MemberLessonScheduleListActivity.class);
+            intent.putExtra(MemberLessonScheduleListActivity.EXTRA_MEMBER_ID, dto.getId());
+            intent.putExtra(MemberLessonScheduleListActivity.EXTRA_MEMBER_NAME, dto.getDisplayName());
             contents.startActivity(intent);
         }
 
