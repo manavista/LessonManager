@@ -24,6 +24,7 @@ import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberLessonActivity;
+import jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity;
 import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
@@ -73,7 +74,7 @@ public class MemberLessonScheduleListFragment extends Fragment {
     @Inject
     MemberLessonScheduleListFacade facade;
 
-    /** MemberLesson disposable */
+    /** MemberLessonScheduleList disposable */
     private Disposable disposable;
 
     public MemberLessonScheduleListFragment() {
@@ -145,6 +146,7 @@ public class MemberLessonScheduleListFragment extends Fragment {
         ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
         itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.attachToRecyclerView(view);
+        itemTouchHelper.setClickToRecoverAnimation(false);
     }
 
     @Override
@@ -178,12 +180,40 @@ public class MemberLessonScheduleListFragment extends Fragment {
     final private MemberLessonScheduleOperation memberLessonScheduleOperation = new MemberLessonScheduleOperation() {
         @Override
         public void edit(long id, int position) {
-
+            itemTouchHelper.closeOpened();
+            final Intent intent = new Intent(contents, MemberLessonScheduleActivity.class);
+            intent.putExtra(MemberLessonScheduleActivity.EXTRA_SCHEDULE_ID, id);
+            contents.startActivity(intent);
         }
 
         @Override
-        public void delete(long id, int position) {
+        public void delete(final int adapterPosition) {
 
+            itemTouchHelper.closeOpened();
+
+            final int lessonItems = memberLessonSection.getContentItemsTotal();
+            Log.d(TAG, "lessonItems: " + lessonItems);
+
+            /*
+             * Calculate position
+             * lessonSchedule position =
+             *   adapterPosition - (lessonItemCount + lessonHeader + lessonScheduleHeader)
+             */
+            final int position = adapterPosition - (lessonItems + 1 + 1);
+            Log.d(TAG, "delete target position: " + position);
+            if( position > memberLessonScheduleSection.getList().size() ) {
+                throw new ArrayIndexOutOfBoundsException("invalid position in memberLessonSchedule list");
+            }
+            final MemberLessonScheduleVo vo = memberLessonScheduleSection.getList().get(position);
+            Log.d(TAG, "delete target id: " + vo.getId());
+
+            memberLessonScheduleService.deleteById(vo.getId()).subscribe(new Consumer<Integer>() {
+                @Override
+                public void accept(Integer integer) throws Exception {
+                    memberLessonScheduleSection.getList().remove(position);
+                    sectionAdapter.notifyItemRemovedFromSection(memberLessonScheduleSection, position);
+                }
+            });
         }
     };
 

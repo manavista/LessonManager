@@ -2,8 +2,6 @@ package jp.manavista.lessonmanager.service.impl;
 
 import android.util.Log;
 
-import com.github.gfx.android.orma.SingleAssociation;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,11 +132,7 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
         final List<MemberLessonSchedule> entityList = new ArrayList<>();
 
         for( String date : dateList ) {
-            final MemberLessonSchedule schedule = new MemberLessonSchedule();
-            schedule.lessonDate = date;
-            schedule.member = SingleAssociation.just(member);
-            schedule.memberLesson = SingleAssociation.just(lesson);
-            entityList.add(schedule);
+            entityList.add(MemberLessonSchedule.newInstance(lesson, member, date));
         }
 
         return repository.getRelation()
