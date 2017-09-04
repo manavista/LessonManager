@@ -131,6 +131,7 @@
     <string name="toolbar.member_lesson_list.option.add">Add</string>
 
     <!-- Member Lesson Schedule -->
+    <string name="toolbar.member_lesson_schedule.title">Schedule</string>
 
     <!-- Member Lesson Schedule List -->
     <string name="toolbar.member_lesson_schedule_list.title">Schedule</string>

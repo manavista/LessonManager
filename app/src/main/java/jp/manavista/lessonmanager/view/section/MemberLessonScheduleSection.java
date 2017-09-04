@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.view.section;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import java.util.List;
@@ -17,12 +18,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ *
+ * Member Lesson Schedule Section
+ *
  * <p>
  * Overview:<br>
  * </p>
  */
-
 public final class MemberLessonScheduleSection extends StatelessSection implements FilterableSection {
+
+    private final static String TAG = MemberLessonScheduleSection.class.getSimpleName();
 
     /** Section Title */
     @Getter
@@ -88,6 +93,8 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
         itemHolder.scheduleTime.setText(vo.getLessonDisplayTime());
         itemHolder.scheduleName.setText(vo.getLessonDisplayName());
         itemHolder.scheduleType.setText(vo.getType());
+
+        prepareObjectLister(itemHolder, position);
     }
 
     @Override
@@ -99,5 +106,39 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
     @Override
     public void filter(String query) {
 
+    }
+
+    /**
+     *
+     * Prepare View Lister
+     *
+     * <p>
+     * Overview:
+     * Set View lister for schedule list item operation.
+     * </p>
+     *
+     * @param holder list holder model
+     * @param position list position
+     */
+    private void prepareObjectLister(final MemberLessonScheduleHolder holder, final int position) {
+
+        holder.viewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.d(TAG, "position: " + position);
+                Log.d(TAG, "getAdapterPosition(): " + holder.getAdapterPosition());
+
+                operation.delete(holder.getAdapterPosition());
+            }
+        });
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final MemberLessonScheduleVo vo = list.get(position);
+                operation.edit(vo.getId(), position);
+            }
+        });
     }
 }

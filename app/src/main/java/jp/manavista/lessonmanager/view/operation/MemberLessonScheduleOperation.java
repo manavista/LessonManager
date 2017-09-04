@@ -1,8 +1,13 @@
 package jp.manavista.lessonmanager.view.operation;
 
 /**
+ *
+ * MemberLessonSchedule Operation
+ *
  * <p>
  * Overview:<br>
+ * Operation <code>MemberLessonSchedule</code> entity.<br>
+ * Interface for executing listeners defined by adapters with fragment.
  * </p>
  */
 public interface MemberLessonScheduleOperation {
@@ -30,8 +35,7 @@ public interface MemberLessonScheduleOperation {
      * Delete MemberLessonSchedule row.
      * </p>
      *
-     * @param id target row id
      * @param position target adapter position
      */
-    void delete(final long id, final int position);
+    void delete(final int position);
 }
