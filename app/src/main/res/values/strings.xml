@@ -132,6 +132,17 @@
 
     <!-- Member Lesson Schedule -->
     <string name="toolbar.member_lesson_schedule.title">Schedule</string>
+    <string name="label.member_lesson_schedule.status">Status</string>
+    <string name="label.member_lesson_schedule.date_and_time">Date and Time</string>
+    <string name="label.member_lesson_schedule.contents">Contents</string>
+    <string name="label.member_lesson_schedule.date">DATE:</string>
+    <string name="label.member_lesson_schedule.start_time">FROM:</string>
+    <string name="label.member_lesson_schedule.end_time">TO:</string>
+
+    <string name="label.member_lesson_schedule.radio.scheduled">Scheduled</string>
+    <string name="label.member_lesson_schedule.radio.done">Done</string>
+    <string name="label.member_lesson_schedule.radio.suspended">Suspended</string>
+    <string name="label.member_lesson_schedule.radio.absent">Absent</string>
 
     <!-- Member Lesson Schedule List -->
     <string name="toolbar.member_lesson_schedule_list.title">Schedule</string>
