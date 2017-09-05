@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -21,12 +23,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Timetable;
-import jp.manavista.lessonmanager.service.MemberLessonService;
-import jp.manavista.lessonmanager.service.MemberService;
+import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
+import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.TimetableService;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
 import jp.manavista.lessonmanager.view.week.DateTimeInterpreter;
@@ -34,6 +37,7 @@ import jp.manavista.lessonmanager.view.week.LessonView;
 import jp.manavista.lessonmanager.view.week.MonthLoader;
 import jp.manavista.lessonmanager.view.week.WeekView;
 import jp.manavista.lessonmanager.view.week.WeekViewEvent;
+import lombok.val;
 
 /**
  *
@@ -58,6 +62,8 @@ public final class LessonViewFragment extends Fragment implements
     private View rootView;
     /** Timetable DTO List */
     private List<TimetableDto> timetableList;
+    /** eekViewEvent List */
+    private List<WeekViewEvent> weekViewEventList;
 
     /** Shared preferences */
     @Inject
@@ -65,15 +71,11 @@ public final class LessonViewFragment extends Fragment implements
     /** Timetable service */
     @Inject
     TimetableService timetableService;
-
-    // TODO: 2017/08/20 after delete
     @Inject
-    MemberService memberService;
-    @Inject
-    MemberLessonService memberLessonService;
+    MemberLessonScheduleService memberLessonScheduleService;
 
     /** Timetable categoriesList disposable */
-    private Disposable timetableDisposable = Disposables.empty();
+    private Disposable timetableDisposable;
 
 
     /** Constructor */
@@ -96,6 +98,12 @@ public final class LessonViewFragment extends Fragment implements
         return new LessonViewFragment();
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        timetableDisposable = Disposables.empty();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -121,133 +129,28 @@ public final class LessonViewFragment extends Fragment implements
         lessonView.setDateTimeInterpreter(this);
 
         timetableList = new ArrayList<>();
-
-        // TODO: 2017/08/20
-//        timetableDisposable = memberLessonService.deleteAll().subscribe();
-//        memberService.deleteAll();
+        weekViewEventList = new ArrayList<>();
     }
 
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
 
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 10);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth - 1);
-        startTime.set(Calendar.YEAR, newYear);
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR, 1);
-        endTime.set(Calendar.MONTH, newMonth - 1);
-        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_01));
-        events.add(event);
+        Log.d(TAG, "newYear: " + newYear + " newMonth: " + newMonth);
 
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 30);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, 4);
-        endTime.set(Calendar.MINUTE, 30);
-        endTime.set(Calendar.MONTH, newMonth-1);
-        event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_02));
-        events.add(event);
+        final List<WeekViewEvent> events = new ArrayList<>();
 
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 17);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, 18);
-        endTime.set(Calendar.MINUTE, 20);
-        endTime.set(Calendar.MONTH, newMonth-1);
-        event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_02));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 4);
-        startTime.set(Calendar.MINUTE, 20);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, 5);
-        endTime.set(Calendar.MINUTE, 0);
-        event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_03));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 5);
-        startTime.set(Calendar.MINUTE, 30);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 2);
-        endTime.set(Calendar.MONTH, newMonth-1);
-        event = new WeekViewEvent(2, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_02));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 5);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth - 1);
-        startTime.set(Calendar.YEAR, newYear);
-        startTime.add(Calendar.DATE, 1);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 3);
-        endTime.set(Calendar.MONTH, newMonth - 1);
-        event = new WeekViewEvent(3, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_03));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.DAY_OF_MONTH, 15);
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 3);
-        event = new WeekViewEvent(4, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_04));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.DAY_OF_MONTH, 1);
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 3);
-        event = new WeekViewEvent(5, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_01));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.DAY_OF_MONTH, startTime.getActualMaximum(Calendar.DAY_OF_MONTH));
-        startTime.set(Calendar.HOUR_OF_DAY, 15);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 3);
-        event = new WeekViewEvent(5, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_02));
-        events.add(event);
-
+        for( val event : weekViewEventList ) {
+            if( isMatched(event.getStartTime(), newYear, newMonth) ) {
+                events.add(event);
+            }
+        }
         return events;
     }
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-
+        // TODO: 2017/09/05 implement activity lesson schedule edit
+        Log.d(TAG, event.toString());
     }
 
     @Override
@@ -275,8 +178,8 @@ public final class LessonViewFragment extends Fragment implements
 
         super.onResume();
 
-        int startHour = sharedPreferences.getInt(getString(R.string.preferences_key_display_start_time), 9);
-        int endHour = sharedPreferences.getInt(getString(R.string.preferences_key_display_end_time), 21);
+        final int startHour = sharedPreferences.getInt(getString(R.string.preferences_key_display_start_time), 9);
+        final int endHour = sharedPreferences.getInt(getString(R.string.preferences_key_display_end_time), 21);
         lessonView.setLimitTime(startHour, endHour);
 
         Log.d(TAG, "set limit time start: " + startHour + " end: " + endHour);
@@ -298,8 +201,10 @@ public final class LessonViewFragment extends Fragment implements
             @Override
             public void run() throws Exception {
                 lessonView.setLessonTableList(timetableList);
+                buildEvents();
             }
         });
+
     }
 
     @Override
@@ -337,9 +242,70 @@ public final class LessonViewFragment extends Fragment implements
         lessonView.goToToday();
     }
 
-    protected String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
+    private boolean isMatched(Calendar calendar, final int year, final int month) {
+        return calendar.get(Calendar.YEAR) == year && calendar.get(Calendar.MONTH) == month;
     }
 
+    private void buildEvents() {
 
+        weekViewEventList.clear();
+
+        /* Do not create a new instance inside the loop. */
+        final StringBuilder builder = new StringBuilder();
+
+        memberLessonScheduleService.getVoListAll().map(new Function<MemberLessonScheduleVo, WeekViewEvent>() {
+            @Override
+            public WeekViewEvent apply(@NonNull MemberLessonScheduleVo vo) throws Exception {
+
+                final WeekViewEvent event = new WeekViewEvent(
+                        vo.getId(),
+                        buildEventName(vo, builder),
+                        vo.getLocation(),
+                        vo.getLessonStartCalendar(),
+                        vo.getLessonEndCalendar());
+                event.setColor(vo.getBackgroundColor());
+
+                return event;
+            }
+        }).subscribe(new Consumer<WeekViewEvent>() {
+            @Override
+            public void accept(WeekViewEvent weekViewEvent) throws Exception {
+                weekViewEventList.add(weekViewEvent);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throw new RuntimeException(throwable);
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                lessonView.notifyDatasetChanged();
+            }
+        });
+    }
+
+    private String buildEventName(MemberLessonScheduleVo vo, StringBuilder builder) {
+
+        builder.setLength(0);
+
+        /* If the lesson start time is the same as timetable, display is omitted. */
+        boolean addStartTime = true;
+        for( val timetable : timetableList ) {
+            if( timetable.getStartTimeFormatted().equals(vo.getLessonStartTimeFormatted()) ) {
+                addStartTime = false;
+                break;
+            }
+        }
+
+        builder.append(addStartTime ? vo.getLessonStartTimeFormatted() : StringUtils.EMPTY)
+                .append(addStartTime ? " " : StringUtils.EMPTY)
+                .append(StringUtils.isEmpty(vo.getAbbr()) ? vo.getName() : vo.getAbbr())
+                .append("/")
+                .append(StringUtils.isEmpty(vo.getMember().nickName)
+                        ? vo.getMember().givenName
+                        : vo.getMember().nickName);
+
+        return builder.toString();
+    }
 }

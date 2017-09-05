@@ -4,11 +4,15 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.Calendar;
 
+import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
 import lombok.Data;
 import lombok.val;
+
+import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD;
 
 /**
  *
@@ -32,7 +36,11 @@ public final class MemberLessonScheduleVo implements Serializable {
     private Time lessonStartTime;
     private Time lessonEndTime;
     private int status;
+    private int textColor;
+    private int backgroundColor;
     private String memo;
+
+    private Member member;
 
     public static MemberLessonScheduleVo copy(@NonNull MemberLessonSchedule entity) {
 
@@ -50,7 +58,11 @@ public final class MemberLessonScheduleVo implements Serializable {
 
         vo.setLessonDate(entity.lessonDate);
         vo.setStatus(entity.status);
+        vo.setTextColor(entity.textColor);
+        vo.setBackgroundColor(entity.backgroundColor);
         vo.setMemo(entity.memo);
+
+        vo.setMember(entity.member);
 
         return vo;
     }
@@ -63,6 +75,14 @@ public final class MemberLessonScheduleVo implements Serializable {
         return DateTimeUtil.TIME_FORMAT_HHMM.format(lessonEndTime);
     }
 
+    public Calendar getLessonStartCalendar() {
+        return DateTimeUtil.parseCalendar(lessonDate, DATE_PATTERN_YYYYMMDD, lessonStartTime);
+    }
+
+    public Calendar getLessonEndCalendar() {
+        return DateTimeUtil.parseCalendar(lessonDate, DATE_PATTERN_YYYYMMDD, lessonEndTime);
+    }
+
     public String getLessonDisplayName() {
         // TODO: 2017/08/27 if exits abbr, concat "(abbr)"
         return getName();
@@ -71,4 +91,9 @@ public final class MemberLessonScheduleVo implements Serializable {
     public String getLessonDisplayTime() {
         return getLessonStartTimeFormatted() + " - " + getLessonEndTimeFormatted();
     }
+
+//    public boolean isMatched(final int year, final int month) {
+//        final Calendar calendar = DateTimeUtil.parserCalendar(lessonDate, DATE_PATTERN_YYYYMMDD);
+//        return calendar.get(Calendar.YEAR) == year && calendar.get(Calendar.MONTH) == month;
+//    }
 }

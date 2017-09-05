@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import lombok.ToString;
+
 /**
  * <p>
  * Overview:<br>
  * </p>
  */
+@ToString
 public class WeekViewEvent {
 
     private long mId;

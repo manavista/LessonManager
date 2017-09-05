@@ -48,7 +48,7 @@ public class MemberLessonSchedule {
     @Nullable
     public String presenter;
 
-    @Column
+    @Column(indexed = true)
     public String lessonDate;
     @Column
     @Nullable
@@ -68,6 +68,10 @@ public class MemberLessonSchedule {
     @Column
     @Nullable
     public String memo;
+
+    // temporary
+    @Column(indexed = true)
+    public Member member;
 
 
     /**
@@ -97,6 +101,8 @@ public class MemberLessonSchedule {
 
         entity.textColor = lesson.textColor;
         entity.backgroundColor = lesson.backgroundColor;
+
+        entity.member = member;
 
         return entity;
     }
