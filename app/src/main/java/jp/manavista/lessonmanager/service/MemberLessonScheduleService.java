@@ -82,6 +82,10 @@ public interface MemberLessonScheduleService {
 
     Single<List<MemberLessonScheduleVo>> getSingleVoListByMemberId(final long memberId);
 
+    Observable<MemberLessonScheduleVo> getVoListAll();
+
+    Observable<MemberLessonScheduleVo> getVoListByMonth(final int year, final int month);
+
     /**
      *
      * Save

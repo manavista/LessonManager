@@ -11,12 +11,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import lombok.val;
+
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
+ *
+ * DateTimeUtilTest
+ *
  * <p>
  * Overview:<br>
  * </p>
@@ -39,6 +44,25 @@ public class DateTimeUtilTest {
         assertEquals(expected.get(Calendar.YEAR), actual.get(Calendar.YEAR));
         assertEquals(expected.get(Calendar.MONTH), actual.get(Calendar.MONTH));
         assertEquals(expected.get(Calendar.DAY_OF_MONTH), actual.get(Calendar.DAY_OF_MONTH));
+    }
+
+    @Test
+    public void parseCalendarDateTime() throws Exception {
+
+        final String date  = "2013/04/30";
+        final String format = DateTimeUtil.DATE_PATTERN_YYYYMMDD;
+        final Time time = DateTimeUtil.parseTime(17, 40);
+
+        Calendar actual = DateTimeUtil.parseCalendar(date, format, time);
+
+        Calendar expected = Calendar.getInstance();
+        expected.set(2013, Calendar.APRIL, 30);
+        expected.set(Calendar.HOUR_OF_DAY, 17);
+        expected.set(Calendar.MINUTE, 40);
+
+        val sdf = DateTimeUtil.DATETIME_FORMAT_YYYYMMDD_HHMMDD;
+
+        assertThat(sdf.format(actual.getTime()), is(sdf.format(expected.getTime())));
     }
 
     @Test
@@ -121,5 +145,21 @@ public class DateTimeUtilTest {
         }
 
         assertThat(count, is(not(0)));
+    }
+
+    @Test
+    public void nextMonth() throws Exception {
+
+        int year = 2017;
+        int month = 12;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, 1);
+
+        calendar.add(Calendar.MONTH, 1);
+
+        assertThat(calendar.get(Calendar.YEAR), is(2018));
+        assertThat(calendar.get(Calendar.MONTH), is(1));
+        assertThat(calendar.get(Calendar.DAY_OF_MONTH), is(1));
     }
 }

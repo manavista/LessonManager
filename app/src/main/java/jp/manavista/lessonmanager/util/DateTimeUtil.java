@@ -33,6 +33,7 @@ public final class DateTimeUtil {
 
     public static final String DATE_PATTERN_YYYYMMDD = "yyyy/MM/dd";
     public static final String DATE_PATTERN_YYYYMD = "yyyy/M/d";
+    public static final String DATETIME_PATTERN_YYYYMMDD_HHMMDD = "yyyy/MM/dd HH:mm";
 
     public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat(DATE_PATTERN_YYYYMMDD, Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_MMDD = new SimpleDateFormat("MM/dd", Locale.getDefault());
@@ -43,6 +44,8 @@ public final class DateTimeUtil {
     public static SimpleDateFormat TIME_FORMAT_hhMM = new SimpleDateFormat("hh:mm", Locale.getDefault());
     public static SimpleDateFormat TIME_FORMAT_H = new SimpleDateFormat("H", Locale.getDefault());
     public static SimpleDateFormat TIME_FORMAT_m = new SimpleDateFormat("m", Locale.getDefault());
+
+    public static SimpleDateFormat DATETIME_FORMAT_YYYYMMDD_HHMMDD = new SimpleDateFormat(DATETIME_PATTERN_YYYYMMDD_HHMMDD, Locale.getDefault());
 
     private static final Map<String, Integer> dayOfWeekConvertMap = new HashMap<String, Integer>() {{
         put("1", Calendar.SUNDAY);
@@ -123,6 +126,19 @@ public final class DateTimeUtil {
             return false;
         }
         return true;
+    }
+
+    public static Calendar parseCalendar(final String date, final String dateFormat, final Time time) {
+
+        Calendar calendar = parserCalendar(date, dateFormat);
+
+        Calendar timeCalendar = Calendar.getInstance(Locale.getDefault());
+        timeCalendar.setTime(time);
+
+        calendar.set(Calendar.HOUR_OF_DAY, timeCalendar.get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, timeCalendar.get(Calendar.MINUTE));
+
+        return calendar;
     }
 
     public static Calendar parserCalendar(final String date, final String format) {
