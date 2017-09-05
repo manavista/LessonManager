@@ -4,10 +4,14 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -20,6 +24,8 @@ import java.sql.Time;
 import java.util.List;
 import java.util.Locale;
 
+import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
 import lombok.AccessLevel;
@@ -41,6 +47,8 @@ import lombok.Setter;
 @Builder
 public final class MemberLessonScheduleDto implements Serializable {
 
+    private static final String TAG = MemberLessonScheduleDto.class.getSimpleName();
+
     /** Tag argument: Set Color */
     public static final String TAG_SET_COLOR = "TAG_SET_COLOR";
     @SuppressWarnings(value = "MismatchedQueryAndUpdateOfCollection")
@@ -59,6 +67,13 @@ public final class MemberLessonScheduleDto implements Serializable {
     private MemberLessonSchedule original;
 
     private long id;
+
+    private RadioGroup statusRadioGroup;
+    private RadioButton statusScheduled;
+    private RadioButton statusDone;
+    private RadioButton statusAbsent;
+    private RadioButton statusSuspend;
+    private int status;
 
     @NotEmpty
     private EditText scheduleDate;
@@ -146,6 +161,28 @@ public final class MemberLessonScheduleDto implements Serializable {
         }
     };
 
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    public final RadioGroup.OnCheckedChangeListener statusRadioGroupListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup radioGroup, @IdRes int checkedId) {
+            switch (checkedId) {
+                case R.id.scheduledRadioButton:
+                    status = MemberLessonScheduleStatus.SCHEDULED.getId();
+                    break;
+                case R.id.doneRadioButton:
+                    status = MemberLessonScheduleStatus.DONE.getId();
+                    break;
+                case R.id.suspendedRadioButton:
+                    status = MemberLessonScheduleStatus.SUSPENDED.getId();
+                    break;
+                case R.id.absentRadioButton:
+                    status = MemberLessonScheduleStatus.ABSENT.getId();
+                    break;
+            }
+        }
+    };
+
 
     public void store(@NonNull MemberLessonSchedule entity) {
 
@@ -168,6 +205,27 @@ public final class MemberLessonScheduleDto implements Serializable {
         backgroundColor = entity.backgroundColor;
         getPreviewText().setTextColor(entity.textColor);
         getPreviewText().setBackgroundColor(entity.backgroundColor);
+
+        status = entity.status;
+        switch (MemberLessonScheduleStatus.statusSparseArray().get(status)) {
+            case SCHEDULED:
+                statusScheduled.setChecked(true);
+                break;
+            case DONE:
+                statusDone.setChecked(true);
+                break;
+            case SUSPENDED:
+                statusSuspend.setChecked(true);
+                break;
+            case ABSENT:
+                statusAbsent.setChecked(true);
+                break;
+            case UNDEFINED:
+                break;
+            default:
+                Log.w(TAG, "schedule status code not exists !");
+                break;
+        }
     }
 
     public MemberLessonSchedule convert() {
@@ -182,6 +240,7 @@ public final class MemberLessonScheduleDto implements Serializable {
         original.lessonDate = scheduleDate.getText().toString();
         original.lessonStartTime = DateTimeUtil.parseTime(DateTimeUtil.TIME_FORMAT_HHMM, startTimeText.getText().toString());
         original.lessonEndTime = DateTimeUtil.parseTime(DateTimeUtil.TIME_FORMAT_HHMM, endTimeText.getText().toString());
+        original.status = status;
 
         return original;
     }

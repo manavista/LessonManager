@@ -31,7 +31,7 @@ public final class MemberLessonScheduleVo implements Serializable {
     private String lessonDate;
     private Time lessonStartTime;
     private Time lessonEndTime;
-    private boolean absent;
+    private int status;
     private String memo;
 
     public static MemberLessonScheduleVo copy(@NonNull MemberLessonSchedule entity) {
@@ -49,7 +49,7 @@ public final class MemberLessonScheduleVo implements Serializable {
         vo.setLessonEndTime(entity.lessonEndTime);
 
         vo.setLessonDate(entity.lessonDate);
-        vo.setAbsent(entity.absent);
+        vo.setStatus(entity.status);
         vo.setMemo(entity.memo);
 
         return vo;

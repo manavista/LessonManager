@@ -63,7 +63,7 @@ public class MemberLessonSchedule {
     public int backgroundColor;
 
     @Column
-    public boolean absent;
+    public int status;
 
     @Column
     @Nullable

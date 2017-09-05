@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -111,6 +113,11 @@ public class MemberLessonScheduleFragment extends Fragment implements Validator.
 
         dto = MemberLessonScheduleDto.builder()
                 .id(scheduleId)
+                .statusRadioGroup((RadioGroup) rootView.findViewById(R.id.statusRadioGroup))
+                .statusScheduled((RadioButton) rootView.findViewById(R.id.scheduledRadioButton))
+                .statusDone((RadioButton) rootView.findViewById(R.id.doneRadioButton))
+                .statusAbsent((RadioButton) rootView.findViewById(R.id.absentRadioButton))
+                .statusSuspend((RadioButton) rootView.findViewById(R.id.suspendedRadioButton))
                 .name((EditText) rootView.findViewById(R.id.name))
                 .abbr((EditText) rootView.findViewById(R.id.abbr))
                 .type((EditText) rootView.findViewById(R.id.type))
@@ -335,5 +342,7 @@ public class MemberLessonScheduleFragment extends Fragment implements Validator.
                         }).build().show(getFragmentManager(), "background_color_select_dialog");
             }
         });
+
+        dto.getStatusRadioGroup().setOnCheckedChangeListener(dto.statusRadioGroupListener);
     }
 }

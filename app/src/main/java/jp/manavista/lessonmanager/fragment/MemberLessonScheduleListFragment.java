@@ -46,7 +46,7 @@ import jp.manavista.lessonmanager.view.section.MemberLessonSection;
  * Use the {@link MemberLessonScheduleListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MemberLessonScheduleListFragment extends Fragment {
+public final class MemberLessonScheduleListFragment extends Fragment {
 
     private static final String TAG = MemberLessonScheduleListFragment.class.getSimpleName();
 
