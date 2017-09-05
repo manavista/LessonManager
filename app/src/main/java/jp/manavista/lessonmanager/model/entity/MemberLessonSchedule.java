@@ -2,7 +2,6 @@ package jp.manavista.lessonmanager.model.entity;
 
 import android.support.annotation.Nullable;
 
-import com.github.gfx.android.orma.SingleAssociation;
 import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
 import com.github.gfx.android.orma.annotation.Table;
@@ -10,6 +9,7 @@ import com.github.gfx.android.orma.annotation.Table;
 import java.sql.Time;
 
 import lombok.ToString;
+import lombok.val;
 
 /**
  *
@@ -28,12 +28,8 @@ public class MemberLessonSchedule {
     public long id;
 
     @Column(indexed = true)
-    public SingleAssociation<Member> member;
-
-    @Column(indexed = true)
-    public SingleAssociation<MemberLesson> memberLesson;
-
     public long memberId;
+    @Column(indexed = true)
     public long lessonId;
 
     @Column
@@ -85,26 +81,23 @@ public class MemberLessonSchedule {
      */
     public static MemberLessonSchedule newInstance(MemberLesson lesson, Member member, String scheduleDate) {
 
-        final MemberLessonSchedule schedule = new MemberLessonSchedule();
+        final val entity = new MemberLessonSchedule();
 
-        schedule.memberId = member.id;
-        schedule.lessonId = lesson.id;
+        entity.memberId = member.id;
+        entity.lessonId = lesson.id;
 
-        schedule.lessonDate = scheduleDate;
-        schedule.lessonStartTime = lesson.startTime;
-        schedule.lessonEndTime = lesson.endTime;
-        schedule.name = lesson.name;
-        schedule.abbr = lesson.abbr;
-        schedule.type = lesson.type;
-        schedule.location = lesson.location;
-        schedule.presenter = lesson.presenter;
+        entity.lessonDate = scheduleDate;
+        entity.lessonStartTime = lesson.startTime;
+        entity.lessonEndTime = lesson.endTime;
+        entity.name = lesson.name;
+        entity.abbr = lesson.abbr;
+        entity.type = lesson.type;
+        entity.location = lesson.location;
+        entity.presenter = lesson.presenter;
 
-        schedule.textColor = lesson.textColor;
-        schedule.backgroundColor = lesson.backgroundColor;
+        entity.textColor = lesson.textColor;
+        entity.backgroundColor = lesson.backgroundColor;
 
-        schedule.member = SingleAssociation.just(member);
-        schedule.memberLesson = SingleAssociation.just(lesson);
-
-        return schedule;
+        return entity;
     }
 }

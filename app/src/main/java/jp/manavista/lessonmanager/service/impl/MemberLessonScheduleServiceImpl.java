@@ -54,7 +54,7 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
     public Observable<MemberLessonSchedule> getListByLessonId(long lessonId) {
         return repository.getRelation()
                 .selector()
-                .memberLessonEq(lessonId)
+                .lessonIdEq(lessonId)
                 .executeAsObservable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
@@ -64,7 +64,7 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
     public Observable<MemberLessonSchedule> getListByMemberId(long memberId) {
         return repository.getRelation()
                 .selector()
-                .memberEq(memberId)
+                .memberIdEq(memberId)
                 .orderBy(repository.getSchema().lessonDate.orderInAscending())
                 .orderBy(repository.getSchema().lessonStartTime.orderInAscending())
                 .executeAsObservable()
@@ -76,7 +76,7 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
     public Observable<MemberLessonScheduleVo> getVoListByMemberId(long memberId) {
         return repository.getRelation()
                 .selector()
-                .memberEq(memberId)
+                .memberIdEq(memberId)
                 .orderBy(repository.getSchema().lessonDate.orderInAscending())
                 .orderBy(repository.getSchema().lessonStartTime.orderInAscending())
                 .executeAsObservable()
@@ -94,7 +94,7 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
     public Single<List<MemberLessonScheduleVo>> getSingleVoListByMemberId(long memberId) {
         return repository.getRelation()
                 .selector()
-                .memberEq(memberId)
+                .memberIdEq(memberId)
                 .orderBy(repository.getSchema().lessonDate.orderInAscending())
                 .orderBy(repository.getSchema().lessonStartTime.orderInAscending())
                 .executeAsObservable()
