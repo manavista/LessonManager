@@ -2,12 +2,9 @@ package jp.manavista.lessonmanager.model.vo;
 
 import android.support.annotation.NonNull;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 import java.sql.Time;
 
-import jp.manavista.lessonmanager.model.entity.MemberLesson;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
 import lombok.Data;
@@ -43,18 +40,13 @@ public final class MemberLessonScheduleVo implements Serializable {
 
         vo.setId(entity.id);
 
-        /*
-         * Schedule uses lesson's properties.
-         * However, if schedule-specific values are set, give priority to them.
-         */
-        final MemberLesson lesson = entity.memberLesson.get();
-        vo.setName(StringUtils.isEmpty(entity.name) ? lesson.name : entity.name);
-        vo.setAbbr(StringUtils.isEmpty(entity.abbr) ? lesson.abbr : entity.abbr);
-        vo.setType(StringUtils.isEmpty(entity.type) ? lesson.type : entity.type);
-        vo.setLocation(StringUtils.isEmpty(entity.location) ? lesson.location: entity.location);
-        vo.setPresenter(StringUtils.isEmpty(entity.presenter) ? lesson.presenter : entity.presenter);
-        vo.setLessonStartTime(entity.lessonStartTime == null ? lesson.startTime: entity.lessonStartTime);
-        vo.setLessonEndTime(entity.lessonEndTime == null ? lesson.endTime: entity.lessonEndTime);
+        vo.setName(entity.name);
+        vo.setAbbr(entity.abbr);
+        vo.setType(entity.type);
+        vo.setLocation(entity.location);
+        vo.setPresenter(entity.presenter);
+        vo.setLessonStartTime(entity.lessonStartTime);
+        vo.setLessonEndTime(entity.lessonEndTime);
 
         vo.setLessonDate(entity.lessonDate);
         vo.setAbsent(entity.absent);
