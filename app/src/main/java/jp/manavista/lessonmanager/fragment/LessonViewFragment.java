@@ -60,12 +60,16 @@ public final class LessonViewFragment extends Fragment implements
 
     /** Logger Tag string  */
     private static final String TAG = LessonViewFragment.class.getSimpleName();
+    /** bundle key: Visible Days */
+    public static final String KEY_VISIBLE_DAYS = "VISIBLE_DAYS";
 
     /** LessonView */
     @Getter
     private LessonView lessonView;
     /** RootView */
     private View rootView;
+    /** Start Visible Days */
+    private int visibleDays;
     /** Timetable DTO List */
     private List<TimetableDto> timetableList;
     /** WeekViewEvent List */
@@ -102,16 +106,24 @@ public final class LessonViewFragment extends Fragment implements
      * Create new {@code LessonViewFragment} object.
      * </p>
      *
+     * @param visibleDays display week days
      * @return {@code LessonViewFragment} object
      */
-    public static LessonViewFragment newInstance() {
-        return new LessonViewFragment();
+    public static LessonViewFragment newInstance(final int visibleDays) {
+        final LessonViewFragment fragment = new LessonViewFragment();
+        Bundle args = new Bundle();
+        args.putInt(KEY_VISIBLE_DAYS, visibleDays);
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        visibleDays = args.getInt(KEY_VISIBLE_DAYS, 3);
+
         timetableDisposable = Disposables.empty();
         scheduleDisposable = Disposables.empty();
     }
@@ -133,6 +145,7 @@ public final class LessonViewFragment extends Fragment implements
         DependencyInjector.appComponent().inject(this);
 
         lessonView = rootView.findViewById(R.id.weekView);
+        lessonView.setNumberOfVisibleDays(visibleDays);
         lessonView.setOnEventClickListener(this);
         lessonView.setMonthChangeListener(this);
         lessonView.setEventLongPressListener(this);

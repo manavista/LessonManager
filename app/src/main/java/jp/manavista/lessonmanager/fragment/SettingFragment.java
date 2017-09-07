@@ -5,20 +5,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
-import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Locale;
-import java.util.TreeSet;
 
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.SettingActivity;
@@ -35,8 +30,6 @@ import jp.manavista.lessonmanager.view.preference.NumberPickerPreference;
  */
 public final class SettingFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-    // TODO: Add Lesson View preferences. start time, end time, and first day (or today?)
 
     private static final String TIME_FORMAT_HMM = "%01d:00";
 
@@ -67,13 +60,9 @@ public final class SettingFragment extends PreferenceFragment
         preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Log.d("delete","click");
-                // TODO: 2017/08/24 intent activity
-
                 final Intent intent = new Intent(contents, SettingActivity.class);
                 intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, SettingActivity.FragmentType.DELETE);
                 contents.startActivity(intent);
-
                 return false;
             }
         });
@@ -130,37 +119,16 @@ public final class SettingFragment extends PreferenceFragment
      */
     private void updateSummary() {
 
-        ListAdapter listAdapter  = getPreferenceScreen().getRootAdapter();
+        final ListAdapter listAdapter  = getPreferenceScreen().getRootAdapter();
         for( int i = 0 ; i < listAdapter.getCount() ; i++ ) {
 
             final Object item = listAdapter.getItem(i);
 
             if (item instanceof ListPreference) {
 
-                ListPreference preference = (ListPreference) item;
-                preference.setSummary(preference.getEntry() == null ? StringUtils.EMPTY : preference.getEntry());
-
-            } else if (item instanceof MultiSelectListPreference) {
-
-                final MultiSelectListPreference preference = (MultiSelectListPreference) item;
-                final String key = preference.getKey();
-
-                if( key.equals("display_day_of_week") ) {
-
-                    CharSequence[] entries = preference.getEntries();
-                    StringBuilder sb = new StringBuilder();
-
-                    for (String value : new TreeSet<>(preference.getValues())) {
-                        if (sb.length() > 0) {
-                            sb.append(", ");
-                        }
-                        sb.append(entries[Integer.valueOf(value) - 1]);
-                    }
-
-                    final String noData = getResources().getString(R.string.summary_no_data);
-                    preference.setSummary(preference.getValues().size() == 0 ? noData : sb.toString());
-
-                }
+                final ListPreference preference = (ListPreference) item;
+                final String summary = preference.getSummary().toString();
+                preference.setSummary(preference.getEntry() == null ? summary : preference.getEntry());
 
             } else if( item instanceof NumberPickerPreference ) {
                 NumberPickerPreference preference = (NumberPickerPreference) item;
