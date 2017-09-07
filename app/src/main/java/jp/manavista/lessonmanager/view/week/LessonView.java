@@ -124,7 +124,7 @@ public final class LessonView extends WeekView {
         float headerColumnWidth = super.getHeaderColumnWidth();
 
         canvas.drawRect(0, headerHeight + headerColumnPadding * 2, headerColumnWidth, getHeight(), super.getHeaderColumnBackgroundPaint());
-        canvas.clipRect(0, headerHeight + headerColumnPadding * 2, headerColumnWidth, getHeight(), Region.Op.REPLACE);
+        canvas.clipRect(0, headerHeight + headerColumnPadding * 2 + headerMarginBottom + timeTextHeight/2, headerColumnWidth, getHeight(), Region.Op.REPLACE);
 //        canvas.clipOutRect(0, headerHeight + headerColumnPadding * 2, headerColumnWidth, getHeight());
 
 
@@ -252,7 +252,6 @@ public final class LessonView extends WeekView {
      * Delete the time display of the calendar when the calendar time display and
      * the start and end time of the lesson overlap or near.
      * </p>
-     *
      */
     private void calcExceptDrawHourSet() {
 

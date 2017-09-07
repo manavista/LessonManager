@@ -57,6 +57,13 @@
     <string name="preferences.summary.delete_using_data">Select delete category</string>
     <string name="preferences.dialog.delete_using_data">Delete Category</string>
 
+    <!-- LessonView -->
+    <string name="toolbar.lesson_view.change_date">Change Date</string>
+    <string name="toolbar.lesson_view.1_day">View 1 Day</string>
+    <string name="toolbar.lesson_view.3_days">View 3 Days</string>
+    <string name="toolbar.lesson_view.5_days">View 5 Days</string>
+    <string name="toolbar.lesson_view.7_days">View 7 Days</string>
+
     <!-- Timetable -->
     <string name="toolbar.timetable.title">Timetable</string>
     <string name="toolbar.timetable.option.add">add</string>
@@ -96,8 +103,6 @@
     <string name="label.member_list.dialog.schedule">Schedule</string>
     <string name="label.member_list.dialog.delete">Delete</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Member Lesson -->
     <string name="toolbar.member_lesson.title">Lesson</string>

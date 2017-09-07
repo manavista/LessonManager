@@ -15,7 +15,8 @@ import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
  *
  * <p>
  * Overview:<br>
- *
+ * For the data of <code>MemberLessonSchedule</code>,
+ * define actions related to acquisition and processing.
  * </p>
  */
 public interface MemberLessonScheduleService {
@@ -83,6 +84,8 @@ public interface MemberLessonScheduleService {
     Single<List<MemberLessonScheduleVo>> getSingleVoListByMemberId(final long memberId);
 
     Observable<MemberLessonScheduleVo> getVoListAll();
+
+    Observable<MemberLessonScheduleVo> getVoListByExcludeStatus(final int excludeStatus);
 
     Observable<MemberLessonScheduleVo> getVoListByMonth(final int year, final int month);
 

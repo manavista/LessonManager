@@ -1,11 +1,14 @@
 package jp.manavista.lessonmanager.model.vo;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.Calendar;
 
+import jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus;
 import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.entity.MemberLessonSchedule;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
@@ -25,6 +28,8 @@ import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD
  */
 @Data
 public final class MemberLessonScheduleVo implements Serializable {
+
+    private final static String TAG = MemberLessonScheduleVo.class.getSimpleName();
 
     private long id;
     private String name;
@@ -92,8 +97,36 @@ public final class MemberLessonScheduleVo implements Serializable {
         return getLessonStartTimeFormatted() + " - " + getLessonEndTimeFormatted();
     }
 
-//    public boolean isMatched(final int year, final int month) {
-//        final Calendar calendar = DateTimeUtil.parserCalendar(lessonDate, DATE_PATTERN_YYYYMMDD);
-//        return calendar.get(Calendar.YEAR) == year && calendar.get(Calendar.MONTH) == month;
-//    }
+    /**
+     *
+     * Get LessonView Color
+     *
+     * <p>
+     * Overview:<br>
+     * Get the schedule color to be displayed on the LessonView screen.<br>
+     * Roles the display according to the schedule status.
+     * </p>
+     *
+     * @return Color(int)
+     */
+    public int getLessonViewColor() {
+
+        final int base = getBackgroundColor();
+
+        switch (MemberLessonScheduleStatus.statusSparseArray().get(getStatus())) {
+
+            case SCHEDULED:
+                return base;
+            case DONE:
+                /* alpha range: 0(invisible) - 255(clearly) */
+                return Color.argb(64, Color.red(base), Color.green(base), Color.blue(base));
+            case ABSENT:
+            case SUSPENDED:
+                /* @color/grey_300 */
+                return Color.parseColor("#E0E0E0");
+            default:
+                Log.w(TAG, "undefined lesson schedule status!");
+                return base;
+        }
+    }
 }

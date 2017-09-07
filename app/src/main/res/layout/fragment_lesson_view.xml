@@ -13,6 +13,7 @@
         app:eventTextColor="@android:color/white"
         app:textSize="12sp"
         app:hourHeight="60dp"
+        app:eventCornerRadius="4dp"
         app:headerColumnPadding="8dp"
         app:headerColumnTextColor="@color/toolbar_text"
         app:headerRowPadding="12dp"

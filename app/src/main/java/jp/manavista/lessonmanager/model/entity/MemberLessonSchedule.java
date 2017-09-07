@@ -62,14 +62,13 @@ public class MemberLessonSchedule {
     @Column
     public int backgroundColor;
 
-    @Column
+    @Column(indexed = true)
     public int status;
 
     @Column
     @Nullable
     public String memo;
 
-    // temporary
     @Column(indexed = true)
     public Member member;
 
