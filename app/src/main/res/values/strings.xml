@@ -30,17 +30,6 @@
     <string name="toolbar.preference.title">Settings</string>
     <string name="label.preference.category.delete">DELETE</string>
     <string name="preference.category.lesson_week_view">LessonWeek View</string>
-    <string name="entry_start_view_default">Weekly</string>
-    <string name="entry_first_day_of_week_default">Weekly</string>
-
-    <string name="summary.start_view">Select week and day display</string>
-    <string name="summary.display_day_of_week">Select the day of the week to display</string>
-
-    <string name="key.first_day_of_week">first_day_of_week</string>
-    <string name="title.first_day_of_week">FIRST DAY OF WEEK</string>
-    <string name="summary.first_day_of_week">Select the first day of the week</string>
-    <string name="default.value.first_day_of_week">1</string>
-    <string name="summary.no_data">No data</string>
 
     <string name="preferences.key.display_start_time">display_start_hour</string>
     <string name="preferences.title.display_start_time">Display Start Time</string>
@@ -56,6 +45,11 @@
     <string name="preferences.title.delete_using_data">Delete using data</string>
     <string name="preferences.summary.delete_using_data">Select delete category</string>
     <string name="preferences.dialog.delete_using_data">Delete Category</string>
+
+    <string name="preferences.key.start_visible_days">start_visible_days</string>
+    <string name="preferences.title.start_visible_days">Start Visible Days</string>
+    <string name="preferences.summary.start_visible_days">Select the Start Visible Days</string>
+    <string name="preferences.default.start_visible_days">3</string>
 
     <!-- LessonView -->
     <string name="toolbar.lesson_view.change_date">Change Date</string>

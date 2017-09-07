@@ -3,6 +3,7 @@ package jp.manavista.lessonmanager.activity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -19,8 +20,11 @@ import android.widget.DatePicker;
 import java.util.Calendar;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.LessonViewFragment;
+import jp.manavista.lessonmanager.injector.DependencyInjector;
 
 /**
  *
@@ -43,6 +47,12 @@ public class LessonViewActivity extends AppCompatActivity
     /** Lesson View Fragment */
     private LessonViewFragment fragment;
 
+    private int visibleDays;
+
+    /** Shared preferences */
+    @Inject
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -64,7 +74,13 @@ public class LessonViewActivity extends AppCompatActivity
         // preference setting
         PreferenceManager.setDefaultValues(activity, R.xml.preferences, false);
 
-        fragment = LessonViewFragment.newInstance();
+        DependencyInjector.appComponent().inject(this);
+
+        final String defaultDays = getString(R.string.preferences_default_start_visible_days);
+        final String keys = getString(R.string.preferences_key_start_visible_days);
+        visibleDays = Integer.valueOf(sharedPreferences.getString(keys, defaultDays));
+
+        fragment = LessonViewFragment.newInstance(visibleDays);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.activity_lesson_view_content, fragment)
@@ -75,10 +91,23 @@ public class LessonViewActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_lesson_view, menu);
 
-        // TODO: 2017/09/07 add shared preference default view
-        // https://stackoverflow.com/questions/29122447/checkbox-item-state-on-menu-android
+        int itemId = R.id.item_view_3_days;
+        switch (visibleDays) {
+            case 1:
+                itemId = R.id.item_view_1_day;
+                break;
+            case 5:
+                itemId = R.id.item_view_5_days;
+                break;
+            case 7:
+                itemId = R.id.item_view_7_days;
+                break;
+            case 3:
+            default:
+                break;
+        }
 
-        MenuItem item = menu.findItem(R.id.item_view_3_days);
+        final MenuItem item = menu.findItem(itemId);
         item.setChecked(true);
 
         return true;
