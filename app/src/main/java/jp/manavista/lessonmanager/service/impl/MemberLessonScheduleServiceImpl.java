@@ -108,6 +108,22 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
     }
 
     @Override
+    public Observable<MemberLessonScheduleVo> getVoListByExcludeStatus(int excludeStatus) {
+        return repository.getRelation()
+                .selector()
+                .statusNotEq(excludeStatus)
+                .executeAsObservable()
+                .map(new Function<MemberLessonSchedule, MemberLessonScheduleVo>() {
+                    @Override
+                    public MemberLessonScheduleVo apply(@NonNull MemberLessonSchedule entity) throws Exception {
+                        return MemberLessonScheduleVo.copy(entity);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
     public Observable<MemberLessonScheduleVo> getVoListByMonth(final int year, final int month) {
 
         final String format = "%04d/%02d/01";

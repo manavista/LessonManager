@@ -30,7 +30,7 @@ import jp.manavista.lessonmanager.repository.impl.TimetableRepositoryImpl;
 public class RepositoryModule {
 
     /** Database Name */
-    private static final String DB_NAME = "main.db";
+    private static final String DB_NAME = "toolbar_lesson_view.db";
 
     @Provides
     @Singleton

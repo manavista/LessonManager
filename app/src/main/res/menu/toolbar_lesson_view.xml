@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_change_date"
+        android:title="@string/toolbar.lesson_view.change_date"
+        android:icon="@drawable/ic_event_white"
+        app:showAsAction="ifRoom" />
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/item_view_1_day"
+            android:orderInCategory="120"
+            android:title="@string/toolbar.lesson_view.1_day"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/item_view_3_days"
+            android:orderInCategory="140"
+            android:title="@string/toolbar.lesson_view.3_days"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/item_view_5_days"
+            android:orderInCategory="140"
+            android:title="@string/toolbar.lesson_view.5_days"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/item_view_7_days"
+            android:orderInCategory="140"
+            android:title="@string/toolbar.lesson_view.7_days"
+            app:showAsAction="never" />
+
+    </group>
+
+</menu>

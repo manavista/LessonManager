@@ -1,5 +1,7 @@
 package jp.manavista.lessonmanager.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.RectF;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity;
+import jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Timetable;
@@ -37,6 +41,7 @@ import jp.manavista.lessonmanager.view.week.LessonView;
 import jp.manavista.lessonmanager.view.week.MonthLoader;
 import jp.manavista.lessonmanager.view.week.WeekView;
 import jp.manavista.lessonmanager.view.week.WeekViewEvent;
+import lombok.Getter;
 import lombok.val;
 
 /**
@@ -57,13 +62,17 @@ public final class LessonViewFragment extends Fragment implements
     private static final String TAG = LessonViewFragment.class.getSimpleName();
 
     /** LessonView */
+    @Getter
     private LessonView lessonView;
     /** RootView */
     private View rootView;
     /** Timetable DTO List */
     private List<TimetableDto> timetableList;
-    /** eekViewEvent List */
+    /** WeekViewEvent List */
     private List<WeekViewEvent> weekViewEventList;
+
+    /** Activity Contents */
+    private Activity contents;
 
     /** Shared preferences */
     @Inject
@@ -74,8 +83,9 @@ public final class LessonViewFragment extends Fragment implements
     @Inject
     MemberLessonScheduleService memberLessonScheduleService;
 
-    /** Timetable categoriesList disposable */
+    /** disposable */
     private Disposable timetableDisposable;
+    private Disposable scheduleDisposable;
 
 
     /** Constructor */
@@ -103,6 +113,7 @@ public final class LessonViewFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         timetableDisposable = Disposables.empty();
+        scheduleDisposable = Disposables.empty();
     }
 
     @Override
@@ -118,7 +129,7 @@ public final class LessonViewFragment extends Fragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-
+        this.contents = getActivity();
         DependencyInjector.appComponent().inject(this);
 
         lessonView = rootView.findViewById(R.id.weekView);
@@ -135,8 +146,6 @@ public final class LessonViewFragment extends Fragment implements
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
 
-        Log.d(TAG, "newYear: " + newYear + " newMonth: " + newMonth);
-
         final List<WeekViewEvent> events = new ArrayList<>();
 
         for( val event : weekViewEventList ) {
@@ -149,8 +158,9 @@ public final class LessonViewFragment extends Fragment implements
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        // TODO: 2017/09/05 implement activity lesson schedule edit
-        Log.d(TAG, event.toString());
+        final Intent intent = new Intent(contents, MemberLessonScheduleActivity.class);
+        intent.putExtra(MemberLessonScheduleActivity.EXTRA_SCHEDULE_ID, event.getId());
+        contents.startActivity(intent);
     }
 
     @Override
@@ -211,6 +221,7 @@ public final class LessonViewFragment extends Fragment implements
     public void onDestroy() {
         super.onDestroy();
         timetableDisposable.dispose();
+        scheduleDisposable.dispose();
     }
 
     /**
@@ -220,32 +231,39 @@ public final class LessonViewFragment extends Fragment implements
      * <p>
      * Overview:<br>
      * Change the number of days displayed in the schedule
-     * to the number of days set in the argument.
+     * to the number of days set in the argument.<br>
+     * After change days, keep displaying the current date.
      * </p>
      *
      * @param days Visible days
      */
     public void changeVisibleDays(int days) {
+        final Calendar calendar = lessonView.getFirstVisibleDay();
         lessonView.setNumberOfVisibleDays(days);
-    }
-
-    /**
-     *
-     * Go to Today
-     *
-     * <p>
-     * Overview:<br>
-     * Scroll the screen to show today's schedule.
-     * </p>
-     */
-    public void goToday() {
-        lessonView.goToToday();
+        lessonView.goToDate(calendar);
     }
 
     private boolean isMatched(Calendar calendar, final int year, final int month) {
         return calendar.get(Calendar.YEAR) == year && calendar.get(Calendar.MONTH) == month;
     }
 
+    /**
+     *
+     * Build Events
+     *
+     * <p>
+     * Overview:<br>
+     * Reads the lesson schedule from the database,
+     * and creates event objects and lists to be displayed on the screen.
+     * </p>
+     * <p><b>Type of schedule to display:</b></p>
+     * <ul>
+     * <li>SCHEDULED - Normal display</li>
+     * <li>ABSENT - Display with special mark</li>
+     * <li>SUSPENDED - Don't display</li>
+     * <li>DONE - Display with high transparency</li>
+     * </ul>
+     */
     private void buildEvents() {
 
         weekViewEventList.clear();
@@ -253,7 +271,7 @@ public final class LessonViewFragment extends Fragment implements
         /* Do not create a new instance inside the loop. */
         final StringBuilder builder = new StringBuilder();
 
-        memberLessonScheduleService.getVoListAll().map(new Function<MemberLessonScheduleVo, WeekViewEvent>() {
+        scheduleDisposable = memberLessonScheduleService.getVoListByExcludeStatus(MemberLessonScheduleStatus.SUSPENDED.getId()).map(new Function<MemberLessonScheduleVo, WeekViewEvent>() {
             @Override
             public WeekViewEvent apply(@NonNull MemberLessonScheduleVo vo) throws Exception {
 
@@ -263,7 +281,7 @@ public final class LessonViewFragment extends Fragment implements
                         vo.getLocation(),
                         vo.getLessonStartCalendar(),
                         vo.getLessonEndCalendar());
-                event.setColor(vo.getBackgroundColor());
+                event.setColor(vo.getLessonViewColor());
 
                 return event;
             }
