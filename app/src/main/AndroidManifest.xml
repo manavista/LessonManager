@@ -26,8 +26,6 @@
         </activity>
         <activity android:name=".activity.MemberListActivity">
         </activity>
-        <activity android:name=".activity.MemberLessonListActivity">
-        </activity>
         <activity android:name=".activity.MemberLessonActivity">
         </activity>
         <activity android:name=".activity.MemberLessonScheduleActivity">
