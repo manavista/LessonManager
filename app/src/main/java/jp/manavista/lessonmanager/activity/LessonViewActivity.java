@@ -160,9 +160,6 @@ public class LessonViewActivity extends AppCompatActivity
         if( id == R.id.nav_member_list ) {
             Intent intent = new Intent(activity, MemberListActivity.class);
             activity.startActivity(intent);
-        } else if( id == R.id.nav_member_lesson_list ) {
-            Intent intent = new Intent(activity, MemberLessonListActivity.class);
-            activity.startActivity(intent);
         } else if ( id == R.id.nav_settings ) {
             Intent intent = new Intent(activity, SettingActivity.class);
             activity.startActivity(intent);
