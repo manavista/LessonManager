@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.LessonViewFragment;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
+import jp.manavista.lessonmanager.view.dialog.ApplicationInformationDialog;
 
 /**
  *
@@ -166,9 +167,12 @@ public class LessonViewActivity extends AppCompatActivity
         } else if( id == R.id.nav_timetable ) {
             Intent intent = new Intent(activity, TimetableActivity.class);
             activity.startActivity(intent);
-        } else if( id == R.id.nav_member) {
+        } else if( id == R.id.nav_member ) {
             Intent intent = new Intent(activity, MemberActivity.class);
             activity.startActivity(intent);
+        } else if( id == R.id.nav_info ) {
+            new ApplicationInformationDialog()
+                    .show(getSupportFragmentManager(), "application_information_dialog");
         }
 
         drawer.closeDrawer(GravityCompat.START);
