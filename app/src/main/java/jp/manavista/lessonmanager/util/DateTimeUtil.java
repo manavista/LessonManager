@@ -33,9 +33,11 @@ public final class DateTimeUtil {
 
     public static final String DATE_PATTERN_YYYYMMDD = "yyyy/MM/dd";
     public static final String DATE_PATTERN_YYYYMD = "yyyy/M/d";
+    public static final String DATE_PATTERN_YYYYMMDD_DIGITS = "yyyyMMdd";
     public static final String DATETIME_PATTERN_YYYYMMDD_HHMMDD = "yyyy/MM/dd HH:mm";
 
     public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat(DATE_PATTERN_YYYYMMDD, Locale.getDefault());
+    public static SimpleDateFormat DATE_FORMAT_YYYYMMDD_DIGITS = new SimpleDateFormat(DATE_PATTERN_YYYYMMDD_DIGITS, Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_MMDD = new SimpleDateFormat("MM/dd", Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_MMDDE = new SimpleDateFormat("MM/dd E", Locale.getDefault());
     public static SimpleDateFormat DATE_FORMAT_E = new SimpleDateFormat("E", Locale.getDefault());
