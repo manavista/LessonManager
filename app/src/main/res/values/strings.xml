@@ -68,6 +68,7 @@
     <!-- Member -->
     <string name="toolbar.member.title">Member</string>
     <string name="toolbar.member.option.save">Save</string>
+    <string name="toolbar.member.option.import_contact">Import Contacts</string>
     <string name="label.category.member.name">Name</string>
     <string name="label.category.member.contact">Contact</string>
     <string name="label.category.member.other">Other Info</string>
@@ -85,6 +86,9 @@
     <string name="description.member.birthday.dummy">This element is necessary to determine the vertical position of the calendar icon</string>
 
     <string name="message.member.birthday.input_invalid_date">Input invalid date</string>
+
+    <string name="label.member.phone.dialog">Select Phone Number</string>
+    <string name="label.member.email.dialog">Select Email Address</string>
 
     <!-- Member List -->
     <string name="toolbar.member_list.title">Member List</string>

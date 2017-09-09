@@ -33,6 +33,7 @@ import jp.manavista.lessonmanager.model.dto.MemberFragmentDto;
 import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
+import lombok.Getter;
 
 /**
  *
@@ -56,6 +57,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     /** Activity Contents */
     private Activity contents;
     /** DTO */
+    @Getter
     private MemberFragmentDto dto;
     /** member id */
     private long memberId;
