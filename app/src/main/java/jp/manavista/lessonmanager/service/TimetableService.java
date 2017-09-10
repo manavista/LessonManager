@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.service;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Timetable;
 
 /**
@@ -40,6 +41,8 @@ public interface TimetableService {
      * @return All Timetable entity of Observable
      */
     Observable<Timetable> add();
+
+    Observable<TimetableDto> addDtoList();
 
     /**
      *

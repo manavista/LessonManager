@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -118,6 +119,18 @@ public final class DateTimeUtil {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Time addMinutes(Time time, int amount) {
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.setTime(time);
+        calendar.add(Calendar.MINUTE, amount);
+        return new Time(calendar.getTime().getTime());
+    }
+
+    public static int calculateMinuteSpan(Time start, Time end) {
+        final long difference = end.getTime() - start.getTime();
+        return (int) TimeUnit.MILLISECONDS.toMinutes(difference);
     }
 
     public static boolean parseDateStrictly(final String str, final String... patterns) {

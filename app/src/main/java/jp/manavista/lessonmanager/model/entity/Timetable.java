@@ -7,6 +7,7 @@ import com.github.gfx.android.orma.annotation.Table;
 import java.sql.Time;
 
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
+import lombok.ToString;
 
 /**
  *
@@ -19,11 +20,12 @@ import jp.manavista.lessonmanager.model.dto.TimetableDto;
  * </p>
  */
 @Table
+@ToString
 public class Timetable {
 
     @PrimaryKey(autoincrement = true)
     public int id;
-    @Column
+    @Column(indexed = true)
     public int lessonNo;
     @Column
     public Time startTime;
