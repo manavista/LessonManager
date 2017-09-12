@@ -219,7 +219,7 @@
 
             <ImageView
                 android:id="@+id/abbr_image"
-                android:src="@drawable/bp_material_button_background"
+                android:src="@drawable/button_blank"
                 android:contentDescription="@string/label.member_lesson.hint.abbr"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
