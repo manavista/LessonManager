@@ -22,11 +22,18 @@ import javax.inject.Inject;
 
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.facade.SettingDeleteFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.service.MemberService;
+import jp.manavista.lessonmanager.service.TimetableService;
 import lombok.val;
+
+import static jp.manavista.lessonmanager.facade.SettingDeleteFacade.LESSON;
+import static jp.manavista.lessonmanager.facade.SettingDeleteFacade.MEMBER;
+import static jp.manavista.lessonmanager.facade.SettingDeleteFacade.SCHEDULE;
+import static jp.manavista.lessonmanager.facade.SettingDeleteFacade.TIMETABLE;
 
 /**
  *
@@ -37,7 +44,7 @@ import lombok.val;
  * Define screen to delete internal categoriesList
  * </p>
  */
-public class SettingDeleteFragment extends Fragment {
+public final class SettingDeleteFragment extends Fragment {
 
     private View rootView;
     private ListView listView;
@@ -51,6 +58,10 @@ public class SettingDeleteFragment extends Fragment {
     MemberLessonService memberLessonService;
     @Inject
     MemberService memberService;
+    @Inject
+    TimetableService timetableService;
+    @Inject
+    SettingDeleteFacade facade;
 
     public SettingDeleteFragment() {
         // Required empty public constructor
@@ -115,9 +126,18 @@ public class SettingDeleteFragment extends Fragment {
                 }
             }
 
-            // TODO: 2017/08/25 define service class
+            // TODO: 2017/09/12 define facade class
 
-            if( deleteSet.contains("Schedule") ) {
+            if( deleteSet.contains(TIMETABLE) ) {
+                timetableService.deleteAll().subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        contents.finish();
+                    }
+                });
+            }
+
+            if( deleteSet.contains(SCHEDULE) ) {
                 memberLessonScheduleService.deleteAll().subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
@@ -126,7 +146,7 @@ public class SettingDeleteFragment extends Fragment {
                 });
             }
 
-            if( deleteSet.contains("Lesson") ) {
+            if( deleteSet.contains(LESSON) ) {
                 memberLessonService.deleteAll().subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
@@ -135,7 +155,7 @@ public class SettingDeleteFragment extends Fragment {
                 });
             }
 
-            if( deleteSet.contains("Member") ) {
+            if( deleteSet.contains(MEMBER) ) {
                 memberService.deleteAll().subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {

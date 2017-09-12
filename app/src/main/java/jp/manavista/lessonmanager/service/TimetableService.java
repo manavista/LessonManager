@@ -102,5 +102,16 @@ public interface TimetableService {
 
     Single<Integer> deleteById(int id);
 
-    void deleteAll();
+    /**
+     *
+     * Delete All
+     *
+     * <p>
+     * Overview:<br>
+     * Delete All rows in {@code Timetable}
+     * </p>
+     *
+     * @return {@link Single} observable object in deleted rows count
+     */
+    Single<Integer> deleteAll();
 }

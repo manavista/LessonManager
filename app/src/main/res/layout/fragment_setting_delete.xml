@@ -12,16 +12,22 @@
         android:layout_height="wrap_content"
         android:choiceMode="multipleChoice"/>
 
-    <ImageButton
-        android:id="@+id/delete_button"
-        android:src="@drawable/ic_delete_white"
-        android:background="@color/event_delete"
+    <FrameLayout
         android:layout_marginStart="@dimen/margin_16dp"
         android:layout_marginTop="@dimen/margin_16dp"
-        android:padding="6dp"
-        android:layout_width="96dp"
-        android:layout_height="36dp"
-        android:elevation="2dp"/>
+        android:background="@color/event_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:src="@drawable/ic_delete_white"
+            android:contentDescription="@string/label.preferences.button.delete"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="6dp"
+            android:layout_width="96dp"
+            android:layout_height="36dp"
+            android:elevation="2dp"/>
+    </FrameLayout>
 
     <View
         android:background="@color/lightGray"
@@ -38,7 +44,7 @@
         <ImageView
             android:id="@+id/attention_icon_image"
             android:src="@drawable/ic_error_black"
-            android:contentDescription="attention"
+            android:contentDescription="@string/label.preferences.icon.attention"
             android:alpha="0.6"
             android:layout_marginStart="@dimen/margin_16dp"
             android:layout_marginEnd="@dimen/margin_4dp"
@@ -46,10 +52,11 @@
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:text="Description attention paragraphs"
+            android:text="@string/message.preferences.icon.attention"
             android:layout_toEndOf="@+id/attention_icon_image"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
     </RelativeLayout>
 
 </LinearLayout>

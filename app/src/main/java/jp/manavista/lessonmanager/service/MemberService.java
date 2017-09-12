@@ -81,6 +81,5 @@ public interface MemberService {
      *
      * @return {@link Single} observable object in deleted rows count
      */
-
     Single<Integer> deleteAll();
 }
