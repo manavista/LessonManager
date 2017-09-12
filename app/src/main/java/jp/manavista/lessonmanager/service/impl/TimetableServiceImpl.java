@@ -166,11 +166,10 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
-    public void deleteAll() {
-        repository.getDeleter()
+    public Single<Integer> deleteAll() {
+        return repository.getDeleter()
                 .executeAsSingle()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe();
+                .subscribeOn(Schedulers.io());
     }
 }

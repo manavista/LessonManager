@@ -6,30 +6,23 @@
         <item
             android:id="@+id/nav_member_list"
             android:icon="@drawable/ic_people_black"
-            android:title="@string/menu.member_list"/>
+            android:title="@string/drawable.label.member_list"/>
     </group>
 
-    <item android:title="@string/menu.add">
-
+    <item android:title="@string/drawable.label.add">
         <menu>
-
             <item
                 android:id="@+id/nav_member"
                 android:icon="@drawable/ic_person_black"
                 android:title="@string/drawable.menu.member"/>
             <item
-                android:id="@+id/nav_lesson"
-                android:icon="@drawable/ic_school_black"
-                android:title="@string/drawable.menu.lesson"/>
-            <item
                 android:id="@+id/nav_timetable"
                 android:icon="@drawable/ic_schedule_black"
                 android:title="@string/drawable.menu.timetable"/>
             <item
-                android:id="@+id/nav_private"
-                android:icon="@drawable/ic_free_breakfast_black"
-                android:title="@string/drawable.menu.private_day"/>
-
+                android:id="@+id/nav_event"
+                android:icon="@drawable/ic_assistant_photo_black"
+                android:title="@string/drawable.label.event"/>
         </menu>
     </item>
 

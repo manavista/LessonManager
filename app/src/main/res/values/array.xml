@@ -57,11 +57,13 @@
     </string-array>
 
     <string-array name="entries_delete_category">
+        <item>Timetable</item>
         <item>Member</item>
         <item>Lesson</item>
         <item>Schedule</item>
     </string-array>
     <string-array name="values_delete_category">
+        <item>Timetable</item>
         <item>Member</item>
         <item>Lesson</item>
         <item>Schedule</item>

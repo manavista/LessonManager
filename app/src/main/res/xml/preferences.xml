@@ -5,7 +5,7 @@
 
     <PreferenceCategory
         android:layout="@layout/preferences_category"
-        android:title="@string/preference.category.lesson_week_view">
+        android:title="@string/label.preference.category.lesson_week_view">
 
         <ListPreference
             android:key="@string/preferences.key.start_visible_days"
