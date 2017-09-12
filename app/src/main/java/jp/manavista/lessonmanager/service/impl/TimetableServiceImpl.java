@@ -129,6 +129,26 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
+    public Observable<TimetableDto> updateDtoList(final Timetable timetable) {
+        return repository.getRelation()
+                .upsertAsSingle(timetable)
+                .flatMapObservable(new Function<Timetable, ObservableSource<? extends Timetable>>() {
+                    @Override
+                    public ObservableSource<? extends Timetable> apply(@NonNull Timetable timetable) throws Exception {
+                        return repository.getSelector().executeAsObservable();
+                    }
+                })
+                .map(new Function<Timetable, TimetableDto>() {
+                    @Override
+                    public TimetableDto apply(@NonNull Timetable timetable) throws Exception {
+                        return TimetableDto.copy(timetable);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
     public Single<Timetable> save(final Timetable timetable) {
         return repository.getRelation()
                 .upsertAsSingle(timetable)

@@ -19,6 +19,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
@@ -34,6 +36,7 @@ import jp.manavista.lessonmanager.view.decoration.TimetableItemDecoration;
 import jp.manavista.lessonmanager.view.dialog.NumberPickerDialogFragment;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.TimetableOperation;
+import lombok.val;
 
 /**
  *
@@ -205,19 +208,17 @@ public final class TimetableFragment extends Fragment {
         @Override
         public void update(Timetable timetable) {
 
-            // TODO: 2017/09/10 validate startTime, endTime value relation
-
             itemTouchHelper.closeOpened();
             final List<TimetableDto> list = new ArrayList<>();
-            timetableDisposable = timetableService.update(timetable).subscribe(new Consumer<Timetable>() {
+            timetableDisposable = timetableService.updateDtoList(timetable).subscribe(new Consumer<TimetableDto>() {
                 @Override
-                public void accept(@NonNull Timetable timetable) throws Exception {
-                    list.add(TimetableDto.copy(timetable));
+                public void accept(@NonNull TimetableDto dto) throws Exception {
+                    list.add(dto);
                 }
             }, new Consumer<Throwable>() {
                 @Override
                 public void accept(@NonNull Throwable throwable) throws Exception {
-                    throw new RuntimeException(throwable.toString());
+                    throw new RuntimeException(throwable);
                 }
             }, new Action() {
                 @Override
@@ -234,10 +235,23 @@ public final class TimetableFragment extends Fragment {
             final TextView textView = (TextView) view;
             final int lessonNo = Integer.valueOf(textView.getText().toString());
 
-            final NumberPickerDialogFragment dialog = NumberPickerDialogFragment.newInstance(new NumberPickerDialogFragment.OnSetListener() {
+            final val dialog = NumberPickerDialogFragment.newInstance(new NumberPickerDialogFragment.OnSetListener() {
                 @Override
                 public void onNumberSet(int value) {
-                    TimetableDto row = adapter.getList().get(position);
+                    final TimetableDto row = adapter.getList().get(position);
+
+                    List<Integer> lessonNoList = new ArrayList<>();
+                    for( val dto : adapter.getList() ) {
+                        lessonNoList.add(dto.getLessonNo());
+                    }
+
+                    if( lessonNoList.contains(value) ) {
+                        Crouton.makeText(getActivity(),
+                                R.string.message_timetable_error_duplicate_lesson_no,
+                                Style.ALERT).show();
+                        return;
+                    }
+
                     row.setLessonNo(value);
                     Log.d(TAG, "change Timetable row position: " + position + " row: " + row);
                     update(Timetable.convert(row));

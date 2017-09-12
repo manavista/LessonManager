@@ -228,16 +228,32 @@ public final class LessonView extends WeekView {
             float startTimeY = top + timeTextHeight + (timeTextHeight / 2);
             canvas.drawText(dto.getStartTimeFormatted(), startTimeX, startTimeY, lessonTimePaint);
 
-            // LessonNo end time
-
-            float endTimeX = timeTextWidth + headerColumnPadding;
-            float endTimeY = bottom - (timeTextHeight / 2);
-            canvas.drawText(dto.getEndTimeFormatted(), endTimeX, endTimeY, lessonTimePaint);
+            /*
+             * If Lesson start time equals to end time,
+             * do not display lesson end time and no.
+             */
+            if( dto.getStartTime().compareTo(dto.getEndTime()) == 0 ) {
+                continue;
+            }
 
             // LessonNo
             float lessonNoX = headerColumnWidth / 2;
             float lessonNoY = top + ((bottom - top) / 2);
             canvas.drawText(String.valueOf(dto.getLessonNo()), lessonNoX, lessonNoY, lessonNoPaint);
+
+            /*
+             * If the end time is less than 30 minutes from the start,
+             * do not display the end time
+             */
+            if( dto.getEndTime().getTime() - dto.getStartTime().getTime() <= 30 * 60000 ) {
+                continue;
+            }
+
+            // LessonNo end time
+
+            float endTimeX = timeTextWidth + headerColumnPadding;
+            float endTimeY = bottom - (timeTextHeight / 2);
+            canvas.drawText(dto.getEndTimeFormatted(), endTimeX, endTimeY, lessonTimePaint);
         }
 
     }

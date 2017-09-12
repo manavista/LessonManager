@@ -42,6 +42,17 @@ public interface TimetableService {
      */
     Observable<Timetable> add();
 
+    /**
+     *
+     * Add
+     *
+     * <p>
+     * Overview:<br>
+     * Add new Timetable row, and then get All TimetableDto List of Observable object.
+     * </p>
+     *
+     * @return All Timetable Data Transfer Object of Observable
+     */
     Observable<TimetableDto> addDtoList();
 
     /**
@@ -71,6 +82,20 @@ public interface TimetableService {
      * @return All Timetable entity of Observable
      */
     Observable<Timetable> update(Timetable timetable);
+
+    /**
+     *
+     * Update
+     *
+     * <p>
+     * Overview:<br>
+     * Update exists Timetable row, and then get All TimetableDto List of Observable object.
+     * </p>
+     *
+     * @param timetable target update Timetable entity
+     * @return All Timetable Data Transfer Object of Observable
+     */
+    Observable<TimetableDto> updateDtoList(Timetable timetable);
 
 
     Single<Timetable> save(Timetable timetable);
