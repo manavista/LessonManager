@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_member_lesson"
     android:orientation="horizontal"
-    android:background="@color/white"
+    android:background="#FAFAFA"
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
@@ -108,7 +108,7 @@
             android:layout_width="42dp"
             android:layout_height="72dp"
             android:alpha="0.6"
-            android:background="@color/bpTransparent"
+            android:background="@color/transparent"
             android:contentDescription="expand"
             android:gravity="end"
             android:src="@drawable/ic_expand_more_black"/>
@@ -119,14 +119,11 @@
             android:layout_height="72dp"
             android:alpha="0.6"
             android:paddingEnd="@dimen/margin_16dp"
-            android:background="@color/bpTransparent"
+            android:background="@color/transparent"
             android:contentDescription="filter"
             android:gravity="end"
             android:src="@drawable/ic_filter_list_black"/>
 
     </LinearLayout>
-
-
-
 
 </LinearLayout>

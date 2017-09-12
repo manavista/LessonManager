@@ -36,6 +36,8 @@
     <color name="gray">#808080</color>
     <color name="darkGray">#a9a9a9</color>
 
+    <color name="transparent">#00000000</color>
+
     <!--
     Google Material Design Color Palette for Android http://www.google.com/design/spec/style/color.html#color-ui-color-palette
     Spreadsheet used to create this resource - http://bit.ly/mdcolor_spreadsheet
