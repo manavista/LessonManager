@@ -1,7 +1,6 @@
 package jp.manavista.lessonmanager.util;
 
 import android.support.annotation.NonNull;
-import android.util.Pair;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -11,11 +10,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -59,30 +58,6 @@ public final class DateTimeUtil {
         put("7",Calendar.SATURDAY);
     }};
 
-    /**
-     *
-     * Get First and Last Days of Week
-     *
-     * <p>
-     * Overview:<br>
-     *
-     * </p>
-     *
-     * @param targetDate target date
-     * @param firstDayOfWeek first day of week
-     * @param lastDayOfWeek last day of week
-     * @return pair of calendar object
-     */
-    public static Pair<Calendar, Calendar> getWeekRange (
-            Date targetDate, final int firstDayOfWeek, final int lastDayOfWeek) {
-
-        // First day of Week
-        final Calendar first = getDayOfWeek(targetDate, firstDayOfWeek, firstDayOfWeek);
-        // Last day of week
-        final Calendar last = getDayOfWeek(targetDate, firstDayOfWeek, lastDayOfWeek);
-
-        return Pair.create(first, last);
-    }
 
     public static String today(final SimpleDateFormat format) {
         Calendar calendar = Calendar.getInstance();
@@ -101,16 +76,6 @@ public final class DateTimeUtil {
         return parseTime(hourOfDay, minute, 0);
     }
 
-    public static Time parseTime(int hourOfDay, int minute, int second) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, second);
-
-        return new Time(calendar.getTime().getTime());
-    }
-
     public static Time parseTime(@NonNull SimpleDateFormat format, @NonNull String time) {
 
         try {
@@ -118,6 +83,18 @@ public final class DateTimeUtil {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Time addMinutes(Time time, int amount) {
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.setTime(time);
+        calendar.add(Calendar.MINUTE, amount);
+        return new Time(calendar.getTime().getTime());
+    }
+
+    public static int calculateMinuteSpan(Time start, Time end) {
+        final long difference = end.getTime() - start.getTime();
+        return (int) TimeUnit.MILLISECONDS.toMinutes(difference);
     }
 
     public static boolean parseDateStrictly(final String str, final String... patterns) {
@@ -220,20 +197,31 @@ public final class DateTimeUtil {
         return dateList;
     }
 
+
     /**
-     * 対象日付の同一週の指定曜日の日付を取得する。
      *
-     * @param targetDate 対象日付
-     * @param firstDayOfWeek 週の開始曜日
-     * @param dayOfWeek 取得指定曜日
-     * @return 指定曜日の日付
+     * Parse Time
+     *
+     * <p>
+     * Overview:<br>
+     * A Parse hour, minute, second integer, to Time Object.
+     * as 1700-01-01 HH:MM:SS.000
+     * </p>
+     *
+     * @param hourOfDay create hour
+     * @param minute create minute
+     * @param second create second
+     * @return create Time Object
      */
-    private static Calendar getDayOfWeek (
-            Date targetDate, final int firstDayOfWeek, final int dayOfWeek) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(targetDate);
-        cal.setFirstDayOfWeek(firstDayOfWeek);
-        cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-        return cal;
+    private static Time parseTime(int hourOfDay, int minute, int second) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1970, Calendar.JANUARY ,1);
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, second);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return new Time(calendar.getTime().getTime());
     }
 }

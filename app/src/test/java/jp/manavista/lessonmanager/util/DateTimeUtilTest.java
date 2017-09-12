@@ -162,4 +162,28 @@ public class DateTimeUtilTest {
         assertThat(calendar.get(Calendar.MONTH), is(1));
         assertThat(calendar.get(Calendar.DAY_OF_MONTH), is(1));
     }
+
+    @Test
+    public void addTimeMinutes() throws Exception {
+
+        Time time = DateTimeUtil.parseTime(12,40);
+        Time time2 = DateTimeUtil.addMinutes(time, 30);
+
+        String expected = "13:10";
+        String actual = DateTimeUtil.TIME_FORMAT_HHMM.format(time2);
+
+        assertThat(expected, is(actual));
+    }
+
+    @Test
+    public void calculateTimeSpan() throws Exception {
+
+        Time start = DateTimeUtil.parseTime(12, 40);
+        Time end = DateTimeUtil.parseTime(14, 0);
+
+        int expected = 80;
+        int actual = DateTimeUtil.calculateMinuteSpan(start,end);
+
+        assertThat(actual, is(expected));
+    }
 }

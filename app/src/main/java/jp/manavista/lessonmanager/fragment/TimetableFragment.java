@@ -1,13 +1,11 @@
 package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +19,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
@@ -36,6 +36,7 @@ import jp.manavista.lessonmanager.view.decoration.TimetableItemDecoration;
 import jp.manavista.lessonmanager.view.dialog.NumberPickerDialogFragment;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.TimetableOperation;
+import lombok.val;
 
 /**
  *
@@ -57,9 +58,10 @@ public final class TimetableFragment extends Fragment {
 
     /** Timetable recycler view adapter */
     private TimetableAdapter adapter;
+    private ItemTouchHelperExtension itemTouchHelper;
 
     /** Timetable categoriesList disposable */
-    private Disposable timetableDisposable = Disposables.empty();
+    private Disposable timetableDisposable;
 
     @Inject
     TimetableService timetableService;
@@ -89,19 +91,7 @@ public final class TimetableFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().finish();
-            }
-        });
+        timetableDisposable = Disposables.empty();
     }
 
     @Override
@@ -117,10 +107,8 @@ public final class TimetableFragment extends Fragment {
 
         DependencyInjector.appComponent().inject(this);
         final Activity contents = getActivity();
-
-        final List<TimetableDto> list = new ArrayList<>();
-
         final RecyclerView view = contents.findViewById(R.id.rv);
+
         view.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(contents);
         view.setLayoutManager(manager);
@@ -130,11 +118,16 @@ public final class TimetableFragment extends Fragment {
         view.setAdapter(adapter);
 
         ItemTouchHelperExtension.Callback callback = new SwipeDeleteTouchHelperCallback();
-        ItemTouchHelperExtension itemTouchHelper = new ItemTouchHelperExtension(callback);
+        itemTouchHelper = new ItemTouchHelperExtension(callback);
         itemTouchHelper.attachToRecyclerView(view);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        // TODO: 2017/08/27 implements onResume
+        final List<TimetableDto> list = new ArrayList<>();
+
         timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
             @Override
             public void accept(@NonNull Timetable timetable) throws Exception {
@@ -152,7 +145,6 @@ public final class TimetableFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-
     }
 
     /**
@@ -170,15 +162,15 @@ public final class TimetableFragment extends Fragment {
 
         final List<TimetableDto> list = new ArrayList<>();
 
-        timetableDisposable = timetableService.add().subscribe(new Consumer<Timetable>() {
+        timetableDisposable = timetableService.addDtoList().subscribe(new Consumer<TimetableDto>() {
             @Override
-            public void accept(@NonNull Timetable timetable) throws Exception {
-                list.add(TimetableDto.copy(timetable));
+            public void accept(TimetableDto dto) throws Exception {
+                list.add(dto);
             }
         }, new Consumer<Throwable>() {
             @Override
-            public void accept(@NonNull Throwable throwable) throws Exception {
-                throw new RuntimeException(throwable.toString());
+            public void accept(Throwable throwable) throws Exception {
+                throw new RuntimeException(throwable);
             }
         }, new Action() {
             @Override
@@ -192,6 +184,7 @@ public final class TimetableFragment extends Fragment {
     private final TimetableOperation timetableOperation = new TimetableOperation() {
         @Override
         public void delete(int id) {
+            itemTouchHelper.closeOpened();
             final List<TimetableDto> list = new ArrayList<>();
             timetableDisposable = timetableService.delete(id).subscribe(new Consumer<Timetable>() {
                 @Override
@@ -214,16 +207,18 @@ public final class TimetableFragment extends Fragment {
 
         @Override
         public void update(Timetable timetable) {
+
+            itemTouchHelper.closeOpened();
             final List<TimetableDto> list = new ArrayList<>();
-            timetableDisposable = timetableService.update(timetable).subscribe(new Consumer<Timetable>() {
+            timetableDisposable = timetableService.updateDtoList(timetable).subscribe(new Consumer<TimetableDto>() {
                 @Override
-                public void accept(@NonNull Timetable timetable) throws Exception {
-                    list.add(TimetableDto.copy(timetable));
+                public void accept(@NonNull TimetableDto dto) throws Exception {
+                    list.add(dto);
                 }
             }, new Consumer<Throwable>() {
                 @Override
                 public void accept(@NonNull Throwable throwable) throws Exception {
-                    throw new RuntimeException(throwable.toString());
+                    throw new RuntimeException(throwable);
                 }
             }, new Action() {
                 @Override
@@ -240,10 +235,23 @@ public final class TimetableFragment extends Fragment {
             final TextView textView = (TextView) view;
             final int lessonNo = Integer.valueOf(textView.getText().toString());
 
-            final NumberPickerDialogFragment dialog = NumberPickerDialogFragment.newInstance(new NumberPickerDialogFragment.OnSetListener() {
+            final val dialog = NumberPickerDialogFragment.newInstance(new NumberPickerDialogFragment.OnSetListener() {
                 @Override
                 public void onNumberSet(int value) {
-                    TimetableDto row = adapter.getList().get(position);
+                    final TimetableDto row = adapter.getList().get(position);
+
+                    List<Integer> lessonNoList = new ArrayList<>();
+                    for( val dto : adapter.getList() ) {
+                        lessonNoList.add(dto.getLessonNo());
+                    }
+
+                    if( lessonNoList.contains(value) ) {
+                        Crouton.makeText(getActivity(),
+                                R.string.message_timetable_error_duplicate_lesson_no,
+                                Style.ALERT).show();
+                        return;
+                    }
+
                     row.setLessonNo(value);
                     Log.d(TAG, "change Timetable row position: " + position + " row: " + row);
                     update(Timetable.convert(row));
@@ -253,11 +261,6 @@ public final class TimetableFragment extends Fragment {
 
         }
     };
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
 
     @Override
     public void onDestroyView() {

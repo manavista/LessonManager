@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.service;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Timetable;
 
 /**
@@ -43,6 +44,19 @@ public interface TimetableService {
 
     /**
      *
+     * Add
+     *
+     * <p>
+     * Overview:<br>
+     * Add new Timetable row, and then get All TimetableDto List of Observable object.
+     * </p>
+     *
+     * @return All Timetable Data Transfer Object of Observable
+     */
+    Observable<TimetableDto> addDtoList();
+
+    /**
+     *
      * Delete
      *
      * <p>
@@ -68,6 +82,20 @@ public interface TimetableService {
      * @return All Timetable entity of Observable
      */
     Observable<Timetable> update(Timetable timetable);
+
+    /**
+     *
+     * Update
+     *
+     * <p>
+     * Overview:<br>
+     * Update exists Timetable row, and then get All TimetableDto List of Observable object.
+     * </p>
+     *
+     * @param timetable target update Timetable entity
+     * @return All Timetable Data Transfer Object of Observable
+     */
+    Observable<TimetableDto> updateDtoList(Timetable timetable);
 
 
     Single<Timetable> save(Timetable timetable);

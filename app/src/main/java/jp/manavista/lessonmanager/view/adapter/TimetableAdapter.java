@@ -1,5 +1,6 @@
 package jp.manavista.lessonmanager.view.adapter;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.widget.TimePicker;
 import java.sql.Time;
 import java.util.List;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Timetable;
@@ -21,6 +24,7 @@ import jp.manavista.lessonmanager.view.holder.TimetableHolder;
 import jp.manavista.lessonmanager.view.operation.TimetableOperation;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 /**
  *
@@ -103,12 +107,20 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
                 final TextView textView = (TextView) view;
                 String[] times = String.valueOf(textView.getText()).split(DateTimeUtil.COLON);
 
-                TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                val dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
 
-                        Time time = DateTimeUtil.parseTime(hourOfDay, minute);
-                        TimetableDto dto = list.get(holder.getAdapterPosition());
+                        final Time time = DateTimeUtil.parseTime(hourOfDay, minute);
+                        final TimetableDto dto = list.get(holder.getAdapterPosition());
+
+                        /*
+                         * If the start time is later than the end time,
+                         * make the end time equal to the start time
+                         */
+                        if( time.compareTo(dto.getEndTime()) > 0 ) {
+                            dto.setEndTime(time);
+                        }
                         dto.setStartTime(time);
 
                         Log.d(TAG, "changed row: " + holder.getAdapterPosition() + "changed dto: " + dto.toString());
@@ -127,12 +139,20 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
                 final TextView textView = (TextView) view;
                 String[] times = String.valueOf(textView.getText()).split(DateTimeUtil.COLON);
 
-                TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                val dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
 
-                        Time time = DateTimeUtil.parseTime(hourOfDay, minute);
-                        TimetableDto dto = list.get(holder.getAdapterPosition());
+                        final Time time = DateTimeUtil.parseTime(hourOfDay, minute);
+                        final TimetableDto dto = list.get(holder.getAdapterPosition());
+
+                        if( time.compareTo(dto.getStartTime()) <= 0 ) {
+                            Crouton.makeText((Activity) context,
+                                    R.string.message_timetable_error_end_time,
+                                    Style.ALERT).show();
+                            return;
+                        }
+
                         dto.setEndTime(time);
 
                         Log.d(TAG, "changed row: " + holder.getAdapterPosition() + "changed dto: " + dto.toString());
