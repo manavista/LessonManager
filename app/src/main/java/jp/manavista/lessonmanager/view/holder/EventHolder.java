@@ -1,6 +1,7 @@
 package jp.manavista.lessonmanager.view.holder;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import jp.manavista.lessonmanager.R;
@@ -17,6 +18,7 @@ import jp.manavista.lessonmanager.R;
  */
 public final class EventHolder extends SwipeDeleteHolder {
 
+    public ImageView eventIconImage;
     public TextView name;
     public TextView date;
     public TextView memo;
@@ -24,8 +26,9 @@ public final class EventHolder extends SwipeDeleteHolder {
     public EventHolder(View itemView) {
         super(itemView);
         super.view = itemView.findViewById(R.id.item_event);
-        this.name = itemView.findViewById(R.id.event_name);
-        this.date = itemView.findViewById(R.id.event_date_text);
-        this.memo = itemView.findViewById(R.id.event_memo);
+        eventIconImage = itemView.findViewById(R.id.event_icon_image);
+        name = itemView.findViewById(R.id.event_name);
+        date = itemView.findViewById(R.id.event_date_text);
+        memo = itemView.findViewById(R.id.event_memo);
     }
 }

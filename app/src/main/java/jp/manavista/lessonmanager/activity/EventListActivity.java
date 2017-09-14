@@ -5,14 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.EventListFragment;
+import jp.manavista.lessonmanager.view.section.FilterableSection;
+import lombok.val;
 
-public class EventListActivity extends AppCompatActivity {
+public class EventListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     /** fragment */
     private EventListFragment fragment;
@@ -52,6 +57,29 @@ public class EventListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_event_list, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(this);
+
         return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+
+        val adapter = fragment.getAdapter();
+        for( Section section : adapter.getSectionsMap().values() ) {
+            if( section instanceof FilterableSection) {
+                ((FilterableSection) section).filter(query);
+            }
+        }
+        adapter.notifyDataSetChanged();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 }

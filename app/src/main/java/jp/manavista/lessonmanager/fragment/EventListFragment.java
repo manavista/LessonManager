@@ -34,6 +34,7 @@ import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.EventOperation;
 import jp.manavista.lessonmanager.view.section.EventSection;
+import lombok.Getter;
 
 /**
  *
@@ -50,6 +51,7 @@ public final class EventListFragment extends Fragment {
     /** Activity Contents */
     private Activity contents;
     /** MemberLesson RecyclerView Adapter */
+    @Getter
     private SectionedRecyclerViewAdapter adapter;
     /** Event Adapter Section */
     private EventSection section;

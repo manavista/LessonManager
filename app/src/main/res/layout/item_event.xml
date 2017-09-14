@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/event_icon_image"
-        android:src="@drawable/ic_event_note_black"
+        android:src="@drawable/ic_assistant_photo_black"
         android:background="@drawable/circle"
         android:alpha="0.6"
         android:contentDescription="@string/description.event_list.image"

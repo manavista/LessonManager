@@ -1,5 +1,6 @@
 package jp.manavista.lessonmanager.view.section;
 
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -63,6 +64,9 @@ public final class EventSection extends StatelessSection implements FilterableSe
         itemHolder.name.setText(vo.getName());
         itemHolder.date.setText(vo.getDisplayDate());
         itemHolder.memo.setText(vo.getMemo());
+
+        itemHolder.eventIconImage.setColorFilter(vo.getTextColor());
+        DrawableCompat.setTint(itemHolder.eventIconImage.getBackground(), vo.getBackgroundColor());
 
         itemHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
