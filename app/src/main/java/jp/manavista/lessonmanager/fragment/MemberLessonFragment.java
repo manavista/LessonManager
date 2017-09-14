@@ -484,9 +484,9 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      *
      * <p>
      * Overview:<br>
-     *
+     * Initial value is set to the screen element to be edited
+     * when new event is created.
      * </p>
-     *
      */
     private void storeInitValueToDto() {
 

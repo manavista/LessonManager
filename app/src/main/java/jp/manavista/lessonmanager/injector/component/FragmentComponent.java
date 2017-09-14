@@ -1,6 +1,8 @@
 package jp.manavista.lessonmanager.injector.component;
 
 import jp.manavista.lessonmanager.fragment.BaseFragment;
+import jp.manavista.lessonmanager.fragment.EventFragment;
+import jp.manavista.lessonmanager.fragment.EventListFragment;
 import jp.manavista.lessonmanager.fragment.LessonViewFragment;
 import jp.manavista.lessonmanager.fragment.MemberFragment;
 import jp.manavista.lessonmanager.fragment.MemberLessonFragment;
@@ -32,6 +34,8 @@ public interface FragmentComponent {
     void inject(MemberLessonListFragment memberLessonListFragment);
     void inject(MemberLessonScheduleFragment memberLessonScheduleFragment);
     void inject(MemberLessonScheduleListFragment memberLessonScheduleListFragment);
+    void inject(EventFragment eventFragment);
+    void inject(EventListFragment eventListFragment);
     void inject(LessonViewFragment lessonViewFragment);
     void inject(SettingDeleteFragment settingDeleteFragment);
 }
