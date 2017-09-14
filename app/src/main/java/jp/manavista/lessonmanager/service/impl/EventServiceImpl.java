@@ -6,13 +6,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import jp.manavista.lessonmanager.model.dto.EventDto;
 import jp.manavista.lessonmanager.model.entity.Event;
 import jp.manavista.lessonmanager.model.vo.EventVo;
 import jp.manavista.lessonmanager.repository.EventRepository;
 import jp.manavista.lessonmanager.service.EventService;
 
 /**
+ *
+ * Member service implement
+ *
  * <p>
  * Overview:<br>
  * </p>
@@ -27,7 +29,11 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Single<Event> getById(long id) {
-        return null;
+        return repository.getRelation()
+                .idEq(id)
+                .getAsSingle(0)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
@@ -46,9 +52,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Single<Event> save(EventDto dto) {
+    public Single<Event> save(Event entity) {
         return repository.getRelation()
-                .upsertAsSingle(dto.toEntity())
+                .upsertAsSingle(entity)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Single<Integer> deleteById(long id) {
+        return repository.getDeleter()
+                .idEq(id)
+                .executeAsSingle()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }

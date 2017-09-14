@@ -2,7 +2,6 @@ package jp.manavista.lessonmanager.service;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import jp.manavista.lessonmanager.model.dto.EventDto;
 import jp.manavista.lessonmanager.model.entity.Event;
 import jp.manavista.lessonmanager.model.vo.EventVo;
 
@@ -42,13 +41,27 @@ public interface EventService {
      *
      * <p>
      * Overview:<br>
-     * Convert DTO to entity object. Then, save Event entity.
+     * save Event entity.
      * </p>
      *
-     * @param dto target {@link EventDto}
+     * @param entity target {@link Event}
      * @return {@link Single} observable object
      */
-    Single<Event> save(EventDto dto);
+    Single<Event> save(Event entity);
+
+    /**
+     *
+     * Delete
+     *
+     * <p>
+     * Overview:<br>
+     * Delete by entity row id.
+     * </p>
+     *
+     * @param id row id
+     * @return transaction row count
+     */
+    Single<Integer> deleteById(long id);
 
     /**
      *

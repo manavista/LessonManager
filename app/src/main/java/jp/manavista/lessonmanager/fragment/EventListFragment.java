@@ -1,6 +1,7 @@
 package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,14 +20,17 @@ import javax.inject.Inject;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.EventActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.vo.EventVo;
 import jp.manavista.lessonmanager.service.EventService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
+import jp.manavista.lessonmanager.view.operation.EventOperation;
 import jp.manavista.lessonmanager.view.section.EventSection;
 
 /**
@@ -34,7 +38,7 @@ import jp.manavista.lessonmanager.view.section.EventSection;
  * Event List Fragment
  *
  */
-public class EventListFragment extends Fragment {
+public final class EventListFragment extends Fragment {
 
     private static final String TAG = EventListFragment.class.getSimpleName();
 
@@ -72,6 +76,7 @@ public class EventListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.disposable = Disposables.empty();
     }
 
     @Override
@@ -92,7 +97,7 @@ public class EventListFragment extends Fragment {
         view.addItemDecoration(new ItemDecoration(contents));
 
         adapter = new SectionedRecyclerViewAdapter();
-        section = EventSection.newInstance();
+        section = EventSection.newInstance(operation);
         adapter.addSection(section);
         view.setAdapter(adapter);
 
@@ -132,4 +137,35 @@ public class EventListFragment extends Fragment {
         super.onDestroyView();
         disposable.dispose();
     }
+
+    /**
+     *
+     * Event Operation
+     *
+     * <p>
+     * Define the implementation
+     * that manipulates the items of the EventList within the section.
+     * </p>
+     */
+    private final EventOperation operation = new EventOperation() {
+        @Override
+        public void edit(long id, int position) {
+            itemTouchHelper.closeOpened();
+            final Intent intent = new Intent(contents, EventActivity.class);
+            intent.putExtra(EventActivity.EXTRA_EVENT_ID, id);
+            contents.startActivity(intent);
+        }
+
+        @Override
+        public void delete(long id, final int position) {
+            itemTouchHelper.closeOpened();
+            disposable = service.deleteById(id).subscribe(new Consumer<Integer>() {
+                @Override
+                public void accept(Integer integer) throws Exception {
+                    section.getList().remove(position);
+                    adapter.notifyItemRemoved(position);
+                }
+            });
+        }
+    };
 }

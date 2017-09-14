@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -39,16 +40,19 @@ import jp.manavista.lessonmanager.util.DateTimeUtil;
 import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link EventFragment#newInstance} factory method to
- * create an instance of this fragment.
+ *
+ * Event Fragment
+ *
+ *
  */
 public class EventFragment extends Fragment implements Validator.ValidationListener {
 
-    /** Logger tag string */
+    /** Logger Tag string */
     public static final String TAG = EventFragment.class.getSimpleName();
     /** bundle key: member id */
     public static final String KEY_EVENT_ID = "EVENT_ID";
+    /** Preview Tag string */
+    private static final int TAG_PREVIEW_TEXT = R.string.tag_event_preview_color;
 
     /** member id */
     private long eventId;
@@ -137,7 +141,7 @@ public class EventFragment extends Fragment implements Validator.ValidationListe
         super.onResume();
 
         if( eventId > 0 ) {
-            // TODO: 2017/09/14 read database
+            storeEntity(eventId);
         } else {
             storeInitValue();
         }
@@ -151,7 +155,7 @@ public class EventFragment extends Fragment implements Validator.ValidationListe
 
     @Override
     public void onValidationSucceeded() {
-        disposable = service.save(dto).subscribe(new Consumer<Event>() {
+        disposable = service.save(dto.toEntity()).subscribe(new Consumer<Event>() {
             @Override
             public void accept(Event event) throws Exception {
                 contents.finish();
@@ -192,6 +196,25 @@ public class EventFragment extends Fragment implements Validator.ValidationListe
     private void storeInitValue() {
         final Calendar today = DateTimeUtil.today();
         dto.getDate().setText(DateTimeUtil.format(DATE_PATTERN_YYYYMMDD, today));
+
+        /* Color (default text: @color/black, background: @color/amber_500) */
+        final int textColor = dto.getPreviewText().getCurrentTextColor();
+        final int backgroundColor = ((ColorDrawable) dto.getPreviewText().getBackground()).getColor();
+
+        dto.setTextColor(textColor);
+        dto.getTextColorImageButton().setTag(TAG_PREVIEW_TEXT, textColor);
+
+        dto.setBackgroundColor(backgroundColor);
+        dto.getBackgroundColorImageButton().setTag(TAG_PREVIEW_TEXT, backgroundColor);
+    }
+
+    private void storeEntity(final long id) {
+        disposable = service.getById(id).subscribe(new Consumer<Event>() {
+            @Override
+            public void accept(Event entity) throws Exception {
+                dto.store(entity);
+            }
+        });
     }
 
     /**
@@ -245,9 +268,9 @@ public class EventFragment extends Fragment implements Validator.ValidationListe
             public void onClick(final View view) {
 
                 final ImageButton textColorButton = (ImageButton) view;
-                final int textColor = textColorButton.getTag(R.string.tag_member_lesson_preview_color) == null
+                final int textColor = textColorButton.getTag(TAG_PREVIEW_TEXT) == null
                         ? ContextCompat.getColor(contents, R.color.black)
-                        : (int) textColorButton.getTag(R.string.tag_member_lesson_preview_color);
+                        : (int) textColorButton.getTag(TAG_PREVIEW_TEXT);
 
                 new SpectrumDialog.Builder(contents)
                         .setColors(R.array.color_picker_target)
@@ -258,7 +281,7 @@ public class EventFragment extends Fragment implements Validator.ValidationListe
                             public void onColorSelected(boolean positiveResult, @ColorInt int color) {
                                 dto.setTextColor(color);
                                 dto.getPreviewText().setTextColor(color);
-                                textColorButton.setTag(R.string.tag_member_lesson_preview_color, color);
+                                textColorButton.setTag(TAG_PREVIEW_TEXT, color);
                             }
                         }).build().show(getFragmentManager(), "text_color_select_dialog");
             }
@@ -269,9 +292,9 @@ public class EventFragment extends Fragment implements Validator.ValidationListe
             public void onClick(View view) {
 
                 final ImageButton backgroundColorButton = (ImageButton) view;
-                final int backgroundColor = backgroundColorButton.getTag(R.string.tag_member_lesson_preview_color) == null
+                final int backgroundColor = backgroundColorButton.getTag(TAG_PREVIEW_TEXT) == null
                         ? ContextCompat.getColor(contents, R.color.amber_500)
-                        : (int) backgroundColorButton.getTag(R.string.tag_member_lesson_preview_color);
+                        : (int) backgroundColorButton.getTag(TAG_PREVIEW_TEXT);
 
                 new SpectrumDialog.Builder(contents)
                         .setColors(R.array.color_picker_target)
@@ -282,7 +305,7 @@ public class EventFragment extends Fragment implements Validator.ValidationListe
                             public void onColorSelected(boolean positiveResult, @ColorInt int color) {
                                 dto.setBackgroundColor(color);
                                 dto.getPreviewText().setBackgroundColor(color);
-                                backgroundColorButton.setTag(R.string.tag_member_lesson_preview_color, color);
+                                backgroundColorButton.setTag(TAG_PREVIEW_TEXT, color);
                             }
                         }).build().show(getFragmentManager(), "background_color_select_dialog");
             }

@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
  * Overview:<br>
  * </p>
  */
-public class MemberLessonFragmentDtoTest {
+public class MemberLessonDtoTest {
 
     @Before
     public void setUp() {
@@ -24,7 +24,7 @@ public class MemberLessonFragmentDtoTest {
     @Test
     public void rangeTimetableListener() {
 
-        MemberLessonFragmentDto dto = MemberLessonFragmentDto.builder().build();
+        MemberLessonDto dto = MemberLessonDto.builder().build();
         List<TimetableDto> list = new ArrayList<>();
 
         list.add(new TimetableDto());

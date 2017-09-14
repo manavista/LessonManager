@@ -14,10 +14,16 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.model.vo.EventVo;
 import jp.manavista.lessonmanager.view.holder.EventHolder;
+import jp.manavista.lessonmanager.view.operation.EventOperation;
+import lombok.val;
 
 /**
+ *
+ * Event Section
+ *
  * <p>
  * Overview:<br>
+ * Define the internal section class of adapter used in section recycler view.
  * </p>
  */
 public final class EventSection extends StatelessSection implements FilterableSection {
@@ -25,13 +31,17 @@ public final class EventSection extends StatelessSection implements FilterableSe
     private List<EventVo> list;
     private List<EventVo> filteredList;
 
+    /** Operation */
+    private final EventOperation operation;
+
     /** Constructor(private) */
-    private EventSection() {
+    private EventSection(EventOperation operation) {
         super(new SectionParameters.Builder(R.layout.container_event).build());
+        this.operation = operation;
     }
 
-    public static EventSection newInstance() {
-        return new EventSection();
+    public static EventSection newInstance(EventOperation operation) {
+        return new EventSection(operation);
     }
 
     @Override
@@ -53,18 +63,19 @@ public final class EventSection extends StatelessSection implements FilterableSe
         itemHolder.name.setText(vo.getName());
         itemHolder.memo.setText(vo.getMemo());
 
-
         itemHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                final val vo = filteredList.get(itemHolder.getAdapterPosition());
+                operation.edit(vo.getId(), itemHolder.getAdapterPosition());
             }
         });
 
         itemHolder.viewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                final val vo = filteredList.get(itemHolder.getAdapterPosition());
+                operation.delete(vo.getId(), itemHolder.getAdapterPosition());
             }
         });
     }

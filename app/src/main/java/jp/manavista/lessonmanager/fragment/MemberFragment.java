@@ -29,7 +29,7 @@ import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.model.dto.MemberFragmentDto;
+import jp.manavista.lessonmanager.model.dto.MemberDto;
 import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
@@ -58,7 +58,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     private Activity contents;
     /** DTO */
     @Getter
-    private MemberFragmentDto dto;
+    private MemberDto dto;
     /** member id */
     private long memberId;
     /** input validator */
@@ -112,7 +112,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
 
         rootView = inflater.inflate(R.layout.fragment_member, container, false);
 
-        dto = MemberFragmentDto.builder()
+        dto = MemberDto.builder()
                 .givenName((EditText) rootView.findViewById(R.id.givenNameEditText))
                 .additionalName((EditText) rootView.findViewById(R.id.additionalNameEditText))
                 .familyName((EditText) rootView.findViewById(R.id.familyNameEditText))
@@ -164,7 +164,11 @@ public final class MemberFragment extends Fragment implements Validator.Validati
                 new DatePickerDialog(contents, dto.birthdaySetListener, year, month, day).show();
             }
         });
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
         if( memberId > 0 ) {
             storeEntityToDto(memberId);
         }

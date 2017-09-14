@@ -41,7 +41,7 @@ import lombok.Setter;
  */
 @Data
 @Builder
-public final class MemberLessonFragmentDto implements Serializable {
+public final class MemberLessonDto implements Serializable {
 
     /** Logger tag string */
     private static final String TAG = MemberLessonFragment.class.getSimpleName();
@@ -205,7 +205,7 @@ public final class MemberLessonFragmentDto implements Serializable {
         return memberLesson;
     }
 
-    public void copy(@NonNull final MemberLesson entity) {
+    public void store(@NonNull final MemberLesson entity) {
 
         setId(entity.id);
         getMemberName().setText(MemberVo.copy(entity.member.get()).getDisplayName());

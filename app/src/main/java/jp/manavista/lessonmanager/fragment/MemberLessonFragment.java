@@ -43,7 +43,7 @@ import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.vo.MemberVo;
-import jp.manavista.lessonmanager.model.dto.MemberLessonFragmentDto;
+import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
@@ -81,7 +81,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     /** member lesson id */
     private long id;
     /** DTO */
-    private MemberLessonFragmentDto dto;
+    private MemberLessonDto dto;
     /** Activity Contents */
     private Activity contents;
 
@@ -146,7 +146,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
 
         final View rootView = inflater.inflate(R.layout.fragment_member_lesson, container, false);
 
-        dto = MemberLessonFragmentDto.builder()
+        dto = MemberLessonDto.builder()
                 .id(id)
                 .memberId(memberId)
                 .memberName((TextView) rootView.findViewById(R.id.member_name))
@@ -535,7 +535,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         disposable = memberLessonService.getById(memberLessonId).subscribe(new Consumer<MemberLesson>() {
             @Override
             public void accept(MemberLesson entity) throws Exception {
-                dto.copy(entity);
+                dto.store(entity);
                 dto.getDayOfWeek().setText(buildDayOfWeek(dto.getDayOfWeekValue()));
             }
         }, new Consumer<Throwable>() {

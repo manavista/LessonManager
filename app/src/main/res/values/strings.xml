@@ -8,6 +8,7 @@
     <!--   title: -->
     <!--   key: -->
     <!--   summary: -->
+    <!--   tag: -->
 
     <!-- application -->
     <string name="app_name">Lesson Manager</string>
@@ -174,5 +175,6 @@
     <string name="hint.event.name">Input Event Name</string>
     <string name="hint.event.memo">Input Event Memo</string>
     <string name="description.event.date_button">Enter Event Date</string>
+    <string name="tag.event.preview.color">TAG_SELECTED_COLOR</string>
 
 </resources>

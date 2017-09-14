@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.model.dto;
 
 import android.app.DatePickerDialog;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -93,6 +94,25 @@ public final class EventDto implements Serializable {
         entity.backgroundColor = backgroundColor;
 
         return entity;
+    }
+
+    /**
+     *
+     * Store
+     *
+     * @param entity target entity
+     */
+    public void store(@NonNull Event entity) {
+
+        id = entity.id;
+        name.setText(entity.name);
+        date.setText(entity.date);
+        memo.setText(entity.memo);
+
+        textColor = entity.textColor;
+        backgroundColor = entity.backgroundColor;
+        previewText.setTextColor(entity.textColor);
+        previewText.setBackgroundColor(entity.backgroundColor);
     }
 }
 
