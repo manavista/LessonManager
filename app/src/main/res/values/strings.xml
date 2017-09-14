@@ -165,6 +165,13 @@
     <!-- Event List -->
     <string name="toolbar.event_list.title">Event List</string>
     <string name="toolbar.event_list.option.list">Setting List Item</string>
+    <string name="description.event_list.image">Icon Image</string>
+    <string name="label.event_list.name">Event Name</string>
+    <string name="label.event_list.memo">Event Memo</string>
+    <string name="label.event_list.date">YYYY/MM/DD</string>
+    <string name="label.event_list.date.today">Today</string>
+    <string name="label.event_list.date.yesterday">Yesterday</string>
+    <string name="label.event_list.date.tomorrow">Tomorrow</string>
 
     <!-- Event -->
     <string name="toolbar.event.title">Event</string>

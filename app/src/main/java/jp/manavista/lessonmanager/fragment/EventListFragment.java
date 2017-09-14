@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.EventActivity;
+import jp.manavista.lessonmanager.constants.DateLabel;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.vo.EventVo;
 import jp.manavista.lessonmanager.service.EventService;
@@ -41,6 +43,9 @@ import jp.manavista.lessonmanager.view.section.EventSection;
 public final class EventListFragment extends Fragment {
 
     private static final String TAG = EventListFragment.class.getSimpleName();
+
+    /** Date Label Map */
+    private SparseArray<String> dateLabelArray;
 
     /** Activity Contents */
     private Activity contents;
@@ -77,6 +82,11 @@ public final class EventListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.disposable = Disposables.empty();
+
+        dateLabelArray = new SparseArray<>();
+        dateLabelArray.put(DateLabel.TODAY.code(), getString(R.string.label_event_list_date_today));
+        dateLabelArray.put(DateLabel.YESTERDAY.code(), getString(R.string.label_event_list_date_yesterday));
+        dateLabelArray.put(DateLabel.TOMORROW.code(), getString(R.string.label_event_list_date_tomorrow));
     }
 
     @Override
@@ -109,11 +119,12 @@ public final class EventListFragment extends Fragment {
 
     @Override
     public void onResume() {
+
         super.onResume();
 
         final List<EventVo> list = new ArrayList<>();
 
-        disposable = service.getVoListAll().subscribe(new Consumer<EventVo>() {
+        disposable = service.getVoListAll(dateLabelArray).subscribe(new Consumer<EventVo>() {
             @Override
             public void accept(EventVo vo) throws Exception {
                 list.add(vo);

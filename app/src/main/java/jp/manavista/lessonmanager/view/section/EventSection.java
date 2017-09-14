@@ -61,6 +61,7 @@ public final class EventSection extends StatelessSection implements FilterableSe
         final EventVo vo = filteredList.get(position);
 
         itemHolder.name.setText(vo.getName());
+        itemHolder.date.setText(vo.getDisplayDate());
         itemHolder.memo.setText(vo.getMemo());
 
         itemHolder.view.setOnClickListener(new View.OnClickListener() {

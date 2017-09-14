@@ -1,5 +1,7 @@
 package jp.manavista.lessonmanager.service;
 
+import android.util.SparseArray;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import jp.manavista.lessonmanager.model.entity.Event;
@@ -30,10 +32,16 @@ public interface EventService {
      *
      * Get All Value Object List
      *
+     * <p>
+     * Overview:<br>
+     * Acquires the processed event list displayed on the screen.
+     * Sort by the Event date oldest.
+     * </p>
+     *
+     * @param labelMap Display Date Label Map
      * @return {@link Event} vo list
      */
-    Observable<EventVo> getVoListAll();
-
+    Observable<EventVo> getVoListAll(SparseArray<String> labelMap);
 
     /**
      *
