@@ -10,7 +10,7 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/option_list"
+        android:id="@+id/option_setting"
         android:title="@string/toolbar.event_list.option.list"
         android:icon="@drawable/ic_list_white"
         app:showAsAction="always"/>

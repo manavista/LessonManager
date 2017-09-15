@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -62,6 +63,9 @@ public final class EventListFragment extends Fragment {
 
     @Inject
     EventService service;
+    /** Shared preferences */
+    @Inject
+    SharedPreferences preferences;
 
     public EventListFragment() {
         // Required empty public constructor
@@ -124,9 +128,12 @@ public final class EventListFragment extends Fragment {
 
         super.onResume();
 
+        final boolean containPast = preferences.getBoolean(
+                getString(R.string.key_preferences_event_list_display_past), false);
+
         final List<EventVo> list = new ArrayList<>();
 
-        disposable = service.getVoListAll(dateLabelArray).subscribe(new Consumer<EventVo>() {
+        disposable = service.getVoListAll(containPast, dateLabelArray).subscribe(new Consumer<EventVo>() {
             @Override
             public void accept(EventVo vo) throws Exception {
                 list.add(vo);

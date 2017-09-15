@@ -9,6 +9,7 @@ import android.view.View;
 
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.SettingDeleteFragment;
+import jp.manavista.lessonmanager.fragment.SettingEventFragment;
 import jp.manavista.lessonmanager.fragment.SettingFragment;
 
 /**
@@ -38,6 +39,7 @@ public class SettingActivity extends AppCompatActivity {
     public enum FragmentType {
 
         GENERAL("Settings"),
+        EVENT("Event"),
         DELETE("Delete using data");
 
         String title;
@@ -86,6 +88,12 @@ public class SettingActivity extends AppCompatActivity {
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_setting, SettingDeleteFragment.newInstance())
+                        .commit();
+                break;
+            case EVENT:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_setting, SettingEventFragment.newInstance())
                         .commit();
                 break;
         }

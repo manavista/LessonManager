@@ -60,6 +60,19 @@
     <string name="label.preferences.icon.attention">Attention</string>
     <string name="message.preferences.icon.attention">Deleting a member also deletes the related Lesson and Schedule. And deleted data can not be restored.</string>
 
+    <string name="label.preference.category.event">Event</string>
+    <string name="key.preference.event">event</string>
+    <string name="title.preference.event">Event</string>
+    <string name="summary.preference.event">Select Event Category</string>
+
+
+    <!-- Preferences Event -->
+    <string name="label.preferences.category.event_list">Event List</string>
+    <string name="key.preferences.event_list.display_past">event_list_display_past</string>
+    <string name="title.preferences.event_list.display_past">Display Past Event</string>
+    <string name="summary.preferences.event_list.display_past">Select display past event</string>
+
+
     <!-- LessonView -->
     <string name="toolbar.lesson_view.change_date">Change Date</string>
     <string name="toolbar.lesson_view.1_day">View 1 Day</string>

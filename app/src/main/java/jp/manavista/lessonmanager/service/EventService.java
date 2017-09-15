@@ -38,10 +38,11 @@ public interface EventService {
      * Sort by the Event date oldest.
      * </p>
      *
+     * @param containPast Contain past event data
      * @param labelMap Display Date Label Map
      * @return {@link Event} vo list
      */
-    Observable<EventVo> getVoListAll(SparseArray<String> labelMap);
+    Observable<EventVo> getVoListAll(boolean containPast, SparseArray<String> labelMap);
 
     /**
      *

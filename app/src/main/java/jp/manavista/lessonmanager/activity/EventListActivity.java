@@ -17,6 +17,8 @@ import jp.manavista.lessonmanager.fragment.EventListFragment;
 import jp.manavista.lessonmanager.view.section.FilterableSection;
 import lombok.val;
 
+import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.EVENT;
+
 public class EventListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     /** fragment */
@@ -63,6 +65,19 @@ public class EventListActivity extends AppCompatActivity implements SearchView.O
         searchView.setOnQueryTextListener(this);
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.option_setting:
+                final Intent intent = new Intent(this, SettingActivity.class);
+                intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, EVENT);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

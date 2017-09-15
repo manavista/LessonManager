@@ -15,6 +15,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import jp.manavista.lessonmanager.constants.DateLabel;
 import jp.manavista.lessonmanager.model.entity.Event;
+import jp.manavista.lessonmanager.model.entity.Event_Selector;
 import jp.manavista.lessonmanager.model.vo.EventVo;
 import jp.manavista.lessonmanager.repository.EventRepository;
 import jp.manavista.lessonmanager.service.EventService;
@@ -46,7 +47,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Observable<EventVo> getVoListAll(final SparseArray<String> labelMap) {
+    public Observable<EventVo> getVoListAll(final boolean containPast, final SparseArray<String> labelMap) {
 
         /*
          * Natural Display Date
@@ -61,8 +62,13 @@ public class EventServiceImpl implements EventService {
         final Date yesterday = DateUtils.addDays(today, -1);
         final Date tomorrow = DateUtils.addDays(today, 1);
 
-        return repository.getRelation()
-                .selector()
+        Event_Selector selector = repository.getSelector();
+
+        if( !containPast ) {
+            selector = selector.dateGe(DateTimeUtil.DATE_FORMAT_YYYYMMDD.format(today));
+        }
+
+        return selector
                 .orderByDateAsc()
                 .executeAsObservable()
                 .map(new Function<Event, EventVo>() {
