@@ -233,6 +233,8 @@ public final class LessonViewFragment extends Fragment implements
 
         timetableList.clear();
 
+        // TODO: 2017/09/16 If timetable delete, remain except draw hour. add If 0 row
+
         timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
             @Override
             public void accept(@NonNull Timetable timetable) throws Exception {

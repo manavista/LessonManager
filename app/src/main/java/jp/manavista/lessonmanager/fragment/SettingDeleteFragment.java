@@ -24,16 +24,7 @@ import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.facade.SettingDeleteFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
-import jp.manavista.lessonmanager.service.MemberLessonService;
-import jp.manavista.lessonmanager.service.MemberService;
-import jp.manavista.lessonmanager.service.TimetableService;
 import lombok.val;
-
-import static jp.manavista.lessonmanager.facade.SettingDeleteFacade.LESSON;
-import static jp.manavista.lessonmanager.facade.SettingDeleteFacade.MEMBER;
-import static jp.manavista.lessonmanager.facade.SettingDeleteFacade.SCHEDULE;
-import static jp.manavista.lessonmanager.facade.SettingDeleteFacade.TIMETABLE;
 
 /**
  *
@@ -46,20 +37,13 @@ import static jp.manavista.lessonmanager.facade.SettingDeleteFacade.TIMETABLE;
  */
 public final class SettingDeleteFragment extends Fragment {
 
-    private View rootView;
+    private static final String TAG = SettingDeleteFragment.class.getSimpleName();
+
     private ListView listView;
 
     /** Activity Contents */
     private Activity contents;
 
-    @Inject
-    MemberLessonScheduleService memberLessonScheduleService;
-    @Inject
-    MemberLessonService memberLessonService;
-    @Inject
-    MemberService memberService;
-    @Inject
-    TimetableService timetableService;
     @Inject
     SettingDeleteFacade facade;
 
@@ -86,14 +70,10 @@ public final class SettingDeleteFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_setting_delete, container, false);
         return inflater.inflate(R.layout.fragment_setting_delete, container, false);
     }
 
@@ -126,43 +106,13 @@ public final class SettingDeleteFragment extends Fragment {
                 }
             }
 
-            // TODO: 2017/09/12 define facade class
-
-            if( deleteSet.contains(TIMETABLE) ) {
-                timetableService.deleteAll().subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        contents.finish();
-                    }
-                });
-            }
-
-            if( deleteSet.contains(SCHEDULE) ) {
-                memberLessonScheduleService.deleteAll().subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        contents.finish();
-                    }
-                });
-            }
-
-            if( deleteSet.contains(LESSON) ) {
-                memberLessonService.deleteAll().subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        contents.finish();
-                    }
-                });
-            }
-
-            if( deleteSet.contains(MEMBER) ) {
-                memberService.deleteAll().subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        contents.finish();
-                    }
-                });
-            }
+            facade.delete(deleteSet).subscribe(new Consumer<Integer>() {
+                @Override
+                public void accept(Integer integer) throws Exception {
+                    Log.d(TAG, "delete total rows: " + integer);
+                    contents.finish();
+                }
+            });
 
         }
     };
