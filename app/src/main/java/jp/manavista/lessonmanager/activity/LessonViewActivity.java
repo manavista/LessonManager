@@ -173,6 +173,9 @@ public class LessonViewActivity extends AppCompatActivity
         } else if( id == R.id.nav_info ) {
             new ApplicationInformationDialog()
                     .show(getSupportFragmentManager(), "application_information_dialog");
+        } else if( id == R.id.nav_event ) {
+            Intent intent = new Intent(activity, EventListActivity.class);
+            activity.startActivity(intent);
         }
 
         drawer.closeDrawer(GravityCompat.START);

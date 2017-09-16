@@ -9,10 +9,12 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import jp.manavista.lessonmanager.model.entity.OrmaDatabase;
+import jp.manavista.lessonmanager.repository.EventRepository;
 import jp.manavista.lessonmanager.repository.MemberLessonRepository;
 import jp.manavista.lessonmanager.repository.MemberLessonScheduleRepository;
 import jp.manavista.lessonmanager.repository.MemberRepository;
 import jp.manavista.lessonmanager.repository.TimeTableRepository;
+import jp.manavista.lessonmanager.repository.impl.EventRepositoryImpl;
 import jp.manavista.lessonmanager.repository.impl.MemberLessonRepositoryImpl;
 import jp.manavista.lessonmanager.repository.impl.MemberLessonScheduleRepositoryImpl;
 import jp.manavista.lessonmanager.repository.impl.MemberRepositoryImpl;
@@ -68,5 +70,11 @@ public class RepositoryModule {
     @Singleton
     MemberLessonScheduleRepository provideMemberLessonScheduleRepository(OrmaDatabase database) {
         return new MemberLessonScheduleRepositoryImpl(database);
+    }
+
+    @Provides
+    @Singleton
+    EventRepository provideEventRepository(OrmaDatabase database) {
+        return new EventRepositoryImpl(database);
     }
 }

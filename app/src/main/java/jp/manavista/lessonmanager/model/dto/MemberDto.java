@@ -41,10 +41,10 @@ import lombok.Setter;
  */
 @Data
 @Builder
-public final class MemberFragmentDto implements Serializable {
+public final class MemberDto implements Serializable {
 
     /** Logger tag string */
-    public static final String TAG = MemberFragmentDto.class.getSimpleName();
+    public static final String TAG = MemberDto.class.getSimpleName();
 
     /** phone type Spinner value */
     private int[] phoneTypeValues;

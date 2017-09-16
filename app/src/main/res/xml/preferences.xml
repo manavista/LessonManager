@@ -35,6 +35,17 @@
 
     <PreferenceCategory
         android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.event">
+
+        <Preference
+            android:key="@string/key.preference.event"
+            android:title="@string/title.preference.event"
+            android:summary="@string/summary.preference.event"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
         android:title="@string/label.preference.category.delete">
 
         <Preference

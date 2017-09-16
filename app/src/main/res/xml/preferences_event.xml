@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preferences.category.event_list">
+
+        <CheckBoxPreference
+            android:id="@+id/preferences_event_list_display_past"
+            android:key="@string/key.preferences.event_list.display_past"
+            android:title="@string/title.preferences.event_list.display_past"
+            android:summary="@string/summary.preferences.event_list.display_past"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

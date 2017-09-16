@@ -1,5 +1,15 @@
 <resources>
 
+    <!-- String TYPE     -->
+    <!--   message:  -->
+    <!--   label:  -->
+    <!--   description: -->
+    <!--   hint: -->
+    <!--   title: -->
+    <!--   key: -->
+    <!--   summary: -->
+    <!--   tag: -->
+
     <!-- application -->
     <string name="app_name">Lesson Manager</string>
     <string name="app_version">Version 1.0.0</string>
@@ -49,6 +59,19 @@
     <string name="label.preferences.button.delete">Delete Selected Items</string>
     <string name="label.preferences.icon.attention">Attention</string>
     <string name="message.preferences.icon.attention">Deleting a member also deletes the related Lesson and Schedule. And deleted data can not be restored.</string>
+
+    <string name="label.preference.category.event">Event</string>
+    <string name="key.preference.event">event</string>
+    <string name="title.preference.event">Event</string>
+    <string name="summary.preference.event">Select Event Category</string>
+
+
+    <!-- Preferences Event -->
+    <string name="label.preferences.category.event_list">Event List</string>
+    <string name="key.preferences.event_list.display_past">event_list_display_past</string>
+    <string name="title.preferences.event_list.display_past">Display Past Event</string>
+    <string name="summary.preferences.event_list.display_past">Select display past event</string>
+
 
     <!-- LessonView -->
     <string name="toolbar.lesson_view.change_date">Change Date</string>
@@ -151,5 +174,28 @@
 
     <!-- Member Lesson Schedule List -->
     <string name="toolbar.member_lesson_schedule_list.title">Schedule</string>
+
+    <!-- Event List -->
+    <string name="toolbar.event_list.title">Event List</string>
+    <string name="toolbar.event_list.option.list">Setting List Item</string>
+    <string name="toolbar.event_list.option.search">Search</string>
+    <string name="description.event_list.image">Icon Image</string>
+    <string name="label.event_list.name">Event Name</string>
+    <string name="label.event_list.memo">Event Memo</string>
+    <string name="label.event_list.date">YYYY/MM/DD</string>
+    <string name="label.event_list.date.today">Today</string>
+    <string name="label.event_list.date.yesterday">Yesterday</string>
+    <string name="label.event_list.date.tomorrow">Tomorrow</string>
+
+    <!-- Event -->
+    <string name="toolbar.event.title">Event</string>
+    <string name="toolbar.event.option.save">Save</string>
+    <string name="label.event.name">Event Name:</string>
+    <string name="label.event.date">Date:</string>
+    <string name="label.event.memo">Memo:</string>
+    <string name="hint.event.name">Input Event Name</string>
+    <string name="hint.event.memo">Input Event Memo</string>
+    <string name="description.event.date_button">Enter Event Date</string>
+    <string name="tag.event.preview.color">TAG_SELECTED_COLOR</string>
 
 </resources>

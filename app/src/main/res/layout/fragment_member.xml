@@ -207,7 +207,7 @@
                 android:text="@string/label.member.birthday"/>
 
             <ImageView
-                android:id="@+id/birthdayCalenderIconDummy"
+                android:id="@+id/event_date_icon_dummy"
                 android:layout_width="1dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="@dimen/margin_8dp"
@@ -224,7 +224,7 @@
                 android:hint="@string/hint.member.birthday"
                 android:inputType="date"
                 android:layout_below="@+id/birthdayLabel"
-                android:layout_toEndOf="@+id/birthdayCalenderIconDummy"/>
+                android:layout_toEndOf="@+id/event_date_icon_dummy"/>
 
             <ImageView
                 android:id="@+id/birthdayCalenderIcon"
@@ -232,7 +232,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/description.member.birthday.icon"
                 app:srcCompat="@drawable/ic_event_black"
-                android:layout_alignTop="@+id/birthdayCalenderIconDummy"
+                android:layout_alignTop="@+id/event_date_icon_dummy"
                 android:layout_toEndOf="@+id/birthdayEditText"/>
 
             <TextView

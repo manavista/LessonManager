@@ -19,6 +19,9 @@ import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.SettingActivity;
 import jp.manavista.lessonmanager.view.preference.NumberPickerPreference;
 
+import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.EVENT;
+import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.DELETE;
+
 /**
  *
  * Setting Fragment
@@ -55,17 +58,6 @@ public final class SettingFragment extends PreferenceFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-
-        final Preference preference = findPreference(getString(R.string.preferences_key_delete_using_data));
-        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                final Intent intent = new Intent(contents, SettingActivity.class);
-                intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, SettingActivity.FragmentType.DELETE);
-                contents.startActivity(intent);
-                return false;
-            }
-        });
     }
 
     @Override
@@ -83,6 +75,8 @@ public final class SettingFragment extends PreferenceFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         contents = getActivity();
+
+        setPreferencesLister();
     }
 
     @Override
@@ -135,5 +129,30 @@ public final class SettingFragment extends PreferenceFragment
                 preference.setSummary(String.format(Locale.getDefault(), TIME_FORMAT_HMM, preference.getSelectedValue()));
             }
         }
+    }
+
+    private void setPreferencesLister() {
+
+        final Preference event = findPreference(getString(R.string.key_preference_event));
+        event.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final Intent intent = new Intent(contents, SettingActivity.class);
+                intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, EVENT);
+                contents.startActivity(intent);
+                return false;
+            }
+        });
+
+        final Preference delete = findPreference(getString(R.string.preferences_key_delete_using_data));
+        delete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final Intent intent = new Intent(contents, SettingActivity.class);
+                intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, DELETE);
+                contents.startActivity(intent);
+                return false;
+            }
+        });
     }
 }
