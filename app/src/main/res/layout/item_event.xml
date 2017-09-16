@@ -7,52 +7,65 @@
     android:background="#FAFAFA"
     android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/event_icon_image"
-        android:src="@drawable/ic_assistant_photo_black"
-        android:background="@drawable/circle"
-        android:alpha="0.6"
-        android:contentDescription="@string/description.event_list.image"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:paddingStart="@dimen/margin_16dp"
-        android:paddingEnd="@dimen/margin_16dp"/>
-
-    <LinearLayout
-        android:orientation="vertical"
+    <FrameLayout
+        android:background="?android:selectableItemBackgroundBorderless"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_marginTop="@dimen/margin_16dp"
-        android:paddingStart="0dp"
-        android:paddingEnd="@dimen/margin_16dp">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/event_name"
-                android:text="@string/label.event_list.name"
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/event_icon_image"
+                android:src="@drawable/ic_assistant_photo_black"
+                android:background="@drawable/circle"
+                android:alpha="0.6"
+                android:contentDescription="@string/description.event_list.image"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:paddingStart="@dimen/margin_16dp"
+                android:paddingEnd="@dimen/margin_16dp"/>
 
-            <TextView
-                android:id="@+id/event_date_text"
-                android:text="@string/label.event_list.date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_marginTop="@dimen/margin_16dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="@dimen/margin_16dp">
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/event_memo"
-            android:text="@string/label.event_list.memo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/event_name"
+                        android:text="@string/label.event_list.name"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/event_date_text"
+                        android:text="@string/label.event_list.date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/event_memo"
+                    android:text="@string/label.event_list.memo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

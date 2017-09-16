@@ -1,8 +1,11 @@
 package jp.manavista.lessonmanager.model.vo;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.Calendar;
 
 import jp.manavista.lessonmanager.model.entity.Event;
+import jp.manavista.lessonmanager.util.DateTimeUtil;
 import lombok.Data;
 
 /**
@@ -36,5 +39,20 @@ public final class EventVo implements Serializable {
         vo.backgroundColor = entity.backgroundColor;
         vo.memo = entity.memo;
         return vo;
+    }
+
+    public Calendar getStartDateCalendar() throws ParseException {
+        final Calendar start = DateTimeUtil.today();
+        start.setTime(DateTimeUtil.DATE_FORMAT_YYYYMMDD.parse(date));
+        return start;
+    }
+
+    public Calendar getEndDateCalendar() throws ParseException {
+        final Calendar end = DateTimeUtil.today();
+        end.setTime(DateTimeUtil.DATE_FORMAT_YYYYMMDD.parse(date));
+        end.set(Calendar.HOUR_OF_DAY, 23);
+        end.set(Calendar.MINUTE, 59);
+        end.set(Calendar.SECOND, 59);
+        return end;
     }
 }

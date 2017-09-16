@@ -27,12 +27,14 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.EventActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity;
 import jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Timetable;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
+import jp.manavista.lessonmanager.service.EventService;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.TimetableService;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
@@ -72,8 +74,10 @@ public final class LessonViewFragment extends Fragment implements
     private int visibleDays;
     /** Timetable DTO List */
     private List<TimetableDto> timetableList;
-    /** WeekViewEvent List */
-    private List<WeekViewEvent> weekViewEventList;
+    /** Lesson List */
+    private List<WeekViewEvent> lessonList;
+    /** Event List */
+    private List<WeekViewEvent> eventList;
 
     /** Activity Contents */
     private Activity contents;
@@ -85,11 +89,14 @@ public final class LessonViewFragment extends Fragment implements
     @Inject
     TimetableService timetableService;
     @Inject
+    EventService eventService;
+    @Inject
     MemberLessonScheduleService memberLessonScheduleService;
 
     /** disposable */
     private Disposable timetableDisposable;
     private Disposable scheduleDisposable;
+    private Disposable eventDisposable;
 
 
     /** Constructor */
@@ -126,6 +133,7 @@ public final class LessonViewFragment extends Fragment implements
 
         timetableDisposable = Disposables.empty();
         scheduleDisposable = Disposables.empty();
+        eventDisposable = Disposables.empty();
     }
 
     @Override
@@ -153,7 +161,8 @@ public final class LessonViewFragment extends Fragment implements
         lessonView.setDateTimeInterpreter(this);
 
         timetableList = new ArrayList<>();
-        weekViewEventList = new ArrayList<>();
+        lessonList = new ArrayList<>();
+        eventList = new ArrayList<>();
     }
 
     @Override
@@ -161,8 +170,14 @@ public final class LessonViewFragment extends Fragment implements
 
         final List<WeekViewEvent> events = new ArrayList<>();
 
-        for( val event : weekViewEventList ) {
-            if( isMatched(event.getStartTime(), newYear, newMonth) ) {
+        for( val lesson : lessonList ) {
+            if( isMatched(lesson.getStartTime(), newYear, newMonth) ) {
+                events.add(lesson);
+            }
+        }
+
+        for( val event : eventList ) {
+            if(  isMatched(event.getStartTime(), newYear, newMonth)) {
                 events.add(event);
             }
         }
@@ -171,8 +186,16 @@ public final class LessonViewFragment extends Fragment implements
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        final Intent intent = new Intent(contents, MemberLessonScheduleActivity.class);
-        intent.putExtra(MemberLessonScheduleActivity.EXTRA_SCHEDULE_ID, event.getId());
+
+        final Intent intent;
+
+        if( event.isAllDay() ) {
+            intent = new Intent(contents, EventActivity.class);
+            intent.putExtra(EventActivity.EXTRA_EVENT_ID, event.getId());
+        } else {
+            intent = new Intent(contents, MemberLessonScheduleActivity.class);
+            intent.putExtra(MemberLessonScheduleActivity.EXTRA_SCHEDULE_ID, event.getId());
+        }
         contents.startActivity(intent);
     }
 
@@ -235,6 +258,7 @@ public final class LessonViewFragment extends Fragment implements
         super.onDestroy();
         timetableDisposable.dispose();
         scheduleDisposable.dispose();
+        eventDisposable.dispose();
     }
 
     /**
@@ -279,7 +303,7 @@ public final class LessonViewFragment extends Fragment implements
      */
     private void buildEvents() {
 
-        weekViewEventList.clear();
+        lessonList.clear();
 
         /* Do not create a new instance inside the loop. */
         final StringBuilder builder = new StringBuilder();
@@ -288,25 +312,45 @@ public final class LessonViewFragment extends Fragment implements
             @Override
             public WeekViewEvent apply(@NonNull MemberLessonScheduleVo vo) throws Exception {
 
-                final WeekViewEvent event = new WeekViewEvent(
+                final WeekViewEvent lesson = new WeekViewEvent(
                         vo.getId(),
                         buildEventName(vo, builder),
                         vo.getLocation(),
                         vo.getLessonStartCalendar(),
                         vo.getLessonEndCalendar());
-                event.setColor(vo.getLessonViewColor());
+                lesson.setColor(vo.getLessonViewColor());
 
-                return event;
+                return lesson;
             }
         }).subscribe(new Consumer<WeekViewEvent>() {
             @Override
             public void accept(WeekViewEvent weekViewEvent) throws Exception {
-                weekViewEventList.add(weekViewEvent);
+                lessonList.add(weekViewEvent);
             }
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
                 throw new RuntimeException(throwable);
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                lessonView.notifyDatasetChanged();
+            }
+        });
+
+
+        eventList.clear();
+
+        eventDisposable = eventService.getEventListAll().subscribe(new Consumer<WeekViewEvent>() {
+            @Override
+            public void accept(WeekViewEvent weekViewEvent) throws Exception {
+                eventList.add(weekViewEvent);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throwable.printStackTrace();
             }
         }, new Action() {
             @Override

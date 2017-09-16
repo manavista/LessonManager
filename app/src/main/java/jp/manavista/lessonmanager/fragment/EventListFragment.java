@@ -133,7 +133,7 @@ public final class EventListFragment extends Fragment {
 
         final List<EventVo> list = new ArrayList<>();
 
-        disposable = service.getVoListAll(containPast, dateLabelArray).subscribe(new Consumer<EventVo>() {
+        disposable = service.getVoListByCriteria(containPast, dateLabelArray).subscribe(new Consumer<EventVo>() {
             @Override
             public void accept(EventVo vo) throws Exception {
                 list.add(vo);

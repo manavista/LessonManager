@@ -6,10 +6,15 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import jp.manavista.lessonmanager.model.entity.Event;
 import jp.manavista.lessonmanager.model.vo.EventVo;
+import jp.manavista.lessonmanager.view.week.WeekViewEvent;
 
 /**
+ *
+ * Event Service
+ *
  * <p>
  * Overview:<br>
+ *
  * </p>
  */
 public interface EventService {
@@ -30,7 +35,21 @@ public interface EventService {
 
     /**
      *
-     * Get All Value Object List
+     * Get All Event Object List
+     *
+     * <p>
+     * Overview:<br>
+     * All WeekViewEvent List.<br>
+     * Convert {@code Event} entity to WeekViewEvent.
+     * </p>
+     *
+     * @return {@code WeekViewEvent} Object List
+     */
+    Observable<WeekViewEvent> getEventListAll();
+
+    /**
+     *
+     * Get Value Object List
      *
      * <p>
      * Overview:<br>
@@ -42,7 +61,7 @@ public interface EventService {
      * @param labelMap Display Date Label Map
      * @return {@link Event} vo list
      */
-    Observable<EventVo> getVoListAll(boolean containPast, SparseArray<String> labelMap);
+    Observable<EventVo> getVoListByCriteria(boolean containPast, SparseArray<String> labelMap);
 
     /**
      *
