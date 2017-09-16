@@ -6,12 +6,16 @@ import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
 import jp.manavista.lessonmanager.facade.SettingDeleteFacade;
 import jp.manavista.lessonmanager.facade.impl.MemberLessonScheduleListFacadeImpl;
 import jp.manavista.lessonmanager.facade.impl.SettingDeleteFacadeImpl;
+import jp.manavista.lessonmanager.service.EventService;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.service.TimetableService;
 
 /**
+ *
+ * Facade Module
+ *
  * <p>
  * Overview:<br>
  * </p>
@@ -32,13 +36,15 @@ public class FacadeModule {
             TimetableService timetableService,
             MemberService memberService,
             MemberLessonService memberLessonService,
-            MemberLessonScheduleService memberLessonScheduleService
+            MemberLessonScheduleService memberLessonScheduleService,
+            EventService eventService
 
     ) {
         return new SettingDeleteFacadeImpl(
                 timetableService,
                 memberService,
                 memberLessonService,
-                memberLessonScheduleService);
+                memberLessonScheduleService,
+                eventService);
     }
 }

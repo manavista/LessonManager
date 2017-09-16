@@ -18,6 +18,7 @@ public interface SettingDeleteFacade {
     String MEMBER = "Member";
     String LESSON = "Lesson";
     String SCHEDULE = "Schedule";
+    String EVENT = "Event";
 
 
     Single<Integer> delete(Set<String> targetSet);
