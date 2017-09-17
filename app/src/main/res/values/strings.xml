@@ -80,6 +80,8 @@
     <string name="toolbar.lesson_view.5_days">View 5 Days</string>
     <string name="toolbar.lesson_view.7_days">View 7 Days</string>
 
+    <string name="message.lesson_view.add.member">Added %1$s to Member</string>
+
     <!-- Timetable -->
     <string name="toolbar.timetable.title">Timetable</string>
     <string name="toolbar.timetable.option.add">add</string>
@@ -105,10 +107,13 @@
     <string name="label.member.email">Email:</string>
     <string name="label.member.birthday">Birthday:</string>
     <string name="label.member.gender">Gender:</string>
+    <string name="label.member.photo">Photo:</string>
 
     <string name="hint.member.birthday">YYYY/MM/DD</string>
     <string name="description.member.birthday.icon">Enter your birthday calendar</string>
     <string name="description.member.birthday.dummy">This element is necessary to determine the vertical position of the calendar icon</string>
+    <string name="description.member.photo.image">Member Photo</string>
+    <string name="description.member.photo_operation.image">Photo Operation</string>
 
     <string name="message.member.birthday.input_invalid_date">Input invalid date</string>
 

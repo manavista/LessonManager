@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -41,6 +42,10 @@ public class LessonViewActivity extends AppCompatActivity
 
     /** Logger tag string */
     private static final String TAG = LessonViewActivity.class.getSimpleName();
+
+    /** Activity Request Code: */
+    private static final int REQUEST_ADD_MEMBER = 1;
+
     /** Activity of this */
     final private Activity activity = this;
     /** drawer layout menu */
@@ -169,7 +174,7 @@ public class LessonViewActivity extends AppCompatActivity
             activity.startActivity(intent);
         } else if( id == R.id.nav_member ) {
             Intent intent = new Intent(activity, MemberActivity.class);
-            activity.startActivity(intent);
+            activity.startActivityForResult(intent, REQUEST_ADD_MEMBER);
         } else if( id == R.id.nav_info ) {
             new ApplicationInformationDialog()
                     .show(getSupportFragmentManager(), "application_information_dialog");
@@ -192,4 +197,13 @@ public class LessonViewActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if( requestCode == REQUEST_ADD_MEMBER && resultCode == RESULT_OK ) {
+            final String name = data.getStringExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY);
+            final String message = getString(R.string.message_lesson_view_add_member, name);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+    }
 }

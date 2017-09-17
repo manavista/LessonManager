@@ -1,10 +1,13 @@
 package jp.manavista.lessonmanager.activity;
 
 import android.Manifest;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -21,10 +24,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,9 +41,12 @@ import jp.manavista.lessonmanager.util.DateTimeUtil;
 
 public class MemberActivity extends AppCompatActivity {
 
-    /** activity put extra argument: member id */
+    /** Activity put extra argument: */
     public static final String EXTRA_MEMBER_ID = "MEMBER_ID";
-    private static final int PICK_CONTACT_REQUEST = 1;
+    public static final String EXTRA_MEMBER_NAME_DISPLAY = "MEMBER_NAME_DISPLAY";
+
+    /** Activity Request Code: */
+    private static final int REQUEST_PICK_CONTACT = 1;
 
     /** Identifier for the permission request */
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST = 1;
@@ -101,7 +109,7 @@ public class MemberActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        if( requestCode == PICK_CONTACT_REQUEST ) {
+        if( requestCode == REQUEST_PICK_CONTACT) {
             if( resultCode == RESULT_OK ) {
                 retrieveContact(data.getData());
             }
@@ -143,6 +151,8 @@ public class MemberActivity extends AppCompatActivity {
             retrievePhoneNumber(contactId);
             /* Email Address */
             retrieveEmailAddress(contactId);
+            /* Photo */
+            retrievePhoto(contactId);
         }
     }
 
@@ -287,10 +297,42 @@ public class MemberActivity extends AppCompatActivity {
         }
     }
 
+    private void retrievePhoto(final String contactId) {
+
+        final String where = ContactsContract.Data.MIMETYPE + " = ? AND " + ContactsContract.Contacts.Photo.CONTACT_ID + " = ?";
+        final String[] params = new String[] {ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE, contactId };
+        Cursor cursor = getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, where, params, null);
+
+        if( cursor != null && cursor.moveToFirst() ) {
+
+            try {
+
+                final InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(
+                        getContentResolver(),
+                        ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(contactId)));
+                if( inputStream != null ) {
+                    final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    final ImageView photo = fragment.getDto().getPhoto();
+                    photo.setImageBitmap(bitmap);
+                    photo.setAlpha(1.0f);
+
+                    String uri = "@drawable/ic_photo_camera_black";
+                    final int resource = getResources().getIdentifier(uri, null, getPackageName());
+                    fragment.getDto().getPhotoIconImage().setImageResource(resource);
+                }
+
+            } catch (Exception e){
+                e.printStackTrace();
+            } finally {
+                cursor.close();
+            }
+        }
+    }
+
     private void startContactActivity() {
         final Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         if( intent.resolveActivity(getPackageManager()) != null ) {
-            startActivityForResult(intent, PICK_CONTACT_REQUEST);
+            startActivityForResult(intent, REQUEST_PICK_CONTACT);
         }
     }
 

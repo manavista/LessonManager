@@ -23,7 +23,6 @@ public class MemberVo {
     private String familyName;
     private String nickName;
     private String birthday;
-    private Integer gender;
     private Integer phoneType;
     private String phoneNumber;
     private Integer emailType;
@@ -84,7 +83,6 @@ public class MemberVo {
         vo.setFamilyName(entity.familyName);
         vo.setNickName(entity.nickName);
         vo.setBirthday(entity.birthday);
-        vo.setGender(entity.gender);
         vo.setPhoneType(entity.phoneType);
         vo.setPhoneNumber(entity.phoneNumber);
         vo.setEmailType(entity.emailType);

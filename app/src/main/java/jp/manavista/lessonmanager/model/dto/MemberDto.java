@@ -1,10 +1,14 @@
 package jp.manavista.lessonmanager.model.dto;
 
 import android.app.DatePickerDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -18,6 +22,7 @@ import com.mobsandgeeks.saripaar.annotation.Pattern;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Locale;
@@ -50,8 +55,6 @@ public final class MemberDto implements Serializable {
     private int[] phoneTypeValues;
     /** email type Spinner value */
     private int[] emailTypeValues;
-    /** gender type Spinner value */
-    private int[] genderTypeValues;
     /** birthday string format */
     private String dateFormat;
 
@@ -59,63 +62,52 @@ public final class MemberDto implements Serializable {
     private long id;
 
     /** Given Name(FirstName) */
-//    @BindView(R.id.givenNameEditText)
     @NotEmpty
     @Length(max = 50)
     private EditText givenName;
 
     /** Additional Name(MiddleName) */
-//    @BindView(R.id.additionalNameEditText)
     @Optional
     @Length(max = 50)
     private EditText additionalName;
 
     /** Family Name(LastName) */
-//    @BindView(R.id.familyNameEditText)
     @NotEmpty
     @Length(max = 50)
     private EditText familyName;
 
     /** Nick Name */
-//    @BindView(R.id.nickNameEditText)
     @Optional
     @Length(max = 50)
     private EditText nickName;
 
     /** Phone Type(mobile, home, work, other) */
-//    @BindView(R.id.phoneNumberTypeSpinner)
     private Spinner phoneType;
 
     /** Phone Number */
-//    @BindView(R.id.phoneNumberEditText)
     @Optional
     @Length(max = 20)
     private EditText phoneNumber;
 
     /** Email Type(mobile, home, work, other) */
-//    @BindView(R.id.emailTypeSpinner)
     private Spinner emailType;
 
     /** Email Address */
-//    @BindView(R.id.emailEditText)
     @Optional
     @Email
     private EditText email;
 
     /** Birthday */
-//    @BindView(R.id.birthdayEditText)
     @Optional
     @Pattern(regex = "^\\d{4}/\\d{2}/\\d{2}$")
     @Past(dateFormat = "yyyy/MM/dd")
     private EditText birthday;
 
     /** Image icon for input Birthday date */
-    private ImageView birthdayIconImage;
+    private ImageButton birthdayIconImage;
 
-    /** Gender */
-    @Optional
-    private Spinner gender;
-
+    private ImageView photo;
+    private ImageButton photoIconImage;
 
     /**
      *
@@ -126,27 +118,33 @@ public final class MemberDto implements Serializable {
      * Convert DTO to entity.
      * </p>
      *
-     * @return Member entity
+     * @return {@code Member} entity
      */
-    public Member convert() {
+    public Member toEntity() {
 
-        Member member = new Member();
+        final Member entity = new Member();
 
-        member.id = id;
-        member.givenName = this.givenName.getText().toString();
-        member.additionalName = this.additionalName.getText().toString();
-        member.familyName = this.familyName.getText().toString();
-        member.nickName = this.nickName.getText().toString();
+        entity.id = id;
+        entity.givenName = this.givenName.getText().toString();
+        entity.additionalName = this.additionalName.getText().toString();
+        entity.familyName = this.familyName.getText().toString();
+        entity.nickName = this.nickName.getText().toString();
 
-        member.phoneType = getPhoneTypeValues()[phoneType.getSelectedItemPosition()];
-        member.phoneNumber = this.phoneNumber.getText().toString();
-        member.emailType = getEmailTypeValues()[emailType.getSelectedItemPosition()];
-        member.email = this.email.getText().toString();
+        entity.phoneType = getPhoneTypeValues()[phoneType.getSelectedItemPosition()];
+        entity.phoneNumber = this.phoneNumber.getText().toString();
+        entity.emailType = getEmailTypeValues()[emailType.getSelectedItemPosition()];
+        entity.email = this.email.getText().toString();
 
-        member.birthday = this.birthday.getText().toString();
-        member.gender = getGenderTypeValues()[gender.getSelectedItemPosition()];
+        entity.birthday = this.birthday.getText().toString();
 
-        return member;
+        if( photo.getDrawable() != null ) {
+            final Bitmap bitmap = ((BitmapDrawable) photo.getDrawable()).getBitmap();
+            final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            entity.photo = stream.toByteArray();
+        }
+
+        return entity;
     }
 
     public void store(@NonNull Member entity) {
@@ -165,7 +163,11 @@ public final class MemberDto implements Serializable {
 
         // TODO: raw to format data YYYY/MM/DD
         birthday.setText(entity.birthday);
-        gender.setSelection(ArrayUtils.indexOf(genderTypeValues, entity.gender != null ? entity.gender : 1));
+
+        if( entity.photo != null && entity.photo.length > 0 ) {
+            final Bitmap bitmap = BitmapFactory.decodeByteArray(entity.photo, 0, entity.photo.length);
+            photo.setImageBitmap(bitmap);
+        }
     }
 
     /**

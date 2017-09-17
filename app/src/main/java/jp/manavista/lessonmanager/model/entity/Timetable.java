@@ -41,7 +41,7 @@ public class Timetable {
      * Convert {@link TimetableDto} to  {@link Timetable} object.
      * </p>
      *
-     * @param dto convert target object
+     * @param dto toEntity target object
      * @return converted object
      */
     public static Timetable convert(TimetableDto dto) {

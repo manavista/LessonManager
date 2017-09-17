@@ -2,7 +2,13 @@ package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,6 +26,8 @@ import com.mobsandgeeks.saripaar.Validator;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -28,6 +37,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.MemberActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.MemberDto;
 import jp.manavista.lessonmanager.model.entity.Member;
@@ -51,9 +61,9 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     public static final String TAG = MemberFragment.class.getSimpleName();
     /** bundle key: member id */
     public static final String KEY_MEMBER_ID = "MEMBER_ID";
+    /** request key: Pick Gallery */
+    private static final int PICK_GALLERY_REQUEST = 11;
 
-    /** Root view(R.layout.fragment_member) */
-    private View rootView;
     /** Activity Contents */
     private Activity contents;
     /** DTO */
@@ -110,7 +120,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_member, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_member, container, false);
 
         dto = MemberDto.builder()
                 .givenName((EditText) rootView.findViewById(R.id.givenNameEditText))
@@ -122,12 +132,12 @@ public final class MemberFragment extends Fragment implements Validator.Validati
                 .emailType((Spinner) rootView.findViewById(R.id.emailTypeSpinner))
                 .email((EditText) rootView.findViewById(R.id.emailEditText))
                 .birthday((EditText) rootView.findViewById(R.id.birthdayEditText))
-                .birthdayIconImage((ImageView) rootView.findViewById(R.id.birthdayCalenderIcon))
-                .gender((Spinner) rootView.findViewById(R.id.genderSpinner))
+                .birthdayIconImage((ImageButton) rootView.findViewById(R.id.birthdayCalenderIcon))
+                .photo((ImageView) rootView.findViewById(R.id.member_photo_image))
+                .photoIconImage((ImageButton) rootView.findViewById(R.id.photo_operation_image_button))
 
                 .phoneTypeValues(getResources().getIntArray(R.array.values_member_phone_type))
                 .emailTypeValues(getResources().getIntArray(R.array.values_member_email_type))
-                .genderTypeValues(getResources().getIntArray(R.array.values_member_gender_type))
 
                 .dateFormat(DateTimeUtil.DATE_PATTERN_YYYYMMDD)
 
@@ -147,28 +157,12 @@ public final class MemberFragment extends Fragment implements Validator.Validati
         validator = new Validator(dto);
         validator.setValidationListener(this);
 
-        dto.getBirthdayIconImage().setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                int year = 1980;
-                int month = Calendar.JANUARY;
-                int day = 1;
-
-                if( dto.getBirthdayCalendar() != null ) {
-                    year = dto.getBirthdayCalendar().get(Calendar.YEAR);
-                    month = dto.getBirthdayCalendar().get(Calendar.MONTH);
-                    day = dto.getBirthdayCalendar().get(Calendar.DAY_OF_MONTH);
-                }
-                new DatePickerDialog(contents, dto.birthdaySetListener, year, month, day).show();
-            }
-        });
+        prepareButtonListener();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onResume() {
+        super.onResume();
         if( memberId > 0 ) {
             storeEntityToDto(memberId);
         }
@@ -178,6 +172,23 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     public void onDestroyView() {
         super.onDestroyView();
         this.disposable.dispose();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if( requestCode == PICK_GALLERY_REQUEST && resultCode == Activity.RESULT_OK ) {
+
+            if (data != null) {
+
+                final Uri uri = data.getData();
+                try {
+                    dto.getPhoto().setImageBitmap(getBitmapFromUri(uri));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -207,10 +218,14 @@ public final class MemberFragment extends Fragment implements Validator.Validati
             }
         }
 
-        disposable = memberService.save(dto.convert()).subscribe(new Consumer<Member>() {
+        disposable = memberService.save(dto.toEntity()).subscribe(new Consumer<Member>() {
             @Override
             public void accept(Member member) throws Exception {
                 Log.d(TAG, member.toString());
+
+                final Intent intent = new Intent();
+                intent.putExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY, member.givenName);
+                contents.setResult(Activity.RESULT_OK, intent);
                 contents.finish();
             }
         }, new Consumer<Throwable>() {
@@ -252,8 +267,15 @@ public final class MemberFragment extends Fragment implements Validator.Validati
 
         disposable = memberService.getById(memberId).subscribe(new Consumer<Member>() {
             @Override
-            public void accept(Member member) throws Exception {
-                dto.store(member);
+            public void accept(Member entity) throws Exception {
+                dto.store(entity);
+
+                if( entity.photo != null && entity.photo.length > 0 ) {
+                    String uri = "@drawable/ic_photo_camera_black";
+                    final int resource = getResources().getIdentifier(uri, null, contents.getPackageName());
+                    dto.getPhotoIconImage().setImageResource(resource);
+                    dto.getPhoto().setAlpha(1.0f);
+                }
             }
         }, new Consumer<Throwable>() {
             @Override
@@ -263,4 +285,60 @@ public final class MemberFragment extends Fragment implements Validator.Validati
         });
     }
 
+    /**
+     *
+     * Prepare ImageButton Listener
+     *
+     * <p>
+     * Overview:<br>
+     * Define and set the event when ImageButton is clicked.
+     * </p>
+     */
+    private void prepareButtonListener() {
+
+        dto.getBirthdayIconImage().setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                int year = 1980;
+                int month = Calendar.JANUARY;
+                int day = 1;
+
+                if( dto.getBirthdayCalendar() != null ) {
+                    year = dto.getBirthdayCalendar().get(Calendar.YEAR);
+                    month = dto.getBirthdayCalendar().get(Calendar.MONTH);
+                    day = dto.getBirthdayCalendar().get(Calendar.DAY_OF_MONTH);
+                }
+                new DatePickerDialog(contents, dto.birthdaySetListener, year, month, day).show();
+            }
+        });
+
+        dto.getPhotoIconImage().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_GALLERY_REQUEST);
+            }
+        });
+    }
+
+    private Bitmap getBitmapFromUri(@NonNull Uri uri) throws IOException {
+
+        ParcelFileDescriptor parcelFileDescriptor =
+                contents.getContentResolver().openFileDescriptor(uri, "r");
+
+        if( parcelFileDescriptor != null ) {
+
+            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+            Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+            parcelFileDescriptor.close();
+            return image;
+
+        } else {
+            return null;
+        }
+    }
 }
