@@ -271,11 +271,11 @@ public final class LessonView extends WeekView {
      */
     private void calcExceptDrawHourSet() {
 
+        exceptDrawHourSet.clear();
+
         if( lessonTableList == null || lessonTableList.isEmpty() ) {
             return;
         }
-
-        exceptDrawHourSet.clear();
 
         for ( TimetableDto dto : lessonTableList ) {
 

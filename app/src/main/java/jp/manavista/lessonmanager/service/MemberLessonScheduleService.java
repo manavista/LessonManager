@@ -1,6 +1,7 @@
 package jp.manavista.lessonmanager.service;
 
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -52,21 +53,6 @@ public interface MemberLessonScheduleService {
 
     /**
      *
-     * Get List By MemberId
-     *
-     * <p>
-     * Overview:<br>
-     * Acquire {@code MemberLessonSchedule} entity list
-     * associated with the member id specified in the argument.
-     * </p>
-     *
-     * @param memberId target member id
-     * @return {@code MemberLesson} entity of Observable
-     */
-    Observable<MemberLessonSchedule> getListByMemberId(final long memberId);
-
-    /**
-     *
      * Get Value Object List By MemberId
      *
      * <p>
@@ -85,9 +71,20 @@ public interface MemberLessonScheduleService {
 
     Observable<MemberLessonScheduleVo> getVoListAll();
 
-    Observable<MemberLessonScheduleVo> getVoListByExcludeStatus(final int excludeStatus);
-
-    Observable<MemberLessonScheduleVo> getVoListByMonth(final int year, final int month);
+    /**
+     *
+     * Get Value Object List By Status
+     *
+     * <p>
+     * Overview:<br>
+     * Get {@code MemberLessonScheduleVo} list in status id set.
+     * </p>
+     *
+     * @see  jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus MemberLessonScheduleStatus
+     * @param statusSet contain status id set
+     * @return {@code MemberLessonScheduleVo} list
+     */
+    Observable<MemberLessonScheduleVo> getVoListByStatus(Set<Integer> statusSet);
 
     /**
      *
