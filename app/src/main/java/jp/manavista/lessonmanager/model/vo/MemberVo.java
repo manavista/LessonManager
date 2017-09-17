@@ -1,5 +1,8 @@
 package jp.manavista.lessonmanager.model.vo;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.apache.commons.lang3.StringUtils;
 
 import jp.manavista.lessonmanager.model.entity.Member;
@@ -27,7 +30,7 @@ public class MemberVo {
     private String phoneNumber;
     private Integer emailType;
     private String email;
-
+    private Bitmap photo;
 
     /**
      *
@@ -87,6 +90,10 @@ public class MemberVo {
         vo.setPhoneNumber(entity.phoneNumber);
         vo.setEmailType(entity.emailType);
         vo.setEmail(entity.email);
+
+        if( entity.photo != null && entity.photo.length > 0 ) {
+            vo.photo = BitmapFactory.decodeByteArray(entity.photo, 0, entity.photo.length);
+        }
 
         return vo;
     }

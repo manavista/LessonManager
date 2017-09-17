@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,10 @@ import java.util.Locale;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.SettingActivity;
 import jp.manavista.lessonmanager.view.preference.NumberPickerPreference;
+import lombok.val;
 
-import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.EVENT;
 import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.DELETE;
+import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.EVENT;
 
 /**
  *
@@ -123,6 +125,10 @@ public final class SettingFragment extends PreferenceFragment
                 final ListPreference preference = (ListPreference) item;
                 final String summary = preference.getSummary().toString();
                 preference.setSummary(preference.getEntry() == null ? summary : preference.getEntry());
+
+            } else if (item instanceof SwitchPreference) {
+                final val preferences = (SwitchPreference) item;
+                //preferences.setSummary( preferences.isChecked() ? "ON":"OFF");
 
             } else if( item instanceof NumberPickerPreference ) {
                 NumberPickerPreference preference = (NumberPickerPreference) item;

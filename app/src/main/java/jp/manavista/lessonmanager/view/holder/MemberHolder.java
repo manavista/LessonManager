@@ -6,6 +6,7 @@ import android.widget.TextView;
 import com.loopeer.itemtouchhelperextension.Extension;
 
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.view.image.CircleImageView;
 
 /**
  *
@@ -19,19 +20,18 @@ import jp.manavista.lessonmanager.R;
  *
  * @see Extension extension library interface
  */
-public class MemberHolder extends SwipeDeleteHolder {
+public final class MemberHolder extends SwipeEditHolder {
 
-    public View viewEdit;
     public TextView displayName;
+    public CircleImageView photo;
 
     public MemberHolder(View itemView) {
 
         super(itemView);
 
         super.view = itemView.findViewById(R.id.item_member);
-        this.viewEdit = itemView.findViewById(R.id.view_list_repo_action_edit);
-
-        this.displayName = itemView.findViewById(R.id.member_display_name);
+        displayName = itemView.findViewById(R.id.member_display_name);
+        photo = itemView.findViewById(R.id.member_icon);
     }
 
 }

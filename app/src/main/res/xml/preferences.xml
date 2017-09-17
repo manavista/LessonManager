@@ -5,6 +5,19 @@
 
     <PreferenceCategory
         android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.general">
+
+        <SwitchPreference
+            android:id="@+id/preferences_general_delete_confirm"
+            android:key="@string/key.preference.general.delete.confirm"
+            android:title="@string/title.preference.general.delete.confirm"
+            android:summary="@string/summary.preference.general.delete.confirm"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
         android:title="@string/label.preference.category.lesson_week_view">
 
         <ListPreference

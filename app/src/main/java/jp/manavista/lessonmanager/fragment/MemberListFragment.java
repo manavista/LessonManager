@@ -1,12 +1,16 @@
 package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +31,8 @@ import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.model.entity.Member;
+import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
@@ -64,6 +68,8 @@ public final class MemberListFragment extends Fragment {
     private Disposable disposable;
 
     @Inject
+    SharedPreferences preferences;
+    @Inject
     MemberService memberService;
 
     /** Constructor */
@@ -97,8 +103,7 @@ public final class MemberListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_member_list, container, false);
     }
 
@@ -134,6 +139,8 @@ public final class MemberListFragment extends Fragment {
 
         final List<MemberVo> list = new ArrayList<>();
 
+        // TODO: 2017/09/17 display name has to choice. given name + first name/ first + given
+
         disposable = memberService.getListAll().subscribe(new Consumer<Member>() {
             @Override
             public void accept(Member member) throws Exception {
@@ -142,7 +149,7 @@ public final class MemberListFragment extends Fragment {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                throw new RuntimeException("Can not get member categoriesList all.", throwable);
+                Log.e(TAG, "Can not get member categoriesList all.", throwable);
             }
         }, new Action() {
             @Override
@@ -181,8 +188,42 @@ public final class MemberListFragment extends Fragment {
         @Override
         public void delete(final long id, final int position) {
 
-            itemTouchHelper.closeOpened();
+            final String key = getString(R.string.key_preference_general_delete_confirm);
+            final boolean confirm = preferences.getBoolean(key, true);
 
+            if( confirm ) {
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(contents);
+                builder.setTitle(R.string.title_member_list_dialog_delete_confirm)
+                    .setIcon(R.drawable.ic_delete_black)
+                    .setMessage(R.string.message_member_list_dialog_delete_confirm)
+                    .setPositiveButton(android.R.string.ok, onOkListener(id, position))
+                    .setNegativeButton(android.R.string.cancel, onCancelListener)
+                    .show();
+
+            } else {
+                execDelete(id, position);
+            }
+        }
+
+        private final DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                itemTouchHelper.closeOpened();
+            }
+        };
+
+        private DialogInterface.OnClickListener onOkListener(final long id, final int position) {
+            return new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    itemTouchHelper.closeOpened();
+                    execDelete(id, position);
+                }
+            };
+        }
+
+        private void execDelete(final long id, final int position) {
             disposable = memberService.deleteById(id).subscribe(new Consumer<Integer>() {
                 @Override
                 public void accept(Integer integer) throws Exception {
@@ -192,7 +233,7 @@ public final class MemberListFragment extends Fragment {
             }, new Consumer<Throwable>() {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
-                    throw new RuntimeException("Can not delete a member.", throwable);
+                    Log.e(TAG, "Can not delete a member!", throwable);
                 }
             });
         }
