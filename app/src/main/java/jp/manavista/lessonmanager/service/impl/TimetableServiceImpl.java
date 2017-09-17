@@ -43,6 +43,20 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
+    public Observable<TimetableDto> getDtoListAll() {
+        return repository.getSelector()
+                .executeAsObservable()
+                .map(new Function<Timetable, TimetableDto>() {
+                    @Override
+                    public TimetableDto apply(@NonNull Timetable timetable) throws Exception {
+                        return TimetableDto.copy(timetable);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
     public Observable<Timetable> add() {
 
         Timetable timetable = new Timetable();

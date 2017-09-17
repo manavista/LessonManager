@@ -29,6 +29,8 @@ public interface TimetableService {
      */
     Observable<Timetable> getListAll();
 
+    Observable<TimetableDto> getDtoListAll();
+
     /**
      *
      * Add

@@ -12,31 +12,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.EventActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity;
 import jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus;
+import jp.manavista.lessonmanager.facade.LessonViewFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
-import jp.manavista.lessonmanager.model.entity.Timetable;
-import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
-import jp.manavista.lessonmanager.service.EventService;
-import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
-import jp.manavista.lessonmanager.service.TimetableService;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
 import jp.manavista.lessonmanager.view.week.DateTimeInterpreter;
 import jp.manavista.lessonmanager.view.week.LessonView;
@@ -74,10 +66,8 @@ public final class LessonViewFragment extends Fragment implements
     private int visibleDays;
     /** Timetable DTO List */
     private List<TimetableDto> timetableList;
-    /** Lesson List */
-    private List<WeekViewEvent> lessonList;
-    /** Event List */
-    private List<WeekViewEvent> eventList;
+    /** Schedule (Lesson and Event) List */
+    private List<WeekViewEvent> scheduleList;
 
     /** Activity Contents */
     private Activity contents;
@@ -87,16 +77,10 @@ public final class LessonViewFragment extends Fragment implements
     SharedPreferences sharedPreferences;
     /** Timetable service */
     @Inject
-    TimetableService timetableService;
-    @Inject
-    EventService eventService;
-    @Inject
-    MemberLessonScheduleService memberLessonScheduleService;
+    LessonViewFacade facade;
 
     /** disposable */
-    private Disposable timetableDisposable;
-    private Disposable scheduleDisposable;
-    private Disposable eventDisposable;
+    private Disposable disposable;
 
 
     /** Constructor */
@@ -131,9 +115,7 @@ public final class LessonViewFragment extends Fragment implements
         Bundle args = getArguments();
         visibleDays = args.getInt(KEY_VISIBLE_DAYS, 3);
 
-        timetableDisposable = Disposables.empty();
-        scheduleDisposable = Disposables.empty();
-        eventDisposable = Disposables.empty();
+        disposable = Disposables.empty();
     }
 
     @Override
@@ -161,8 +143,7 @@ public final class LessonViewFragment extends Fragment implements
         lessonView.setDateTimeInterpreter(this);
 
         timetableList = new ArrayList<>();
-        lessonList = new ArrayList<>();
-        eventList = new ArrayList<>();
+        scheduleList = new ArrayList<>();
     }
 
     @Override
@@ -170,17 +151,12 @@ public final class LessonViewFragment extends Fragment implements
 
         final List<WeekViewEvent> events = new ArrayList<>();
 
-        for( val lesson : lessonList ) {
+        for( val lesson : scheduleList) {
             if( isMatched(lesson.getStartTime(), newYear, newMonth) ) {
                 events.add(lesson);
             }
         }
 
-        for( val event : eventList ) {
-            if(  isMatched(event.getStartTime(), newYear, newMonth)) {
-                events.add(event);
-            }
-        }
         return events;
     }
 
@@ -231,36 +207,18 @@ public final class LessonViewFragment extends Fragment implements
         Log.d(TAG, "set limit time start: " + startHour + " end: " + endHour);
 
 
-        timetableList.clear();
+        Set<Integer> statusSet = new HashSet<>();
+        statusSet.add(MemberLessonScheduleStatus.SCHEDULED.getId());
+        statusSet.add(MemberLessonScheduleStatus.ABSENT.getId());
+        statusSet.add(MemberLessonScheduleStatus.DONE.getId());
 
-        // TODO: 2017/09/16 If timetable delete, remain except draw hour. add If 0 row
-
-        timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
-            @Override
-            public void accept(@NonNull Timetable timetable) throws Exception {
-                timetableList.add(TimetableDto.copy(timetable));
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@NonNull Throwable throwable) throws Exception {
-                /* no description */
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                lessonView.setLessonTableList(timetableList);
-                buildEvents();
-            }
-        });
-
+        disposable = facade.getViewData(lessonView, timetableList, scheduleList, statusSet);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timetableDisposable.dispose();
-        scheduleDisposable.dispose();
-        eventDisposable.dispose();
+        disposable.dispose();
     }
 
     /**
@@ -284,105 +242,5 @@ public final class LessonViewFragment extends Fragment implements
 
     private boolean isMatched(Calendar calendar, final int year, final int month) {
         return calendar.get(Calendar.YEAR) == year && calendar.get(Calendar.MONTH) == month;
-    }
-
-    /**
-     *
-     * Build Events
-     *
-     * <p>
-     * Overview:<br>
-     * Reads the lesson schedule from the database,
-     * and creates event objects and lists to be displayed on the screen.
-     * </p>
-     * <p><b>Type of schedule to display:</b></p>
-     * <ul>
-     * <li>SCHEDULED - Normal display</li>
-     * <li>ABSENT - Display with special mark</li>
-     * <li>SUSPENDED - Don't display</li>
-     * <li>DONE - Display with high transparency</li>
-     * </ul>
-     */
-    private void buildEvents() {
-
-        lessonList.clear();
-
-        /* Do not create a new instance inside the loop. */
-        final StringBuilder builder = new StringBuilder();
-
-        scheduleDisposable = memberLessonScheduleService.getVoListByExcludeStatus(MemberLessonScheduleStatus.SUSPENDED.getId()).map(new Function<MemberLessonScheduleVo, WeekViewEvent>() {
-            @Override
-            public WeekViewEvent apply(@NonNull MemberLessonScheduleVo vo) throws Exception {
-
-                final WeekViewEvent lesson = new WeekViewEvent(
-                        vo.getId(),
-                        buildEventName(vo, builder),
-                        vo.getLocation(),
-                        vo.getLessonStartCalendar(),
-                        vo.getLessonEndCalendar());
-                lesson.setColor(vo.getLessonViewColor());
-
-                return lesson;
-            }
-        }).subscribe(new Consumer<WeekViewEvent>() {
-            @Override
-            public void accept(WeekViewEvent weekViewEvent) throws Exception {
-                lessonList.add(weekViewEvent);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throw new RuntimeException(throwable);
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                lessonView.notifyDatasetChanged();
-            }
-        });
-
-
-        eventList.clear();
-
-        eventDisposable = eventService.getEventListAll().subscribe(new Consumer<WeekViewEvent>() {
-            @Override
-            public void accept(WeekViewEvent weekViewEvent) throws Exception {
-                eventList.add(weekViewEvent);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                lessonView.notifyDatasetChanged();
-            }
-        });
-    }
-
-    private String buildEventName(MemberLessonScheduleVo vo, StringBuilder builder) {
-
-        builder.setLength(0);
-
-        /* If the lesson start time is the same as timetable, display is omitted. */
-        boolean addStartTime = true;
-        for( val timetable : timetableList ) {
-            if( timetable.getStartTimeFormatted().equals(vo.getLessonStartTimeFormatted()) ) {
-                addStartTime = false;
-                break;
-            }
-        }
-
-        builder.append(addStartTime ? vo.getLessonStartTimeFormatted() : StringUtils.EMPTY)
-                .append(addStartTime ? " " : StringUtils.EMPTY)
-                .append(StringUtils.isEmpty(vo.getAbbr()) ? vo.getName() : vo.getAbbr())
-                .append("/")
-                .append(StringUtils.isEmpty(vo.getMember().nickName)
-                        ? vo.getMember().givenName
-                        : vo.getMember().nickName);
-
-        return builder.toString();
     }
 }
