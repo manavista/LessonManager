@@ -39,9 +39,6 @@ public class Member {
     public String birthday;
     @Column
     @Nullable
-    public Integer gender;
-    @Column
-    @Nullable
     public Integer phoneType;
     @Column
     @Nullable
@@ -52,4 +49,7 @@ public class Member {
     @Column
     @Nullable
     public String email;
+    @Column
+    @Nullable
+    public byte[] photo;
 }
