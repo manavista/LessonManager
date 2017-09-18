@@ -9,6 +9,7 @@
     <!--   key: -->
     <!--   summary: -->
     <!--   tag: -->
+    <!--   default: -->
 
     <!-- application -->
     <string name="app_name">Lesson Manager</string>
@@ -69,6 +70,12 @@
     <string name="key.preference.general.delete.confirm">delete_confirm</string>
     <string name="title.preference.general.delete.confirm">Confirm Delete</string>
     <string name="summary.preference.general.delete.confirm">Show dialog box when item deletes</string>
+
+    <string name="label.preference.category.member">Member</string>
+    <string name="key.preference.member.name_display">member_display_name</string>
+    <string name="title.preference.member.name_display">Display Name</string>
+    <string name="summary.preference.member.name_display">Select the name display item</string>
+    <string name="value.preference.member.name_display">1</string>
 
 
     <!-- Preferences Event -->
@@ -137,6 +144,8 @@
 
     <string name="description.member_list.photo.image">Member Photo</string>
     <string name="label.member_list.name">Member Name</string>
+
+    <string name="message.member_list.edit.member">Edited the %1$s</string>
 
 
     <!-- Member Lesson -->

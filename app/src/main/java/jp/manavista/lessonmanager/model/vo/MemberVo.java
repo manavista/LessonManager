@@ -2,11 +2,11 @@ package jp.manavista.lessonmanager.model.vo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
-import org.apache.commons.lang3.StringUtils;
+import android.support.annotation.NonNull;
 
 import jp.manavista.lessonmanager.model.entity.Member;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  *
@@ -18,6 +18,7 @@ import lombok.Data;
  * </p>
  */
 @Data
+@ToString
 public class MemberVo {
 
     private long id;
@@ -32,37 +33,7 @@ public class MemberVo {
     private String email;
     private Bitmap photo;
 
-    /**
-     *
-     * Get Display Name
-     *
-     * <p>
-     * Overview:<br>
-     * Create and get concatenate names string to be displayed in the list.<br>
-     * </p>
-     * <pre>
-     * givenName + " " + (additionalName + " ") + familyName
-     * </pre>
-     *
-     * @return concatenate names string
-     */
-    public String getDisplayName() {
-
-        StringBuilder builder = new StringBuilder();
-        builder.append(givenName)
-                .append(StringUtils.SPACE)
-                .append(StringUtils.isEmpty(additionalName) ? StringUtils.EMPTY : this.additionalName + StringUtils.SPACE)
-                .append(familyName);
-
-        if( StringUtils.isNotEmpty(nickName) ) {
-            builder.append(StringUtils.SPACE)
-                    .append("(")
-                    .append(nickName)
-                    .append(")");
-        }
-
-        return builder.toString();
-    }
+    private String displayName;
 
     /**
      *
@@ -76,7 +47,7 @@ public class MemberVo {
      * @param entity Member entity object
      * @return Member data transfer object
      */
-    public static MemberVo copy(Member entity) {
+    public static MemberVo copy(@NonNull Member entity) {
 
         MemberVo vo = new MemberVo();
 

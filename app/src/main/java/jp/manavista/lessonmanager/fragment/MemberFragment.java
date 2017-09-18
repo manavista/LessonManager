@@ -62,7 +62,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     /** bundle key: member id */
     public static final String KEY_MEMBER_ID = "MEMBER_ID";
     /** request key: Pick Gallery */
-    private static final int PICK_GALLERY_REQUEST = 11;
+    private static final int REQUEST_PICK_GALLERY = 11;
 
     /** Activity Contents */
     private Activity contents;
@@ -177,7 +177,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if( requestCode == PICK_GALLERY_REQUEST && resultCode == Activity.RESULT_OK ) {
+        if( requestCode == REQUEST_PICK_GALLERY && resultCode == Activity.RESULT_OK ) {
 
             if (data != null) {
 
@@ -320,7 +320,7 @@ public final class MemberFragment extends Fragment implements Validator.Validati
                 final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("image/*");
-                startActivityForResult(intent, PICK_GALLERY_REQUEST);
+                startActivityForResult(intent, REQUEST_PICK_GALLERY);
             }
         });
     }

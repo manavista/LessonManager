@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
@@ -31,7 +32,6 @@ import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
@@ -139,17 +139,19 @@ public final class MemberListFragment extends Fragment {
 
         final List<MemberVo> list = new ArrayList<>();
 
-        // TODO: 2017/09/17 display name has to choice. given name + first name/ first + given
+        final String key = getString(R.string.key_preference_member_name_display);
+        final String defaultValue = getString(R.string.value_preference_member_name_display);
+        final int displayNameCode = Integer.valueOf(preferences.getString(key, defaultValue));
 
-        disposable = memberService.getListAll().subscribe(new Consumer<Member>() {
+        disposable = memberService.getVoListAll(displayNameCode).subscribe(new Consumer<MemberVo>() {
             @Override
-            public void accept(Member member) throws Exception {
-                list.add(MemberVo.copy(member));
+            public void accept(MemberVo vo) throws Exception {
+                list.add(vo);
             }
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                Log.e(TAG, "Can not get member categoriesList all.", throwable);
+                Log.e(TAG, "Can not get member List all.", throwable);
             }
         }, new Action() {
             @Override
@@ -164,6 +166,17 @@ public final class MemberListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         disposable.dispose();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if( requestCode == MemberActivity.RequestCode.EDIT && resultCode == Activity.RESULT_OK ) {
+            final String name = data.getStringExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY);
+            final String message = getString(R.string.message_member_list_edit_member, name);
+            Toast.makeText(contents, message, Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     private MemberOperation memberOperation = new MemberOperation() {
@@ -182,7 +195,7 @@ public final class MemberListFragment extends Fragment {
             itemTouchHelper.closeOpened();
             final Intent intent = new Intent(contents, MemberActivity.class);
             intent.putExtra(MemberActivity.EXTRA_MEMBER_ID, id);
-            contents.startActivity(intent);
+            startActivityForResult(intent, MemberActivity.RequestCode.EDIT);
         }
 
         @Override
