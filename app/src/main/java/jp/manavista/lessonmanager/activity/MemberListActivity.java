@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import jp.manavista.lessonmanager.R;
@@ -51,7 +52,7 @@ public class MemberListActivity extends AppCompatActivity implements SearchView.
             @Override
             public void onClick(View view) {
                 final Intent intent = new Intent(activity, MemberActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, MemberActivity.RequestCode.CREATE);
             }
         });
 
@@ -81,7 +82,19 @@ public class MemberListActivity extends AppCompatActivity implements SearchView.
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
+        if( requestCode == MemberActivity.RequestCode.CREATE && resultCode == RESULT_OK ) {
+
+            final String name = data.getStringExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY);
+            final String message = getString(R.string.message_member_list_add_member, name);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+        } else if( requestCode == MemberActivity.RequestCode.EDIT && resultCode == RESULT_OK ) {
+
+            final String name = data.getStringExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY);
+            final String message = getString(R.string.message_member_list_edit_member, name);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

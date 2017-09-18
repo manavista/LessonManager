@@ -49,7 +49,8 @@ public class MemberActivity extends AppCompatActivity {
     private MemberFragment fragment;
 
     public class RequestCode {
-        public static final int EDIT = 100;
+        public static final int CREATE = 100;
+        public static final int EDIT = 101;
         private static final int PICK_CONTACT = 151;
         private static final int READ_CONTACTS_PERMISSIONS = 152;
     }
