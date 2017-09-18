@@ -71,33 +71,17 @@ public class MemberSection extends StatelessSection implements FilterableSection
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         final MemberHolder itemHolder = (MemberHolder) holder;
+        final MemberVo vo = filteredList.get(position);
 
-        itemHolder.displayName.setText(filteredList.get(position).getDisplayName());
+        itemHolder.displayName.setText(vo.getDisplayName());
 
-        itemHolder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "click position: " + itemHolder.getAdapterPosition());
-                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
-                operation.lessonList(vo, itemHolder.getAdapterPosition());
-            }
-        });
+        if( vo.getPhoto() != null ) {
+            itemHolder.photo.setImageBitmap(vo.getPhoto());
+            itemHolder.photo.setAlpha(1.0f);
+        }
 
-        itemHolder.viewEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
-                operation.edit(vo.getId(), itemHolder.getAdapterPosition());
-            }
-        });
+        prepareObjectLister(itemHolder, position);
 
-        itemHolder.viewDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
-                operation.delete(vo.getId(), itemHolder.getAdapterPosition());
-            }
-        });
     }
 
     @Override
@@ -124,5 +108,46 @@ public class MemberSection extends StatelessSection implements FilterableSection
     public void setList(List<MemberVo> list) {
         this.list = list;
         this.filteredList = new ArrayList<>(list);
+    }
+
+    /**
+     *
+     * Prepare View Lister
+     *
+     * <p>
+     * Overview:
+     * Set View lister for schedule list item operation.
+     * </p>
+     *
+     * @param itemHolder list holder model
+     * @param position list position
+     */
+    private void prepareObjectLister(final MemberHolder itemHolder, final int position) {
+
+        itemHolder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "click position: " + itemHolder.getAdapterPosition());
+                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
+                operation.lessonList(vo, itemHolder.getAdapterPosition());
+            }
+        });
+
+        itemHolder.viewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
+                operation.edit(vo.getId(), itemHolder.getAdapterPosition());
+            }
+        });
+
+        itemHolder.viewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
+                operation.delete(vo.getId(), itemHolder.getAdapterPosition());
+            }
+        });
+
     }
 }

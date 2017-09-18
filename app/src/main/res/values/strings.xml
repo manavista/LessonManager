@@ -9,6 +9,7 @@
     <!--   key: -->
     <!--   summary: -->
     <!--   tag: -->
+    <!--   default: -->
 
     <!-- application -->
     <string name="app_name">Lesson Manager</string>
@@ -64,6 +65,17 @@
     <string name="key.preference.event">event</string>
     <string name="title.preference.event">Event</string>
     <string name="summary.preference.event">Select Event Category</string>
+
+    <string name="label.preference.category.general">General</string>
+    <string name="key.preference.general.delete.confirm">delete_confirm</string>
+    <string name="title.preference.general.delete.confirm">Confirm Delete</string>
+    <string name="summary.preference.general.delete.confirm">Show dialog box when item deletes</string>
+
+    <string name="label.preference.category.member">Member</string>
+    <string name="key.preference.member.name_display">member_display_name</string>
+    <string name="title.preference.member.name_display">Display Name</string>
+    <string name="summary.preference.member.name_display">Select the name display item</string>
+    <string name="value.preference.member.name_display">1</string>
 
 
     <!-- Preferences Event -->
@@ -124,12 +136,16 @@
     <string name="toolbar.member_list.title">Member List</string>
     <string name="toolbar.member_list.option.add">Add</string>
     <string name="toolbar.member_list.option.search">Search</string>
+
     <string name="label.member_list.delete">Delete</string>
-    <string name="label.member_list.dialog.title">Selected Member</string>
-    <string name="label.member_list.dialog.edit">Edit</string>
-    <string name="label.member_list.dialog.lesson">Lesson</string>
-    <string name="label.member_list.dialog.schedule">Schedule</string>
     <string name="label.member_list.dialog.delete">Delete</string>
+    <string name="title.member_list.dialog.delete.confirm">Delete member</string>
+    <string name="message.member_list.dialog.delete.confirm">Are you sure you want to delete the member?</string>
+
+    <string name="description.member_list.photo.image">Member Photo</string>
+    <string name="label.member_list.name">Member Name</string>
+
+    <string name="message.member_list.edit.member">Edited the %1$s</string>
 
 
     <!-- Member Lesson -->

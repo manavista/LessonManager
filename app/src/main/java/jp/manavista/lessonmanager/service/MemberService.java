@@ -3,6 +3,7 @@ package jp.manavista.lessonmanager.service;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import jp.manavista.lessonmanager.model.entity.Member;
+import jp.manavista.lessonmanager.model.vo.MemberVo;
 
 /**
  *
@@ -31,16 +32,18 @@ public interface MemberService {
 
     /**
      *
-     * Get All List
+     * Get All Value Object List
      *
      * <p>
      * Overview:<br>
-     * Get All Member entity of Observable object.
+     * Get All {@link MemberVo} of Observable object.<br>
+     * Set the screen display name by the code specified in the argument.
      * </p>
      *
-     * @return All Member entity of Observable
+     * @param displayNameCode Code to select name display item
+     * @return All {@link MemberVo} of Observable
      */
-    Observable<Member> getListAll();
+    Observable<MemberVo> getVoListAll(int displayNameCode);
 
     /**
      *

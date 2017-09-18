@@ -71,6 +71,19 @@
         <item>Event</item>
     </string-array>
 
+    <string-array name="entries_member_name_display">
+        <item>First Additional Family (Nick)</item>
+        <item>Family Additional First (Nick)</item>
+        <item>Nick (First Additional Family)</item>
+        <item>Nick (Family Additional First)</item>
+    </string-array>
+    <string-array name="entry_values_member_name_display">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
     <!-- Member -->
 
     <string-array name="items_member_phone_type">

@@ -45,14 +45,14 @@ public class MemberActivity extends AppCompatActivity {
     public static final String EXTRA_MEMBER_ID = "MEMBER_ID";
     public static final String EXTRA_MEMBER_NAME_DISPLAY = "MEMBER_NAME_DISPLAY";
 
-    /** Activity Request Code: */
-    private static final int REQUEST_PICK_CONTACT = 1;
-
-    /** Identifier for the permission request */
-    private static final int READ_CONTACTS_PERMISSIONS_REQUEST = 1;
-
     /** MemberFragment */
     private MemberFragment fragment;
+
+    public class RequestCode {
+        public static final int EDIT = 100;
+        private static final int PICK_CONTACT = 151;
+        private static final int READ_CONTACTS_PERMISSIONS = 152;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class MemberActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        if( requestCode == REQUEST_PICK_CONTACT) {
+        if( requestCode == RequestCode.PICK_CONTACT) {
             if( resultCode == RESULT_OK ) {
                 retrieveContact(data.getData());
             }
@@ -119,7 +119,7 @@ public class MemberActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        if ( requestCode == READ_CONTACTS_PERMISSIONS_REQUEST ) {
+        if ( requestCode == RequestCode.READ_CONTACTS_PERMISSIONS ) {
 
             if ( grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
                 startContactActivity();
@@ -332,7 +332,7 @@ public class MemberActivity extends AppCompatActivity {
     private void startContactActivity() {
         final Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         if( intent.resolveActivity(getPackageManager()) != null ) {
-            startActivityForResult(intent, REQUEST_PICK_CONTACT);
+            startActivityForResult(intent, RequestCode.PICK_CONTACT);
         }
     }
 
@@ -366,7 +366,7 @@ public class MemberActivity extends AppCompatActivity {
             // Fire off an async request to actually get the permission
             // This will show the standard permission request dialog UI
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
-                    READ_CONTACTS_PERMISSIONS_REQUEST);
+                    RequestCode.READ_CONTACTS_PERMISSIONS);
         } else {
             startContactActivity();
         }
