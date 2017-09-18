@@ -34,15 +34,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:paddingStart="0dp"
-                android:paddingEnd="@dimen/margin_16dp">
+                android:paddingEnd="0dp">
 
                 <TextView
                     android:id="@+id/member_display_name"
                     android:text="@string/label.member_list.name"
                     android:textColor="@color/black"
-                    android:layout_marginTop="24dp"
+                    android:gravity="center_vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent"/>
 
             </LinearLayout>
 
