@@ -146,7 +146,8 @@
     <string name="label.member_list.name">Member Name</string>
 
     <string name="message.member_list.edit.member">Edited the %1$s</string>
-
+    <string name="message.member_list.add.member">Added %1$s to Member</string>
+    <string name="message.member_list.delete.member">Deleted the Member</string>
 
     <!-- Member Lesson -->
     <string name="toolbar.member_lesson.title">Lesson</string>

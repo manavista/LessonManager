@@ -168,17 +168,6 @@ public final class MemberListFragment extends Fragment {
         disposable.dispose();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if( requestCode == MemberActivity.RequestCode.EDIT && resultCode == Activity.RESULT_OK ) {
-            final String name = data.getStringExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY);
-            final String message = getString(R.string.message_member_list_edit_member, name);
-            Toast.makeText(contents, message, Toast.LENGTH_SHORT)
-                    .show();
-        }
-    }
-
     private MemberOperation memberOperation = new MemberOperation() {
 
         @Override
@@ -195,7 +184,7 @@ public final class MemberListFragment extends Fragment {
             itemTouchHelper.closeOpened();
             final Intent intent = new Intent(contents, MemberActivity.class);
             intent.putExtra(MemberActivity.EXTRA_MEMBER_ID, id);
-            startActivityForResult(intent, MemberActivity.RequestCode.EDIT);
+            contents.startActivityForResult(intent, MemberActivity.RequestCode.EDIT);
         }
 
         @Override
@@ -240,8 +229,13 @@ public final class MemberListFragment extends Fragment {
             disposable = memberService.deleteById(id).subscribe(new Consumer<Integer>() {
                 @Override
                 public void accept(Integer integer) throws Exception {
+
                     memberSection.getList().remove(position);
                     sectionAdapter.notifyItemRemoved(position);
+
+                    final String message = getString(R.string.message_member_list_delete_member);
+                    Toast.makeText(contents, message, Toast.LENGTH_SHORT).show();
+
                 }
             }, new Consumer<Throwable>() {
                 @Override
