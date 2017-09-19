@@ -31,6 +31,7 @@ import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity;
+import jp.manavista.lessonmanager.facade.MemberListFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.service.MemberService;
@@ -71,6 +72,8 @@ public final class MemberListFragment extends Fragment {
     SharedPreferences preferences;
     @Inject
     MemberService memberService;
+    @Inject
+    MemberListFacade facade;
 
     /** Constructor */
     public MemberListFragment() {
@@ -191,11 +194,8 @@ public final class MemberListFragment extends Fragment {
         public void delete(final long id, final int position) {
 
             final String key = getString(R.string.key_preference_general_delete_confirm);
-            final boolean confirm = preferences.getBoolean(key, true);
 
-            // TODO: 2017/09/18 When member has deleted, lesson and schedule delete together.
-
-            if( confirm ) {
+            if( preferences.getBoolean(key, true) ) {
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(contents);
                 builder.setTitle(R.string.title_member_list_dialog_delete_confirm)
@@ -228,16 +228,14 @@ public final class MemberListFragment extends Fragment {
         }
 
         private void execDelete(final long id, final int position) {
-            disposable = memberService.deleteById(id).subscribe(new Consumer<Integer>() {
+            disposable = facade.delete(id).subscribe(new Consumer<Integer>() {
                 @Override
                 public void accept(Integer integer) throws Exception {
-
                     memberSection.getList().remove(position);
                     sectionAdapter.notifyItemRemoved(position);
 
                     final String message = getString(R.string.message_member_list_delete_member);
                     Toast.makeText(contents, message, Toast.LENGTH_SHORT).show();
-
                 }
             }, new Consumer<Throwable>() {
                 @Override
