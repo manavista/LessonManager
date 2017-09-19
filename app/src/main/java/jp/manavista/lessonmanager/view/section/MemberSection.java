@@ -78,6 +78,9 @@ public class MemberSection extends StatelessSection implements FilterableSection
         if( vo.getPhoto() != null ) {
             itemHolder.photo.setImageBitmap(vo.getPhoto());
             itemHolder.photo.setAlpha(1.0f);
+        } else {
+            itemHolder.photo.setImageResource(R.drawable.ic_person_black);
+            itemHolder.photo.setAlpha(0.6f);
         }
 
         prepareObjectLister(itemHolder, position);

@@ -5,10 +5,12 @@ import dagger.Provides;
 import jp.manavista.lessonmanager.facade.LessonViewFacade;
 import jp.manavista.lessonmanager.facade.MemberLessonFacade;
 import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
+import jp.manavista.lessonmanager.facade.MemberListFacade;
 import jp.manavista.lessonmanager.facade.SettingDeleteFacade;
 import jp.manavista.lessonmanager.facade.impl.LessonViewFacadeImpl;
 import jp.manavista.lessonmanager.facade.impl.MemberLessonFacadeImpl;
 import jp.manavista.lessonmanager.facade.impl.MemberLessonScheduleListFacadeImpl;
+import jp.manavista.lessonmanager.facade.impl.MemberListFacadeImpl;
 import jp.manavista.lessonmanager.facade.impl.SettingDeleteFacadeImpl;
 import jp.manavista.lessonmanager.service.EventService;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
@@ -74,5 +76,17 @@ public class FacadeModule {
                 memberService,
                 memberLessonService,
                 memberLessonScheduleService);
+    }
+
+    @Provides
+    MemberListFacade provideMemberListFacade(
+            MemberService memberService,
+            MemberLessonService memberLessonService,
+            MemberLessonScheduleService memberLessonScheduleService
+    ) {
+       return new MemberListFacadeImpl(
+               memberService,
+               memberLessonService,
+               memberLessonScheduleService);
     }
 }

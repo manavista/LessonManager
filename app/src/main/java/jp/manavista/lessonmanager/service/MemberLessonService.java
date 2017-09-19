@@ -92,6 +92,8 @@ public interface MemberLessonService {
      */
     Single<Integer> deleteById(long id);
 
+    Single<Integer> deleteByMemberId(long memberId);
+
     /**
      *
      * Delete All

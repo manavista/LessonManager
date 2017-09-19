@@ -31,7 +31,7 @@ public interface MemberLessonScheduleService {
      * Get a entity by id.
      * </p>
      *
-     * @param id Member id
+     * @param id MemberLessonSchedule entity id
      * @return {@link MemberLessonSchedule} entity
      */
     Single<MemberLessonSchedule> getById(final long id);
@@ -128,6 +128,8 @@ public interface MemberLessonScheduleService {
      * @return transaction row count
      */
     Single<Integer> deleteById(long id);
+
+    Single<Integer> deleteByMemberId(long memberId);
 
     /**
      *
