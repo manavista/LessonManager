@@ -193,6 +193,18 @@
     <string name="toolbar.member_lesson_list.title">Lesson List</string>
     <string name="toolbar.member_lesson_list.option.add">Add</string>
 
+    <string name="description.member_lesson_list.lesson_icon_image">Member Lesson Icon</string>
+    <string name="description.member_lesson_list.day_of_week_icon">Day of Week Icon</string>
+    <string name="description.member_lesson_list.timetable_icon">Day of Week Icon</string>
+
+    <string name="label.member_lesson_list.lesson_name">Lesson Name</string>
+    <string name="label.member_lesson_list.lesson_type">Lesson Type</string>
+    <string name="label.member_lesson_list.day_of_week">Lesson Type</string>
+    <string name="label.member_lesson_list.timetable">HH:MM - HH:MM</string>
+
+    <string name="message.member_lesson_list.add.lesson">Added %1$s to Lesson</string>
+    <string name="message.member_lesson_list.edit.lesson">Edited the %1$s</string>
+
     <!-- Member Lesson Schedule -->
     <string name="toolbar.member_lesson_schedule.title">Schedule</string>
     <string name="label.member_lesson_schedule.status">Status</string>

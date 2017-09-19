@@ -7,46 +7,59 @@
     android:layout_height="72dp"
     android:background="#FAFAFA">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <FrameLayout
+        android:background="?android:selectableItemBackgroundBorderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="12dp"
-        android:layout_marginStart="@dimen/margin_16dp">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/schedule_name"
-            android:text="Name(abbr)"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/schedule_type"
-            android:text="type"
-            android:layout_marginStart="@dimen/margin_4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:layout_marginStart="@dimen/margin_16dp">
 
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_16dp">
+                <TextView
+                    android:id="@+id/schedule_name"
+                    android:text="Name(abbr)"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/schedule_date"
-            android:text="YYYY/MM/DD (SSS)"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/schedule_type"
+                    android:text="type"
+                    android:layout_marginStart="@dimen/margin_4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/schedule_time"
-            android:text="HH:MM:DD - HH:MM:DD"
-            android:layout_marginStart="@dimen/margin_4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16dp">
 
+                <TextView
+                    android:id="@+id/schedule_date"
+                    android:text="YYYY/MM/DD (SSS)"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/schedule_time"
+                    android:text="HH:MM:DD - HH:MM:DD"
+                    android:layout_marginStart="@dimen/margin_4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
 </LinearLayout>

@@ -181,6 +181,15 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
     }
 
     @Override
+    public Single<Integer> deleteByLessonId(long lessonId) {
+        return repository.getDeleter()
+                .lessonIdEq(lessonId)
+                .executeAsSingle()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
     public Single<Integer> deleteAll() {
         return repository.getDeleter()
                 .executeAsSingle()

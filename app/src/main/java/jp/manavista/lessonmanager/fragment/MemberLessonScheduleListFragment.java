@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,6 +23,7 @@ import javax.inject.Inject;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberLessonActivity;
@@ -30,7 +33,6 @@ import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
 import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
-import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
@@ -42,9 +44,7 @@ import jp.manavista.lessonmanager.view.section.MemberLessonSection;
  *
  * MemberLessonSchedule List Fragment
  *
- * A simple {@link Fragment} subclass.
- * Use the {@link MemberLessonScheduleListFragment#newInstance} factory method to
- * create an instance of this fragment.
+ *
  */
 public final class MemberLessonScheduleListFragment extends Fragment {
 
@@ -58,6 +58,9 @@ public final class MemberLessonScheduleListFragment extends Fragment {
     /** Activity Contents */
     private Activity contents;
 
+    RecyclerView view;
+    TextView emptyState;
+
     /** MemberLesson RecyclerView Adapter */
     private SectionedRecyclerViewAdapter sectionAdapter;
     /** Adapter MemberLesson Section */
@@ -67,8 +70,9 @@ public final class MemberLessonScheduleListFragment extends Fragment {
     /** MemberLessonSchedule RecyclerView Item Touch Helper */
     private ItemTouchHelperExtension itemTouchHelper;
 
-    @Inject
-    MemberLessonService memberLessonService;
+    private List<MemberLessonVo> lessonVoList;
+    private List<MemberLessonScheduleVo> scheduleVoList;
+
     @Inject
     MemberLessonScheduleService memberLessonScheduleService;
     @Inject
@@ -111,6 +115,9 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         } else {
             Log.w(TAG, "bundle arguments is null");
         }
+
+        lessonVoList = new ArrayList<>();
+        scheduleVoList = new ArrayList<>();
         this.disposable = Disposables.empty();
     }
 
@@ -126,19 +133,23 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         this.contents = getActivity();
         DependencyInjector.appComponent().inject(this);
 
-        final RecyclerView view = contents.findViewById(R.id.rv);
+        view = contents.findViewById(R.id.rv);
         view.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(contents);
         view.setLayoutManager(manager);
         view.addItemDecoration(new ItemDecoration(contents));
 
+        emptyState = contents.findViewById(R.id.empty_state);
+
         sectionAdapter = new SectionedRecyclerViewAdapter();
         memberLessonSection = MemberLessonSection.newInstance(contents, memberLessonOperation);
-        memberLessonSection.setTitle("Lesson");
+        memberLessonSection.setTitle("Lesson"); // TODO: 2017/09/19 use string.xml
+        memberLessonSection.setList(lessonVoList);
         sectionAdapter.addSection(memberLessonSection);
 
         memberLessonScheduleSection = MemberLessonScheduleSection.newInstance(contents, memberLessonScheduleOperation);
         memberLessonScheduleSection.setTitle("Schedule");
+        memberLessonScheduleSection.setList(scheduleVoList);
         sectionAdapter.addSection(memberLessonScheduleSection);
 
         view.setAdapter(sectionAdapter);
@@ -154,21 +165,10 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
         super.onResume();
 
-        disposable = memberLessonService.getSingleVoListByMemberId(memberId).subscribe(new Consumer<List<MemberLessonVo>>() {
-            @Override
-            public void accept(List<MemberLessonVo> voList) throws Exception {
-                memberLessonSection.setList(voList);
-                sectionAdapter.notifyDataSetChanged();
-
-                disposable = memberLessonScheduleService.getSingleVoListByMemberId(memberId).subscribe(new Consumer<List<MemberLessonScheduleVo>>() {
-                    @Override
-                    public void accept(List<MemberLessonScheduleVo> memberLessonScheduleVos) throws Exception {
-                        memberLessonScheduleSection.setList(memberLessonScheduleVos);
-                        sectionAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
+        disposable = facade.getListData(memberId,
+                memberLessonSection.getList(),
+                memberLessonScheduleSection.getList(),
+                view, emptyState, sectionAdapter);
     }
 
     @Override
@@ -224,17 +224,30 @@ public final class MemberLessonScheduleListFragment extends Fragment {
             final Intent intent = new Intent(contents, MemberLessonActivity.class);
             intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, dto.getMemberId());
             intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, dto.getId());
-            contents.startActivity(intent);
+            contents.startActivityForResult(intent, MemberLessonActivity.RequestCode.EDIT);
         }
 
         @Override
         public void delete(long id, final int position) {
             itemTouchHelper.closeOpened();
-            disposable = memberLessonService.deleteById(id).subscribe(new Consumer<Integer>() {
+            scheduleVoList.clear();
+            disposable = facade.deleteLessonByLessonId(memberId, id).subscribe(new Consumer<MemberLessonScheduleVo>() {
                 @Override
-                public void accept(Integer integer) throws Exception {
+                public void accept(MemberLessonScheduleVo vo) throws Exception {
+                    scheduleVoList.add(vo);
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    throwable.printStackTrace();
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
                     memberLessonSection.getList().remove(position);
-                    sectionAdapter.notifyItemRemovedFromSection(memberLessonSection, position);
+//                    sectionAdapter.notifyItemRemovedFromSection(memberLessonSection, position);
+                    memberLessonScheduleSection.setList(scheduleVoList);
+                    sectionAdapter.notifyDataSetChanged();
                 }
             });
         }

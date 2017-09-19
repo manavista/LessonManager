@@ -1,21 +1,32 @@
 package jp.manavista.lessonmanager.facade;
 
-import android.util.Pair;
+import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import java.util.List;
 
-import io.reactivex.Single;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
 import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 
 /**
+ *
+ * MemberLessonSchedule List Facade
+ *
  * <p>
  * Overview:<br>
  * </p>
  */
 public interface MemberLessonScheduleListFacade {
 
-    Single<Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>>> getListPair(long memberId);
+    Disposable getListData(long memberId,
+                           List<MemberLessonVo> lessonVoList,
+                           List<MemberLessonScheduleVo> scheduleVoList,
+                           RecyclerView view,
+                           TextView emptyState,
+                           SectionedRecyclerViewAdapter adapter);
 
-    void createListPair(long memberId, Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>> listPair);
+    Observable<MemberLessonScheduleVo> deleteLessonByLessonId(long memberId, long lessonId);
 }

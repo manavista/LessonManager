@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.MemberLessonScheduleListFragment;
@@ -61,7 +62,7 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
                 final Intent intent = new Intent(activity, MemberLessonActivity.class);
                 intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, memberId);
                 intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, lessonId);
-                startActivity(intent);
+                startActivityForResult(intent, MemberLessonActivity.RequestCode.CREATE);
             }
         });
 
@@ -83,5 +84,23 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_member_lesson_schedule_list, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if( requestCode == MemberLessonActivity.RequestCode.CREATE && resultCode == RESULT_OK ) {
+
+            final String name = data.getStringExtra(MemberLessonActivity.Extra.LESSON_NAME);
+            final String message = getString(R.string.message_member_lesson_list_add_lesson, name);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+        } else if( requestCode == MemberLessonActivity.RequestCode.EDIT && resultCode == RESULT_OK ) {
+
+            final String name = data.getStringExtra(MemberLessonActivity.Extra.LESSON_NAME);
+            final String message = getString(R.string.message_member_lesson_list_edit_lesson, name);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

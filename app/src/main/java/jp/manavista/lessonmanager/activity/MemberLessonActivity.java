@@ -27,6 +27,18 @@ public class MemberLessonActivity extends AppCompatActivity {
     /** activity put extra argument: member lesson id */
     public static final String EXTRA_MEMBER_LESSON_ID = "MEMBER_LESSON_ID";
 
+    public class Extra {
+        public static final String MEMBER_ID = "MEMBER_ID";
+        public static final String MEMBER_LESSON_ID = "MEMBER_LESSON_ID";
+        public static final String LESSON_NAME = "LESSON_NAME";
+    }
+
+    public class RequestCode {
+        private final static int _BASE = 400;
+        public final static int CREATE = 1 + _BASE;
+        public final static int EDIT = 3 + _BASE;
+    }
+
     /** fragment */
     private MemberLessonFragment fragment;
 

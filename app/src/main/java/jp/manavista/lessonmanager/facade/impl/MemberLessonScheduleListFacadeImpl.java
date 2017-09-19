@@ -1,10 +1,22 @@
 package jp.manavista.lessonmanager.facade.impl;
 
-import android.util.Pair;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Single;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.SingleSource;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
 import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
@@ -13,6 +25,7 @@ import jp.manavista.lessonmanager.service.MemberLessonService;
 
 /**
  *
+ * MemberLessonSchedule Facade Implementation
  *
  * <p>
  * Overview:<br>
@@ -20,6 +33,8 @@ import jp.manavista.lessonmanager.service.MemberLessonService;
  * </p>
  */
 public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleListFacade {
+
+    private static final String TAG = MemberLessonScheduleListFacadeImpl.class.getSimpleName();
 
     private final MemberLessonService memberLessonService;
     private final MemberLessonScheduleService memberLessonScheduleService;
@@ -33,53 +48,66 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
     }
 
     @Override
-    public Single<Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>>> getListPair(final long memberId) {
+    public Disposable getListData(final long memberId,
+                                  final @NonNull List<MemberLessonVo> lessonVoList,
+                                  final @NonNull List<MemberLessonScheduleVo> scheduleVoList,
+                                  final RecyclerView view,
+                                  final TextView emptyState,
+                                  final SectionedRecyclerViewAdapter adapter) {
 
-        // TODO: 2017/08/29 implement
-        final Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>> pair = Pair.create(null, null);
-        final List<MemberLessonVo> memberLessonVoList;
+        lessonVoList.clear();
+        scheduleVoList.clear();
 
-//        return memberLessonService.getSingleVoListByMemberId(memberId).flatMap(new Function<List<MemberLessonVo>, SingleSource<? extends List<MemberLessonScheduleVo>>>() {
-//            @Override
-//            public SingleSource<? extends List<MemberLessonScheduleVo>> apply(@NonNull final List<MemberLessonVo> memberLessonVos) throws Exception {
-//                memberLessonVoList = memberLessonVos;
-//                return memberLessonScheduleService.getSingleVoListByMemberId(memberId);
-//            }
-//        }).flatMap(new Function<List<MemberLessonScheduleVo>, SingleSource<? extends Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>>>>() {
-//            @Override
-//            public Single<Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>>> apply(@NonNull List<MemberLessonScheduleVo> memberLessonScheduleVos) throws Exception {
-//                return Single.just(Pair.create(memberLessonVoList, memberLessonScheduleVos));
-//            }
-//        });
-//    }
+        return memberLessonService.getSingleVoListByMemberId(memberId)
+                .flatMap(new Function<List<MemberLessonVo>, SingleSource<List<MemberLessonScheduleVo>>> () {
+                    @Override
+                    public SingleSource<List<MemberLessonScheduleVo>> apply(@io.reactivex.annotations.NonNull List<MemberLessonVo> list) throws Exception {
+                        lessonVoList.addAll(list);
+                        return memberLessonScheduleService.getSingleVoListByMemberId(memberId);
+                    }
+                }).subscribe(new Consumer<List<MemberLessonScheduleVo>>() {
+                    @Override
+                    public void accept(List<MemberLessonScheduleVo> list) throws Exception {
 
-//        return memberLessonService.getSingleVoListByMemberId(memberId).flatMapObservable(new Function<List<MemberLessonVo>, ObservableSource<?>>() {
-//            @Override
-//            public ObservableSource<List<MemberLessonVo>> apply(@NonNull List<MemberLessonVo> memberLessonVos) throws Exception {
-//                return io.reactivex.Observable.just(memberLessonVos);
-//            }
-//        }).flatMap(new Function<ObservableSource<List<MemberLessonVo>>, SingleSource<List<MemberLessonScheduleVo>>>() {
-//            @Override
-//            public SingleSource<List<MemberLessonScheduleVo>> apply(@NonNull ObservableSource<List<MemberLessonVo>> listObservableSource) throws Exception {
-//                return memberLessonScheduleService.getSingleVoListByMemberId(memberId);
-//            }
-//        }, new BiFunction<ObservableSource<List<MemberLessonVo>>, SingleSource<List<MemberLessonScheduleVo>>, SingleSource<Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>>>>() {
-//
-//            @Override
-//            public Object apply(@NonNull Object o, @NonNull Object o2) throws Exception {
-//                return null;
-//            }
-//        })
-        return null;
+                        scheduleVoList.addAll(list);
+                        adapter.notifyDataSetChanged();
+
+                        if( lessonVoList.isEmpty() && scheduleVoList.isEmpty() ) {
+                            Log.d(TAG, "List is empty");
+                            view.setVisibility(View.GONE);
+                            emptyState.setVisibility(View.VISIBLE);
+                        } else {
+                            view.setVisibility(View.VISIBLE);
+                            emptyState.setVisibility(View.GONE);
+                        }
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                });
     }
 
     @Override
-    public void createListPair(long memberId, Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>> listPair) {
+    public Observable<MemberLessonScheduleVo> deleteLessonByLessonId(final long memberId, final long lessonId) {
 
-        List<MemberLessonVo> memberLessonVoList;
-        List<MemberLessonScheduleVo> memberLessonScheduleVoList;
+        final List<Observable<Integer>> targetList = new ArrayList<>();
+        targetList.add(memberLessonScheduleService.deleteByLessonId(lessonId).toObservable());
+        targetList.add(memberLessonService.deleteById(lessonId).toObservable());
 
-
-//        listPair = Pair.create(memberLessonVoList, memberLessonScheduleVoList);
+        return Observable.concat(targetList)
+                .reduce(0, new BiFunction<Integer, Integer, Integer>() {
+                    @Override
+                    public Integer apply(@NonNull Integer sum, @NonNull Integer rows) throws Exception {
+                        return sum + rows;
+                    }
+                }).flatMapObservable(new Function<Integer, ObservableSource<MemberLessonScheduleVo>>() {
+                    @Override
+                    public ObservableSource<MemberLessonScheduleVo> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                        return memberLessonScheduleService.getVoListByMemberId(memberId);
+                    }
+                });
     }
 }

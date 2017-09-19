@@ -131,6 +131,8 @@ public interface MemberLessonScheduleService {
 
     Single<Integer> deleteByMemberId(long memberId);
 
+    Single<Integer> deleteByLessonId(long lessonId);
+
     /**
      *
      * Delete All
