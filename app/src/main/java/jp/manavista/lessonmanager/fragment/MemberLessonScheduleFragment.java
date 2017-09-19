@@ -52,7 +52,7 @@ import jp.manavista.lessonmanager.util.DateTimeUtil;
  * editing and saving.
  * </p>
  */
-public class MemberLessonScheduleFragment extends Fragment implements Validator.ValidationListener {
+public final class MemberLessonScheduleFragment extends Fragment implements Validator.ValidationListener {
 
     private static final String KEY_LESSON_ID = "LESSON_ID";
 

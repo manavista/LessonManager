@@ -174,7 +174,20 @@
     <string name="label.member_lesson.text_color">Text Color</string>
     <string name="label.member_lesson_background_color">Background Color</string>
     <string name="label.member_lesson.day_of_week.dialog.title">Select day of week</string>
+    <string name="label.member_lesson.dialog.schedule.exist.save_lesson_only">SAVE LESSON ONLY</string>
+    <string name="label.member_lesson.dialog.schedule.exist.force_add">FORCE ADD</string>
+
     <string name="tag.member_lesson.preview.color">TAG_SELECTED_COLOR</string>
+    <string name="title.member_lesson.dialog.timetable">Select a Timetable</string>
+    <string name="title.member_lesson.dialog.invalid.period">The period is too long</string>
+    <string name="title.member_lesson.dialog.schedule.exists">Schedule exists</string>
+    <string name="message.member_lesson.end_time.invalid">Input after start time</string>
+    <string name="message.member_lesson.end_period.invalid.relation">Input after start period</string>
+    <string name="message.member_lesson.end_period.invalid.span">Please set the end period within 6 months of start period</string>
+    <string name="message.member_lesson.schedule.exists">A schedule already exists. May I add a new one?</string>
+
+    <string name="default.member_lesson.start_time">10:00</string>
+    <string name="default.member_lesson.end_time">12:00</string>
 
     <!-- Member Lesson List -->
     <string name="toolbar.member_lesson_list.title">Lesson List</string>

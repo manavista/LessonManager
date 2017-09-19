@@ -34,19 +34,6 @@ public interface MemberLessonService {
 
     /**
      *
-     * Get All List
-     *
-     * <p>
-     * Overview:<br>
-     * Get All {@code MemberLesson} entity of Observable object.
-     * </p>
-     *
-     * @return All {@code MemberLesson} entity of Observable
-     */
-    Observable<MemberLesson> getListAll();
-
-    /**
-     *
      * Get List By Id
      *
      * <p>

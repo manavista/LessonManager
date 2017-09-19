@@ -26,11 +26,12 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/member_icon_image"/>
 
-            <ImageView
+            <jp.manavista.lessonmanager.view.image.CircleImageView
                 android:id="@+id/member_icon_image"
                 android:src="@drawable/ic_person_black"
                 android:contentDescription="@string/label.member_lesson.hint.member"
                 android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_width="24dp"
                 android:layout_height="24dp"/>
 
@@ -254,7 +255,7 @@
                 <ImageButton
                     android:id="@+id/timetable_image_button"
                     android:src="@drawable/button_event_black"
-                    android:background="@drawable/background_image_button"
+                    android:background="?android:selectableItemBackgroundBorderless"
                     android:contentDescription="@string/label.member_lesson.select_timetable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -413,7 +414,7 @@
                 android:id="@+id/text_color_image_button"
                 android:contentDescription="@string/label.member_lesson.text_color"
                 android:src="@drawable/button_format_color_text_black"
-                android:background="@drawable/background_image_button"
+                android:background="?android:selectableItemBackgroundBorderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_8dp"
@@ -424,7 +425,7 @@
                 android:id="@+id/background_color_image_button"
                 android:contentDescription="@string/label.member_lesson_background_color"
                 android:src="@drawable/button_format_color_fill_black"
-                android:background="@drawable/background_image_button"
+                android:background="?android:selectableItemBackgroundBorderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_8dp"

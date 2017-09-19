@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -20,7 +23,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.gfx.android.orma.SingleAssociation;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.thebluealliance.spectrum.SpectrumDialog;
@@ -33,27 +35,24 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.SingleSource;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.facade.MemberLessonFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
 import jp.manavista.lessonmanager.model.entity.Timetable;
-import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.service.TimetableService;
 import jp.manavista.lessonmanager.util.ArrayUtil;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
+import jp.manavista.lessonmanager.view.image.CircleImageView;
 
 import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD;
 
@@ -91,10 +90,10 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     MemberLessonService memberLessonService;
     @Inject
     TimetableService timetableService;
-
-    // FIXME: 2017/08/27 after delete
     @Inject
-    MemberLessonScheduleService memberLessonScheduleService;
+    SharedPreferences preferences;
+    @Inject
+    MemberLessonFacade facade;
 
     /** input validator */
     private Validator validator;
@@ -141,8 +140,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_member_lesson, container, false);
 
@@ -150,6 +148,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
                 .id(id)
                 .memberId(memberId)
                 .memberName((TextView) rootView.findViewById(R.id.member_name))
+                .photo((CircleImageView) rootView.findViewById(R.id.member_icon_image))
                 .name((EditText) rootView.findViewById(R.id.name))
                 .abbr((EditText) rootView.findViewById(R.id.abbr))
                 .type((EditText) rootView.findViewById(R.id.type))
@@ -193,7 +192,11 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         if( id > 0 ) {
             storeEntityToDto(id);
         } else {
-            storeInitValueToDto();
+            storeDefaultValueToDto();
+        }
+
+        if( memberId > 0 ) {
+            storeMemberToDto();
         }
     }
 
@@ -206,34 +209,28 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
     @Override
     public void onValidationSucceeded() {
 
-        final MemberLesson entity = dto.convert();
-        disposable = memberService.getById(dto.getMemberId()).flatMap(new Function<Member, SingleSource<? extends MemberLesson>>() {
-            @Override
-            public SingleSource<? extends MemberLesson> apply(@NonNull Member member) throws Exception {
-                entity.member = SingleAssociation.just(member);
-                return memberLessonService.save(entity);
-            }
-        }).subscribe(new Consumer<MemberLesson>() {
-            @Override
-            public void accept(MemberLesson memberLesson) throws Exception {
-                Log.d(TAG, memberLesson.toString());
+        if( !validatePeriod() ) {
+            return;
+        }
 
-                // FIXME: 2017/08/27 temporary implements
-
-                memberLessonScheduleService.createByLesson(memberLesson.member.get(), memberLesson).subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        contents.finish();
-                    }
-                });
-
-            }
-        }, new Consumer<Throwable>() {
+        facade.isEmptySchedule(id).subscribe(new Consumer<Boolean>() {
             @Override
-            public void accept(Throwable throwable) throws Exception {
-                throw new RuntimeException("can not save MemberLesson entity", throwable);
+            public void accept(Boolean isEmpty) throws Exception {
+                Log.d(TAG, "schedule is empty: " + isEmpty);
+
+                if( !isEmpty ) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(contents);
+                    builder.setTitle(R.string.title_member_lesson_dialog_schedule_exists)
+                            .setIcon(R.drawable.ic_info_black)
+                            .setMessage(R.string.message_member_lesson_schedule_exists)
+                            .setPositiveButton(R.string.label_member_lesson_dialog_schedule_exist_save_lesson_only, onSaveLessonOnlyListener)
+                            .setNegativeButton(R.string.label_member_lesson_dialog_schedule_exist_force_add, onForceAddListener)
+                            .setNeutralButton(android.R.string.cancel, null)
+                            .show();
+                }
             }
         });
+
     }
 
     @Override
@@ -265,6 +262,29 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      */
     public void save() {
         validator.validate();
+    }
+
+    private final DialogInterface.OnClickListener onSaveLessonOnlyListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            executeSave(false);
+        }
+    };
+
+    private final DialogInterface.OnClickListener onForceAddListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            executeSave(true);
+        }
+    };
+
+    private void executeSave(boolean addSchedule) {
+        facade.save(dto.getMemberId(), dto.toEntity(), addSchedule).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(Long rows) throws Exception {
+                contents.finish();
+            }
+        });
     }
 
     /**
@@ -327,7 +347,7 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
                     public void run() throws Exception {
                         dto.setTimetableDtoList(timetableList);
                         AlertDialog.Builder builder = new AlertDialog.Builder(contents);
-                        builder.setTitle("Select a timetable")
+                        builder.setTitle(R.string.title_member_lesson_dialog_timetable)
                                 .setIcon(R.drawable.ic_event_black)
                                 .setItems(labelList.toArray(new CharSequence[0]), dto.timetableSetLister)
                                 .show();
@@ -454,26 +474,32 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
 
     /**
      *
-     * Display Member name
+     * Store Member
      *
      * <p>
      * Overview:<br>
-     * Obtain the display name of the member associated with the id specified in the argument
-     * and display it on the screen.
      * </p>
      */
-    private void displayMemberName() {
+    private void storeMemberToDto() {
+
+        final StringBuilder builder = new StringBuilder();
+        final String key = getString(R.string.key_preference_member_name_display);
+        final String defaultValue = getString(R.string.value_preference_member_name_display);
+        final int displayNameCode = Integer.valueOf(preferences.getString(key, defaultValue));
 
         disposable = memberService.getById(memberId).subscribe(new Consumer<Member>() {
             @Override
-            public void accept(Member member) throws Exception {
-                final String displayName = MemberVo.copy(member).getDisplayName();
-                dto.getMemberName().setText(displayName);
+            public void accept(Member entity) throws Exception {
+                dto.getMemberName().setText(memberService.getDisplayName(entity, displayNameCode, builder));
+                if( entity.photo != null && entity.photo.length > 0 ) {
+                    final Bitmap bitmap = BitmapFactory.decodeByteArray(entity.photo, 0, entity.photo.length);
+                    dto.getPhoto().setImageBitmap(bitmap);
+                }
             }
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                throw new RuntimeException("can not get member entity", throwable);
+                Log.e(TAG, "can not get member entity by id: " + memberId, throwable);
             }
         });
     }
@@ -488,22 +514,28 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      * when new event is created.
      * </p>
      */
-    private void storeInitValueToDto() {
+    private void storeDefaultValueToDto() {
 
-        /* dayOfWeek (default: Monday) */
+        /* Default dayOfWeek (Monday) */
         final String dayOfWeek = "2";
         final String[] dayOfWeeks = getResources().getStringArray(R.array.entries_day_of_week);
 
         dto.setDayOfWeekValue(dayOfWeek);
         dto.getDayOfWeek().setText(dayOfWeeks[1]);
 
-        /* Period */
+        /* Default Time Period (10:00 - 12:00) */
+        dto.getStartTimeText().setText(getResources().getString(R.string.default_member_lesson_start_time));
+        dto.getEndTimeText().setText(getResources().getString(R.string.default_member_lesson_end_time));
+        dto.setStartTime(DateTimeUtil.parseTime(DateTimeUtil.TIME_FORMAT_HHMM, dto.getStartTimeText().getText().toString()));
+        dto.setEndTime(DateTimeUtil.parseTime(DateTimeUtil.TIME_FORMAT_HHMM, dto.getEndTimeText().getText().toString()));
+
+        /* Default Date Period (Today - after 3 months)*/
         final Calendar calendar = DateTimeUtil.today();
         dto.getStartPeriod().setText(DateTimeUtil.format(DATE_PATTERN_YYYYMMDD, calendar));
         calendar.add(Calendar.MONTH, 3);
         dto.getEndPeriod().setText(DateTimeUtil.format(DATE_PATTERN_YYYYMMDD, calendar));
 
-        /* Color (default text: @color/black, background: @color/amber_500) */
+        /* Default Color (text: @color/black, background: @color/amber_500) */
         final int textColor = dto.getPreviewText().getCurrentTextColor();
         final int backgroundColor = ((ColorDrawable) dto.getPreviewText().getBackground()).getColor();
         final int tag = R.string.tag_member_lesson_preview_color;
@@ -514,9 +546,6 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         dto.setBackgroundColor(backgroundColor);
         dto.getBackgroundColorImageButton().setTag(tag, backgroundColor);
 
-        if( memberId > 0 ) {
-            displayMemberName();
-        }
     }
 
     /**
@@ -528,11 +557,11 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      *
      * </p>
      * 
-     * @param memberLessonId member lesson id
+     * @param lessonId member lesson id
      */
-    private void storeEntityToDto(final long memberLessonId) {
+    private void storeEntityToDto(final long lessonId) {
 
-        disposable = memberLessonService.getById(memberLessonId).subscribe(new Consumer<MemberLesson>() {
+        disposable = memberLessonService.getById(lessonId).subscribe(new Consumer<MemberLesson>() {
             @Override
             public void accept(MemberLesson entity) throws Exception {
                 dto.store(entity);
@@ -541,9 +570,45 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                throw new RuntimeException("can not read MemberLesson by id:" + memberLessonId, throwable);
+                Log.e(TAG, "can not read MemberLesson by id: " + lessonId, throwable);
             }
         });
+    }
+
+    private boolean validatePeriod() {
+
+        if( dto.getStartTime().after(dto.getEndTime()) ) {
+            dto.getEndTimeText().setError(getString(R.string.message_member_lesson_end_time_invalid));
+            Log.w(TAG, "start time after end time!");
+            return false;
+        }
+
+        final Calendar start = DateTimeUtil.parserCalendar(dto.getStartPeriod().getText().toString(), DATE_PATTERN_YYYYMMDD);
+        final Calendar end = DateTimeUtil.parserCalendar(dto.getEndPeriod().getText().toString(), DATE_PATTERN_YYYYMMDD);
+
+        if( start.after(end) ) {
+            dto.getEndPeriod().setError(getString(R.string.message_member_lesson_end_period_invalid_relation));
+            Log.w(TAG, "start period after end period!");
+            return false;
+        }
+
+        start.add(Calendar.MONTH, 6);
+
+        if( end.after(start) ) {
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(contents);
+            builder.setTitle(R.string.title_member_lesson_dialog_invalid_period)
+                    .setIcon(R.drawable.ic_info_black)
+                    .setMessage(R.string.message_member_lesson_end_period_invalid_span)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+
+            dto.getEndPeriod().setError(getString(R.string.message_member_lesson_end_period_invalid_span));
+            Log.w(TAG, "End date exceeds 6 months after start date!");
+            return false;
+        }
+
+        return true;
     }
 
     /**

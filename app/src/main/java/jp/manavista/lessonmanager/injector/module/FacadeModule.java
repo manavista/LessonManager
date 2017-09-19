@@ -3,9 +3,11 @@ package jp.manavista.lessonmanager.injector.module;
 import dagger.Module;
 import dagger.Provides;
 import jp.manavista.lessonmanager.facade.LessonViewFacade;
+import jp.manavista.lessonmanager.facade.MemberLessonFacade;
 import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
 import jp.manavista.lessonmanager.facade.SettingDeleteFacade;
 import jp.manavista.lessonmanager.facade.impl.LessonViewFacadeImpl;
+import jp.manavista.lessonmanager.facade.impl.MemberLessonFacadeImpl;
 import jp.manavista.lessonmanager.facade.impl.MemberLessonScheduleListFacadeImpl;
 import jp.manavista.lessonmanager.facade.impl.SettingDeleteFacadeImpl;
 import jp.manavista.lessonmanager.service.EventService;
@@ -59,6 +61,18 @@ public class FacadeModule {
         return new LessonViewFacadeImpl(
                 timetableService,
                 eventService,
+                memberLessonScheduleService);
+    }
+
+    @Provides
+    MemberLessonFacade provideMemberLessonFacade(
+            MemberService memberService,
+            MemberLessonService memberLessonService,
+            MemberLessonScheduleService memberLessonScheduleService
+    ) {
+        return new MemberLessonFacadeImpl(
+                memberService,
+                memberLessonService,
                 memberLessonScheduleService);
     }
 }
