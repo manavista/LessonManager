@@ -17,18 +17,22 @@ import com.mobsandgeeks.saripaar.annotation.Optional;
 
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import jp.manavista.lessonmanager.fragment.MemberLessonFragment;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
-import jp.manavista.lessonmanager.model.vo.MemberVo;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
+import jp.manavista.lessonmanager.view.image.CircleImageView;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD;
+import static jp.manavista.lessonmanager.util.DateTimeUtil.TIME_FORMAT_HHMM;
 
 /**
  *
@@ -59,6 +63,7 @@ public final class MemberLessonDto implements Serializable {
     private long memberId;
 
     private TextView memberName;
+    private CircleImageView photo;
 
     @NotEmpty
     @Length(max = 50)
@@ -80,10 +85,6 @@ public final class MemberLessonDto implements Serializable {
     private EditText startTimeText;
     @NotEmpty
     private EditText endTimeText;
-    private ImageButton timetableIcon;
-
-    private Time startTime;
-    private Time endTime;
 
     @NotEmpty
     private EditText dayOfWeek;
@@ -100,8 +101,12 @@ public final class MemberLessonDto implements Serializable {
     @ColorInt
     private int backgroundColor;
 
+    private ImageButton timetableIcon;
     private ImageButton textColorImageButton;
     private ImageButton backgroundColorImageButton;
+
+    private Time startTime;
+    private Time endTime;
 
 
     @Setter(AccessLevel.NONE)
@@ -110,7 +115,12 @@ public final class MemberLessonDto implements Serializable {
         @Override
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
             startTime = DateTimeUtil.parseTime(hourOfDay, minute);
-            startTimeText.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(startTime));
+            startTimeText.setText(TIME_FORMAT_HHMM.format(startTime));
+
+            if( endTime != null && endTime.before(startTime) ) {
+                endTime = DateTimeUtil.parseTime(hourOfDay, minute);
+                endTimeText.setText(TIME_FORMAT_HHMM.format(endTime));
+            }
         }
     };
 
@@ -120,7 +130,7 @@ public final class MemberLessonDto implements Serializable {
         @Override
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
             endTime = DateTimeUtil.parseTime(hourOfDay, minute);
-            endTimeText.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(endTime));
+            endTimeText.setText(TIME_FORMAT_HHMM.format(endTime));
         }
     };
 
@@ -158,7 +168,15 @@ public final class MemberLessonDto implements Serializable {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int monthYear, int dayOfMonth) {
             monthYear += 1; /* monthYear is 0-11 */
-            startPeriod.setText(String.format(Locale.getDefault(), dateFormat, year, monthYear, dayOfMonth));
+            final String date = String.format(Locale.getDefault(), dateFormat, year, monthYear, dayOfMonth);
+            startPeriod.setText(date);
+
+            final Calendar start = DateTimeUtil.parserCalendar(startPeriod.getText().toString(), DATE_PATTERN_YYYYMMDD);
+            final Calendar end = DateTimeUtil.parserCalendar(endPeriod.getText().toString(), DATE_PATTERN_YYYYMMDD);
+
+            if( start.after(end) ) {
+                endPeriod.setText(date);
+            }
         }
     };
 
@@ -183,32 +201,31 @@ public final class MemberLessonDto implements Serializable {
      *
      * @return {@link MemberLesson} entity.
      */
-    public MemberLesson convert() {
+    public MemberLesson toEntity() {
 
-        final MemberLesson memberLesson = new MemberLesson();
+        final MemberLesson entity = new MemberLesson();
 
-        memberLesson.id = id;
-        memberLesson.memberId = memberId;
-        memberLesson.name = name.getText().toString();
-        memberLesson.abbr = abbr.getText().toString();
-        memberLesson.type = type.getText().toString();
-        memberLesson.location = location.getText().toString();
-        memberLesson.presenter = presenter.getText().toString();
-        memberLesson.textColor = textColor;
-        memberLesson.backgroundColor = backgroundColor;
-        memberLesson.startTime = DateTimeUtil.parseTime(DateTimeUtil.TIME_FORMAT_HHMM, startTimeText.getText().toString());
-        memberLesson.endTime = DateTimeUtil.parseTime(DateTimeUtil.TIME_FORMAT_HHMM, endTimeText.getText().toString());
-        memberLesson.dayOfWeeks = dayOfWeekValue;
-        memberLesson.periodFrom = startPeriod.getText().toString();
-        memberLesson.periodTo = endPeriod.getText().toString();
+        entity.id = id;
+        entity.memberId = memberId;
+        entity.name = name.getText().toString();
+        entity.abbr = abbr.getText().toString();
+        entity.type = type.getText().toString();
+        entity.location = location.getText().toString();
+        entity.presenter = presenter.getText().toString();
+        entity.textColor = textColor;
+        entity.backgroundColor = backgroundColor;
+        entity.startTime = DateTimeUtil.parseTime(TIME_FORMAT_HHMM, startTimeText.getText().toString());
+        entity.endTime = DateTimeUtil.parseTime(TIME_FORMAT_HHMM, endTimeText.getText().toString());
+        entity.dayOfWeeks = dayOfWeekValue;
+        entity.periodFrom = startPeriod.getText().toString();
+        entity.periodTo = endPeriod.getText().toString();
 
-        return memberLesson;
+        return entity;
     }
 
     public void store(@NonNull final MemberLesson entity) {
 
         setId(entity.id);
-        getMemberName().setText(MemberVo.copy(entity.member.get()).getDisplayName());
         getName().setText(entity.name);
         getAbbr().setText(entity.abbr);
         getType().setText(entity.type);
@@ -221,8 +238,11 @@ public final class MemberLessonDto implements Serializable {
 
         startTime = entity.startTime;
         endTime = entity.endTime;
-        startTimeText.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(startTime));
-        endTimeText.setText(DateTimeUtil.TIME_FORMAT_HHMM.format(endTime));
+        startTimeText.setText(TIME_FORMAT_HHMM.format(startTime));
+        endTimeText.setText(TIME_FORMAT_HHMM.format(endTime));
+
+        startPeriod.setText(entity.periodFrom);
+        endPeriod.setText(entity.periodTo);
 
         textColor = entity.textColor;
         backgroundColor = entity.backgroundColor;

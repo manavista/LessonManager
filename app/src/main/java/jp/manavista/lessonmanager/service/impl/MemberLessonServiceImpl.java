@@ -41,13 +41,6 @@ public class MemberLessonServiceImpl implements MemberLessonService {
                 .subscribeOn(Schedulers.io());
     }
 
-    @Override
-    public Observable<MemberLesson> getListAll() {
-        return repository.getSelector()
-                .executeAsObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
-    }
 
     @Override
     public Observable<MemberLesson> getListByMemberId(long memberId) {

@@ -42,11 +42,11 @@ public final class MemberLessonVo implements Serializable {
     public static MemberLessonVo copy(MemberLesson entity) {
 
         final MemberLessonVo vo = new MemberLessonVo();
-        final MemberVo memberVo = MemberVo.copy(entity.member.get());
+        final MemberVo memberVo = MemberVo.copy(entity.member);
 
         vo.setId(entity.id);
         vo.setMemberId(entity.memberId);
-        vo.setMemberName(memberVo.getDisplayName());
+//        vo.setMemberName(memberVo.getDisplayName());
         vo.setName(entity.name);
         vo.setAbbr(entity.abbr);
         vo.setType(entity.type);

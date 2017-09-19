@@ -85,4 +85,20 @@ public interface MemberService {
      * @return {@link Single} observable object in deleted rows count
      */
     Single<Integer> deleteAll();
+
+    /**
+     *
+     * Get Display Name
+     *
+     * <p>
+     * Overview:<br>
+     * Member Display Name (User selectable by displayCode).
+     * </p>
+     *
+     * @param entity {@link Member} entity
+     * @param displayCode Display Type Code
+     * @param builder For concat string builder
+     * @return Display Name
+     */
+    String getDisplayName(final Member entity, final int displayCode, final StringBuilder builder);
 }

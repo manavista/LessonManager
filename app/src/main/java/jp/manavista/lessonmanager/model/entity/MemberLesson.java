@@ -1,6 +1,5 @@
 package jp.manavista.lessonmanager.model.entity;
 
-import com.github.gfx.android.orma.SingleAssociation;
 import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
 import com.github.gfx.android.orma.annotation.Table;
@@ -52,5 +51,5 @@ public class MemberLesson {
     public String periodTo;
 
     @Column(indexed = true)
-    public SingleAssociation<Member> member;
+    public Member member;
 }

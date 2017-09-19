@@ -193,6 +193,8 @@ public final class MemberListFragment extends Fragment {
             final String key = getString(R.string.key_preference_general_delete_confirm);
             final boolean confirm = preferences.getBoolean(key, true);
 
+            // TODO: 2017/09/18 When member has deleted, lesson and schedule delete together.
+
             if( confirm ) {
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(contents);

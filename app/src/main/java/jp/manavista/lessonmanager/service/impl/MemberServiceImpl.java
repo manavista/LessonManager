@@ -87,7 +87,8 @@ public class MemberServiceImpl implements MemberService {
                 .subscribeOn(Schedulers.io());
     }
 
-    private String getDisplayName(final Member entity, final int displayCode, final StringBuilder builder) {
+    @Override
+    public String getDisplayName(final Member entity, final int displayCode, final StringBuilder builder) {
 
         /* Don't create StringBuilder new instance in loop */
         builder.setLength(0);

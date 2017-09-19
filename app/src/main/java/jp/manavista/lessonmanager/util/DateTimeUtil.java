@@ -35,18 +35,18 @@ public final class DateTimeUtil {
     public static final String DATE_PATTERN_YYYYMMDD_DIGITS = "yyyyMMdd";
     public static final String DATETIME_PATTERN_YYYYMMDD_HHMMDD = "yyyy/MM/dd HH:mm";
 
-    public static SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat(DATE_PATTERN_YYYYMMDD, Locale.getDefault());
-    public static SimpleDateFormat DATE_FORMAT_YYYYMMDD_DIGITS = new SimpleDateFormat(DATE_PATTERN_YYYYMMDD_DIGITS, Locale.getDefault());
-    public static SimpleDateFormat DATE_FORMAT_MMDD = new SimpleDateFormat("MM/dd", Locale.getDefault());
-    public static SimpleDateFormat DATE_FORMAT_MMDDE = new SimpleDateFormat("MM/dd E", Locale.getDefault());
-    public static SimpleDateFormat DATE_FORMAT_E = new SimpleDateFormat("E", Locale.getDefault());
+    public static final SimpleDateFormat DATE_FORMAT_YYYYMMDD = new SimpleDateFormat(DATE_PATTERN_YYYYMMDD, Locale.getDefault());
+    public static final SimpleDateFormat DATE_FORMAT_YYYYMMDD_DIGITS = new SimpleDateFormat(DATE_PATTERN_YYYYMMDD_DIGITS, Locale.getDefault());
+    public static final SimpleDateFormat DATE_FORMAT_MMDD = new SimpleDateFormat("MM/dd", Locale.getDefault());
+    public static final SimpleDateFormat DATE_FORMAT_MMDDE = new SimpleDateFormat("MM/dd E", Locale.getDefault());
+    public static final SimpleDateFormat DATE_FORMAT_E = new SimpleDateFormat("E", Locale.getDefault());
 
-    public static SimpleDateFormat TIME_FORMAT_HHMM = new SimpleDateFormat("HH:mm", Locale.getDefault());
-    public static SimpleDateFormat TIME_FORMAT_hhMM = new SimpleDateFormat("hh:mm", Locale.getDefault());
-    public static SimpleDateFormat TIME_FORMAT_H = new SimpleDateFormat("H", Locale.getDefault());
-    public static SimpleDateFormat TIME_FORMAT_m = new SimpleDateFormat("m", Locale.getDefault());
+    public static final SimpleDateFormat TIME_FORMAT_HHMM = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    public static final SimpleDateFormat TIME_FORMAT_hhMM = new SimpleDateFormat("hh:mm", Locale.getDefault());
+    public static final SimpleDateFormat TIME_FORMAT_H = new SimpleDateFormat("H", Locale.getDefault());
+    public static final SimpleDateFormat TIME_FORMAT_m = new SimpleDateFormat("m", Locale.getDefault());
 
-    public static SimpleDateFormat DATETIME_FORMAT_YYYYMMDD_HHMMDD = new SimpleDateFormat(DATETIME_PATTERN_YYYYMMDD_HHMMDD, Locale.getDefault());
+    public static final SimpleDateFormat DATETIME_FORMAT_YYYYMMDD_HHMMDD = new SimpleDateFormat(DATETIME_PATTERN_YYYYMMDD_HHMMDD, Locale.getDefault());
 
     private static final Map<String, Integer> dayOfWeekConvertMap = new HashMap<String, Integer>() {{
         put("1", Calendar.SUNDAY);
