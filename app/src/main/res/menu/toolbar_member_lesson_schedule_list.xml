@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/option_add"
-        android:title="@string/toolbar.member_lesson_list.option.add"
+        android:id="@+id/option_setting"
+        android:title="@string/title.toolbar.member_lesson_schedule_list.option.setting"
         android:icon="@drawable/ic_list_white"
         app:showAsAction="always">
     </item>

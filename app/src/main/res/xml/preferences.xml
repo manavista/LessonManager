@@ -62,6 +62,17 @@
 
     <PreferenceCategory
         android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.lesson_and_schedule">
+
+        <Preference
+            android:key="@string/key.preference.lesson_and_schedule"
+            android:title="@string/title.preference.lesson_and_schedule"
+            android:summary="@string/summary.preference.lesson_and_schedule"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
         android:title="@string/label.preference.category.event">
 
         <Preference

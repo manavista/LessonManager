@@ -1,7 +1,7 @@
 package jp.manavista.lessonmanager.facade;
 
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
 import java.util.List;
 
@@ -22,10 +22,11 @@ import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 public interface MemberLessonScheduleListFacade {
 
     Disposable getListData(long memberId,
+                           boolean containPast,
                            List<MemberLessonVo> lessonVoList,
                            List<MemberLessonScheduleVo> scheduleVoList,
                            RecyclerView view,
-                           TextView emptyState,
+                           FrameLayout emptyState,
                            SectionedRecyclerViewAdapter adapter);
 
     Observable<MemberLessonScheduleVo> deleteLessonByLessonId(long memberId, long lessonId);

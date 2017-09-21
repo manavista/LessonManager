@@ -84,6 +84,23 @@
         <item>4</item>
     </string-array>
 
+    <string-array name="entries_schedule_list_display_status">
+        <item>Scheduled</item>
+        <item>Suspended</item>
+        <item>Absent</item>
+        <item>Done</item>
+    </string-array>
+    <string-array name="entry_values_schedule_list_display_status">
+        <item>0</item>
+        <item>3</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+    <string-array name="default_values_schedule_list_display_status">
+        <item>0</item>
+        <item>3</item>
+    </string-array>
+
     <!-- Member -->
 
     <string-array name="items_member_phone_type">

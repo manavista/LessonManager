@@ -23,6 +23,7 @@ import lombok.val;
 
 import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.DELETE;
 import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.EVENT;
+import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.LESSON_AND_SCHEDULE;
 
 /**
  *
@@ -139,11 +140,22 @@ public final class SettingFragment extends PreferenceFragment
 
     private void setPreferencesLister() {
 
+        final Intent intent = new Intent(contents, SettingActivity.class);
+
+        final Preference lessonAndSchedule = findPreference(getString(R.string.key_preference_lesson_and_schedule));
+        lessonAndSchedule.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, LESSON_AND_SCHEDULE);
+                contents.startActivity(intent);
+                return false;
+            }
+        });
+
         final Preference event = findPreference(getString(R.string.key_preference_event));
         event.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                final Intent intent = new Intent(contents, SettingActivity.class);
                 intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, EVENT);
                 contents.startActivity(intent);
                 return false;
@@ -154,7 +166,6 @@ public final class SettingFragment extends PreferenceFragment
         delete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                final Intent intent = new Intent(contents, SettingActivity.class);
                 intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, DELETE);
                 contents.startActivity(intent);
                 return false;

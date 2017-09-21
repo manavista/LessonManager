@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
@@ -58,8 +59,8 @@ public final class MemberLessonScheduleListFragment extends Fragment {
     /** Activity Contents */
     private Activity contents;
 
-    RecyclerView view;
-    TextView emptyState;
+    private RecyclerView view;
+    private FrameLayout emptyState;
 
     /** MemberLesson RecyclerView Adapter */
     private SectionedRecyclerViewAdapter sectionAdapter;
@@ -77,6 +78,8 @@ public final class MemberLessonScheduleListFragment extends Fragment {
     MemberLessonScheduleService memberLessonScheduleService;
     @Inject
     MemberLessonScheduleListFacade facade;
+    @Inject
+    SharedPreferences preferences;
 
     /** MemberLessonScheduleList disposable */
     private Disposable disposable;
@@ -143,12 +146,12 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
         sectionAdapter = new SectionedRecyclerViewAdapter();
         memberLessonSection = MemberLessonSection.newInstance(contents, memberLessonOperation);
-        memberLessonSection.setTitle("Lesson"); // TODO: 2017/09/19 use string.xml
+        memberLessonSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_lesson));
         memberLessonSection.setList(lessonVoList);
         sectionAdapter.addSection(memberLessonSection);
 
         memberLessonScheduleSection = MemberLessonScheduleSection.newInstance(contents, memberLessonScheduleOperation);
-        memberLessonScheduleSection.setTitle("Schedule");
+        memberLessonScheduleSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_schedule));
         memberLessonScheduleSection.setList(scheduleVoList);
         sectionAdapter.addSection(memberLessonScheduleSection);
 
@@ -165,9 +168,11 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
         super.onResume();
 
-        disposable = facade.getListData(memberId,
-                memberLessonSection.getList(),
-                memberLessonScheduleSection.getList(),
+        final boolean containPast = preferences.getBoolean(
+                getString(R.string.key_preferences_lesson_list_display_past), false);
+
+        disposable = facade.getListData(memberId, containPast,
+                memberLessonSection.getList(), memberLessonScheduleSection.getList(),
                 view, emptyState, sectionAdapter);
     }
 

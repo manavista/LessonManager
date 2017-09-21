@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preferences.category.lesson_list">
+
+        <CheckBoxPreference
+            android:id="@+id/preferences_lesson_list_display_past"
+            android:key="@string/key.preferences.lesson_list.display_past"
+            android:title="@string/title.preferences.lesson_list.display_past"
+            android:summary="@string/summary.preferences.lesson_list.display_past"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preferences.category.schedule_list">
+
+        <MultiSelectListPreference
+            android:key="@string/key.preferences.schedule_list.display_status"
+            android:title="@string/title.preferences.schedule_list.display_status"
+            android:summary="@string/summary.preferences.schedule_list.display_status"
+            android:entries="@array/entries_schedule_list_display_status"
+            android:entryValues="@array/entry_values_schedule_list_display_status"
+            android:dialogTitle="@string/title.preferences.dialog.schedule_list.display_status"
+            android:dialogIcon="@drawable/ic_event_note_black"
+            android:defaultValue="@array/default_values_schedule_list_display_status"
+            />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,16 +49,17 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
 
     @Override
     public Disposable getListData(final long memberId,
+                                  final boolean containPast,
                                   final @NonNull List<MemberLessonVo> lessonVoList,
                                   final @NonNull List<MemberLessonScheduleVo> scheduleVoList,
                                   final RecyclerView view,
-                                  final TextView emptyState,
+                                  final FrameLayout emptyState,
                                   final SectionedRecyclerViewAdapter adapter) {
 
         lessonVoList.clear();
         scheduleVoList.clear();
 
-        return memberLessonService.getSingleVoListByMemberId(memberId)
+        return memberLessonService.getSingleVoListByMemberId(memberId, containPast)
                 .flatMap(new Function<List<MemberLessonVo>, SingleSource<List<MemberLessonScheduleVo>>> () {
                     @Override
                     public SingleSource<List<MemberLessonScheduleVo>> apply(@io.reactivex.annotations.NonNull List<MemberLessonVo> list) throws Exception {
