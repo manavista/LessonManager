@@ -1,6 +1,5 @@
 package jp.manavista.lessonmanager.service;
 
-import java.util.List;
 import java.util.Set;
 
 import io.reactivex.Observable;
@@ -64,12 +63,7 @@ public interface MemberLessonScheduleService {
      * @param memberId target member id
      * @return {@code MemberLessonScheduleVo} of Observable
      */
-    Observable<MemberLessonScheduleVo> getVoListByMemberId(final long memberId);
-
-
-    Single<List<MemberLessonScheduleVo>> getSingleVoListByMemberId(final long memberId);
-
-    Observable<MemberLessonScheduleVo> getVoListAll();
+    Observable<MemberLessonScheduleVo> getVoListByMemberId(final long memberId, Set<Integer> statusSet);
 
     /**
      *

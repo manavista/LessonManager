@@ -18,7 +18,7 @@ import lombok.val;
  * Overview:<br>
  * </p>
  */
-public class SettingLessonAndScheduleFragment extends PreferenceFragment
+public final class SettingLessonAndScheduleFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public SettingLessonAndScheduleFragment() {

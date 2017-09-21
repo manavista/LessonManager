@@ -17,7 +17,10 @@ import android.widget.FrameLayout;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -31,6 +34,7 @@ import jp.manavista.lessonmanager.activity.MemberLessonActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity;
 import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
+import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleListCriteria;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
 import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
@@ -40,6 +44,7 @@ import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
 import jp.manavista.lessonmanager.view.operation.MemberLessonScheduleOperation;
 import jp.manavista.lessonmanager.view.section.MemberLessonScheduleSection;
 import jp.manavista.lessonmanager.view.section.MemberLessonSection;
+import lombok.val;
 
 /**
  *
@@ -168,12 +173,23 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
         super.onResume();
 
-        final boolean containPast = preferences.getBoolean(
-                getString(R.string.key_preferences_lesson_list_display_past), false);
+        final boolean containPast = preferences.getBoolean(getString(R.string.key_preferences_lesson_list_display_past), false);
 
-        disposable = facade.getListData(memberId, containPast,
-                memberLessonSection.getList(), memberLessonScheduleSection.getList(),
-                view, emptyState, sectionAdapter);
+        final Set<String> defaultSet = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.default_values_schedule_list_display_status)));
+        final Set<String> displayStatusSet = preferences.getStringSet(getString(R.string.key_preferences_schedule_list_display_status), defaultSet);
+
+        final val criteria = MemberLessonScheduleListCriteria.builder()
+                .memberId(memberId)
+                .containPastLesson(containPast)
+                .scheduleStatusSet(displayStatusSet)
+                .lessonVoList(memberLessonSection.getList())
+                .scheduleVoList(memberLessonScheduleSection.getList())
+                .view(view)
+                .emptyState(emptyState)
+                .sectionAdapter(sectionAdapter)
+                .build();
+
+        disposable = facade.getListData(criteria);
     }
 
     @Override

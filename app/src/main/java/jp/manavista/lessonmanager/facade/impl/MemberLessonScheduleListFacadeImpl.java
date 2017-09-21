@@ -1,27 +1,29 @@
 package jp.manavista.lessonmanager.facade.impl;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.SingleSource;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
+import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleListCriteria;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
 import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.MemberLessonService;
+import lombok.val;
 
 /**
  *
@@ -48,31 +50,42 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
     }
 
     @Override
-    public Disposable getListData(final long memberId,
-                                  final boolean containPast,
-                                  final @NonNull List<MemberLessonVo> lessonVoList,
-                                  final @NonNull List<MemberLessonScheduleVo> scheduleVoList,
-                                  final RecyclerView view,
-                                  final FrameLayout emptyState,
-                                  final SectionedRecyclerViewAdapter adapter) {
+    public Disposable getListData(final MemberLessonScheduleListCriteria criteria) {
+
+        Log.d(TAG, criteria.toString());
+
+        val memberId = criteria.getMemberId();
+
+        val lessonVoList = criteria.getLessonVoList();
+        val scheduleVoList = criteria.getScheduleVoList();
+
+        val view = criteria.getView();
+        val emptyState = criteria.getEmptyState();
 
         lessonVoList.clear();
         scheduleVoList.clear();
 
-        return memberLessonService.getSingleVoListByMemberId(memberId, containPast)
-                .flatMap(new Function<List<MemberLessonVo>, SingleSource<List<MemberLessonScheduleVo>>> () {
+        return memberLessonService.getSingleVoListByMemberId(memberId, criteria.getContainPastLesson())
+                .flatMapObservable(new Function<List<MemberLessonVo>, ObservableSource<MemberLessonScheduleVo>> () {
                     @Override
-                    public SingleSource<List<MemberLessonScheduleVo>> apply(@io.reactivex.annotations.NonNull List<MemberLessonVo> list) throws Exception {
+                    public ObservableSource<MemberLessonScheduleVo> apply(@io.reactivex.annotations.NonNull List<MemberLessonVo> list) throws Exception {
                         lessonVoList.addAll(list);
-                        return memberLessonScheduleService.getSingleVoListByMemberId(memberId);
+                        return memberLessonScheduleService.getVoListByMemberId(memberId, criteria.getScheduleStatusIntegerSet());
                     }
-                }).subscribe(new Consumer<List<MemberLessonScheduleVo>>() {
+                }).subscribe(new Consumer<MemberLessonScheduleVo>() {
                     @Override
-                    public void accept(List<MemberLessonScheduleVo> list) throws Exception {
-
-                        scheduleVoList.addAll(list);
-                        adapter.notifyDataSetChanged();
-
+                    public void accept(MemberLessonScheduleVo vo) throws Exception {
+                        scheduleVoList.add(vo);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        criteria.getSectionAdapter().notifyDataSetChanged();
                         if( lessonVoList.isEmpty() && scheduleVoList.isEmpty() ) {
                             Log.d(TAG, "List is empty");
                             view.setVisibility(View.GONE);
@@ -81,12 +94,6 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
                             view.setVisibility(View.VISIBLE);
                             emptyState.setVisibility(View.GONE);
                         }
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
                     }
                 });
     }
@@ -98,6 +105,9 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
         targetList.add(memberLessonScheduleService.deleteByLessonId(lessonId).toObservable());
         targetList.add(memberLessonService.deleteById(lessonId).toObservable());
 
+        // TODO: 2017/09/21 add set
+        final Set<Integer> statusSet = new HashSet<>(Arrays.asList(0, 3));
+
         return Observable.concat(targetList)
                 .reduce(0, new BiFunction<Integer, Integer, Integer>() {
                     @Override
@@ -107,7 +117,7 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
                 }).flatMapObservable(new Function<Integer, ObservableSource<MemberLessonScheduleVo>>() {
                     @Override
                     public ObservableSource<MemberLessonScheduleVo> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                        return memberLessonScheduleService.getVoListByMemberId(memberId);
+                        return memberLessonScheduleService.getVoListByMemberId(memberId, statusSet);
                     }
                 });
     }
