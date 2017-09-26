@@ -32,7 +32,9 @@ import lombok.Setter;
  *
  * @see io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
  */
-public class MemberLessonSection extends StatelessSection {
+public final class MemberLessonSection extends StatelessSection {
+
+    private static final String TAG = MemberLessonSection.class.getSimpleName();
 
     /** Section Title */
     @Getter
@@ -95,6 +97,7 @@ public class MemberLessonSection extends StatelessSection {
 
         final MemberLessonVo vo = list.get(position);
 
+        itemHolder.lessonId.setText(String.valueOf(vo.getId()));
         itemHolder.lessonName.setText(vo.getName());
         itemHolder.lessonType.setText(vo.getType());
         itemHolder.timetable.setText(vo.getStartTime() + " - " + vo.getEndTime());
@@ -129,7 +132,7 @@ public class MemberLessonSection extends StatelessSection {
 
         /* All Day of week true is Everyday */
         if( !ArrayUtils.contains(index, false) ) {
-            return "Everyday";
+            return context.getResources().getString(R.string.label_member_lesson_list_day_of_week_everyday);
         }
 
         return ArrayUtil.concatIndexOfArray(days, index, ",");
@@ -137,12 +140,28 @@ public class MemberLessonSection extends StatelessSection {
 
     private void prepareObjectLister(final MemberLessonHolder holder, final int position) {
 
+        holder.filterImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final MemberLessonVo vo = list.get(holder.getAdapterPosition()-1);
+
+                if( view.isSelected() ) {
+                    operation.clearFilter();
+                } else {
+                    operation.filter(vo.getId());
+                }
+
+                view.setSelected(!view.isSelected());
+            }
+        });
+
         holder.viewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Log.d("position ", String.valueOf(position));
-                Log.d("getAdapterPosition()", String.valueOf(holder.getAdapterPosition()) );
+                Log.d(TAG, "position " + position);
+                Log.d(TAG, "getAdapterPosition() " + holder.getAdapterPosition() );
                 final MemberLessonVo vo = list.get(holder.getAdapterPosition()-1);
                 operation.delete(vo.getId(), holder.getAdapterPosition()-1);
             }

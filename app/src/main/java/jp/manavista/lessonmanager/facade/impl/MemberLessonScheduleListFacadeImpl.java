@@ -56,14 +56,11 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
 
         val memberId = criteria.getMemberId();
 
-        val lessonVoList = criteria.getLessonVoList();
-        val scheduleVoList = criteria.getScheduleVoList();
+        final List<MemberLessonVo> lessonVoList = new ArrayList<>();
+        final List<MemberLessonScheduleVo> scheduleVoList = new ArrayList<>();
 
         val view = criteria.getView();
         val emptyState = criteria.getEmptyState();
-
-        lessonVoList.clear();
-        scheduleVoList.clear();
 
         return memberLessonService.getSingleVoListByMemberId(memberId, criteria.getContainPastLesson())
                 .flatMapObservable(new Function<List<MemberLessonVo>, ObservableSource<MemberLessonScheduleVo>> () {
@@ -85,6 +82,9 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
+
+                        criteria.getLessonSection().setList(lessonVoList);
+                        criteria.getScheduleSection().setList(scheduleVoList);
                         criteria.getSectionAdapter().notifyDataSetChanged();
                         if( lessonVoList.isEmpty() && scheduleVoList.isEmpty() ) {
                             Log.d(TAG, "List is empty");

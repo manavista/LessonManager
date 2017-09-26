@@ -201,5 +201,15 @@ public final class MemberLessonListFragment extends Fragment {
             intent.putExtra(MemberLessonScheduleListActivity.EXTRA_LESSON_ID, id);
             contents.startActivity(intent);
         }
+
+        @Override
+        public void filter(long lessonId) {
+
+        }
+
+        @Override
+        public void clearFilter() {
+
+        }
     };
 }

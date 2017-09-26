@@ -32,6 +32,7 @@ public final class MemberLessonScheduleVo implements Serializable {
     private final static String TAG = MemberLessonScheduleVo.class.getSimpleName();
 
     private long id;
+    private long lessonId;
     private String name;
     private String abbr;
     private String type;
@@ -52,6 +53,7 @@ public final class MemberLessonScheduleVo implements Serializable {
         val vo = new MemberLessonScheduleVo();
 
         vo.setId(entity.id);
+        vo.setLessonId(entity.lessonId);
 
         vo.setName(entity.name);
         vo.setAbbr(entity.abbr);

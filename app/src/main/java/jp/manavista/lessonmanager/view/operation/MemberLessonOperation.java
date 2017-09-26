@@ -49,4 +49,28 @@ public interface MemberLessonOperation {
      * @param id lesson id
      */
     void scheduleList(final long id);
+
+    /**
+     *
+     * Filter
+     *
+     * <p>
+     * Overview:<br>
+     * Switch to screen display of only lessonId specified as argument.
+     * </p>
+     *
+     * @param lessonId target lesson id
+     */
+    void filter(final long lessonId);
+
+    /**
+     *
+     * Clear Filter
+     *
+     * <p>
+     * Overview:<br>
+     * Clear Lesson's filter
+     * </p>
+     */
+    void clearFilter();
 }

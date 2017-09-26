@@ -18,6 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/lesson_id_invisible"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <ImageView
                 android:id="@+id/lesson_icon_image"
                 android:src="@drawable/ic_event_note_black"
@@ -105,38 +111,38 @@
 
                 </RelativeLayout>
 
-
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end">
-
-                <ImageButton
-                    android:id="@+id/expand_icon_image"
-                    android:layout_width="42dp"
-                    android:layout_height="72dp"
-                    android:alpha="0.6"
-                    android:background="?android:selectableItemBackgroundBorderless"
-                    android:contentDescription="expand"
-                    android:gravity="end"
-                    android:src="@drawable/ic_expand_more_black"/>
-
+                android:layout_height="match_parent">
 
                 <ImageButton
                     android:id="@+id/filter_icon_image"
-                    android:layout_width="40dp"
-                    android:layout_height="72dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_16dp"
                     android:alpha="0.6"
-                    android:paddingEnd="@dimen/margin_16dp"
                     android:background="?android:selectableItemBackgroundBorderless"
-                    android:contentDescription="filter"
+                    android:contentDescription="@string/description.member_lesson_list.filter"
                     android:gravity="end"
-                    android:src="@drawable/ic_filter_list_black"/>
+                    android:src="@drawable/button_selected_filter_list"/>
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/expand_icon_image"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:alpha="0.6"
+                    android:background="@color/transparent"
+                    android:contentDescription="@string/description.member_lesson_list.expand"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/filter_icon_image"
+                    android:layout_marginEnd="@dimen/margin_8dp"
+                    android:src="@drawable/ic_expand_more_black"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 

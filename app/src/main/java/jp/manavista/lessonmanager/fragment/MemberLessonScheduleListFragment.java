@@ -40,6 +40,7 @@ import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
+import jp.manavista.lessonmanager.view.holder.MemberLessonHolder;
 import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
 import jp.manavista.lessonmanager.view.operation.MemberLessonScheduleOperation;
 import jp.manavista.lessonmanager.view.section.MemberLessonScheduleSection;
@@ -70,14 +71,11 @@ public final class MemberLessonScheduleListFragment extends Fragment {
     /** MemberLesson RecyclerView Adapter */
     private SectionedRecyclerViewAdapter sectionAdapter;
     /** Adapter MemberLesson Section */
-    private MemberLessonSection memberLessonSection;
+    private MemberLessonSection lessonSection;
     /** Adapter MemberLessonSchedule Section */
-    private MemberLessonScheduleSection memberLessonScheduleSection;
+    private MemberLessonScheduleSection scheduleSection;
     /** MemberLessonSchedule RecyclerView Item Touch Helper */
     private ItemTouchHelperExtension itemTouchHelper;
-
-    private List<MemberLessonVo> lessonVoList;
-    private List<MemberLessonScheduleVo> scheduleVoList;
 
     @Inject
     MemberLessonScheduleService memberLessonScheduleService;
@@ -124,8 +122,6 @@ public final class MemberLessonScheduleListFragment extends Fragment {
             Log.w(TAG, "bundle arguments is null");
         }
 
-        lessonVoList = new ArrayList<>();
-        scheduleVoList = new ArrayList<>();
         this.disposable = Disposables.empty();
     }
 
@@ -150,15 +146,13 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         emptyState = contents.findViewById(R.id.empty_state);
 
         sectionAdapter = new SectionedRecyclerViewAdapter();
-        memberLessonSection = MemberLessonSection.newInstance(contents, memberLessonOperation);
-        memberLessonSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_lesson));
-        memberLessonSection.setList(lessonVoList);
-        sectionAdapter.addSection(memberLessonSection);
+        lessonSection = MemberLessonSection.newInstance(contents, memberLessonOperation);
+        lessonSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_lesson));
+        sectionAdapter.addSection(lessonSection);
 
-        memberLessonScheduleSection = MemberLessonScheduleSection.newInstance(contents, memberLessonScheduleOperation);
-        memberLessonScheduleSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_schedule));
-        memberLessonScheduleSection.setList(scheduleVoList);
-        sectionAdapter.addSection(memberLessonScheduleSection);
+        scheduleSection = MemberLessonScheduleSection.newInstance(contents, memberLessonScheduleOperation);
+        scheduleSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_schedule));
+        sectionAdapter.addSection(scheduleSection);
 
         view.setAdapter(sectionAdapter);
 
@@ -173,17 +167,20 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
         super.onResume();
 
-        final boolean containPast = preferences.getBoolean(getString(R.string.key_preferences_lesson_list_display_past), false);
+        final int pastKey = R.string.key_preferences_lesson_list_display_past;
+        final boolean containPast = preferences.getBoolean(getString(pastKey), false);
 
-        final Set<String> defaultSet = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.default_values_schedule_list_display_status)));
-        final Set<String> displayStatusSet = preferences.getStringSet(getString(R.string.key_preferences_schedule_list_display_status), defaultSet);
+        final int defaultKey = R.array.default_values_schedule_list_display_status;
+        final int statusKey = R.string.key_preferences_schedule_list_display_status;
+        final Set<String> defaultSet = new HashSet<>(Arrays.asList(getResources().getStringArray(defaultKey)));
+        final Set<String> displayStatusSet = preferences.getStringSet(getString(statusKey), defaultSet);
 
         final val criteria = MemberLessonScheduleListCriteria.builder()
                 .memberId(memberId)
                 .containPastLesson(containPast)
                 .scheduleStatusSet(displayStatusSet)
-                .lessonVoList(memberLessonSection.getList())
-                .scheduleVoList(memberLessonScheduleSection.getList())
+                .lessonSection(lessonSection)
+                .scheduleSection(scheduleSection)
                 .view(view)
                 .emptyState(emptyState)
                 .sectionAdapter(sectionAdapter)
@@ -212,7 +209,7 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
             itemTouchHelper.closeOpened();
 
-            final int lessonItems = memberLessonSection.getContentItemsTotal();
+            final int lessonItems = lessonSection.getContentItemsTotal();
             Log.d(TAG, "lessonItems: " + lessonItems);
 
             /*
@@ -222,17 +219,17 @@ public final class MemberLessonScheduleListFragment extends Fragment {
              */
             final int position = adapterPosition - (lessonItems + 1 + 1);
             Log.d(TAG, "delete target position: " + position);
-            if( position > memberLessonScheduleSection.getList().size() ) {
+            if( position > scheduleSection.getList().size() ) {
                 throw new ArrayIndexOutOfBoundsException("invalid position in memberLessonSchedule list");
             }
-            final MemberLessonScheduleVo vo = memberLessonScheduleSection.getList().get(position);
+            final MemberLessonScheduleVo vo = scheduleSection.getList().get(position);
             Log.d(TAG, "delete target id: " + vo.getId());
 
             memberLessonScheduleService.deleteById(vo.getId()).subscribe(new Consumer<Integer>() {
                 @Override
                 public void accept(Integer integer) throws Exception {
-                    memberLessonScheduleSection.getList().remove(position);
-                    sectionAdapter.notifyItemRemovedFromSection(memberLessonScheduleSection, position);
+                    scheduleSection.getList().remove(position);
+                    sectionAdapter.notifyItemRemovedFromSection(scheduleSection, position);
                 }
             });
         }
@@ -251,7 +248,9 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         @Override
         public void delete(long id, final int position) {
             itemTouchHelper.closeOpened();
-            scheduleVoList.clear();
+            scheduleSection.getList().clear();
+            final List<MemberLessonScheduleVo> scheduleVoList = new ArrayList<>();
+
             disposable = facade.deleteLessonByLessonId(memberId, id).subscribe(new Consumer<MemberLessonScheduleVo>() {
                 @Override
                 public void accept(MemberLessonScheduleVo vo) throws Exception {
@@ -265,9 +264,9 @@ public final class MemberLessonScheduleListFragment extends Fragment {
             }, new Action() {
                 @Override
                 public void run() throws Exception {
-                    memberLessonSection.getList().remove(position);
-//                    sectionAdapter.notifyItemRemovedFromSection(memberLessonSection, position);
-                    memberLessonScheduleSection.setList(scheduleVoList);
+                    lessonSection.getList().remove(position);
+//                    sectionAdapter.notifyItemRemovedFromSection(lessonSection, position);
+                    scheduleSection.setList(scheduleVoList);
                     sectionAdapter.notifyDataSetChanged();
                 }
             });
@@ -276,6 +275,33 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         @Override
         public void scheduleList(long id) {
 
+        }
+
+        @Override
+        public void filter(long lessonId) {
+
+            /*
+             * If another filter is enabled when the filter is operated,
+             * the other selection is canceled.
+             */
+            for( int i = 0, size = lessonSection.getContentItemsTotal() ; i < size ; i++ ) {
+
+                /* Offset Section Title row, view.getChildAt( i+1 )  */
+                final MemberLessonHolder viewHolder = (MemberLessonHolder) lessonSection.getItemViewHolder(view.getChildAt(i+1));
+                if( !viewHolder.lessonId.getText().toString().equals(String.valueOf(lessonId))
+                        && viewHolder.filterImageButton.isSelected() ) {
+                    viewHolder.filterImageButton.setSelected(false);
+                }
+            }
+
+            scheduleSection.filterByLessonId(lessonId);
+            sectionAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void clearFilter() {
+            scheduleSection.clearFilter();
+            sectionAdapter.notifyDataSetChanged();
         }
     };
 }
