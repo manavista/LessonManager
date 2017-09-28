@@ -234,6 +234,8 @@ public class MemberActivity extends AppCompatActivity {
             }
             cursor.close();
 
+            // TODO: 2017/09/21 If addressList is empty, nothing to do and return.
+
             if( numberList.size() == 1 ) {
                 fragment.getDto().getPhoneNumber().setText(numberList.get(0));
             } else {
@@ -274,6 +276,8 @@ public class MemberActivity extends AppCompatActivity {
                 }
             }
             cursor.close();
+
+            // TODO: 2017/09/21 If addressList is empty, nothing to do and return.
 
             if( addressList.size() == 1 ) {
                 fragment.getDto().getEmail().setText(addressList.get(0));

@@ -62,7 +62,7 @@ public interface MemberLessonService {
      */
     Observable<MemberLessonVo> getVoListByMemberId(long memberId);
 
-    Single<List<MemberLessonVo>> getSingleVoListByMemberId(long memberId);
+    Single<List<MemberLessonVo>> getSingleVoListByMemberId(long memberId, boolean containPast);
 
     /**
      *

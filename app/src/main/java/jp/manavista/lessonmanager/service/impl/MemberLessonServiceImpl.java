@@ -1,5 +1,6 @@
 package jp.manavista.lessonmanager.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -9,9 +10,11 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
+import jp.manavista.lessonmanager.model.entity.MemberLesson_Selector;
 import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.repository.MemberLessonRepository;
 import jp.manavista.lessonmanager.service.MemberLessonService;
+import jp.manavista.lessonmanager.util.DateTimeUtil;
 
 /**
  *
@@ -69,9 +72,16 @@ public class MemberLessonServiceImpl implements MemberLessonService {
     }
 
     @Override
-    public Single<List<MemberLessonVo>> getSingleVoListByMemberId(long memberId) {
-        return repository.getRelation()
-                .selector()
+    public Single<List<MemberLessonVo>> getSingleVoListByMemberId(long memberId, boolean containPast) {
+
+        MemberLesson_Selector selector = repository.getSelector();
+
+        if( !containPast ) {
+            final Date today = DateTimeUtil.today().getTime();
+            selector = selector.periodToGe(DateTimeUtil.DATE_FORMAT_YYYYMMDD.format(today));
+        }
+
+        return selector
                 .memberIdEq(memberId)
                 .executeAsObservable()
                 .map(new Function<MemberLesson, MemberLessonVo>() {

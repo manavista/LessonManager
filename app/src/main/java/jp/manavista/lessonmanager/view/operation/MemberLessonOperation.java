@@ -44,9 +44,37 @@ public interface MemberLessonOperation {
 
     /**
      *
-     * Schedule List
+     * Close
      *
-     * @param id lesson id
+     * <p>
+     * Overview:<br>
+     * Close to Expanded Lesson row.<br>
+     * Switch Show/Hide to detail information in Lesson.
+     * </p>
      */
-    void scheduleList(final long id);
+    void close();
+
+    /**
+     *
+     * Filter
+     *
+     * <p>
+     * Overview:<br>
+     * Switch to screen display of only lessonId specified as argument.
+     * </p>
+     *
+     * @param lessonId target lesson id
+     */
+    void filter(final long lessonId);
+
+    /**
+     *
+     * Clear Filter
+     *
+     * <p>
+     * Overview:<br>
+     * Clear Lesson's filter
+     * </p>
+     */
+    void clearFilter();
 }

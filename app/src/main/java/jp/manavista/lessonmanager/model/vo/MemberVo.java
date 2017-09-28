@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 import jp.manavista.lessonmanager.model.entity.Member;
 import lombok.Data;
 import lombok.ToString;
@@ -19,7 +21,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class MemberVo {
+public final class MemberVo implements Serializable {
 
     private long id;
     private String givenName;

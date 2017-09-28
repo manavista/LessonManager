@@ -2,6 +2,7 @@ package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,40 +12,47 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberLessonActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity;
 import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
+import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleListCriteria;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
 import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
-import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
+import jp.manavista.lessonmanager.view.holder.MemberLessonHolder;
+import jp.manavista.lessonmanager.view.layout.expandable.ExpandableLayout;
 import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
 import jp.manavista.lessonmanager.view.operation.MemberLessonScheduleOperation;
 import jp.manavista.lessonmanager.view.section.MemberLessonScheduleSection;
 import jp.manavista.lessonmanager.view.section.MemberLessonSection;
+import lombok.val;
 
 /**
  *
  * MemberLessonSchedule List Fragment
  *
- * A simple {@link Fragment} subclass.
- * Use the {@link MemberLessonScheduleListFragment#newInstance} factory method to
- * create an instance of this fragment.
+ *
  */
 public final class MemberLessonScheduleListFragment extends Fragment {
 
@@ -58,21 +66,24 @@ public final class MemberLessonScheduleListFragment extends Fragment {
     /** Activity Contents */
     private Activity contents;
 
+    private RecyclerView view;
+    private FrameLayout emptyState;
+
     /** MemberLesson RecyclerView Adapter */
     private SectionedRecyclerViewAdapter sectionAdapter;
     /** Adapter MemberLesson Section */
-    private MemberLessonSection memberLessonSection;
+    private MemberLessonSection lessonSection;
     /** Adapter MemberLessonSchedule Section */
-    private MemberLessonScheduleSection memberLessonScheduleSection;
+    private MemberLessonScheduleSection scheduleSection;
     /** MemberLessonSchedule RecyclerView Item Touch Helper */
     private ItemTouchHelperExtension itemTouchHelper;
 
     @Inject
-    MemberLessonService memberLessonService;
-    @Inject
     MemberLessonScheduleService memberLessonScheduleService;
     @Inject
     MemberLessonScheduleListFacade facade;
+    @Inject
+    SharedPreferences preferences;
 
     /** MemberLessonScheduleList disposable */
     private Disposable disposable;
@@ -111,6 +122,7 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         } else {
             Log.w(TAG, "bundle arguments is null");
         }
+
         this.disposable = Disposables.empty();
     }
 
@@ -126,20 +138,22 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         this.contents = getActivity();
         DependencyInjector.appComponent().inject(this);
 
-        final RecyclerView view = contents.findViewById(R.id.rv);
+        view = contents.findViewById(R.id.rv);
         view.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(contents);
         view.setLayoutManager(manager);
         view.addItemDecoration(new ItemDecoration(contents));
 
-        sectionAdapter = new SectionedRecyclerViewAdapter();
-        memberLessonSection = MemberLessonSection.newInstance(contents, memberLessonOperation);
-        memberLessonSection.setTitle("Lesson");
-        sectionAdapter.addSection(memberLessonSection);
+        emptyState = contents.findViewById(R.id.empty_state);
 
-        memberLessonScheduleSection = MemberLessonScheduleSection.newInstance(contents, memberLessonScheduleOperation);
-        memberLessonScheduleSection.setTitle("Schedule");
-        sectionAdapter.addSection(memberLessonScheduleSection);
+        sectionAdapter = new SectionedRecyclerViewAdapter();
+        lessonSection = MemberLessonSection.newInstance(contents, memberLessonOperation);
+        lessonSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_lesson));
+        sectionAdapter.addSection(lessonSection);
+
+        scheduleSection = MemberLessonScheduleSection.newInstance(contents, memberLessonScheduleOperation);
+        scheduleSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_schedule));
+        sectionAdapter.addSection(scheduleSection);
 
         view.setAdapter(sectionAdapter);
 
@@ -154,21 +168,26 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
         super.onResume();
 
-        disposable = memberLessonService.getSingleVoListByMemberId(memberId).subscribe(new Consumer<List<MemberLessonVo>>() {
-            @Override
-            public void accept(List<MemberLessonVo> voList) throws Exception {
-                memberLessonSection.setList(voList);
-                sectionAdapter.notifyDataSetChanged();
+        final int pastKey = R.string.key_preferences_lesson_list_display_past;
+        final boolean containPast = preferences.getBoolean(getString(pastKey), false);
 
-                disposable = memberLessonScheduleService.getSingleVoListByMemberId(memberId).subscribe(new Consumer<List<MemberLessonScheduleVo>>() {
-                    @Override
-                    public void accept(List<MemberLessonScheduleVo> memberLessonScheduleVos) throws Exception {
-                        memberLessonScheduleSection.setList(memberLessonScheduleVos);
-                        sectionAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
+        final int defaultKey = R.array.default_values_schedule_list_display_status;
+        final int statusKey = R.string.key_preferences_schedule_list_display_status;
+        final Set<String> defaultSet = new HashSet<>(Arrays.asList(getResources().getStringArray(defaultKey)));
+        final Set<String> displayStatusSet = preferences.getStringSet(getString(statusKey), defaultSet);
+
+        final val criteria = MemberLessonScheduleListCriteria.builder()
+                .memberId(memberId)
+                .containPastLesson(containPast)
+                .scheduleStatusSet(displayStatusSet)
+                .lessonSection(lessonSection)
+                .scheduleSection(scheduleSection)
+                .view(view)
+                .emptyState(emptyState)
+                .sectionAdapter(sectionAdapter)
+                .build();
+
+        disposable = facade.getListData(criteria);
     }
 
     @Override
@@ -191,7 +210,7 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
             itemTouchHelper.closeOpened();
 
-            final int lessonItems = memberLessonSection.getContentItemsTotal();
+            final int lessonItems = lessonSection.getContentItemsTotal();
             Log.d(TAG, "lessonItems: " + lessonItems);
 
             /*
@@ -201,17 +220,17 @@ public final class MemberLessonScheduleListFragment extends Fragment {
              */
             final int position = adapterPosition - (lessonItems + 1 + 1);
             Log.d(TAG, "delete target position: " + position);
-            if( position > memberLessonScheduleSection.getList().size() ) {
+            if( position > scheduleSection.getList().size() ) {
                 throw new ArrayIndexOutOfBoundsException("invalid position in memberLessonSchedule list");
             }
-            final MemberLessonScheduleVo vo = memberLessonScheduleSection.getList().get(position);
+            final MemberLessonScheduleVo vo = scheduleSection.getList().get(position);
             Log.d(TAG, "delete target id: " + vo.getId());
 
             memberLessonScheduleService.deleteById(vo.getId()).subscribe(new Consumer<Integer>() {
                 @Override
                 public void accept(Integer integer) throws Exception {
-                    memberLessonScheduleSection.getList().remove(position);
-                    sectionAdapter.notifyItemRemovedFromSection(memberLessonScheduleSection, position);
+                    scheduleSection.getList().remove(position);
+                    sectionAdapter.notifyItemRemovedFromSection(scheduleSection, position);
                 }
             });
         }
@@ -224,24 +243,87 @@ public final class MemberLessonScheduleListFragment extends Fragment {
             final Intent intent = new Intent(contents, MemberLessonActivity.class);
             intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, dto.getMemberId());
             intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, dto.getId());
-            contents.startActivity(intent);
+            contents.startActivityForResult(intent, MemberLessonActivity.RequestCode.EDIT);
         }
 
         @Override
         public void delete(long id, final int position) {
             itemTouchHelper.closeOpened();
-            disposable = memberLessonService.deleteById(id).subscribe(new Consumer<Integer>() {
+            scheduleSection.getList().clear();
+            final List<MemberLessonScheduleVo> scheduleVoList = new ArrayList<>();
+
+            disposable = facade.deleteLessonByLessonId(memberId, id).subscribe(new Consumer<MemberLessonScheduleVo>() {
                 @Override
-                public void accept(Integer integer) throws Exception {
-                    memberLessonSection.getList().remove(position);
-                    sectionAdapter.notifyItemRemovedFromSection(memberLessonSection, position);
+                public void accept(MemberLessonScheduleVo vo) throws Exception {
+                    scheduleVoList.add(vo);
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    throwable.printStackTrace();
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    lessonSection.getList().remove(position);
+//                    sectionAdapter.notifyItemRemovedFromSection(lessonSection, position);
+                    scheduleSection.setList(scheduleVoList);
+                    sectionAdapter.notifyDataSetChanged();
                 }
             });
         }
 
         @Override
-        public void scheduleList(long id) {
+        public void close() {
 
+            for( int i = 0, size = lessonSection.getContentItemsTotal() ; i < size ; i++ ) {
+
+                /* Offset Section Title row, view.getChildAt( i+1 )  */
+                final MemberLessonHolder viewHolder = (MemberLessonHolder) lessonSection.getItemViewHolder(view.getChildAt(i+1));
+                if( viewHolder.view instanceof ExpandableLayout
+                        && ((ExpandableLayout) viewHolder.view).isExpanded()) {
+
+                    final ExpandableLayout layout = (ExpandableLayout) viewHolder.view;
+
+                    /*
+                     * TIPS TO AVOID BUGS
+                     *
+                     * Temporarily disable line expand/closed animation.
+                     * When animation is enabled and closed,
+                     * the image of the line to be opened is not displayed.
+                     */
+                    layout.setExpandDuration(0);
+                    layout.close();
+                    layout.setExpandDuration(200);
+                }
+            }
+        }
+
+        @Override
+        public void filter(long lessonId) {
+
+            /*
+             * If another filter is enabled when the filter is operated,
+             * the other selection is canceled.
+             */
+            for( int i = 0, size = lessonSection.getContentItemsTotal() ; i < size ; i++ ) {
+
+                /* Offset Section Title row, view.getChildAt( i+1 )  */
+                final MemberLessonHolder viewHolder = (MemberLessonHolder) lessonSection.getItemViewHolder(view.getChildAt(i+1));
+                if( !viewHolder.lessonId.getText().toString().equals(String.valueOf(lessonId))
+                        && viewHolder.filterImageButton.isSelected() ) {
+                    viewHolder.filterImageButton.setSelected(false);
+                }
+            }
+
+            scheduleSection.filterByLessonId(lessonId);
+            sectionAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void clearFilter() {
+            scheduleSection.clearFilter();
+            sectionAdapter.notifyDataSetChanged();
         }
     };
 }

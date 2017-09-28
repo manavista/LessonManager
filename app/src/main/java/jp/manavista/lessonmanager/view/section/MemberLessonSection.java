@@ -5,8 +5,10 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.util.ArrayUtil;
 import jp.manavista.lessonmanager.view.holder.MemberLessonHolder;
 import jp.manavista.lessonmanager.view.holder.SectionTitleHolder;
+import jp.manavista.lessonmanager.view.layout.expandable.ExpandableLayout;
 import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +35,9 @@ import lombok.Setter;
  *
  * @see io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
  */
-public class MemberLessonSection extends StatelessSection {
+public final class MemberLessonSection extends StatelessSection {
+
+    private static final String TAG = MemberLessonSection.class.getSimpleName();
 
     /** Section Title */
     @Getter
@@ -49,6 +54,7 @@ public class MemberLessonSection extends StatelessSection {
     /** Operation */
     private final MemberLessonOperation operation;
 
+    /** Constructor */
     private MemberLessonSection(Context context, MemberLessonOperation operation) {
         super(new SectionParameters.Builder(R.layout.container_item_member_lesson)
             .headerResourceId(R.layout.section_item_header).build());
@@ -91,10 +97,11 @@ public class MemberLessonSection extends StatelessSection {
             return;
         }
 
-        MemberLessonHolder itemHolder = (MemberLessonHolder) holder;
+        final MemberLessonHolder itemHolder = (MemberLessonHolder) holder;
 
         final MemberLessonVo vo = list.get(position);
 
+        itemHolder.lessonId.setText(String.valueOf(vo.getId()));
         itemHolder.lessonName.setText(vo.getName());
         itemHolder.lessonType.setText(vo.getType());
         itemHolder.timetable.setText(vo.getStartTime() + " - " + vo.getEndTime());
@@ -102,6 +109,10 @@ public class MemberLessonSection extends StatelessSection {
 
         itemHolder.lessonIconImage.setColorFilter(vo.getTextColor());
         DrawableCompat.setTint(itemHolder.lessonIconImage.getBackground(), vo.getBackgroundColor());
+
+        itemHolder.location.setText(StringUtils.defaultIfEmpty(vo.getLocation(), "-"));
+        itemHolder.presenter.setText(StringUtils.defaultIfEmpty(vo.getPresenter(), "-"));
+        itemHolder.period.setText(vo.getPeriodFrom() + " - " + vo.getPeriodTo());
 
         prepareObjectLister(itemHolder, position);
     }
@@ -129,7 +140,7 @@ public class MemberLessonSection extends StatelessSection {
 
         /* All Day of week true is Everyday */
         if( !ArrayUtils.contains(index, false) ) {
-            return "Everyday";
+            return context.getResources().getString(R.string.label_member_lesson_list_day_of_week_everyday);
         }
 
         return ArrayUtil.concatIndexOfArray(days, index, ",");
@@ -137,12 +148,28 @@ public class MemberLessonSection extends StatelessSection {
 
     private void prepareObjectLister(final MemberLessonHolder holder, final int position) {
 
+        holder.filterImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final MemberLessonVo vo = list.get(holder.getAdapterPosition()-1);
+
+                if( view.isSelected() ) {
+                    operation.clearFilter();
+                } else {
+                    operation.filter(vo.getId());
+                }
+
+                view.setSelected(!view.isSelected());
+            }
+        });
+
         holder.viewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Log.d("position ", String.valueOf(position));
-                Log.d("getAdapterPosition()", String.valueOf(holder.getAdapterPosition()) );
+                Log.d(TAG, "position " + position);
+                Log.d(TAG, "getAdapterPosition() " + holder.getAdapterPosition() );
                 final MemberLessonVo vo = list.get(holder.getAdapterPosition()-1);
                 operation.delete(vo.getId(), holder.getAdapterPosition()-1);
             }
@@ -159,8 +186,27 @@ public class MemberLessonSection extends StatelessSection {
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final MemberLessonVo vo = list.get(position);
-                operation.scheduleList(vo.getId());
+
+                if( view instanceof ExpandableLayout) {
+
+                    /* force close for other expanded row if exists */
+                    operation.close();
+                    ((ExpandableLayout) view).toggle();
+                }
+            }
+        });
+
+        final ExpandableLayout expandableLayout = (ExpandableLayout) holder.view;
+        expandableLayout.setOnExpandListener(new ExpandableLayout.OnExpandListener() {
+            @Override
+            public void onExpand(boolean expanded) {
+
+                final int resource = expanded
+                        ? R.drawable.ic_expand_less_black
+                        : R.drawable.ic_expand_more_black;
+
+                final ImageView icon = expandableLayout.findViewById(R.id.expand_icon_image);
+                icon.setImageResource(resource);
             }
         });
     }

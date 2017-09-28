@@ -62,27 +62,13 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
     }
 
     @Override
-    public Observable<MemberLessonScheduleVo> getVoListByMemberId(long memberId) {
+    public Observable<MemberLessonScheduleVo> getVoListByMemberId(long memberId, Set<Integer> statusSet) {
         return repository.getRelation()
                 .selector()
                 .memberIdEq(memberId)
+                .statusIn(statusSet)
                 .orderBy(repository.getSchema().lessonDate.orderInAscending())
                 .orderBy(repository.getSchema().lessonStartTime.orderInAscending())
-                .executeAsObservable()
-                .map(new Function<MemberLessonSchedule, MemberLessonScheduleVo>() {
-                    @Override
-                    public MemberLessonScheduleVo apply(@NonNull MemberLessonSchedule entity) throws Exception {
-                        return MemberLessonScheduleVo.copy(entity);
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
-    }
-
-    @Override
-    public Observable<MemberLessonScheduleVo> getVoListAll() {
-        return repository.getRelation()
-                .selector()
                 .executeAsObservable()
                 .map(new Function<MemberLessonSchedule, MemberLessonScheduleVo>() {
                     @Override
@@ -106,25 +92,6 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
                         return MemberLessonScheduleVo.copy(entity);
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
-    }
-
-    @Override
-    public Single<List<MemberLessonScheduleVo>> getSingleVoListByMemberId(long memberId) {
-        return repository.getRelation()
-                .selector()
-                .memberIdEq(memberId)
-                .orderBy(repository.getSchema().lessonDate.orderInAscending())
-                .orderBy(repository.getSchema().lessonStartTime.orderInAscending())
-                .executeAsObservable()
-                .map(new Function<MemberLessonSchedule, MemberLessonScheduleVo>() {
-                    @Override
-                    public MemberLessonScheduleVo apply(@NonNull MemberLessonSchedule entity) throws Exception {
-                        return MemberLessonScheduleVo.copy(entity);
-                    }
-                })
-                .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }
@@ -175,6 +142,15 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
     public Single<Integer> deleteByMemberId(long memberId) {
         return repository.getDeleter()
                 .memberIdEq(memberId)
+                .executeAsSingle()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Single<Integer> deleteByLessonId(long lessonId) {
+        return repository.getDeleter()
+                .lessonIdEq(lessonId)
                 .executeAsSingle()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());

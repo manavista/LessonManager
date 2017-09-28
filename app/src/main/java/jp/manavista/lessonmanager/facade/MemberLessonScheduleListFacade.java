@@ -1,21 +1,22 @@
 package jp.manavista.lessonmanager.facade;
 
-import android.util.Pair;
-
-import java.util.List;
-
-import io.reactivex.Single;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleListCriteria;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
-import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 
 /**
+ *
+ * MemberLessonSchedule List Facade Interface
+ *
  * <p>
  * Overview:<br>
+ *
  * </p>
  */
 public interface MemberLessonScheduleListFacade {
 
-    Single<Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>>> getListPair(long memberId);
+    Disposable getListData(MemberLessonScheduleListCriteria criteria);
 
-    void createListPair(long memberId, Pair<List<MemberLessonVo>, List<MemberLessonScheduleVo>> listPair);
+    Observable<MemberLessonScheduleVo> deleteLessonByLessonId(long memberId, long lessonId);
 }

@@ -11,6 +11,7 @@ import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.SettingDeleteFragment;
 import jp.manavista.lessonmanager.fragment.SettingEventFragment;
 import jp.manavista.lessonmanager.fragment.SettingFragment;
+import jp.manavista.lessonmanager.fragment.SettingLessonAndScheduleFragment;
 
 /**
  *
@@ -38,9 +39,12 @@ public class SettingActivity extends AppCompatActivity {
      */
     public enum FragmentType {
 
+        // TODO: 2017/09/21 use string xml
+
         GENERAL("Settings"),
         EVENT("Event"),
-        DELETE("Delete using data");
+        DELETE("Delete using data"),
+        LESSON_AND_SCHEDULE("Lesson and Schedule");
 
         String title;
         FragmentType(String title) {
@@ -94,6 +98,12 @@ public class SettingActivity extends AppCompatActivity {
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_setting, SettingEventFragment.newInstance())
+                        .commit();
+                break;
+            case LESSON_AND_SCHEDULE:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_setting, SettingLessonAndScheduleFragment.newInstance())
                         .commit();
                 break;
         }

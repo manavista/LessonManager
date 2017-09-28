@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
@@ -16,6 +17,7 @@ import jp.manavista.lessonmanager.view.holder.SectionTitleHolder;
 import jp.manavista.lessonmanager.view.operation.MemberLessonScheduleOperation;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 /**
  *
@@ -34,10 +36,8 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
     @Setter
     private String title;
 
-    @Getter
-    @Setter
-    @SuppressWarnings(value = "MismatchedQueryAndUpdateOfCollection")
     private List<MemberLessonScheduleVo> list;
+    private List<MemberLessonScheduleVo> filteredList;
 
     /** Context */
     private final Context context;
@@ -66,7 +66,7 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
 
     @Override
     public int getContentItemsTotal() {
-        return this.list == null ? 0 : this.list.size();
+        return this.filteredList == null ? 0 : this.filteredList.size();
     }
 
     @Override
@@ -82,12 +82,12 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if( list == null ) {
+        if( filteredList == null ) {
             return;
         }
 
         final MemberLessonScheduleHolder itemHolder = (MemberLessonScheduleHolder) holder;
-        final MemberLessonScheduleVo vo = list.get(position);
+        final MemberLessonScheduleVo vo = filteredList.get(position);
 
         itemHolder.scheduleDate.setText(vo.getLessonDate());
         itemHolder.scheduleTime.setText(vo.getLessonDisplayTime());
@@ -108,6 +108,39 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
 
     }
 
+    public void filterByLessonId(final long lessonId) {
+
+        if( lessonId <= 0 ) {
+            Log.w(TAG, "invalid lessonId by filter!");
+            return;
+        }
+
+        filteredList.clear();
+
+        for( val vo : list ) {
+            if( vo.getLessonId() == lessonId ) {
+                filteredList.add(vo);
+            }
+        }
+        setVisible(!filteredList.isEmpty());
+    }
+
+    public void clearFilter() {
+        filteredList.clear();
+        filteredList = new ArrayList<>(list);
+        setVisible(true);
+    }
+
+    public List<MemberLessonScheduleVo> getList() {
+        return this.filteredList;
+    }
+
+    public void setList(List<MemberLessonScheduleVo> list) {
+        this.list = list;
+        this.filteredList = new ArrayList<>(list);
+    }
+
+
     /**
      *
      * Prepare View Lister
@@ -125,7 +158,7 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
         holder.viewEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final MemberLessonScheduleVo vo = list.get(position);
+                final MemberLessonScheduleVo vo = filteredList.get(position);
                 operation.edit(vo.getId(), position);
             }
         });
@@ -144,7 +177,7 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final MemberLessonScheduleVo vo = list.get(position);
+                final MemberLessonScheduleVo vo = filteredList.get(position);
                 operation.edit(vo.getId(), position);
             }
         });

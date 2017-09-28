@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,6 +41,7 @@ import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.MemberLessonActivity;
 import jp.manavista.lessonmanager.facade.MemberLessonFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
@@ -227,6 +229,8 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
                             .setNegativeButton(R.string.label_member_lesson_dialog_schedule_exist_force_add, onForceAddListener)
                             .setNeutralButton(android.R.string.cancel, null)
                             .show();
+                } else {
+                    executeSave(true);
                 }
             }
         });
@@ -282,6 +286,9 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         facade.save(dto.getMemberId(), dto.toEntity(), addSchedule).subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long rows) throws Exception {
+                final Intent intent = new Intent();
+                intent.putExtra(MemberLessonActivity.Extra.LESSON_NAME, dto.getName().getText().toString());
+                contents.setResult(Activity.RESULT_OK, intent);
                 contents.finish();
             }
         });

@@ -77,6 +77,10 @@
     <string name="summary.preference.member.name_display">Select the name display item</string>
     <string name="value.preference.member.name_display">1</string>
 
+    <string name="label.preference.category.lesson_and_schedule">Lesson and Schedule</string>
+    <string name="key.preference.lesson_and_schedule">lesson_and_schedule</string>
+    <string name="title.preference.lesson_and_schedule">Lesson and Schedule List</string>
+    <string name="summary.preference.lesson_and_schedule">Setting for Lesson and Schedule List</string>
 
     <!-- Preferences Event -->
     <string name="label.preferences.category.event_list">Event List</string>
@@ -84,6 +88,17 @@
     <string name="title.preferences.event_list.display_past">Display Past Event</string>
     <string name="summary.preferences.event_list.display_past">Select display past event</string>
 
+    <!-- Preferences Lesson and Schedule -->
+    <string name="label.preferences.category.lesson_list">Lesson List</string>
+    <string name="key.preferences.lesson_list.display_past">lesson_list_display_past</string>
+    <string name="title.preferences.lesson_list.display_past">Display Past Lesson</string>
+    <string name="summary.preferences.lesson_list.display_past">Select display past lesson</string>
+
+    <string name="label.preferences.category.schedule_list">Schedule List</string>
+    <string name="key.preferences.schedule_list.display_status">schedule_list_display_status</string>
+    <string name="title.preferences.schedule_list.display_status">Display Status</string>
+    <string name="summary.preferences.schedule_list.display_status">Select display item status</string>
+    <string name="title.preferences.dialog.schedule_list.display_status">Display item status</string>
 
     <!-- LessonView -->
     <string name="toolbar.lesson_view.change_date">Change Date</string>
@@ -193,6 +208,27 @@
     <string name="toolbar.member_lesson_list.title">Lesson List</string>
     <string name="toolbar.member_lesson_list.option.add">Add</string>
 
+    <string name="description.member_lesson_list.lesson_icon_image">Member Lesson Icon</string>
+    <string name="description.member_lesson_list.day_of_week_icon">Day of Week Icon</string>
+    <string name="description.member_lesson_list.timetable_icon">Day of Week Icon</string>
+    <string name="description.member_lesson_list.filter">Filter</string>
+    <string name="description.member_lesson_list.expand">Expand Status</string>
+    <string name="description.member_lesson_list.location">Location</string>
+    <string name="description.member_lesson_list.presenter">Presenter</string>
+    <string name="description.member_lesson_list.period">Period</string>
+
+    <string name="label.member_lesson_list.lesson_name">Lesson Name</string>
+    <string name="label.member_lesson_list.lesson_type">Lesson Type</string>
+    <string name="label.member_lesson_list.day_of_week">Day of Week</string>
+    <string name="label.member_lesson_list.timetable">HH:MM - HH:MM</string>
+    <string name="label.member_lesson_list.day_of_week.everyday">Everyday</string>
+    <string name="label.member_lesson_list.location">Location Name</string>
+    <string name="label.member_lesson_list.presenter">Presenter Name</string>
+    <string name="label.member_lesson_list.period">YYYY/MM/DD - YYYY/MM/DD</string>
+
+    <string name="message.member_lesson_list.add.lesson">Added %1$s to Lesson</string>
+    <string name="message.member_lesson_list.edit.lesson">Edited the %1$s</string>
+
     <!-- Member Lesson Schedule -->
     <string name="toolbar.member_lesson_schedule.title">Schedule</string>
     <string name="label.member_lesson_schedule.status">Status</string>
@@ -209,6 +245,12 @@
 
     <!-- Member Lesson Schedule List -->
     <string name="toolbar.member_lesson_schedule_list.title">Schedule</string>
+    <string name="title.member_lesson_schedule_list.section.lesson">Lesson</string>
+    <string name="title.member_lesson_schedule_list.section.schedule">Schedule</string>
+    <string name="title.toolbar.member_lesson_schedule_list.option.setting">Setting</string>
+    <string name="message.member_lesson_schedule_list.empty_stat.no_lesson">No Member Lesson</string>
+    <string name="message.member_lesson_schedule_list.empty_stat.add_lesson">Add Lesson and send you a present !</string>
+    <string name="description.member_lesson_schedule_list.empty_stat.image">Lesson Image</string>
 
     <!-- Event List -->
     <string name="toolbar.event_list.title">Event List</string>

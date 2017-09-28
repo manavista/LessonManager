@@ -47,7 +47,7 @@ public class MemberLesson {
     public String dayOfWeeks;
     @Column
     public String periodFrom;
-    @Column
+    @Column(indexed = true)
     public String periodTo;
 
     @Column(indexed = true)

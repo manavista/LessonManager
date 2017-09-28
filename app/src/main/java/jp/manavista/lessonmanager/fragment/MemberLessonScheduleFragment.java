@@ -163,7 +163,7 @@ public final class MemberLessonScheduleFragment extends Fragment implements Vali
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-
+                throwable.printStackTrace();
             }
         });
     }
@@ -264,6 +264,8 @@ public final class MemberLessonScheduleFragment extends Fragment implements Vali
                 final List<String> labelList = new ArrayList<>();
                 final List<TimetableDto> timetableList = new ArrayList<>();
                 final StringBuilder sb = new StringBuilder();
+
+                // TODO: 2017/09/22 If Timetable is empty, create Timetable icon and screen.
 
                 disposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
                     @Override
