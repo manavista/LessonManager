@@ -26,10 +26,9 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberLessonActivity;
-import jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
-import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
+import jp.manavista.lessonmanager.model.vo.MemberLessonVo;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
@@ -195,20 +194,17 @@ public final class MemberLessonListFragment extends Fragment {
         }
 
         @Override
-        public void scheduleList(long id) {
-            itemTouchHelper.closeOpened();
-            final Intent intent = new Intent(contents, MemberLessonScheduleListActivity.class);
-            intent.putExtra(MemberLessonScheduleListActivity.EXTRA_LESSON_ID, id);
-            contents.startActivity(intent);
-        }
-
-        @Override
         public void filter(long lessonId) {
 
         }
 
         @Override
         public void clearFilter() {
+
+        }
+
+        @Override
+        public void close() {
 
         }
     };

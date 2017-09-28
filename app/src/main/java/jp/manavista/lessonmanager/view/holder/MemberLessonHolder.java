@@ -27,10 +27,15 @@ public final class MemberLessonHolder extends SwipeDeleteHolder {
     public TextView lessonName;
     public TextView lessonType;
 
-    public ImageView expandStatusImage;
     public ImageButton filterImageButton;
 
     public TextView lessonId;
+
+    /* expand view area */
+
+    public TextView location;
+    public TextView presenter;
+    public TextView period;
 
     /** Constructor */
     public MemberLessonHolder(View itemView) {
@@ -48,7 +53,10 @@ public final class MemberLessonHolder extends SwipeDeleteHolder {
         lessonName = itemView.findViewById(R.id.lesson_name);
         lessonType = itemView.findViewById(R.id.lesson_type);
 
-        expandStatusImage = itemView.findViewById(R.id.expand_icon_image);
         filterImageButton = itemView.findViewById(R.id.filter_icon_image);
+
+        location = itemView.findViewById(R.id.location);
+        presenter = itemView.findViewById(R.id.presenter);
+        period = itemView.findViewById(R.id.period_from_to);
     }
 }

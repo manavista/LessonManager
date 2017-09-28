@@ -213,12 +213,18 @@
     <string name="description.member_lesson_list.timetable_icon">Day of Week Icon</string>
     <string name="description.member_lesson_list.filter">Filter</string>
     <string name="description.member_lesson_list.expand">Expand Status</string>
+    <string name="description.member_lesson_list.location">Location</string>
+    <string name="description.member_lesson_list.presenter">Presenter</string>
+    <string name="description.member_lesson_list.period">Period</string>
 
     <string name="label.member_lesson_list.lesson_name">Lesson Name</string>
     <string name="label.member_lesson_list.lesson_type">Lesson Type</string>
     <string name="label.member_lesson_list.day_of_week">Day of Week</string>
     <string name="label.member_lesson_list.timetable">HH:MM - HH:MM</string>
     <string name="label.member_lesson_list.day_of_week.everyday">Everyday</string>
+    <string name="label.member_lesson_list.location">Location Name</string>
+    <string name="label.member_lesson_list.presenter">Presenter Name</string>
+    <string name="label.member_lesson_list.period">YYYY/MM/DD - YYYY/MM/DD</string>
 
     <string name="message.member_lesson_list.add.lesson">Added %1$s to Lesson</string>
     <string name="message.member_lesson_list.edit.lesson">Edited the %1$s</string>

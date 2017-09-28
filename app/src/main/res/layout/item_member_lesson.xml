@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<jp.manavista.lessonmanager.view.layout.expandable.ExpandableLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_member_lesson"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="#FAFAFA"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:layout_height="match_parent"
+    app:expDuration="200">
 
     <FrameLayout
         android:background="?android:selectableItemBackgroundBorderless"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="72dp">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -148,4 +150,82 @@
 
     </FrameLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginStart="80dp"
+        android:paddingBottom="@dimen/margin_8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/location_icon_image"
+                android:src="@drawable/ic_room_black"
+                android:contentDescription="@string/description.member_lesson_list.location"
+                android:alpha="0.6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_toEndOf="@+id/location_icon_image"
+                android:text="@string/label.member_lesson_list.location"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/presenter_icon_image"
+                android:src="@drawable/ic_face_black"
+                android:contentDescription="@string/description.member_lesson_list.presenter"
+                android:alpha="0.6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/presenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_toEndOf="@+id/presenter_icon_image"
+                android:text="@string/label.member_lesson_list.presenter"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/period_icon_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:contentDescription="@string/description.member_lesson_list.period"
+                android:src="@drawable/ic_event_note_black"/>
+
+            <TextView
+                android:id="@+id/period_from_to"
+                android:text="@string/label.member_lesson_list.period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_toEndOf="@+id/period_icon_image"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</jp.manavista.lessonmanager.view.layout.expandable.ExpandableLayout>

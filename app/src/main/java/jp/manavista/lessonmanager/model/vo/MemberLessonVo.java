@@ -33,6 +33,8 @@ public final class MemberLessonVo implements Serializable {
     private String dayOfWeek;
     private String startTime;
     private String endTime;
+    private String periodFrom;
+    private String periodTo;
 
     @ColorInt
     private int textColor;
@@ -42,11 +44,9 @@ public final class MemberLessonVo implements Serializable {
     public static MemberLessonVo copy(MemberLesson entity) {
 
         final MemberLessonVo vo = new MemberLessonVo();
-        final MemberVo memberVo = MemberVo.copy(entity.member);
 
         vo.setId(entity.id);
         vo.setMemberId(entity.memberId);
-//        vo.setMemberName(memberVo.getDisplayName());
         vo.setName(entity.name);
         vo.setAbbr(entity.abbr);
         vo.setType(entity.type);
@@ -56,6 +56,9 @@ public final class MemberLessonVo implements Serializable {
         vo.setDayOfWeek(entity.dayOfWeeks);
         vo.setStartTime(DateTimeUtil.TIME_FORMAT_HHMM.format(entity.startTime));
         vo.setEndTime(DateTimeUtil.TIME_FORMAT_HHMM.format(entity.endTime));
+
+        vo.setPeriodFrom(entity.periodFrom);
+        vo.setPeriodTo(entity.periodTo);
 
         vo.setTextColor(entity.textColor);
         vo.setBackgroundColor(entity.backgroundColor);

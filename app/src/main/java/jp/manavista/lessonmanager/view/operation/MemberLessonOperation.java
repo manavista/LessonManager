@@ -44,11 +44,15 @@ public interface MemberLessonOperation {
 
     /**
      *
-     * Schedule List
+     * Close
      *
-     * @param id lesson id
+     * <p>
+     * Overview:<br>
+     * Close to Expanded Lesson row.<br>
+     * Switch Show/Hide to detail information in Lesson.
+     * </p>
      */
-    void scheduleList(final long id);
+    void close();
 
     /**
      *

@@ -41,6 +41,7 @@ import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.view.decoration.ItemDecoration;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.holder.MemberLessonHolder;
+import jp.manavista.lessonmanager.view.layout.expandable.ExpandableLayout;
 import jp.manavista.lessonmanager.view.operation.MemberLessonOperation;
 import jp.manavista.lessonmanager.view.operation.MemberLessonScheduleOperation;
 import jp.manavista.lessonmanager.view.section.MemberLessonScheduleSection;
@@ -273,8 +274,29 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         }
 
         @Override
-        public void scheduleList(long id) {
+        public void close() {
 
+            for( int i = 0, size = lessonSection.getContentItemsTotal() ; i < size ; i++ ) {
+
+                /* Offset Section Title row, view.getChildAt( i+1 )  */
+                final MemberLessonHolder viewHolder = (MemberLessonHolder) lessonSection.getItemViewHolder(view.getChildAt(i+1));
+                if( viewHolder.view instanceof ExpandableLayout
+                        && ((ExpandableLayout) viewHolder.view).isExpanded()) {
+
+                    final ExpandableLayout layout = (ExpandableLayout) viewHolder.view;
+
+                    /*
+                     * TIPS TO AVOID BUGS
+                     *
+                     * Temporarily disable line expand/closed animation.
+                     * When animation is enabled and closed,
+                     * the image of the line to be opened is not displayed.
+                     */
+                    layout.setExpandDuration(0);
+                    layout.close();
+                    layout.setExpandDuration(200);
+                }
+            }
         }
 
         @Override
