@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_4dp"
-            android:layout_marginStart="@dimen/margin_8dp"
+            android:layout_marginStart="@dimen/margin_16dp"
             android:layout_marginEnd="@dimen/margin_8dp"
             android:layout_marginBottom="@dimen/margin_8dp">
 
@@ -69,8 +69,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_4dp"
-            android:layout_marginStart="@dimen/margin_8dp"
-            android:layout_marginEnd="@dimen/margin_8dp"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
             android:layout_marginBottom="@dimen/margin_8dp">
 
             <LinearLayout
@@ -147,8 +147,8 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginStart="@dimen/margin_8dp"
-            android:layout_marginEnd="@dimen/margin_8dp"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
             android:layout_marginBottom="@dimen/margin_8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -182,137 +182,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <RelativeLayout
+        <EditText
+            android:id="@+id/name"
+            android:hint="@string/hint.member_lesson_schedule.name"
+            android:drawableStart="@drawable/ic_import_contacts_black"
+            android:drawablePadding="@dimen/margin_4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_4dp"
-            android:layout_marginStart="@dimen/margin_8dp"
-            android:layout_marginEnd="@dimen/margin_8dp"
-            android:layout_marginBottom="@dimen/margin_8dp">
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
 
-            <ImageView
-                android:id="@+id/name_image"
-                android:src="@drawable/ic_import_contacts_black"
-                android:contentDescription="@string/label.member_lesson.hint.name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"/>
-
-            <EditText
-                android:id="@+id/name"
-                android:hint="@string/label.member_lesson.hint.name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/name_image"/>
-
-        </RelativeLayout>
-        <RelativeLayout
+        <EditText
+            android:id="@+id/abbr"
+            android:hint="@string/hint.member_lesson_schedule.abbr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_4dp"
-            android:layout_marginStart="@dimen/margin_8dp"
-            android:layout_marginEnd="@dimen/margin_8dp"
-            android:layout_marginBottom="@dimen/margin_8dp">
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
 
-            <ImageView
-                android:id="@+id/abbr_image"
-                android:src="@drawable/button_blank"
-                android:contentDescription="@string/label.member_lesson.hint.abbr"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"/>
-
-            <EditText
-                android:id="@+id/abbr"
-                android:hint="@string/label.member_lesson.hint.abbr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/abbr_image"/>
-        </RelativeLayout>
-        <RelativeLayout
+        <EditText
+            android:id="@+id/type"
+            android:hint="@string/hint.member_lesson_schedule.schedule_type"
+            android:drawableStart="@drawable/ic_bookmark_black"
+            android:drawablePadding="@dimen/margin_4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_4dp"
-            android:layout_marginStart="@dimen/margin_8dp"
-            android:layout_marginEnd="@dimen/margin_8dp"
-            android:layout_marginBottom="@dimen/margin_8dp">
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
 
-            <ImageView
-                android:id="@+id/type_image"
-                android:src="@drawable/ic_bookmark_black"
-                android:contentDescription="@string/label.member_lesson.hint.type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"/>
-
-            <EditText
-                android:id="@+id/type"
-                android:hint="@string/label.member_lesson.hint.type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/type_image"/>
-        </RelativeLayout>
-        <RelativeLayout
+        <EditText
+            android:id="@+id/location"
+            android:hint="@string/hint.member_lesson_schedule.location"
+            android:drawableStart="@drawable/ic_room_black"
+            android:drawablePadding="@dimen/margin_4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_4dp"
-            android:layout_marginStart="@dimen/margin_8dp"
-            android:layout_marginEnd="@dimen/margin_8dp"
-            android:layout_marginBottom="@dimen/margin_8dp">
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
 
-            <ImageView
-                android:id="@+id/location_image"
-                android:src="@drawable/ic_room_black"
-                android:contentDescription="@string/label.member_lesson.hint.location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"/>
-
-            <EditText
-                android:id="@+id/location"
-                android:hint="@string/label.member_lesson.hint.location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/location_image"/>
-        </RelativeLayout>
-        <RelativeLayout
+        <EditText
+            android:id="@+id/presenter"
+            android:drawableStart="@drawable/ic_face_black"
+            android:drawablePadding="@dimen/margin_4dp"
+            android:hint="@string/hint.member_lesson_schedule.presenter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_4dp"
-            android:layout_marginStart="@dimen/margin_8dp"
-            android:layout_marginEnd="@dimen/margin_8dp"
-            android:layout_marginBottom="@dimen/margin_8dp">
-
-            <ImageView
-                android:id="@+id/presenter_image"
-                android:src="@drawable/ic_face_black"
-                android:contentDescription="@string/label.member_lesson.hint.presenter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"/>
-
-            <EditText
-                android:id="@+id/presenter"
-                android:hint="@string/label.member_lesson.hint.presenter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/presenter_image"/>
-        </RelativeLayout>
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
 
 
         <TextView

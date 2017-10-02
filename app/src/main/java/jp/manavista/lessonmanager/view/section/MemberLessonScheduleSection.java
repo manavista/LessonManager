@@ -89,7 +89,7 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
         final MemberLessonScheduleHolder itemHolder = (MemberLessonScheduleHolder) holder;
         final MemberLessonScheduleVo vo = filteredList.get(position);
 
-        itemHolder.scheduleDate.setText(vo.getLessonDate());
+        itemHolder.scheduleDate.setText(vo.getLessonDisplayDate());
         itemHolder.scheduleTime.setText(vo.getLessonDisplayTime());
         itemHolder.scheduleName.setText(vo.getLessonDisplayName());
         itemHolder.scheduleType.setText(vo.getType());
