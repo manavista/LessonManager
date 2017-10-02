@@ -3,6 +3,8 @@ package jp.manavista.lessonmanager.fragment;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -33,6 +35,7 @@ import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.TimetableActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.MemberLessonScheduleDto;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
@@ -265,8 +268,6 @@ public final class MemberLessonScheduleFragment extends Fragment implements Vali
                 final List<TimetableDto> timetableList = new ArrayList<>();
                 final StringBuilder sb = new StringBuilder();
 
-                // TODO: 2017/09/22 If Timetable is empty, create Timetable icon and screen.
-
                 disposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
                     @Override
                     public void accept(Timetable timetable) throws Exception {
@@ -287,11 +288,28 @@ public final class MemberLessonScheduleFragment extends Fragment implements Vali
                     @Override
                     public void run() throws Exception {
                         dto.setTimetableDtoList(timetableList);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(contents);
-                        builder.setTitle("Select a timetable")
-                                .setIcon(R.drawable.ic_event_black)
-                                .setItems(labelList.toArray(new CharSequence[0]), dto.timetableSetLister)
-                                .show();
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(contents);
+                        builder.setIcon(R.drawable.ic_event_black);
+
+                        if( timetableList.size() > 0 ) {
+
+                            builder.setTitle(R.string.title_member_lesson_schedule_select_timetable)
+                                    .setItems(labelList.toArray(new CharSequence[0]), dto.timetableSetLister);
+                        } else {
+
+                            builder.setTitle(R.string.title_member_lesson_schedule_no_timetable)
+                                    .setMessage(R.string.message_member_lesson_schedule_dialog_timetable)
+                                    .setPositiveButton(R.string.label_member_lesson_schedule_dialog_timetable_create, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int which) {
+                                            Intent intent = new Intent(contents, TimetableActivity.class);
+                                            contents.startActivity(intent);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.cancel, null);
+                        }
+
+                        builder.show();
                     }
                 });
             }

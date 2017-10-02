@@ -90,6 +90,21 @@ public final class MemberLessonScheduleVo implements Serializable {
         return DateTimeUtil.parseCalendar(lessonDate, DATE_PATTERN_YYYYMMDD, lessonEndTime);
     }
 
+    /**
+     *
+     * Lesson Display Date
+     *
+     * <p>
+     * Overview:<br>
+     * Display scheduled date for 'YYYY/MM/DD (EEE)' formatted.
+     * </p>
+     *
+     * @return formatted date string
+     */
+    public String getLessonDisplayDate() {
+        return DateTimeUtil.DATE_FORMAT_YYYYMMDDEEE.format(getLessonStartCalendar().getTime());
+    }
+
     public String getLessonDisplayName() {
         // TODO: 2017/08/27 if exits abbr, concat "(abbr)"
         return getName();
