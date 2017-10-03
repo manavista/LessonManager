@@ -51,6 +51,10 @@ public final class EventListFragment extends Fragment {
 
     /** Activity Contents */
     private Activity contents;
+
+    private RecyclerView view;
+    private ViewGroup emptyState;
+
     /** MemberLesson RecyclerView Adapter */
     @Getter
     private SectionedRecyclerViewAdapter adapter;
@@ -106,7 +110,9 @@ public final class EventListFragment extends Fragment {
         this.contents = getActivity();
         DependencyInjector.appComponent().inject(this);
 
-        final RecyclerView view = contents.findViewById(R.id.rv);
+        view = contents.findViewById(R.id.rv);
+        emptyState = contents.findViewById(R.id.empty_state);
+
         view.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(contents);
         view.setLayoutManager(manager);
@@ -128,8 +134,8 @@ public final class EventListFragment extends Fragment {
 
         super.onResume();
 
-        final boolean containPast = preferences.getBoolean(
-                getString(R.string.key_preferences_event_list_display_past), false);
+        final int key = R.string.key_preferences_event_list_display_past;
+        final boolean containPast = preferences.getBoolean(getString(key), false);
 
         final List<EventVo> list = new ArrayList<>();
 
@@ -148,6 +154,14 @@ public final class EventListFragment extends Fragment {
             public void run() throws Exception {
                 section.setList(list);
                 adapter.notifyDataSetChanged();
+
+                if( list.isEmpty() ) {
+                    view.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -184,6 +198,14 @@ public final class EventListFragment extends Fragment {
                 public void accept(Integer integer) throws Exception {
                     section.getList().remove(position);
                     adapter.notifyItemRemoved(position);
+
+                    if( section.getList().isEmpty() ) {
+                        view.setVisibility(View.GONE);
+                        emptyState.setVisibility(View.VISIBLE);
+                    } else {
+                        view.setVisibility(View.VISIBLE);
+                        emptyState.setVisibility(View.GONE);
+                    }
                 }
             });
         }

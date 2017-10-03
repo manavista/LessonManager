@@ -53,8 +53,8 @@ public final class TimetableFragment extends Fragment {
     /** Logger tag */
     private static final String TAG = TimetableFragment.class.getSimpleName();
 
-    /** RootView object */
-    private View rootView;
+    private RecyclerView view;
+    private ViewGroup emptyState;
 
     /** Timetable recycler view adapter */
     private TimetableAdapter adapter;
@@ -96,8 +96,7 @@ public final class TimetableFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_timetable, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_timetable, container, false);
     }
 
     @Override
@@ -107,7 +106,9 @@ public final class TimetableFragment extends Fragment {
 
         DependencyInjector.appComponent().inject(this);
         final Activity contents = getActivity();
-        final RecyclerView view = contents.findViewById(R.id.rv);
+
+        view = contents.findViewById(R.id.rv);
+        emptyState = contents.findViewById(R.id.empty_state);
 
         view.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(contents);
@@ -143,6 +144,14 @@ public final class TimetableFragment extends Fragment {
             public void run() throws Exception {
                 adapter.setList(list);
                 adapter.notifyDataSetChanged();
+
+                if( list.isEmpty() ) {
+                    view.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -177,6 +186,14 @@ public final class TimetableFragment extends Fragment {
             public void run() throws Exception {
                 adapter.setList(list);
                 adapter.notifyDataSetChanged();
+
+                if( list.isEmpty() ) {
+                    view.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -201,6 +218,14 @@ public final class TimetableFragment extends Fragment {
                 public void run() throws Exception {
                     adapter.setList(list);
                     adapter.notifyDataSetChanged();
+
+                    if( list.isEmpty() ) {
+                        view.setVisibility(View.GONE);
+                        emptyState.setVisibility(View.VISIBLE);
+                    } else {
+                        view.setVisibility(View.VISIBLE);
+                        emptyState.setVisibility(View.GONE);
+                    }
                 }
             });
         }
@@ -225,6 +250,14 @@ public final class TimetableFragment extends Fragment {
                 public void run() throws Exception {
                     adapter.setList(list);
                     adapter.notifyDataSetChanged();
+
+                    if( list.isEmpty() ) {
+                        view.setVisibility(View.GONE);
+                        emptyState.setVisibility(View.VISIBLE);
+                    } else {
+                        view.setVisibility(View.VISIBLE);
+                        emptyState.setVisibility(View.GONE);
+                    }
                 }
             });
         }
@@ -266,11 +299,6 @@ public final class TimetableFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         timetableDisposable.dispose();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
 }

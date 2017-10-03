@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import jp.manavista.lessonmanager.R;
@@ -57,19 +55,4 @@ public class TimetableActivity extends AppCompatActivity {
                 .commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return false;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

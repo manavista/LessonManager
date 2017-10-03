@@ -4,30 +4,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/timetable_title"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/grey_300"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-
-        <TextView
-            android:id="@+id/timetable_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label.timetable.setting"
-            android:textColor="@color/grey_700"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="16dp"/>
-
-    </RelativeLayout>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv"
-        android:layout_below="@+id/timetable_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:id="@+id/empty_state"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_schedule_black"
+                android:contentDescription="@string/description.timetable.empty_stat.image"
+                android:alpha="0.2"
+                android:layout_width="96dp"
+                android:layout_height="96dp"/>
+
+            <TextView
+                android:textSize="24sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/message.timetable.empty_stat.no_timetable"/>
+
+            <TextView
+                android:text="@string/message.timetable.empty_stat.add_timetable"
+                android:textColor="@color/grey_400"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
