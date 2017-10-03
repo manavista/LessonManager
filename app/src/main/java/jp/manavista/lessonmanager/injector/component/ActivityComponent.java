@@ -1,7 +1,6 @@
 package jp.manavista.lessonmanager.injector.component;
 
 import jp.manavista.lessonmanager.activity.LessonViewActivity;
-import jp.manavista.lessonmanager.activity.MainActivity;
 
 /**
  *
@@ -16,6 +15,5 @@ import jp.manavista.lessonmanager.activity.MainActivity;
  * @see jp.manavista.lessonmanager.AppComponent Application Component interface
  */
 public interface ActivityComponent {
-    void inject(MainActivity mainActivity);
     void inject(LessonViewActivity lessonViewActivity);
 }
