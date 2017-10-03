@@ -25,7 +25,6 @@ import io.reactivex.disposables.Disposables;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.EventActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity;
-import jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus;
 import jp.manavista.lessonmanager.facade.LessonViewFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
@@ -37,6 +36,10 @@ import jp.manavista.lessonmanager.view.week.WeekView;
 import jp.manavista.lessonmanager.view.week.WeekViewEvent;
 import lombok.Getter;
 import lombok.val;
+
+import static jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus.ABSENT;
+import static jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus.DONE;
+import static jp.manavista.lessonmanager.constants.MemberLessonScheduleStatus.SCHEDULED;
 
 /**
  *
@@ -119,8 +122,7 @@ public final class LessonViewFragment extends Fragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_lesson_view, container, false);
 
@@ -151,7 +153,7 @@ public final class LessonViewFragment extends Fragment implements
 
         final List<WeekViewEvent> events = new ArrayList<>();
 
-        for( val lesson : scheduleList) {
+        for( val lesson : scheduleList ) {
             if( isMatched(lesson.getStartTime(), newYear, newMonth) ) {
                 events.add(lesson);
             }
@@ -187,7 +189,25 @@ public final class LessonViewFragment extends Fragment implements
 
     @Override
     public String interpretDate(Calendar date) {
-        return DateTimeUtil.DATE_FORMAT_MMDDE.format(date.getTime());
+
+        /*
+         * Header Date Format
+         *
+         * Since the display width varies depending on the number of days displayed,
+         * specify the format dynamically.
+         */
+        switch (visibleDays) {
+
+            case 1:
+                return DateTimeUtil.DATE_FORMAT_LLLLDDEEEYYYY.format(date.getTime());
+            case 3:
+                return DateTimeUtil.DATE_FORMAT_LLLDDE.format(date.getTime());
+            case 5:
+            case 7:
+                return DateTimeUtil.DATE_FORMAT_MMDD.format(date.getTime());
+            default:
+                return DateTimeUtil.DATE_FORMAT_MMDDE.format(date.getTime());
+        }
     }
 
     @Override
@@ -206,11 +226,11 @@ public final class LessonViewFragment extends Fragment implements
 
         Log.d(TAG, "set limit time start: " + startHour + " end: " + endHour);
 
-
-        Set<Integer> statusSet = new HashSet<>();
-        statusSet.add(MemberLessonScheduleStatus.SCHEDULED.getId());
-        statusSet.add(MemberLessonScheduleStatus.ABSENT.getId());
-        statusSet.add(MemberLessonScheduleStatus.DONE.getId());
+        /* Display status target */
+        final Set<Integer> statusSet = new HashSet<>();
+        statusSet.add(SCHEDULED.getId());
+        statusSet.add(ABSENT.getId());
+        statusSet.add(DONE.getId());
 
         disposable = facade.getViewData(lessonView, timetableList, scheduleList, statusSet);
     }
@@ -235,6 +255,7 @@ public final class LessonViewFragment extends Fragment implements
      * @param days Visible days
      */
     public void changeVisibleDays(int days) {
+        this.visibleDays = days;
         final Calendar calendar = lessonView.getFirstVisibleDay();
         lessonView.setNumberOfVisibleDays(days);
         lessonView.goToDate(calendar);
