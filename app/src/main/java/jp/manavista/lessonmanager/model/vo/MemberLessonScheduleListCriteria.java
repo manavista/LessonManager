@@ -1,7 +1,7 @@
 package jp.manavista.lessonmanager.model.vo;
 
 import android.support.v7.widget.RecyclerView;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -35,7 +35,7 @@ public final class MemberLessonScheduleListCriteria implements Serializable {
     private MemberLessonScheduleSection scheduleSection;
 
     private RecyclerView view;
-    private FrameLayout emptyState;
+    private ViewGroup emptyState;
 
     /** MemberLesson RecyclerView Adapter */
     private SectionedRecyclerViewAdapter sectionAdapter;

@@ -58,6 +58,10 @@ public final class MemberListFragment extends Fragment {
 
     /** Activity Contents */
     private Activity contents;
+
+    private RecyclerView view;
+    private ViewGroup emptyState;
+
     /** Member RecyclerView Adapter */
     @Getter
     private SectionedRecyclerViewAdapter sectionAdapter;
@@ -118,7 +122,9 @@ public final class MemberListFragment extends Fragment {
         DependencyInjector.appComponent().inject(this);
         this.contents = getActivity();
 
-        final RecyclerView view = contents.findViewById(R.id.rv);
+        view = contents.findViewById(R.id.rv);
+        emptyState = contents.findViewById(R.id.empty_state);
+
         view.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(contents);
         view.setLayoutManager(manager);
@@ -161,6 +167,14 @@ public final class MemberListFragment extends Fragment {
             public void run() throws Exception {
                 memberSection.setList(list);
                 sectionAdapter.notifyDataSetChanged();
+
+                if( list.isEmpty() ) {
+                    view.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -233,6 +247,14 @@ public final class MemberListFragment extends Fragment {
                 public void accept(Integer integer) throws Exception {
                     memberSection.getList().remove(position);
                     sectionAdapter.notifyItemRemoved(position);
+
+                    if( memberSection.getList().isEmpty() ) {
+                        view.setVisibility(View.GONE);
+                        emptyState.setVisibility(View.VISIBLE);
+                    } else {
+                        view.setVisibility(View.VISIBLE);
+                        emptyState.setVisibility(View.GONE);
+                    }
 
                     final String message = getString(R.string.message_member_list_delete_member);
                     Toast.makeText(contents, message, Toast.LENGTH_SHORT).show();

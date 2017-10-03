@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
@@ -67,7 +66,7 @@ public final class MemberLessonScheduleListFragment extends Fragment {
     private Activity contents;
 
     private RecyclerView view;
-    private FrameLayout emptyState;
+    private ViewGroup emptyState;
 
     /** MemberLesson RecyclerView Adapter */
     private SectionedRecyclerViewAdapter sectionAdapter;

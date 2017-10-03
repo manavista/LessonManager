@@ -112,12 +112,16 @@
     <!-- Timetable -->
     <string name="toolbar.timetable.title">Timetable</string>
     <string name="toolbar.timetable.option.add">add</string>
-    <string name="label.timetable.setting">Setting Timetable</string>
     <string name="label.timetable.hyphen_spaces"> - </string>
     <string name="label.timetable.lesson_no.dialog.title">Select Lesson No</string>
+
+    <string name="description.timetable.empty_stat.image">Timetable Image</string>
+
     <string name="message.timetable.error.start_time">Invalid Start Time</string>
     <string name="message.timetable.error.end_time">Invalid End Time</string>
     <string name="message.timetable.error.duplicate.lesson_no">Duplicate lesson No</string>
+    <string name="message.timetable.empty_stat.no_timetable">No Timetable</string>
+    <string name="message.timetable.empty_stat.add_timetable">Add Timetable and Make a Lesson !</string>
 
     <!-- Member -->
     <string name="toolbar.member.title">Member</string>
@@ -154,15 +158,18 @@
 
     <string name="label.member_list.delete">Delete</string>
     <string name="label.member_list.dialog.delete">Delete</string>
+    <string name="label.member_list.name">Member Name</string>
     <string name="title.member_list.dialog.delete.confirm">Delete member</string>
-    <string name="message.member_list.dialog.delete.confirm">Are you sure you want to delete the member?</string>
 
     <string name="description.member_list.photo.image">Member Photo</string>
-    <string name="label.member_list.name">Member Name</string>
+    <string name="description.member_list.empty_stat.image">Member Image</string>
 
+    <string name="message.member_list.dialog.delete.confirm">Are you sure you want to delete the member?</string>
     <string name="message.member_list.edit.member">Edited the %1$s</string>
     <string name="message.member_list.add.member">Added %1$s to Member</string>
     <string name="message.member_list.delete.member">Deleted the Member</string>
+    <string name="message.member_list.empty_stat.no_member">No Member</string>
+    <string name="message.member_list.empty_stat.add_member">Let\'s meet people you need !</string>
 
     <!-- Member Lesson -->
     <string name="toolbar.member_lesson.title">Lesson</string>
@@ -274,7 +281,13 @@
     <string name="toolbar.event_list.title">Event List</string>
     <string name="toolbar.event_list.option.list">Setting List Item</string>
     <string name="toolbar.event_list.option.search">Search</string>
+
     <string name="description.event_list.image">Icon Image</string>
+    <string name="description.event_list.empty_stat.image">Event Image</string>
+
+    <string name="message.event_list.empty_stat.no_event">No Event</string>
+    <string name="message.event_list.empty_stat.add_event">The goal is what we decide !</string>
+
     <string name="label.event_list.name">Event Name</string>
     <string name="label.event_list.memo">Event Memo</string>
     <string name="label.event_list.date">YYYY/MM/DD</string>
