@@ -161,7 +161,6 @@ public final class MemberDto implements Serializable {
         emailType.setSelection(ArrayUtils.indexOf(emailTypeValues, entity.emailType != null ? entity.emailType : 1));
         email.setText(entity.email);
 
-        // TODO: raw to format data YYYY/MM/DD
         birthday.setText(entity.birthday);
 
         if( entity.photo != null && entity.photo.length > 0 ) {

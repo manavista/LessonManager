@@ -37,19 +37,6 @@ public interface TimetableService {
      *
      * <p>
      * Overview:<br>
-     * Add new Timetable row, and then get All Timetable List of Observable object.
-     * </p>
-     *
-     * @return All Timetable entity of Observable
-     */
-    Observable<Timetable> add();
-
-    /**
-     *
-     * Add
-     *
-     * <p>
-     * Overview:<br>
      * Add new Timetable row, and then get All TimetableDto List of Observable object.
      * </p>
      *
