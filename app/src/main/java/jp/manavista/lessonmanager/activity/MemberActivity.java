@@ -234,11 +234,9 @@ public class MemberActivity extends AppCompatActivity {
             }
             cursor.close();
 
-            // TODO: 2017/09/21 If addressList is empty, nothing to do and return.
-
             if( numberList.size() == 1 ) {
                 fragment.getDto().getPhoneNumber().setText(numberList.get(0));
-            } else {
+            } else if( numberList.size() > 1 )  {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.label_member_phone_dialog))
@@ -277,11 +275,9 @@ public class MemberActivity extends AppCompatActivity {
             }
             cursor.close();
 
-            // TODO: 2017/09/21 If addressList is empty, nothing to do and return.
-
             if( addressList.size() == 1 ) {
                 fragment.getDto().getEmail().setText(addressList.get(0));
-            } else {
+            } else if( addressList.size() > 1 ) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.label_member_email_dialog))
