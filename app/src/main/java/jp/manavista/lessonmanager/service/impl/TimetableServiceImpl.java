@@ -57,23 +57,6 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
-    public Observable<Timetable> add() {
-
-        Timetable timetable = new Timetable();
-        timetable.lessonNo = 0; // TODO: 2017/08/24 get max lessonNo in database
-        timetable.startTime = DateTimeUtil.parseTime(12,0);
-        timetable.endTime = DateTimeUtil.parseTime(13,0);
-
-        return save(timetable)
-                .flatMapObservable(new Function<Timetable, ObservableSource<? extends Timetable>>() {
-                    @Override
-                    public ObservableSource<? extends Timetable> apply(@NonNull Timetable timetable) throws Exception {
-                        return getListAll();
-                    }
-                });
-    }
-
-    @Override
     public Observable<TimetableDto> addDtoList() {
 
         final Timetable timetable = new Timetable();

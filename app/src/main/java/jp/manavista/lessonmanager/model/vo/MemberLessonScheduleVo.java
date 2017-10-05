@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.Calendar;
@@ -78,6 +80,7 @@ public final class MemberLessonScheduleVo implements Serializable {
         return DateTimeUtil.TIME_FORMAT_HHMM.format(lessonStartTime);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public String getLessonEndTimeFormatted() {
         return DateTimeUtil.TIME_FORMAT_HHMM.format(lessonEndTime);
     }
@@ -106,8 +109,9 @@ public final class MemberLessonScheduleVo implements Serializable {
     }
 
     public String getLessonDisplayName() {
-        // TODO: 2017/08/27 if exits abbr, concat "(abbr)"
-        return getName();
+        return StringUtils.isEmpty(getAbbr())
+                ? getName()
+                : String.format("%1$s (%2$s)", getName(), getAbbr());
     }
 
     public String getLessonDisplayTime() {
