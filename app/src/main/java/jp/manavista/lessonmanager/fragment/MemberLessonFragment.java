@@ -622,8 +622,6 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      *
      * Build Day of Week String
      *
-     * TODO: duplicate define. see MemberLessonAdapter. consider of integration.
-     *
      * @param dayOfWeek saved string (e.g. "3,5")
      * @return converted display string (e.g. "Tue, Thr")
      */
