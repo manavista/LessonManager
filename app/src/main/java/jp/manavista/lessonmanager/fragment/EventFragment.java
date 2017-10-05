@@ -45,7 +45,7 @@ import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD
  *
  *
  */
-public class EventFragment extends Fragment implements Validator.ValidationListener {
+public final class EventFragment extends Fragment implements Validator.ValidationListener {
 
     /** Logger Tag string */
     public static final String TAG = EventFragment.class.getSimpleName();
