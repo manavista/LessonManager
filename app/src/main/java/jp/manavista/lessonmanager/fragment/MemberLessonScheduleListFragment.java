@@ -47,6 +47,10 @@ import jp.manavista.lessonmanager.view.section.MemberLessonScheduleSection;
 import jp.manavista.lessonmanager.view.section.MemberLessonSection;
 import lombok.val;
 
+import static jp.manavista.lessonmanager.activity.MemberLessonActivity.EXTRA_MEMBER_ID;
+import static jp.manavista.lessonmanager.activity.MemberLessonActivity.EXTRA_MEMBER_LESSON_ID;
+import static jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity.EXTRA_SCHEDULE_ID;
+
 /**
  *
  * MemberLessonSchedule List Fragment
@@ -67,6 +71,8 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
     private RecyclerView view;
     private ViewGroup emptyState;
+
+    private Set<String> displayStatusSet;
 
     /** MemberLesson RecyclerView Adapter */
     private SectionedRecyclerViewAdapter sectionAdapter;
@@ -173,7 +179,7 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         final int defaultKey = R.array.default_values_schedule_list_display_status;
         final int statusKey = R.string.key_preferences_schedule_list_display_status;
         final Set<String> defaultSet = new HashSet<>(Arrays.asList(getResources().getStringArray(defaultKey)));
-        final Set<String> displayStatusSet = preferences.getStringSet(getString(statusKey), defaultSet);
+        displayStatusSet = preferences.getStringSet(getString(statusKey), defaultSet);
 
         final val criteria = MemberLessonScheduleListCriteria.builder()
                 .memberId(memberId)
@@ -200,7 +206,7 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         public void edit(long id, int position) {
             itemTouchHelper.closeOpened();
             final Intent intent = new Intent(contents, MemberLessonScheduleActivity.class);
-            intent.putExtra(MemberLessonScheduleActivity.EXTRA_SCHEDULE_ID, id);
+            intent.putExtra(EXTRA_SCHEDULE_ID, id);
             contents.startActivity(intent);
         }
 
@@ -240,8 +246,8 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         public void edit(MemberLessonVo dto, int position) {
             itemTouchHelper.closeOpened();
             final Intent intent = new Intent(contents, MemberLessonActivity.class);
-            intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, dto.getMemberId());
-            intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, dto.getId());
+            intent.putExtra(EXTRA_MEMBER_ID, dto.getMemberId());
+            intent.putExtra(EXTRA_MEMBER_LESSON_ID, dto.getId());
             contents.startActivityForResult(intent, MemberLessonActivity.RequestCode.EDIT);
         }
 
@@ -251,7 +257,7 @@ public final class MemberLessonScheduleListFragment extends Fragment {
             scheduleSection.getList().clear();
             final List<MemberLessonScheduleVo> scheduleVoList = new ArrayList<>();
 
-            disposable = facade.deleteLessonByLessonId(memberId, id).subscribe(new Consumer<MemberLessonScheduleVo>() {
+            disposable = facade.deleteLessonByLessonId(memberId, id, displayStatusSet).subscribe(new Consumer<MemberLessonScheduleVo>() {
                 @Override
                 public void accept(MemberLessonScheduleVo vo) throws Exception {
                     scheduleVoList.add(vo);

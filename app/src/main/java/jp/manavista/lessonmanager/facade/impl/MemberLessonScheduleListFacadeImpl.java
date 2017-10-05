@@ -5,8 +5,6 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,15 +36,15 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
 
     private static final String TAG = MemberLessonScheduleListFacadeImpl.class.getSimpleName();
 
-    private final MemberLessonService memberLessonService;
-    private final MemberLessonScheduleService memberLessonScheduleService;
+    private final MemberLessonService lessonService;
+    private final MemberLessonScheduleService scheduleService;
 
     /** Constructor */
     public MemberLessonScheduleListFacadeImpl (
-            MemberLessonService memberLessonService,
-            MemberLessonScheduleService memberLessonScheduleService) {
-        this.memberLessonService = memberLessonService;
-        this.memberLessonScheduleService = memberLessonScheduleService;
+            MemberLessonService lessonService,
+            MemberLessonScheduleService scheduleService) {
+        this.lessonService = lessonService;
+        this.scheduleService = scheduleService;
     }
 
     @Override
@@ -62,12 +60,12 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
         val view = criteria.getView();
         val emptyState = criteria.getEmptyState();
 
-        return memberLessonService.getSingleVoListByMemberId(memberId, criteria.getContainPastLesson())
+        return lessonService.getSingleVoListByMemberId(memberId, criteria.getContainPastLesson())
                 .flatMapObservable(new Function<List<MemberLessonVo>, ObservableSource<MemberLessonScheduleVo>> () {
                     @Override
                     public ObservableSource<MemberLessonScheduleVo> apply(@io.reactivex.annotations.NonNull List<MemberLessonVo> list) throws Exception {
                         lessonVoList.addAll(list);
-                        return memberLessonScheduleService.getVoListByMemberId(memberId, criteria.getScheduleStatusIntegerSet());
+                        return scheduleService.getVoListByMemberId(memberId, criteria.getScheduleStatusIntegerSet());
                     }
                 }).subscribe(new Consumer<MemberLessonScheduleVo>() {
                     @Override
@@ -99,14 +97,15 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
     }
 
     @Override
-    public Observable<MemberLessonScheduleVo> deleteLessonByLessonId(final long memberId, final long lessonId) {
+    public Observable<MemberLessonScheduleVo> deleteLessonByLessonId(final long memberId, final long lessonId, final Set<String> displayStatusSet) {
 
         final List<Observable<Integer>> targetList = new ArrayList<>();
-        targetList.add(memberLessonScheduleService.deleteByLessonId(lessonId).toObservable());
-        targetList.add(memberLessonService.deleteById(lessonId).toObservable());
+        targetList.add(scheduleService.deleteByLessonId(lessonId).toObservable());
+        targetList.add(lessonService.deleteById(lessonId).toObservable());
 
-        // TODO: 2017/09/21 add set
-        final Set<Integer> statusSet = new HashSet<>(Arrays.asList(0, 3));
+        final val criteria = MemberLessonScheduleListCriteria.builder()
+                .scheduleStatusSet(displayStatusSet)
+                .build();
 
         return Observable.concat(targetList)
                 .reduce(0, new BiFunction<Integer, Integer, Integer>() {
@@ -117,7 +116,7 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
                 }).flatMapObservable(new Function<Integer, ObservableSource<MemberLessonScheduleVo>>() {
                     @Override
                     public ObservableSource<MemberLessonScheduleVo> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                        return memberLessonScheduleService.getVoListByMemberId(memberId, statusSet);
+                        return scheduleService.getVoListByMemberId(memberId, criteria.getScheduleStatusIntegerSet());
                     }
                 });
     }
