@@ -33,7 +33,11 @@
     <string name="label.common.list.action.delete">Delete</string>
 
     <!-- Preference -->
-    <string name="toolbar.preference.title">Settings</string>
+    <string name="title.preference.general.toolbar">Settings</string>
+    <string name="title.preference.event.toolbar">Event</string>
+    <string name="title.preference.delete.toolbar">Delete</string>
+    <string name="title.preference.lesson_and_schedule.toolbar">Lesson and Schedule</string>
+
     <string name="label.preference.category.delete">Delete</string>
     <string name="label.preference.category.lesson_week_view">LessonWeek View</string>
 

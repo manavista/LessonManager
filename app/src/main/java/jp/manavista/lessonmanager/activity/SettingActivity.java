@@ -34,25 +34,23 @@ public class SettingActivity extends AppCompatActivity {
      *
      * <p>
      * overview:<br>
-     *
+     * Define fragment type and title string resource.
      * </p>
      */
     public enum FragmentType {
 
-        // TODO: 2017/09/21 use string xml
+        GENERAL(R.string.title_preference_general_toolbar),
+        EVENT(R.string.title_preference_event_toolbar),
+        DELETE(R.string.title_preference_delete_toolbar),
+        LESSON_AND_SCHEDULE(R.string.title_preference_lesson_and_schedule_toolbar);
 
-        GENERAL("Settings"),
-        EVENT("Event"),
-        DELETE("Delete using data"),
-        LESSON_AND_SCHEDULE("Lesson and Schedule");
-
-        String title;
-        FragmentType(String title) {
-            this.title = title;
+        int resourceId;
+        FragmentType(int resourceId) {
+            this.resourceId = resourceId;
         }
 
-        public String getTitle() {
-            return this.title;
+        public int getResourceId() {
+            return resourceId;
         }
     }
 
@@ -71,7 +69,7 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(type.getTitle());
+        toolbar.setTitle(getApplicationContext().getString(type.getResourceId()));
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
