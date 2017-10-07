@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
@@ -1957,12 +1956,7 @@ public class WeekView extends View {
      * @return true if scrolling should be stopped before reaching the end of animation.
      */
     private boolean forceFinishScroll() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            // current velocity only available since api 14
-            return mScroller.getCurrVelocity() <= mMinimumFlingVelocity;
-        } else {
-            return false;
-        }
+        return mScroller.getCurrVelocity() <= mMinimumFlingVelocity;
     }
 
     /////////////////////////////////////////////////////////////////

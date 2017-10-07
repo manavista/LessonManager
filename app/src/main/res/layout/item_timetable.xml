@@ -4,7 +4,7 @@
     android:id="@+id/timetable_item"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="#FAFAFA"
+    android:background="@color/colorBackground"
     android:orientation="horizontal"
     android:paddingStart="@dimen/margin_16dp"
     android:paddingEnd="@dimen/margin_16dp"
@@ -21,7 +21,6 @@
 
     <TextView
         android:id="@+id/start_time"
-        android:text="17:00"
         android:textSize="@dimen/text_size_26sp"
         android:clickable="true"
         android:layout_width="wrap_content"
@@ -37,7 +36,6 @@
 
     <TextView
         android:id="@+id/end_time"
-        android:text="18:30"
         android:textSize="@dimen/text_size_26sp"
         android:clickable="true"
         android:layout_width="wrap_content"

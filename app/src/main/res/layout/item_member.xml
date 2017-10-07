@@ -4,7 +4,7 @@
     android:id="@+id/item_member"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="#FAFAFA"
+    android:background="@color/colorBackground"
     android:orientation="horizontal">
 
     <FrameLayout

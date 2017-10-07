@@ -4,7 +4,7 @@
     android:id="@+id/item_event"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="#FAFAFA"
+    android:background="@color/colorBackground"
     android:orientation="horizontal">
 
     <FrameLayout
@@ -14,6 +14,7 @@
 
         <LinearLayout
             android:orientation="horizontal"
+            android:background="@color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
