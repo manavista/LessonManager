@@ -6,23 +6,23 @@
         <item
             android:id="@+id/nav_member_list"
             android:icon="@drawable/ic_people_black"
-            android:title="@string/drawable.label.member_list"/>
+            android:title="@string/label.drawable_menu.member_list"/>
     </group>
 
-    <item android:title="@string/drawable.label.add">
+    <item android:title="@string/label.drawable_menu.add">
         <menu>
             <item
                 android:id="@+id/nav_member"
                 android:icon="@drawable/ic_person_black"
-                android:title="@string/drawable.menu.member"/>
+                android:title="@string/label.drawable_menu.member"/>
             <item
                 android:id="@+id/nav_timetable"
                 android:icon="@drawable/ic_schedule_black"
-                android:title="@string/drawable.menu.timetable"/>
+                android:title="@string/label.drawable_menu.timetable"/>
             <item
                 android:id="@+id/nav_event"
                 android:icon="@drawable/ic_assistant_photo_black"
-                android:title="@string/drawable.label.event"/>
+                android:title="@string/label.drawable_menu.event"/>
         </menu>
     </item>
 
@@ -30,11 +30,11 @@
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black"
-            android:title="@string/drawable.menu.settings"/>
+            android:title="@string/label.drawable_menu.settings"/>
         <item
             android:id="@+id/nav_info"
             android:icon="@drawable/ic_info_black"
-            android:title="@string/drawable.menu.info"/>
+            android:title="@string/label.drawable_menu.info"/>
     </group>
 
 </menu>

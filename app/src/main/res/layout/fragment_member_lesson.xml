@@ -135,7 +135,6 @@
 
                     <EditText
                         android:id="@+id/start_time"
-                        android:text="10:00"
                         android:inputType="time"
                         android:focusable="false"
                         android:layout_width="match_parent"
@@ -155,7 +154,6 @@
 
                     <EditText
                         android:id="@+id/end_time"
-                        android:text="12:00"
                         android:inputType="time"
                         android:focusable="false"
                         android:layout_width="match_parent"
@@ -216,7 +214,6 @@
 
             <EditText
                 android:id="@+id/day_of_week"
-                android:text="Mon, Thr"
                 android:inputType="text"
                 android:focusable="false"
                 android:layout_width="match_parent"
@@ -235,7 +232,8 @@
             android:layout_height="wrap_content"/>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_4dp"
@@ -243,52 +241,45 @@
             android:layout_marginEnd="@dimen/margin_16dp"
             android:layout_marginBottom="@dimen/margin_8dp">
 
-
             <LinearLayout
-                android:orientation="horizontal"
-                android:baselineAligned="false"
-                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/start_period_label"
+                    android:text="@string/label.member_lesson.start_period"
+                    android:labelFor="@+id/start_period"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        android:text="@string/label.member_lesson.start_period"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                <EditText
+                    android:id="@+id/start_period"
+                    android:inputType="date"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/start_period"
-                        android:text="2017/01/01"
-                        android:inputType="date"
-                        android:focusable="false"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/end_period_label"
+                    android:text="@string/label.member_lesson.end_period"
+                    android:labelFor="@+id/end_period"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        android:text="@string/label.member_lesson.end_period"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <EditText
-                        android:id="@+id/end_period"
-                        android:text="2017/12/31"
-                        android:inputType="date"
-                        android:focusable="false"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-
+                <EditText
+                    android:id="@+id/end_period"
+                    android:inputType="date"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
         </LinearLayout>

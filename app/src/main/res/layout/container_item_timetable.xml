@@ -21,7 +21,7 @@
             <ImageView
                 android:layout_gravity="center"
                 android:src="@drawable/ic_delete_white"
-                android:contentDescription="delete icon"
+                android:contentDescription="@string/description.timetable.delete.icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </FrameLayout>

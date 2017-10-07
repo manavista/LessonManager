@@ -37,7 +37,7 @@ public final class EventSection extends StatelessSection implements FilterableSe
 
     /** Constructor(private) */
     private EventSection(EventOperation operation) {
-        super(new SectionParameters.Builder(R.layout.container_event).build());
+        super(new SectionParameters.Builder(R.layout.container_item_event).build());
         this.operation = operation;
     }
 

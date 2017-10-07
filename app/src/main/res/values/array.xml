@@ -63,13 +63,6 @@
         <item>Schedule</item>
         <item>Event</item>
     </string-array>
-    <string-array name="values_delete_category">
-        <item>Timetable</item>
-        <item>Member</item>
-        <item>Lesson</item>
-        <item>Schedule</item>
-        <item>Event</item>
-    </string-array>
 
     <string-array name="entries_member_name_display">
         <item>First Additional Family (Nick)</item>
@@ -115,11 +108,6 @@
         <item>Work</item>
         <item>Other</item>
     </string-array>
-    <string-array name="items_member_gender_type">
-        <item>Male</item>
-        <item>Female</item>
-        <item>Other</item>
-    </string-array>
 
     <integer-array name="values_member_phone_type">
         <item>1</item>
@@ -131,11 +119,6 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
-        <item>9</item>
-    </integer-array>
-    <integer-array name="values_member_gender_type">
-        <item>1</item>
-        <item>2</item>
         <item>9</item>
     </integer-array>
 
