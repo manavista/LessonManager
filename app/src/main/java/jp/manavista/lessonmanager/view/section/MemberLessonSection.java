@@ -104,7 +104,7 @@ public final class MemberLessonSection extends StatelessSection {
         itemHolder.lessonId.setText(String.valueOf(vo.getId()));
         itemHolder.lessonName.setText(vo.getName());
         itemHolder.lessonType.setText(vo.getType());
-        itemHolder.timetable.setText(vo.getStartTime() + " - " + vo.getEndTime());
+        itemHolder.timetable.setText(String.format("%1$s -", vo.getStartTime()));
         itemHolder.dayOfWeek.setText(buildDayOfWeek(vo.getDayOfWeek()));
 
         itemHolder.lessonIconImage.setColorFilter(vo.getTextColor());
