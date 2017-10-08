@@ -131,7 +131,7 @@ public final class MemberListFragment extends Fragment {
         view.addItemDecoration(new ItemDecoration(contents));
 
         sectionAdapter = new SectionedRecyclerViewAdapter();
-        memberSection = MemberSection.newInstance(contents, memberOperation);
+        memberSection = MemberSection.newInstance(memberOperation);
         sectionAdapter.addSection(memberSection);
         view.setAdapter(sectionAdapter);
 

@@ -1,6 +1,5 @@
 package jp.manavista.lessonmanager.view.section;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +26,7 @@ import jp.manavista.lessonmanager.view.operation.MemberOperation;
  * Define the internal section class of adapter used in section recycler view.<br>
  * </p>
  */
-public class MemberSection extends StatelessSection implements FilterableSection {
+public final class MemberSection extends StatelessSection implements FilterableSection {
 
     /** Logger tag string */
     private static final String TAG = MemberSection.class.getSimpleName();
@@ -35,13 +34,11 @@ public class MemberSection extends StatelessSection implements FilterableSection
     private List<MemberVo> list;
     private List<MemberVo> filteredList;
 
-    /** Context */
-    private final Context context;
     /** Operation */
     private final MemberOperation operation;
 
     /** Constructor(private) */
-    private MemberSection(Context context, MemberOperation operation) {
+    private MemberSection(MemberOperation operation) {
 
         /*
          * No Header Section
@@ -49,12 +46,11 @@ public class MemberSection extends StatelessSection implements FilterableSection
          */
         super(new SectionParameters.Builder(R.layout.container_item_member).build());
 
-        this.context = context;
         this.operation = operation;
     }
 
-    public static MemberSection newInstance(Context context, MemberOperation operation) {
-        return new MemberSection(context, operation);
+    public static MemberSection newInstance(MemberOperation operation) {
+        return new MemberSection(operation);
     }
 
     @Override

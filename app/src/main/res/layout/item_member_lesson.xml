@@ -22,7 +22,7 @@
 
             <TextView
                 android:id="@+id/lesson_id_invisible"
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
