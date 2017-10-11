@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 manavista. All rights reserved.
+ */
+
 package jp.manavista.lessonmanager.repository.impl;
 
 import jp.manavista.lessonmanager.model.entity.Event_Deleter;
