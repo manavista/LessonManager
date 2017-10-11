@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 manavista. All rights reserved.
+ */
+
 package jp.manavista.lessonmanager.constants;
 
 import android.util.SparseArray;

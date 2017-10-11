@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 manavista. All rights reserved.
+ */
+
 package jp.manavista.lessonmanager.injector.component;
 
 import jp.manavista.lessonmanager.activity.LessonViewActivity;
