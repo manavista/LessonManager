@@ -15,30 +15,28 @@ import android.view.View;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.MemberLessonFragment;
 
+import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_ID;
+import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_LESSON_ID;
+
 /**
  *
  * MemberLesson Activity
  *
  * <p>
  * Overview:<br>
- *
+ * Define the screen action of the Member Lesson List.
  * </p>
  */
 public class MemberLessonActivity extends AppCompatActivity {
 
-    /** activity put extra argument: member id */
-    public static final String EXTRA_MEMBER_ID = "MEMBER_ID";
-    /** activity put extra argument: member lesson id */
-    public static final String EXTRA_MEMBER_LESSON_ID = "MEMBER_LESSON_ID";
-
-    // TODO: 2017/10/12 change EXTRA various to Extra class field.
-
+    /** activity put extra argument class */
     public class Extra {
         public static final String MEMBER_ID = "MEMBER_ID";
         public static final String MEMBER_LESSON_ID = "MEMBER_LESSON_ID";
         public static final String LESSON_NAME = "LESSON_NAME";
     }
 
+    /** activity request code values class */
     public class RequestCode {
         private final static int _BASE = 400;
         public final static int CREATE = 1 + _BASE;
@@ -64,8 +62,8 @@ public class MemberLessonActivity extends AppCompatActivity {
         });
 
         final Intent intent = getIntent();
-        final long memberId = intent.getLongExtra(EXTRA_MEMBER_ID, 0);
-        final long memberLessonId = intent.getLongExtra(EXTRA_MEMBER_LESSON_ID, 0);
+        final long memberId = intent.getLongExtra(MEMBER_ID, 0);
+        final long memberLessonId = intent.getLongExtra(MEMBER_LESSON_ID, 0);
 
         fragment = MemberLessonFragment.newInstance(memberId, memberLessonId);
         getSupportFragmentManager()

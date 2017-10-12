@@ -51,8 +51,8 @@ import jp.manavista.lessonmanager.view.section.MemberLessonScheduleSection;
 import jp.manavista.lessonmanager.view.section.MemberLessonSection;
 import lombok.val;
 
-import static jp.manavista.lessonmanager.activity.MemberLessonActivity.EXTRA_MEMBER_ID;
-import static jp.manavista.lessonmanager.activity.MemberLessonActivity.EXTRA_MEMBER_LESSON_ID;
+import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_ID;
+import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_LESSON_ID;
 import static jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity.EXTRA_SCHEDULE_ID;
 
 /**
@@ -250,8 +250,8 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         public void edit(MemberLessonVo dto, int position) {
             itemTouchHelper.closeOpened();
             final Intent intent = new Intent(contents, MemberLessonActivity.class);
-            intent.putExtra(EXTRA_MEMBER_ID, dto.getMemberId());
-            intent.putExtra(EXTRA_MEMBER_LESSON_ID, dto.getId());
+            intent.putExtra(MEMBER_ID, dto.getMemberId());
+            intent.putExtra(MEMBER_LESSON_ID, dto.getId());
             contents.startActivityForResult(intent, MemberLessonActivity.RequestCode.EDIT);
         }
 
