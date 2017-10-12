@@ -19,6 +19,8 @@ import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.MemberLessonScheduleListFragment;
 import lombok.val;
 
+import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_ID;
+import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_LESSON_ID;
 import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.LESSON_AND_SCHEDULE;
 
 /**
@@ -64,8 +66,8 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final Intent intent = new Intent(activity, MemberLessonActivity.class);
-                intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_ID, memberId);
-                intent.putExtra(MemberLessonActivity.EXTRA_MEMBER_LESSON_ID, lessonId);
+                intent.putExtra(MEMBER_ID, memberId);
+                intent.putExtra(MEMBER_LESSON_ID, lessonId);
                 startActivityForResult(intent, MemberLessonActivity.RequestCode.CREATE);
             }
         });
