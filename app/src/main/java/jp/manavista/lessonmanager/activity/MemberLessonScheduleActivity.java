@@ -20,8 +20,6 @@ public class MemberLessonScheduleActivity extends AppCompatActivity {
     /** activity put extra argument: member id */
     public static final String EXTRA_SCHEDULE_ID = "SCHEDULE_ID";
 
-    private long scheduleId;
-
     /** fragment */
     private MemberLessonScheduleFragment fragment;
 
@@ -32,13 +30,10 @@ public class MemberLessonScheduleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_member_lesson_schedule);
 
         final Intent intent = getIntent();
-        scheduleId = intent.getLongExtra(EXTRA_SCHEDULE_ID, 0);
+        final long scheduleId = intent.getLongExtra(EXTRA_SCHEDULE_ID, 0);
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        final Activity activity = this;
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

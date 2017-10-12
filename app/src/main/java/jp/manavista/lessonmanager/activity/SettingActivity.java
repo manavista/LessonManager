@@ -48,7 +48,7 @@ public class SettingActivity extends AppCompatActivity {
         DELETE(R.string.title_preference_delete_toolbar),
         LESSON_AND_SCHEDULE(R.string.title_preference_lesson_and_schedule_toolbar);
 
-        int resourceId;
+        final int resourceId;
         FragmentType(int resourceId) {
             this.resourceId = resourceId;
         }

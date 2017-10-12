@@ -39,11 +39,6 @@ public final class SettingEventFragment extends PreferenceFragment
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         getPreferenceScreen()

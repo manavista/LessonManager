@@ -44,9 +44,6 @@ import jp.manavista.lessonmanager.view.dialog.ApplicationInformationDialog;
 public class LessonViewActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    /** Logger tag string */
-    private static final String TAG = LessonViewActivity.class.getSimpleName();
-
     /** Activity Request Code: */
     private static final int REQUEST_ADD_MEMBER = 1;
 

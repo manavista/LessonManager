@@ -22,7 +22,7 @@ public enum MemberDisplayNameType {
     /** NickName + " " + (FamilyName + " " + (AdditionalName + " ") + GivenName) */
     NICK_FAMILY_GIVEN(4);
 
-    private int code;
+    private final int code;
 
     MemberDisplayNameType(int code) {
         this.code = code;
@@ -32,7 +32,7 @@ public enum MemberDisplayNameType {
         return code;
     }
 
-    public static SparseArray<MemberDisplayNameType> map = new SparseArray<MemberDisplayNameType>() {{
+    public static final SparseArray<MemberDisplayNameType> map = new SparseArray<MemberDisplayNameType>() {{
         for (MemberDisplayNameType type : values() ) {
             put(type.code(), type);
         }

@@ -22,7 +22,7 @@ public enum MemberLessonScheduleStatus {
     DONE(9),
     UNDEFINED(-1);
 
-    private int id;
+    private final int id;
 
     MemberLessonScheduleStatus(int id) {
         this.id = id;

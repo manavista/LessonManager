@@ -13,9 +13,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListAdapter;
 
 import java.util.Locale;
@@ -23,7 +20,6 @@ import java.util.Locale;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.SettingActivity;
 import jp.manavista.lessonmanager.view.preference.NumberPickerPreference;
-import lombok.val;
 
 import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.DELETE;
 import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.EVENT;
@@ -65,17 +61,6 @@ public final class SettingFragment extends PreferenceFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -132,8 +117,8 @@ public final class SettingFragment extends PreferenceFragment
                 preference.setSummary(preference.getEntry() == null ? summary : preference.getEntry());
 
             } else if (item instanceof SwitchPreference) {
-                final val preferences = (SwitchPreference) item;
-                //preferences.setSummary( preferences.isChecked() ? "ON":"OFF");
+                // final val preferences = (SwitchPreference) item;
+                // preferences.setSummary( preferences.isChecked() ? "ON":"OFF");
 
             } else if( item instanceof NumberPickerPreference ) {
                 NumberPickerPreference preference = (NumberPickerPreference) item;
