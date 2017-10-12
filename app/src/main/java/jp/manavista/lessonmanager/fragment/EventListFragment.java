@@ -48,8 +48,6 @@ import lombok.Getter;
  */
 public final class EventListFragment extends Fragment {
 
-    private static final String TAG = EventListFragment.class.getSimpleName();
-
     /** Date Label Map */
     private SparseArray<String> dateLabelArray;
 

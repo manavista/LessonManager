@@ -72,11 +72,6 @@ public final class SettingDeleteFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_setting_delete, container, false);
     }
@@ -98,7 +93,7 @@ public final class SettingDeleteFragment extends Fragment {
         listView.setAdapter(adapter);
     }
 
-    private View.OnClickListener deleteButtonListener = new View.OnClickListener() {
+    final private View.OnClickListener deleteButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             final Set<String> deleteSet = new HashSet<>();

@@ -160,7 +160,7 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         lessonSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_lesson));
         sectionAdapter.addSection(lessonSection);
 
-        scheduleSection = MemberLessonScheduleSection.newInstance(contents, memberLessonScheduleOperation);
+        scheduleSection = MemberLessonScheduleSection.newInstance(memberLessonScheduleOperation);
         scheduleSection.setTitle(getString(R.string.title_member_lesson_schedule_list_section_schedule));
         sectionAdapter.addSection(scheduleSection);
 

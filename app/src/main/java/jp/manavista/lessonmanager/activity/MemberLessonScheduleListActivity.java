@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.MemberLessonScheduleListFragment;
+import lombok.val;
 
 import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.LESSON_AND_SCHEDULE;
 
@@ -39,11 +40,8 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
     public static final String EXTRA_MEMBER_NAME = "MEMBER_NAME";
 
     private long memberId;
-    private String memberName;
     private long lessonId;
 
-    /** fragment */
-    private MemberLessonScheduleListFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +51,10 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         memberId = intent.getLongExtra(EXTRA_MEMBER_ID, 0);
-        memberName = intent.getStringExtra(EXTRA_MEMBER_NAME);
         lessonId = intent.getLongExtra(EXTRA_LESSON_ID, 0);
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(memberName);
+        toolbar.setTitle(intent.getStringExtra(EXTRA_MEMBER_NAME));
         setSupportActionBar(toolbar);
 
         final Activity activity = this;
@@ -80,7 +77,7 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
             }
         });
 
-        fragment = MemberLessonScheduleListFragment.newInstance(memberId);
+        val fragment = MemberLessonScheduleListFragment.newInstance(memberId);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_member_lesson_schedule_list, fragment)

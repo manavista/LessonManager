@@ -4,7 +4,6 @@
 
 package jp.manavista.lessonmanager.view.section;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -43,16 +42,13 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
     private List<MemberLessonScheduleVo> list;
     private List<MemberLessonScheduleVo> filteredList;
 
-    /** Context */
-    private final Context context;
     /** Operation */
     private final MemberLessonScheduleOperation operation;
 
     /** Constructor(private) */
-    private MemberLessonScheduleSection(Context context, MemberLessonScheduleOperation operation) {
+    private MemberLessonScheduleSection(MemberLessonScheduleOperation operation) {
         super(new SectionParameters.Builder(R.layout.container_item_member_lesson_schedule)
                 .headerResourceId(R.layout.section_item_header).build());
-        this.context = context;
         this.operation = operation;
     }
 
@@ -60,12 +56,11 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
      *
      * New Instance
      *
-     * @param context Context
      * @param operation entity operation implementation
      * @return new {@code MemberLessonScheduleSection} instance
      */
-    public static MemberLessonScheduleSection newInstance(Context context, MemberLessonScheduleOperation operation) {
-        return new MemberLessonScheduleSection(context, operation);
+    public static MemberLessonScheduleSection newInstance(MemberLessonScheduleOperation operation) {
+        return new MemberLessonScheduleSection(operation);
     }
 
     @Override

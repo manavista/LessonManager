@@ -7,7 +7,6 @@ package jp.manavista.lessonmanager.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
@@ -44,33 +43,6 @@ public class MemberLessonServiceImpl implements MemberLessonService {
         return repository.getRelation()
                 .idEq(id)
                 .getAsSingle(0)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
-    }
-
-
-    @Override
-    public Observable<MemberLesson> getListByMemberId(long memberId) {
-        return repository.getRelation()
-                .selector()
-                .memberIdEq(memberId)
-                .executeAsObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
-    }
-
-    @Override
-    public Observable<MemberLessonVo> getVoListByMemberId(long memberId) {
-        return repository.getRelation()
-                .selector()
-                .memberIdEq(memberId)
-                .executeAsObservable()
-                .map(new Function<MemberLesson, MemberLessonVo>() {
-                    @Override
-                    public MemberLessonVo apply(@NonNull MemberLesson entity) throws Exception {
-                        return MemberLessonVo.copy(entity);
-                    }
-                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }

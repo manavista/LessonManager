@@ -51,7 +51,6 @@ import jp.manavista.lessonmanager.R;
  * Overview:<br>
  * </p>
  */
-
 public class WeekView extends View {
 
     private enum Direction {

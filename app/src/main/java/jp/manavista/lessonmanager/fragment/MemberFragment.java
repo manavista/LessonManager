@@ -62,7 +62,7 @@ import lombok.Getter;
 public final class MemberFragment extends Fragment implements Validator.ValidationListener {
 
     /** Logger tag string */
-    public static final String TAG = MemberFragment.class.getSimpleName();
+    private static final String TAG = MemberFragment.class.getSimpleName();
     /** bundle key: member id */
     public static final String KEY_MEMBER_ID = "MEMBER_ID";
     /** request key: Pick Gallery */

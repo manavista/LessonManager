@@ -189,7 +189,7 @@ public final class MemberListFragment extends Fragment {
         disposable.dispose();
     }
 
-    private MemberOperation memberOperation = new MemberOperation() {
+    private final MemberOperation memberOperation = new MemberOperation() {
 
         @Override
         public void lessonList(MemberVo dto, int position) {

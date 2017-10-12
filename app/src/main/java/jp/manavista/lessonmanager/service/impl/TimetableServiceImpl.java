@@ -28,8 +28,6 @@ import jp.manavista.lessonmanager.util.DateTimeUtil;
  */
 public class TimetableServiceImpl implements TimetableService {
 
-    private final static String TAG = TimetableServiceImpl.class.getSimpleName();
-
     /** Timetable Repository */
     private final TimeTableRepository repository;
 

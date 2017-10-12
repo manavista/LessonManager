@@ -11,7 +11,7 @@ import java.util.Calendar;
  * Overview:<br>
  * </p>
  */
-public class WeekViewUtil {
+class WeekViewUtil {
 
 
     /////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ public class WeekViewUtil {
      * @param dayTwo The second day.
      * @return Whether the times are on the same day.
      */
-    public static boolean isSameDay(Calendar dayOne, Calendar dayTwo) {
+    static boolean isSameDay(Calendar dayOne, Calendar dayTwo) {
         return dayOne.get(Calendar.YEAR) == dayTwo.get(Calendar.YEAR) &&
                 dayOne.get(Calendar.DAY_OF_YEAR) == dayTwo.get(Calendar.DAY_OF_YEAR);
     }

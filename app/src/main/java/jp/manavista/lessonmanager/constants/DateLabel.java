@@ -17,7 +17,7 @@ public enum DateLabel {
     YESTERDAY(-1),
     TOMORROW(1);
 
-    private int code;
+    private final int code;
 
     DateLabel(int code) {
         this.code = code;
