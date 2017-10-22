@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
 import java.util.ArrayList;
@@ -35,6 +36,9 @@ import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity;
+import jp.manavista.lessonmanager.constants.analytics.ContentType;
+import jp.manavista.lessonmanager.constants.analytics.Event;
+import jp.manavista.lessonmanager.constants.analytics.Param;
 import jp.manavista.lessonmanager.facade.MemberListFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.vo.MemberVo;
@@ -44,6 +48,8 @@ import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.MemberOperation;
 import jp.manavista.lessonmanager.view.section.MemberSection;
 import lombok.Getter;
+
+import static com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE;
 
 /**
  *
@@ -83,6 +89,8 @@ public final class MemberListFragment extends Fragment {
     @Inject
     MemberListFacade facade;
 
+    private FirebaseAnalytics analytics;
+
     /** Constructor */
     public MemberListFragment() {
         // Required empty public constructor
@@ -111,6 +119,7 @@ public final class MemberListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         disposable = Disposables.empty();
+        analytics = FirebaseAnalytics.getInstance(getContext());
     }
 
     @Override
@@ -248,7 +257,7 @@ public final class MemberListFragment extends Fragment {
         private void execDelete(final long id, final int position) {
             disposable = facade.delete(id).subscribe(new Consumer<Integer>() {
                 @Override
-                public void accept(Integer integer) throws Exception {
+                public void accept(Integer rows) throws Exception {
                     memberSection.getList().remove(position);
                     sectionAdapter.notifyItemRemoved(position);
 
@@ -262,6 +271,11 @@ public final class MemberListFragment extends Fragment {
 
                     final String message = getString(R.string.message_member_list_delete_member);
                     Toast.makeText(contents, message, Toast.LENGTH_SHORT).show();
+
+                    final Bundle bundle = new Bundle();
+                    bundle.putString(CONTENT_TYPE, ContentType.Member.label());
+                    bundle.putInt(Param.Rows.label(), rows);
+                    analytics.logEvent(Event.Delete.label(), bundle);
                 }
             }, new Consumer<Throwable>() {
                 @Override

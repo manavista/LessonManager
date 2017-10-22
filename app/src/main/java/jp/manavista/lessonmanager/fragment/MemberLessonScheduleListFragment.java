@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberLessonActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity;
+import jp.manavista.lessonmanager.constants.analytics.ContentType;
+import jp.manavista.lessonmanager.constants.analytics.Event;
 import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleListCriteria;
@@ -51,6 +54,7 @@ import jp.manavista.lessonmanager.view.section.MemberLessonScheduleSection;
 import jp.manavista.lessonmanager.view.section.MemberLessonSection;
 import lombok.val;
 
+import static com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE;
 import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_ID;
 import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_LESSON_ID;
 import static jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity.EXTRA_SCHEDULE_ID;
@@ -97,6 +101,8 @@ public final class MemberLessonScheduleListFragment extends Fragment {
     /** MemberLessonScheduleList disposable */
     private Disposable disposable;
 
+    private FirebaseAnalytics analytics;
+
     public MemberLessonScheduleListFragment() {
         // Required empty public constructor
     }
@@ -133,6 +139,7 @@ public final class MemberLessonScheduleListFragment extends Fragment {
         }
 
         this.disposable = Disposables.empty();
+        this.analytics = FirebaseAnalytics.getInstance(getContext());
     }
 
     @Override
@@ -278,6 +285,12 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 //                    sectionAdapter.notifyItemRemovedFromSection(lessonSection, position);
                     scheduleSection.setList(scheduleVoList);
                     sectionAdapter.notifyDataSetChanged();
+
+                    final Bundle bundle = new Bundle();
+                    bundle.putString(CONTENT_TYPE, ContentType.Lesson.label());
+                    analytics.logEvent(Event.Delete.label(), bundle);
+
+                    // TODO: 2017/10/19 When delete all, show empty state image.
                 }
             });
         }
@@ -327,6 +340,10 @@ public final class MemberLessonScheduleListFragment extends Fragment {
 
             scheduleSection.filterByLessonId(lessonId);
             sectionAdapter.notifyDataSetChanged();
+
+            final Bundle bundle = new Bundle();
+            bundle.putString(CONTENT_TYPE, ContentType.Schedule.label());
+            analytics.logEvent(Event.Filter.label(), bundle);
         }
 
         @Override

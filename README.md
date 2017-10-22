@@ -5,6 +5,15 @@ The app supports devices running Android 7.0+, and is optimized for phones only.
 ## Source
 The source code in this repository reflects the app as Google Play Application.
 
+## Getting Started
+This project uses FireBase analytics.
+If you are not using Firebase, create an account.
+Place `google-service.json` in the following location.
+
+```
+[project-home]/app/google-service.json
+```
+
 ## Features
 With the app, you can:
 - You can set the timetable of your lesson.

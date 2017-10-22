@@ -22,15 +22,23 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.Calendar;
 import java.util.Locale;
 
 import javax.inject.Inject;
 
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.constants.analytics.ContentType;
+import jp.manavista.lessonmanager.constants.analytics.Event;
+import jp.manavista.lessonmanager.constants.analytics.Param;
 import jp.manavista.lessonmanager.fragment.LessonViewFragment;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.view.dialog.ApplicationInformationDialog;
+
+import static com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE;
+import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_FORMAT_YYYYMMDD;
 
 /**
  *
@@ -60,11 +68,15 @@ public class LessonViewActivity extends AppCompatActivity
     @Inject
     SharedPreferences sharedPreferences;
 
+    private FirebaseAnalytics analytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson_view);
+
+        analytics = FirebaseAnalytics.getInstance(this);
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -123,6 +135,8 @@ public class LessonViewActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        final Bundle bundle = new Bundle();
+
         switch (item.getItemId()) {
 
             case R.id.item_change_date:
@@ -134,6 +148,11 @@ public class LessonViewActivity extends AppCompatActivity
                         final Calendar display = Calendar.getInstance(Locale.getDefault());
                         display.set(year, monthYear, dayOfMonth);
                         fragment.getLessonView().goToDate(display);
+
+                        final Bundle bundle = new Bundle();
+                        bundle.putString(CONTENT_TYPE, ContentType.Calendar.label());
+                        bundle.putString(Param.Value.label(), DATE_FORMAT_YYYYMMDD.format(display.getTime()));
+                        analytics.logEvent(Event.View.label(), bundle);
                     }
                 }, day.get(Calendar.YEAR), day.get(Calendar.MONTH), day.get(Calendar.DAY_OF_MONTH)).show();
                 break;
@@ -141,18 +160,34 @@ public class LessonViewActivity extends AppCompatActivity
             case R.id.item_view_1_day:
                 item.setChecked(!item.isChecked());
                 fragment.changeVisibleDays(1);
+
+                bundle.putString(CONTENT_TYPE, ContentType.VisibleDays.label());
+                bundle.putInt(Param.Value.label(), 1);
+                analytics.logEvent(Event.View.label(), bundle);
                 break;
             case R.id.item_view_3_days:
                 item.setChecked(!item.isChecked());
                 fragment.changeVisibleDays(3);
+
+                bundle.putString(CONTENT_TYPE, ContentType.VisibleDays.label());
+                bundle.putInt(Param.Value.label(), 3);
+                analytics.logEvent(Event.View.label(), bundle);
                 break;
             case R.id.item_view_5_days:
                 item.setChecked(!item.isChecked());
                 fragment.changeVisibleDays(5);
+
+                bundle.putString(CONTENT_TYPE, ContentType.VisibleDays.label());
+                bundle.putInt(Param.Value.label(), 5);
+                analytics.logEvent(Event.View.label(), bundle);
                 break;
             case R.id.item_view_7_days:
                 item.setChecked(!item.isChecked());
                 fragment.changeVisibleDays(7);
+
+                bundle.putString(CONTENT_TYPE, ContentType.VisibleDays.label());
+                bundle.putInt(Param.Value.label(), 7);
+                analytics.logEvent(Event.View.label(), bundle);
                 break;
         }
 
@@ -205,6 +240,10 @@ public class LessonViewActivity extends AppCompatActivity
             final String name = data.getStringExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY);
             final String message = getString(R.string.message_lesson_view_add_member, name);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            final Bundle bundle = new Bundle();
+            bundle.putString(CONTENT_TYPE, ContentType.Member.label());
+            analytics.logEvent(Event.Add.label(), bundle);
         }
     }
 }
