@@ -63,7 +63,11 @@ import static jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity.E
  *
  * MemberLessonSchedule List Fragment
  *
- *
+ * <p>
+ * Overview:<br>
+ * Display a lesson and schedule List of members. <br>
+ * Provide interface for editing and creating new.
+ * </p>
  */
 public final class MemberLessonScheduleListFragment extends Fragment {
 
@@ -286,11 +290,17 @@ public final class MemberLessonScheduleListFragment extends Fragment {
                     scheduleSection.setList(scheduleVoList);
                     sectionAdapter.notifyDataSetChanged();
 
+                    if( lessonSection.getList().isEmpty() ) {
+                        view.setVisibility(View.GONE);
+                        emptyState.setVisibility(View.VISIBLE);
+                    } else {
+                        view.setVisibility(View.VISIBLE);
+                        emptyState.setVisibility(View.GONE);
+                    }
+
                     final Bundle bundle = new Bundle();
                     bundle.putString(CONTENT_TYPE, ContentType.Lesson.label());
                     analytics.logEvent(Event.Delete.label(), bundle);
-
-                    // TODO: 2017/10/19 When delete all, show empty state image.
                 }
             });
         }
