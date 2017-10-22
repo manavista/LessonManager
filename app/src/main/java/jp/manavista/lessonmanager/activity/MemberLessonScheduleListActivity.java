@@ -15,10 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.constants.analytics.ContentType;
+import jp.manavista.lessonmanager.constants.analytics.Event;
 import jp.manavista.lessonmanager.fragment.MemberLessonScheduleListFragment;
 import lombok.val;
 
+import static com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE;
 import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_ID;
 import static jp.manavista.lessonmanager.activity.MemberLessonActivity.Extra.MEMBER_LESSON_ID;
 import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.LESSON_AND_SCHEDULE;
@@ -34,6 +39,8 @@ import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.L
  */
 public class MemberLessonScheduleListActivity extends AppCompatActivity {
 
+    // TODO: 2017/10/22 create Extra class as MemberLessonActivity
+
     /** activity put extra argument: lesson id */
     public static final String EXTRA_LESSON_ID = "LESSON_ID";
     /** activity put extra argument: member id */
@@ -44,12 +51,15 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
     private long memberId;
     private long lessonId;
 
+    private FirebaseAnalytics analytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_lesson_schedule_list);
+
+        analytics = FirebaseAnalytics.getInstance(this);
 
         final Intent intent = getIntent();
         memberId = intent.getLongExtra(EXTRA_MEMBER_ID, 0);
@@ -114,11 +124,19 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
             final String message = getString(R.string.message_member_lesson_list_add_lesson, name);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
+            final Bundle bundle = new Bundle();
+            bundle.putString(CONTENT_TYPE, ContentType.Lesson.label());
+            analytics.logEvent(Event.Add.label(), bundle);
+
         } else if( requestCode == MemberLessonActivity.RequestCode.EDIT && resultCode == RESULT_OK ) {
 
             final String name = data.getStringExtra(MemberLessonActivity.Extra.LESSON_NAME);
             final String message = getString(R.string.message_member_lesson_list_edit_lesson, name);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            final Bundle bundle = new Bundle();
+            bundle.putString(CONTENT_TYPE, ContentType.Lesson.label());
+            analytics.logEvent(Event.Edit.label(), bundle);
         }
 
     }

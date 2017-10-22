@@ -17,11 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.constants.analytics.ContentType;
+import jp.manavista.lessonmanager.constants.analytics.Event;
+import jp.manavista.lessonmanager.constants.analytics.Param;
 import jp.manavista.lessonmanager.fragment.MemberListFragment;
 import jp.manavista.lessonmanager.view.section.FilterableSection;
 import lombok.val;
+
+import static com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE;
 
 /**
  *
@@ -41,10 +48,14 @@ public class MemberListActivity extends AppCompatActivity implements SearchView.
     /** MemberList fragment */
     private MemberListFragment memberListFragment;
 
+    private FirebaseAnalytics analytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_list);
+
+        analytics = FirebaseAnalytics.getInstance(this);
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -93,11 +104,19 @@ public class MemberListActivity extends AppCompatActivity implements SearchView.
             final String message = getString(R.string.message_member_list_add_member, name);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
+            final Bundle bundle = new Bundle();
+            bundle.putString(CONTENT_TYPE, ContentType.Member.label());
+            analytics.logEvent(Event.Add.label(), bundle);
+
         } else if( requestCode == MemberActivity.RequestCode.EDIT && resultCode == RESULT_OK ) {
 
             final String name = data.getStringExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY);
             final String message = getString(R.string.message_member_list_edit_member, name);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            final Bundle bundle = new Bundle();
+            bundle.putString(CONTENT_TYPE, ContentType.Member.label());
+            analytics.logEvent(Event.Edit.label(), bundle);
         }
     }
 
@@ -116,10 +135,15 @@ public class MemberListActivity extends AppCompatActivity implements SearchView.
     @Override
     public boolean onQueryTextChange(String query) {
 
+        final Bundle bundle = new Bundle();
+        bundle.putString(CONTENT_TYPE, ContentType.Member.label());
+
         val adapter = memberListFragment.getSectionAdapter();
         for( Section section : adapter.getSectionsMap().values() ) {
             if( section instanceof FilterableSection ) {
                 ((FilterableSection) section).filter(query);
+                bundle.putString(Param.Value.label(), query);
+                analytics.logEvent(FirebaseAnalytics.Event.SEARCH, bundle);
             }
         }
         adapter.notifyDataSetChanged();

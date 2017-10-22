@@ -247,11 +247,11 @@ public final class LessonViewFragment extends Fragment implements
 
     /**
      *
-     * Change Visible Days
+     * Edit Visible Days
      *
      * <p>
      * Overview:<br>
-     * Change the number of days displayed in the schedule
+     * Edit the number of days displayed in the schedule
      * to the number of days set in the argument.<br>
      * After change days, keep displaying the current date.
      * </p>

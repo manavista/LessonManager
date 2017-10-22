@@ -190,14 +190,14 @@ public class WeekView extends View {
                     break;
                 }
                 case LEFT: {
-                    // Change direction if there was enough change.
+                    // Edit direction if there was enough change.
                     if (Math.abs(distanceX) > Math.abs(distanceY) && (distanceX < -mScaledTouchSlop)) {
                         mCurrentScrollDirection = Direction.RIGHT;
                     }
                     break;
                 }
                 case RIGHT: {
-                    // Change direction if there was enough change.
+                    // Edit direction if there was enough change.
                     if (Math.abs(distanceX) > Math.abs(distanceY) && (distanceX > mScaledTouchSlop)) {
                         mCurrentScrollDirection = Direction.LEFT;
                     }

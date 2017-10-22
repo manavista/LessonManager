@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.constants.analytics.ContentType;
+import jp.manavista.lessonmanager.constants.analytics.Event;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Timetable;
@@ -41,6 +44,8 @@ import jp.manavista.lessonmanager.view.dialog.NumberPickerDialogFragment;
 import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.TimetableOperation;
 import lombok.val;
+
+import static com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE;
 
 /**
  *
@@ -70,6 +75,7 @@ public final class TimetableFragment extends Fragment {
     @Inject
     TimetableService timetableService;
 
+    private FirebaseAnalytics analytics;
 
     /** constructor */
     public TimetableFragment() {
@@ -96,6 +102,7 @@ public final class TimetableFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         timetableDisposable = Disposables.empty();
+        analytics = FirebaseAnalytics.getInstance(getContext());
     }
 
     @Override
@@ -169,7 +176,6 @@ public final class TimetableFragment extends Fragment {
      * Add new Timetable row.<br>
      * Default lesson no, start time and end time is automatic formed.
      * </p>
-     *
      */
     public void addTimetable() {
 
@@ -198,6 +204,10 @@ public final class TimetableFragment extends Fragment {
                     view.setVisibility(View.VISIBLE);
                     emptyState.setVisibility(View.GONE);
                 }
+
+                final Bundle bundle = new Bundle();
+                bundle.putString(CONTENT_TYPE, ContentType.Timetable.label());
+                analytics.logEvent(Event.Add.label(), bundle);
             }
         });
     }
@@ -230,6 +240,10 @@ public final class TimetableFragment extends Fragment {
                         view.setVisibility(View.VISIBLE);
                         emptyState.setVisibility(View.GONE);
                     }
+
+                    final Bundle bundle = new Bundle();
+                    bundle.putString(CONTENT_TYPE, ContentType.Timetable.label());
+                    analytics.logEvent(Event.Delete.label(), bundle);
                 }
             });
         }
@@ -262,6 +276,10 @@ public final class TimetableFragment extends Fragment {
                         view.setVisibility(View.VISIBLE);
                         emptyState.setVisibility(View.GONE);
                     }
+
+                    final Bundle bundle = new Bundle();
+                    bundle.putString(CONTENT_TYPE, ContentType.Timetable.label());
+                    analytics.logEvent(Event.Edit.label(), bundle);
                 }
             });
         }

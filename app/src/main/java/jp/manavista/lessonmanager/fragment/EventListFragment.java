@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.EventActivity;
 import jp.manavista.lessonmanager.constants.DateLabel;
+import jp.manavista.lessonmanager.constants.analytics.ContentType;
+import jp.manavista.lessonmanager.constants.analytics.Event;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.vo.EventVo;
 import jp.manavista.lessonmanager.service.EventService;
@@ -40,6 +43,8 @@ import jp.manavista.lessonmanager.view.helper.SwipeDeleteTouchHelperCallback;
 import jp.manavista.lessonmanager.view.operation.EventOperation;
 import jp.manavista.lessonmanager.view.section.EventSection;
 import lombok.Getter;
+
+import static com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE;
 
 /**
  *
@@ -73,6 +78,8 @@ public final class EventListFragment extends Fragment {
     @Inject
     SharedPreferences preferences;
 
+    private FirebaseAnalytics analytics;
+
     public EventListFragment() {
         // Required empty public constructor
     }
@@ -94,6 +101,7 @@ public final class EventListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.disposable = Disposables.empty();
+        this.analytics = FirebaseAnalytics.getInstance(getContext());
 
         dateLabelArray = new SparseArray<>();
         dateLabelArray.put(DateLabel.TODAY.code(), getString(R.string.label_event_list_date_today));
@@ -208,6 +216,10 @@ public final class EventListFragment extends Fragment {
                         view.setVisibility(View.VISIBLE);
                         emptyState.setVisibility(View.GONE);
                     }
+
+                    final Bundle bundle = new Bundle();
+                    bundle.putString(CONTENT_TYPE, ContentType.Event.label());
+                    analytics.logEvent(Event.Delete.label(), bundle);
                 }
             });
         }

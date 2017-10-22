@@ -15,12 +15,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.constants.analytics.ContentType;
+import jp.manavista.lessonmanager.constants.analytics.Param;
 import jp.manavista.lessonmanager.fragment.EventListFragment;
 import jp.manavista.lessonmanager.view.section.FilterableSection;
 import lombok.val;
 
+import static com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE;
 import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.EVENT;
 
 public class EventListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -28,10 +33,14 @@ public class EventListActivity extends AppCompatActivity implements SearchView.O
     /** fragment */
     private EventListFragment fragment;
 
+    private FirebaseAnalytics analytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list);
+
+        analytics = FirebaseAnalytics.getInstance(this);
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,6 +51,7 @@ public class EventListActivity extends AppCompatActivity implements SearchView.O
             @Override
             public void onClick(View view) {
                 final Intent intent = new Intent(activity, EventActivity.class);
+                // TODO: 2017/10/22 replace startActivityForResult
                 startActivity(intent);
             }
         });
@@ -87,10 +97,15 @@ public class EventListActivity extends AppCompatActivity implements SearchView.O
     @Override
     public boolean onQueryTextChange(String query) {
 
+        final Bundle bundle = new Bundle();
+        bundle.putString(CONTENT_TYPE, ContentType.Event.label());
+
         val adapter = fragment.getAdapter();
         for( Section section : adapter.getSectionsMap().values() ) {
             if( section instanceof FilterableSection) {
                 ((FilterableSection) section).filter(query);
+                bundle.putString(Param.Value.label(), query);
+                analytics.logEvent(FirebaseAnalytics.Event.SEARCH, bundle);
             }
         }
         adapter.notifyDataSetChanged();
