@@ -17,8 +17,16 @@ import jp.manavista.lessonmanager.fragment.EventFragment;
 
 public class EventActivity extends AppCompatActivity {
 
-    /** activity put extra argument: event id */
-    public static final String EXTRA_EVENT_ID = "EVENT_ID";
+    /** activity put extra argument class */
+    public class Extra {
+        public static final String EVENT_ID = "EVENT_ID";
+        public static final String EVENT_NAME = "EVENT_NAME";
+    }
+
+    public class RequestCode {
+        public static final int CREATE = 500;
+        public static final int EDIT = 501;
+    }
 
     private EventFragment fragment;
 
@@ -38,7 +46,7 @@ public class EventActivity extends AppCompatActivity {
         });
 
         final Intent intent = getIntent();
-        final long id = intent.getLongExtra(EXTRA_EVENT_ID, 0);
+        final long id = intent.getLongExtra(Extra.EVENT_ID, 0);
 
         fragment = EventFragment.newInstance(id);
         getSupportFragmentManager()

@@ -29,8 +29,6 @@ import jp.manavista.lessonmanager.service.TimetableService;
  */
 public class SettingDeleteFacadeImpl implements SettingDeleteFacade {
 
-    private static final String TAG = SettingDeleteFacadeImpl.class.getSimpleName();
-
     private final TimetableService timetableService;
     private final MemberService memberService;
     private final MemberLessonService memberLessonService;

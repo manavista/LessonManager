@@ -173,7 +173,7 @@ public final class LessonViewFragment extends Fragment implements
 
         if( event.isAllDay() ) {
             intent = new Intent(contents, EventActivity.class);
-            intent.putExtra(EventActivity.EXTRA_EVENT_ID, event.getId());
+            intent.putExtra(EventActivity.Extra.EVENT_ID, event.getId());
         } else {
             intent = new Intent(contents, MemberLessonScheduleActivity.class);
             intent.putExtra(MemberLessonScheduleActivity.EXTRA_SCHEDULE_ID, event.getId());

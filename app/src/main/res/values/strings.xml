@@ -285,6 +285,8 @@
 
     <string name="message.event_list.empty_stat.no_event">No Event</string>
     <string name="message.event_list.empty_stat.add_event">The goal is what we decide !</string>
+    <string name="message.event_list.add.event">Added %1$s to Event</string>
+    <string name="message.event_list.edit.event">Edited %1$s to Event</string>
 
     <string name="label.event_list.name">Event Name</string>
     <string name="label.event_list.memo">Event Memo</string>
