@@ -16,9 +16,6 @@ package jp.manavista.lessonmanager.constants.analytics;
  */
 public enum Param {
 
-    Id("id"),
-    Name("name"),
-    Key("key"),
     Value("value"),
     Rows("rows")
     ;

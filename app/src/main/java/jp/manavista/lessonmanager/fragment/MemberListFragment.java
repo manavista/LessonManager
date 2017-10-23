@@ -50,6 +50,8 @@ import jp.manavista.lessonmanager.view.section.MemberSection;
 import lombok.Getter;
 
 import static com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE;
+import static jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity.Extra.MEMBER_ID;
+import static jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity.Extra.MEMBER_NAME;
 
 /**
  *
@@ -204,8 +206,8 @@ public final class MemberListFragment extends Fragment {
         public void lessonList(MemberVo dto, int position) {
             itemTouchHelper.closeOpened();
             final Intent intent = new Intent(contents, MemberLessonScheduleListActivity.class);
-            intent.putExtra(MemberLessonScheduleListActivity.EXTRA_MEMBER_ID, dto.getId());
-            intent.putExtra(MemberLessonScheduleListActivity.EXTRA_MEMBER_NAME, dto.getDisplayName());
+            intent.putExtra(MEMBER_ID, dto.getId());
+            intent.putExtra(MEMBER_NAME, dto.getDisplayName());
             contents.startActivity(intent);
         }
 

@@ -196,8 +196,8 @@ public final class EventListFragment extends Fragment {
         public void edit(long id, int position) {
             itemTouchHelper.closeOpened();
             final Intent intent = new Intent(contents, EventActivity.class);
-            intent.putExtra(EventActivity.EXTRA_EVENT_ID, id);
-            contents.startActivity(intent);
+            intent.putExtra(EventActivity.Extra.EVENT_ID, id);
+            contents.startActivityForResult(intent, EventActivity.RequestCode.EDIT);
         }
 
         @Override

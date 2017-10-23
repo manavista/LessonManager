@@ -39,17 +39,12 @@ import static jp.manavista.lessonmanager.activity.SettingActivity.FragmentType.L
  */
 public class MemberLessonScheduleListActivity extends AppCompatActivity {
 
-    // TODO: 2017/10/22 create Extra class as MemberLessonActivity
-
-    /** activity put extra argument: lesson id */
-    public static final String EXTRA_LESSON_ID = "LESSON_ID";
-    /** activity put extra argument: member id */
-    public static final String EXTRA_MEMBER_ID = "MEMBER_ID";
-    /** activity put extra argument: member name */
-    public static final String EXTRA_MEMBER_NAME = "MEMBER_NAME";
+    public class Extra {
+        public static final String MEMBER_ID = "MEMBER_ID";
+        public static final String MEMBER_NAME = "MEMBER_NAME";
+    }
 
     private long memberId;
-    private long lessonId;
 
     private FirebaseAnalytics analytics;
 
@@ -62,11 +57,10 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
         analytics = FirebaseAnalytics.getInstance(this);
 
         final Intent intent = getIntent();
-        memberId = intent.getLongExtra(EXTRA_MEMBER_ID, 0);
-        lessonId = intent.getLongExtra(EXTRA_LESSON_ID, 0);
+        memberId = intent.getLongExtra(Extra.MEMBER_ID, 0);
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(intent.getStringExtra(EXTRA_MEMBER_NAME));
+        toolbar.setTitle(intent.getStringExtra(Extra.MEMBER_NAME));
         setSupportActionBar(toolbar);
 
         final Activity activity = this;
@@ -77,7 +71,7 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final Intent intent = new Intent(activity, MemberLessonActivity.class);
                 intent.putExtra(MEMBER_ID, memberId);
-                intent.putExtra(MEMBER_LESSON_ID, lessonId);
+                intent.putExtra(MEMBER_LESSON_ID, 0);
                 startActivityForResult(intent, MemberLessonActivity.RequestCode.CREATE);
             }
         });

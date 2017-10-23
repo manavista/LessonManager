@@ -6,6 +6,7 @@ package jp.manavista.lessonmanager.fragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -35,6 +36,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
+import jp.manavista.lessonmanager.activity.EventActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.EventDto;
 import jp.manavista.lessonmanager.model.entity.Event;
@@ -160,6 +162,10 @@ public final class EventFragment extends Fragment implements Validator.Validatio
         disposable = service.save(dto.toEntity()).subscribe(new Consumer<Event>() {
             @Override
             public void accept(Event event) throws Exception {
+
+                final Intent intent = new Intent();
+                intent.putExtra(EventActivity.Extra.EVENT_NAME, event.name);
+                contents.setResult(Activity.RESULT_OK, intent);
                 contents.finish();
             }
         });
