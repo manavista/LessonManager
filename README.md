@@ -31,7 +31,7 @@ With the app, you can:
 
 ## Development environment
 - Windows7 x64
-- Android Studio v2.3.3
+- Android Studio v3.0.0
 
 ## Copyright
     Copyright 2017 manavista. All rights reserved.
