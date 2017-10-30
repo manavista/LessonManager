@@ -8,9 +8,9 @@
         android:name=".ManavistaApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_content"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_lesson_manager_app"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_lesson_manager_app"
         android:supportsRtl="true"
         android:theme="@style/LessonManagerTheme">
         <activity android:name=".activity.LessonViewActivity">

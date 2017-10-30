@@ -14,7 +14,7 @@
     <!-- application -->
     <string name="app_name">Lesson Manager</string>
     <string name="app_version">Version 1.0.0</string>
-    <string name="app_version_short">v 1.0.0</string>
+    <string name="app_version_short">v1.0.0</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="app_author">Atsushi TAKAHAGI</string>
