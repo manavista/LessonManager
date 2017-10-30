@@ -15,6 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Locale;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
@@ -116,7 +117,7 @@ public final class MemberLessonSection extends StatelessSection {
 
         itemHolder.location.setText(StringUtils.defaultIfEmpty(vo.getLocation(), "-"));
         itemHolder.presenter.setText(StringUtils.defaultIfEmpty(vo.getPresenter(), "-"));
-        itemHolder.period.setText(vo.getPeriodFrom() + " - " + vo.getPeriodTo());
+        itemHolder.period.setText(String.format(Locale.getDefault(), "%s - %s", vo.getPeriodFrom(), vo.getPeriodTo()));
 
         prepareObjectLister(itemHolder, position);
     }
@@ -152,66 +153,51 @@ public final class MemberLessonSection extends StatelessSection {
 
     private void prepareObjectLister(final MemberLessonHolder holder, final int position) {
 
-        holder.filterImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.filterImageButton.setOnClickListener(view -> {
 
-                final MemberLessonVo vo = list.get(holder.getAdapterPosition()-1);
+            final MemberLessonVo vo = list.get(holder.getAdapterPosition()-1);
 
-                if( view.isSelected() ) {
-                    operation.clearFilter();
-                } else {
-                    operation.filter(vo.getId());
-                }
-
-                view.setSelected(!view.isSelected());
+            if( view.isSelected() ) {
+                operation.clearFilter();
+            } else {
+                operation.filter(vo.getId());
             }
+
+            view.setSelected(!view.isSelected());
         });
 
-        holder.viewDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.viewDelete.setOnClickListener(view -> {
 
-                Log.d(TAG, "position " + position);
-                Log.d(TAG, "getAdapterPosition() " + holder.getAdapterPosition() );
-                final MemberLessonVo vo = list.get(holder.getAdapterPosition()-1);
-                operation.delete(vo.getId(), holder.getAdapterPosition()-1);
-            }
+            Log.d(TAG, "position " + position);
+            Log.d(TAG, "getAdapterPosition() " + holder.getAdapterPosition() );
+            final MemberLessonVo vo = list.get(holder.getAdapterPosition()-1);
+            operation.delete(vo.getId(), holder.getAdapterPosition()-1);
         });
 
-        holder.viewEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final MemberLessonVo vo = list.get(position);
-                operation.edit(vo, position);
-            }
+        holder.viewEdit.setOnClickListener(view -> {
+            final MemberLessonVo vo = list.get(position);
+            operation.edit(vo, position);
         });
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.view.setOnClickListener(view -> {
 
-                if( view instanceof ExpandableLayout) {
+            if( view instanceof ExpandableLayout) {
 
-                    /* force close for other expanded row if exists */
-                    operation.close();
-                    ((ExpandableLayout) view).toggle();
-                }
+                /* force close for other expanded row if exists */
+                operation.close();
+                ((ExpandableLayout) view).toggle();
             }
         });
 
         final ExpandableLayout expandableLayout = (ExpandableLayout) holder.view;
-        expandableLayout.setOnExpandListener(new ExpandableLayout.OnExpandListener() {
-            @Override
-            public void onExpand(boolean expanded) {
+        expandableLayout.setOnExpandListener(expanded -> {
 
-                final int resource = expanded
-                        ? R.drawable.ic_expand_less_black
-                        : R.drawable.ic_expand_more_black;
+            final int resource = expanded
+                    ? R.drawable.ic_expand_less_black
+                    : R.drawable.ic_expand_more_black;
 
-                final ImageView icon = expandableLayout.findViewById(R.id.expand_icon_image);
-                icon.setImageResource(resource);
-            }
+            final ImageView icon = expandableLayout.findViewById(R.id.expand_icon_image);
+            icon.setImageResource(resource);
         });
     }
 }

@@ -120,12 +120,9 @@ public class ExpandableLayout extends LinearLayout {
 
         final View target = getChildAt(1);
         mExpandAnimator = ValueAnimator.ofInt(startHeight, endHeight);
-        mExpandAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                target.getLayoutParams().height = (int) animation.getAnimatedValue();
-                target.requestLayout();
-            }
+        mExpandAnimator.addUpdateListener(animation -> {
+            target.getLayoutParams().height = (int) animation.getAnimatedValue();
+            target.requestLayout();
         });
 
         mExpandAnimator.addListener(new AnimatorListenerAdapter() {

@@ -31,8 +31,6 @@ import javax.inject.Inject;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberLessonActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleActivity;
@@ -246,12 +244,9 @@ public final class MemberLessonScheduleListFragment extends Fragment {
             final MemberLessonScheduleVo vo = scheduleSection.getList().get(position);
             Log.d(TAG, "delete target id: " + vo.getId());
 
-            memberLessonScheduleService.deleteById(vo.getId()).subscribe(new Consumer<Integer>() {
-                @Override
-                public void accept(Integer integer) throws Exception {
-                    scheduleSection.getList().remove(position);
-                    sectionAdapter.notifyItemRemovedFromSection(scheduleSection, position);
-                }
+            memberLessonScheduleService.deleteById(vo.getId()).subscribe(integer -> {
+                scheduleSection.getList().remove(position);
+                sectionAdapter.notifyItemRemovedFromSection(scheduleSection, position);
             });
         }
     };
@@ -272,36 +267,23 @@ public final class MemberLessonScheduleListFragment extends Fragment {
             scheduleSection.getList().clear();
             final List<MemberLessonScheduleVo> scheduleVoList = new ArrayList<>();
 
-            disposable = facade.deleteLessonByLessonId(memberId, id, displayStatusSet).subscribe(new Consumer<MemberLessonScheduleVo>() {
-                @Override
-                public void accept(MemberLessonScheduleVo vo) throws Exception {
-                    scheduleVoList.add(vo);
-                }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(Throwable throwable) throws Exception {
-                    throwable.printStackTrace();
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    lessonSection.getList().remove(position);
+            disposable = facade.deleteLessonByLessonId(memberId, id, displayStatusSet).subscribe(scheduleVoList::add, Throwable::printStackTrace, () -> {
+                lessonSection.getList().remove(position);
 //                    sectionAdapter.notifyItemRemovedFromSection(lessonSection, position);
-                    scheduleSection.setList(scheduleVoList);
-                    sectionAdapter.notifyDataSetChanged();
+                scheduleSection.setList(scheduleVoList);
+                sectionAdapter.notifyDataSetChanged();
 
-                    if( lessonSection.getList().isEmpty() ) {
-                        view.setVisibility(View.GONE);
-                        emptyState.setVisibility(View.VISIBLE);
-                    } else {
-                        view.setVisibility(View.VISIBLE);
-                        emptyState.setVisibility(View.GONE);
-                    }
-
-                    final Bundle bundle = new Bundle();
-                    bundle.putString(CONTENT_TYPE, ContentType.Lesson.label());
-                    analytics.logEvent(Event.Delete.label(), bundle);
+                if( lessonSection.getList().isEmpty() ) {
+                    view.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
                 }
+
+                final Bundle bundle = new Bundle();
+                bundle.putString(CONTENT_TYPE, ContentType.Lesson.label());
+                analytics.logEvent(Event.Delete.label(), bundle);
             });
         }
 

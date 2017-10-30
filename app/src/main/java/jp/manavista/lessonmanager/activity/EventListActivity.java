@@ -13,7 +13,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -49,20 +48,12 @@ public class EventListActivity extends AppCompatActivity implements SearchView.O
         final Activity activity = this;
 
         final FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent intent = new Intent(activity, EventActivity.class);
-                startActivityForResult(intent, EventActivity.RequestCode.CREATE);
-            }
+        fab.setOnClickListener(view -> {
+            final Intent intent = new Intent(activity, EventActivity.class);
+            startActivityForResult(intent, EventActivity.RequestCode.CREATE);
         });
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         fragment = EventListFragment.newInstance();
         getSupportFragmentManager()

@@ -20,9 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -39,7 +36,6 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
@@ -127,18 +123,18 @@ public final class MemberFragment extends Fragment implements Validator.Validati
         View rootView = inflater.inflate(R.layout.fragment_member, container, false);
 
         dto = MemberDto.builder()
-                .givenName((EditText) rootView.findViewById(R.id.givenNameEditText))
-                .additionalName((EditText) rootView.findViewById(R.id.additionalNameEditText))
-                .familyName((EditText) rootView.findViewById(R.id.familyNameEditText))
-                .nickName((EditText) rootView.findViewById(R.id.nickNameEditText))
-                .phoneType((Spinner) rootView.findViewById(R.id.phoneNumberTypeSpinner))
-                .phoneNumber((EditText) rootView.findViewById(R.id.phoneNumberEditText))
-                .emailType((Spinner) rootView.findViewById(R.id.emailTypeSpinner))
-                .email((EditText) rootView.findViewById(R.id.emailEditText))
-                .birthday((EditText) rootView.findViewById(R.id.birthdayEditText))
-                .birthdayIconImage((ImageButton) rootView.findViewById(R.id.birthdayCalenderIcon))
-                .photo((ImageView) rootView.findViewById(R.id.member_photo_image))
-                .photoIconImage((ImageButton) rootView.findViewById(R.id.photo_operation_image_button))
+                .givenName(rootView.findViewById(R.id.givenNameEditText))
+                .additionalName(rootView.findViewById(R.id.additionalNameEditText))
+                .familyName(rootView.findViewById(R.id.familyNameEditText))
+                .nickName(rootView.findViewById(R.id.nickNameEditText))
+                .phoneType(rootView.findViewById(R.id.phoneNumberTypeSpinner))
+                .phoneNumber(rootView.findViewById(R.id.phoneNumberEditText))
+                .emailType(rootView.findViewById(R.id.emailTypeSpinner))
+                .email(rootView.findViewById(R.id.emailEditText))
+                .birthday(rootView.findViewById(R.id.birthdayEditText))
+                .birthdayIconImage(rootView.findViewById(R.id.birthdayCalenderIcon))
+                .photo(rootView.findViewById(R.id.member_photo_image))
+                .photoIconImage(rootView.findViewById(R.id.photo_operation_image_button))
 
                 .phoneTypeValues(getResources().getIntArray(R.array.values_member_phone_type))
                 .emailTypeValues(getResources().getIntArray(R.array.values_member_email_type))
@@ -222,22 +218,14 @@ public final class MemberFragment extends Fragment implements Validator.Validati
             }
         }
 
-        disposable = memberService.save(dto.toEntity()).subscribe(new Consumer<Member>() {
-            @Override
-            public void accept(Member member) throws Exception {
-                Log.d(TAG, member.toString());
+        disposable = memberService.save(dto.toEntity()).subscribe(member -> {
+            Log.d(TAG, member.toString());
 
-                final Intent intent = new Intent();
-                intent.putExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY, member.givenName);
-                contents.setResult(Activity.RESULT_OK, intent);
-                contents.finish();
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Log.e(TAG, "can not save member", throwable);
-            }
-        });
+            final Intent intent = new Intent();
+            intent.putExtra(MemberActivity.EXTRA_MEMBER_NAME_DISPLAY, member.givenName);
+            contents.setResult(Activity.RESULT_OK, intent);
+            contents.finish();
+        }, throwable -> Log.e(TAG, "can not save member", throwable));
     }
 
     @Override
@@ -269,23 +257,17 @@ public final class MemberFragment extends Fragment implements Validator.Validati
      */
     private void storeEntityToDto(final long memberId) {
 
-        disposable = memberService.getById(memberId).subscribe(new Consumer<Member>() {
-            @Override
-            public void accept(Member entity) throws Exception {
-                dto.store(entity);
+        disposable = memberService.getById(memberId).subscribe(entity -> {
+            dto.store(entity);
 
-                if( entity.photo != null && entity.photo.length > 0 ) {
-                    String uri = "@drawable/ic_photo_camera_black";
-                    final int resource = getResources().getIdentifier(uri, null, contents.getPackageName());
-                    dto.getPhotoIconImage().setImageResource(resource);
-                    dto.getPhoto().setAlpha(1.0f);
-                }
+            if( entity.photo != null && entity.photo.length > 0 ) {
+                String uri = "@drawable/ic_photo_camera_black";
+                final int resource = getResources().getIdentifier(uri, null, contents.getPackageName());
+                dto.getPhotoIconImage().setImageResource(resource);
+                dto.getPhoto().setAlpha(1.0f);
             }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throw new RuntimeException("can not select member by " + memberId, throwable);
-            }
+        }, throwable -> {
+            throw new RuntimeException("can not select member by " + memberId, throwable);
         });
     }
 
@@ -300,32 +282,25 @@ public final class MemberFragment extends Fragment implements Validator.Validati
      */
     private void prepareButtonListener() {
 
-        dto.getBirthdayIconImage().setOnClickListener(new View.OnClickListener() {
+        dto.getBirthdayIconImage().setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
+            int year = 1980;
+            int month = Calendar.JANUARY;
+            int day = 1;
 
-                int year = 1980;
-                int month = Calendar.JANUARY;
-                int day = 1;
-
-                if( dto.getBirthdayCalendar() != null ) {
-                    year = dto.getBirthdayCalendar().get(Calendar.YEAR);
-                    month = dto.getBirthdayCalendar().get(Calendar.MONTH);
-                    day = dto.getBirthdayCalendar().get(Calendar.DAY_OF_MONTH);
-                }
-                new DatePickerDialog(contents, dto.birthdaySetListener, year, month, day).show();
+            if( dto.getBirthdayCalendar() != null ) {
+                year = dto.getBirthdayCalendar().get(Calendar.YEAR);
+                month = dto.getBirthdayCalendar().get(Calendar.MONTH);
+                day = dto.getBirthdayCalendar().get(Calendar.DAY_OF_MONTH);
             }
+            new DatePickerDialog(contents, dto.birthdaySetListener, year, month, day).show();
         });
 
-        dto.getPhotoIconImage().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                startActivityForResult(intent, REQUEST_PICK_GALLERY);
-            }
+        dto.getPhotoIconImage().setOnClickListener(view -> {
+            final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, REQUEST_PICK_GALLERY);
         });
     }
 

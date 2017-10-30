@@ -9,11 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Set;
 
-import io.reactivex.ObservableSource;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.facade.LessonViewFacade;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
@@ -65,47 +61,29 @@ public class LessonViewFacadeImpl implements LessonViewFacade {
         final StringBuilder builder = new StringBuilder();
 
         return timetableService.getDtoListAll().toList()
-                .flatMapObservable(new Function<List<TimetableDto>, ObservableSource<MemberLessonScheduleVo>>() {
-            @Override
-            public ObservableSource<MemberLessonScheduleVo> apply(@NonNull List<TimetableDto> dtoList) throws Exception {
+                .flatMapObservable(dtoList -> {
+                    timetableList.addAll(dtoList);
+                    lessonView.setLessonTableList(dtoList);
+                    return memberLessonScheduleService.getVoListByStatus(statusSet);
+                }).map(vo -> {
+                    final WeekViewEvent lesson = new WeekViewEvent(
+                            vo.getId(),
+                            buildEventName(vo, timetableList, builder),
+                            vo.getLocation(),
+                            vo.getLessonStartCalendar(),
+                            vo.getLessonEndCalendar());
+                    lesson.setColor(vo.getLessonViewColor());
 
-                timetableList.addAll(dtoList);
-                lessonView.setLessonTableList(dtoList);
-                return memberLessonScheduleService.getVoListByStatus(statusSet);
-            }
-        }).map(new Function<MemberLessonScheduleVo, WeekViewEvent>() {
-            @Override
-            public WeekViewEvent apply(@NonNull MemberLessonScheduleVo vo) throws Exception {
-                final WeekViewEvent lesson = new WeekViewEvent(
-                        vo.getId(),
-                        buildEventName(vo, timetableList, builder),
-                        vo.getLocation(),
-                        vo.getLessonStartCalendar(),
-                        vo.getLessonEndCalendar());
-                lesson.setColor(vo.getLessonViewColor());
-
-                return lesson;
-            }
+                    return lesson;
+                }).toList()
+        .flatMapObservable(list -> {
+            scheduleList.addAll(list);
+            return eventService.getEventListAll();
         }).toList()
-        .flatMapObservable(new Function<List<WeekViewEvent>, ObservableSource<WeekViewEvent>>() {
-            @Override
-            public ObservableSource<WeekViewEvent> apply(@NonNull List<WeekViewEvent> list) throws Exception {
-                scheduleList.addAll(list);
-                return eventService.getEventListAll();
-            }
-        }).toList()
-        .subscribe(new Consumer<List<WeekViewEvent>>() {
-            @Override
-            public void accept(List<WeekViewEvent> list) throws Exception {
-                scheduleList.addAll(list);
-                lessonView.notifyDatasetChanged();
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-            }
-        });
+        .subscribe(list -> {
+            scheduleList.addAll(list);
+            lessonView.notifyDatasetChanged();
+        }, Throwable::printStackTrace);
     }
 
     private String buildEventName(MemberLessonScheduleVo vo, List<TimetableDto> timetableList, StringBuilder builder) {

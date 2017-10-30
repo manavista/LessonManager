@@ -19,7 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -142,18 +141,15 @@ public class LessonViewActivity extends AppCompatActivity
             case R.id.item_change_date:
 
                 final Calendar day = fragment.getLessonView().getFirstVisibleDay();
-                new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int monthYear, int dayOfMonth) {
-                        final Calendar display = Calendar.getInstance(Locale.getDefault());
-                        display.set(year, monthYear, dayOfMonth);
-                        fragment.getLessonView().goToDate(display);
+                new DatePickerDialog(activity, (datePicker, year, monthYear, dayOfMonth) -> {
+                    final Calendar display = Calendar.getInstance(Locale.getDefault());
+                    display.set(year, monthYear, dayOfMonth);
+                    fragment.getLessonView().goToDate(display);
 
-                        final Bundle bundle = new Bundle();
-                        bundle.putString(CONTENT_TYPE, ContentType.Calendar.label());
-                        bundle.putString(Param.Value.label(), DATE_FORMAT_YYYYMMDD.format(display.getTime()));
-                        analytics.logEvent(Event.View.label(), bundle);
-                    }
+                    final Bundle bundle1 = new Bundle();
+                    bundle1.putString(CONTENT_TYPE, ContentType.Calendar.label());
+                    bundle1.putString(Param.Value.label(), DATE_FORMAT_YYYYMMDD.format(display.getTime()));
+                    analytics.logEvent(Event.View.label(), bundle1);
                 }, day.get(Calendar.YEAR), day.get(Calendar.MONTH), day.get(Calendar.DAY_OF_MONTH)).show();
                 break;
 

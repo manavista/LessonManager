@@ -159,11 +159,8 @@ public final class MemberLessonDto implements Serializable {
 
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    public final DialogInterface.OnClickListener dayOfWeekSetListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int which) {
+    public final DialogInterface.OnClickListener dayOfWeekSetListener = (dialogInterface, which) -> {
 
-        }
     };
 
     @Setter(AccessLevel.NONE)

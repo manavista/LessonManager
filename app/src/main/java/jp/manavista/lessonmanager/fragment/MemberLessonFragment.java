@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -25,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -42,23 +40,17 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberLessonActivity;
 import jp.manavista.lessonmanager.facade.MemberLessonFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.MemberLessonDto;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
-import jp.manavista.lessonmanager.model.entity.Member;
-import jp.manavista.lessonmanager.model.entity.MemberLesson;
-import jp.manavista.lessonmanager.model.entity.Timetable;
 import jp.manavista.lessonmanager.service.MemberLessonService;
 import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.service.TimetableService;
 import jp.manavista.lessonmanager.util.ArrayUtil;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
-import jp.manavista.lessonmanager.view.image.CircleImageView;
 
 import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD;
 
@@ -153,22 +145,22 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         dto = MemberLessonDto.builder()
                 .id(id)
                 .memberId(memberId)
-                .memberName((TextView) rootView.findViewById(R.id.member_name))
-                .photo((CircleImageView) rootView.findViewById(R.id.member_icon_image))
-                .name((EditText) rootView.findViewById(R.id.name))
-                .abbr((EditText) rootView.findViewById(R.id.abbr))
-                .type((EditText) rootView.findViewById(R.id.type))
-                .location((EditText) rootView.findViewById(R.id.location))
-                .presenter((EditText) rootView.findViewById(R.id.presenter))
-                .startTimeText((EditText) rootView.findViewById(R.id.start_time))
-                .endTimeText((EditText) rootView.findViewById(R.id.end_time))
-                .timetableIcon((ImageButton) rootView.findViewById(R.id.timetable_image_button))
-                .dayOfWeek((EditText) rootView.findViewById(R.id.day_of_week))
-                .startPeriod((EditText) rootView.findViewById(R.id.start_period))
-                .endPeriod((EditText) rootView.findViewById(R.id.end_period))
-                .previewText((TextView) rootView.findViewById(R.id.preview_text))
-                .textColorImageButton((ImageButton) rootView.findViewById(R.id.text_color_image_button))
-                .backgroundColorImageButton((ImageButton) rootView.findViewById(R.id.background_color_image_button))
+                .memberName(rootView.findViewById(R.id.member_name))
+                .photo(rootView.findViewById(R.id.member_icon_image))
+                .name(rootView.findViewById(R.id.name))
+                .abbr(rootView.findViewById(R.id.abbr))
+                .type(rootView.findViewById(R.id.type))
+                .location(rootView.findViewById(R.id.location))
+                .presenter(rootView.findViewById(R.id.presenter))
+                .startTimeText(rootView.findViewById(R.id.start_time))
+                .endTimeText(rootView.findViewById(R.id.end_time))
+                .timetableIcon(rootView.findViewById(R.id.timetable_image_button))
+                .dayOfWeek(rootView.findViewById(R.id.day_of_week))
+                .startPeriod(rootView.findViewById(R.id.start_period))
+                .endPeriod(rootView.findViewById(R.id.end_period))
+                .previewText(rootView.findViewById(R.id.preview_text))
+                .textColorImageButton(rootView.findViewById(R.id.text_color_image_button))
+                .backgroundColorImageButton(rootView.findViewById(R.id.background_color_image_button))
 
                 .dateFormat("%04d/%02d/%02d")
 
@@ -219,23 +211,20 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
             return;
         }
 
-        facade.isEmptySchedule(id).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean isEmpty) throws Exception {
-                Log.d(TAG, "schedule is empty: " + isEmpty);
+        facade.isEmptySchedule(id).subscribe(isEmpty -> {
+            Log.d(TAG, "schedule is empty: " + isEmpty);
 
-                if( !isEmpty ) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(contents);
-                    builder.setTitle(R.string.title_member_lesson_dialog_schedule_exists)
-                            .setIcon(R.drawable.ic_info_black)
-                            .setMessage(R.string.message_member_lesson_schedule_exists)
-                            .setPositiveButton(R.string.label_member_lesson_dialog_schedule_exist_save_lesson_only, onSaveLessonOnlyListener)
-                            .setNegativeButton(R.string.label_member_lesson_dialog_schedule_exist_force_add, onForceAddListener)
-                            .setNeutralButton(android.R.string.cancel, null)
-                            .show();
-                } else {
-                    executeSave(true);
-                }
+            if( !isEmpty ) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(contents);
+                builder.setTitle(R.string.title_member_lesson_dialog_schedule_exists)
+                        .setIcon(R.drawable.ic_info_black)
+                        .setMessage(R.string.message_member_lesson_schedule_exists)
+                        .setPositiveButton(R.string.label_member_lesson_dialog_schedule_exist_save_lesson_only, onSaveLessonOnlyListener)
+                        .setNegativeButton(R.string.label_member_lesson_dialog_schedule_exist_force_add, onForceAddListener)
+                        .setNeutralButton(android.R.string.cancel, null)
+                        .show();
+            } else {
+                executeSave(true);
             }
         });
 
@@ -272,29 +261,16 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         validator.validate();
     }
 
-    private final DialogInterface.OnClickListener onSaveLessonOnlyListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            executeSave(false);
-        }
-    };
+    private final DialogInterface.OnClickListener onSaveLessonOnlyListener = (dialogInterface, i) -> executeSave(false);
 
-    private final DialogInterface.OnClickListener onForceAddListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            executeSave(true);
-        }
-    };
+    private final DialogInterface.OnClickListener onForceAddListener = (dialogInterface, i) -> executeSave(true);
 
     private void executeSave(boolean addSchedule) {
-        facade.save(dto.getMemberId(), dto.toEntity(), addSchedule).subscribe(new Consumer<Long>() {
-            @Override
-            public void accept(Long rows) throws Exception {
-                final Intent intent = new Intent();
-                intent.putExtra(MemberLessonActivity.Extra.LESSON_NAME, dto.getName().getText().toString());
-                contents.setResult(Activity.RESULT_OK, intent);
-                contents.finish();
-            }
+        facade.save(dto.getMemberId(), dto.toEntity(), addSchedule).subscribe(rows -> {
+            final Intent intent = new Intent();
+            intent.putExtra(MemberLessonActivity.Extra.LESSON_NAME, dto.getName().getText().toString());
+            contents.setResult(Activity.RESULT_OK, intent);
+            contents.finish();
         });
     }
 
@@ -309,177 +285,129 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      */
     private void prepareButtonListener() {
 
-        dto.getStartTimeText().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText startTime = (EditText) view;
-                final String[] times = String.valueOf(startTime.getText()).split(DateTimeUtil.COLON);
-                new TimePickerDialog(contents, dto.startTimeSetListener,
-                        Integer.valueOf(times[0]), Integer.valueOf(times[1]), false).show();
-            }
+        dto.getStartTimeText().setOnClickListener(view -> {
+            final EditText startTime = (EditText) view;
+            final String[] times = String.valueOf(startTime.getText()).split(DateTimeUtil.COLON);
+            new TimePickerDialog(contents, dto.startTimeSetListener,
+                    Integer.valueOf(times[0]), Integer.valueOf(times[1]), false).show();
         });
 
-        dto.getEndTimeText().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText endTime = (EditText) view;
-                final String[] times = String.valueOf(endTime.getText()).split(DateTimeUtil.COLON);
-                new TimePickerDialog(contents, dto.endTimeSetListener,
-                        Integer.valueOf(times[0]), Integer.valueOf(times[1]), false).show();
-            }
+        dto.getEndTimeText().setOnClickListener(view -> {
+            final EditText endTime = (EditText) view;
+            final String[] times = String.valueOf(endTime.getText()).split(DateTimeUtil.COLON);
+            new TimePickerDialog(contents, dto.endTimeSetListener,
+                    Integer.valueOf(times[0]), Integer.valueOf(times[1]), false).show();
         });
 
-        dto.getTimetableIcon().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        dto.getTimetableIcon().setOnClickListener(view -> {
 
-                final List<String> labelList = new ArrayList<>();
-                final List<TimetableDto> timetableList = new ArrayList<>();
-                final StringBuilder sb = new StringBuilder();
+            final List<String> labelList = new ArrayList<>();
+            final List<TimetableDto> timetableList = new ArrayList<>();
+            final StringBuilder sb = new StringBuilder();
 
-                disposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
-                    @Override
-                    public void accept(Timetable timetable) throws Exception {
-                        TimetableDto dto = TimetableDto.copy(timetable);
-                        timetableList.add(dto);
-                        sb.setLength(0);
-                        sb.append(dto.getStartTimeFormatted())
-                                .append(" - ")
-                                .append(dto.getEndTimeFormatted());
-                        labelList.add(sb.toString());
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throw new RuntimeException("can not get timetable", throwable);
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        dto.setTimetableDtoList(timetableList);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(contents);
-                        builder.setTitle(R.string.title_member_lesson_dialog_timetable)
-                                .setIcon(R.drawable.ic_event_black)
-                                .setItems(labelList.toArray(new CharSequence[0]), dto.timetableSetLister)
-                                .show();
-                    }
-                });
-            }
-        });
-
-        dto.getDayOfWeek().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                /* full name: Sunday, Monday, Tuesday... */
-                final String[] daysFull = getResources().getStringArray(R.array.entries_day_of_week_full_name);
-                /* short name: Sun, Mon, Tue, Wed... */
-                final String[] days = getResources().getStringArray(R.array.entries_day_of_week);
-                /* day decimal string value: 1, 2, 3... */
-                final String[] dayValues = getResources().getStringArray(R.array.entry_values_day_of_week);
-
-                final String dayOfWeek = dto.getDayOfWeekValue();
-                final boolean[] index = ArrayUtil.convertIndexFromArray(dayOfWeek, dayValues, ",");
-
+            disposable = timetableService.getListAll().subscribe(timetable -> {
+                TimetableDto dto = TimetableDto.copy(timetable);
+                timetableList.add(dto);
+                sb.setLength(0);
+                sb.append(dto.getStartTimeFormatted())
+                        .append(" - ")
+                        .append(dto.getEndTimeFormatted());
+                labelList.add(sb.toString());
+            }, throwable -> {
+                throw new RuntimeException("can not get timetable", throwable);
+            }, () -> {
+                dto.setTimetableDtoList(timetableList);
                 AlertDialog.Builder builder = new AlertDialog.Builder(contents);
-                builder.setTitle(R.string.label_member_lesson_day_of_week_dialog_title)
+                builder.setTitle(R.string.title_member_lesson_dialog_timetable)
                         .setIcon(R.drawable.ic_event_black)
-                        .setMultiChoiceItems(daysFull, index, new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                                index[which] = isChecked;
-                                ((AlertDialog) dialogInterface)
-                                        .getButton(AlertDialog.BUTTON_POSITIVE)
-                                        .setEnabled(ArrayUtils.contains(index, true));
-                            }
-                        })
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                final String label = ArrayUtil.concatIndexOfArray(days, index, ", ");
-                                final String dayOfWeekValue = ArrayUtil.concatIndexOfArray(dayValues, index, ",");
-                                dto.getDayOfWeek().setText(label);
-                                dto.setDayOfWeekValue(dayOfWeekValue);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        })
+                        .setItems(labelList.toArray(new CharSequence[0]), dto.timetableSetLister)
                         .show();
-            }
+            });
         });
 
-        dto.getStartPeriod().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText startPeriod = (EditText) view;
-                final String[] dates = String.valueOf(startPeriod.getText()).split(DateTimeUtil.SLASH);
-                final int month = Integer.valueOf(dates[1]) - 1;
-                new DatePickerDialog(contents, dto.startPeriodSetListener,
-                        Integer.valueOf(dates[0]), month, Integer.valueOf(dates[2])).show();
-            }
+        dto.getDayOfWeek().setOnClickListener(view -> {
+
+            /* full name: Sunday, Monday, Tuesday... */
+            final String[] daysFull = getResources().getStringArray(R.array.entries_day_of_week_full_name);
+            /* short name: Sun, Mon, Tue, Wed... */
+            final String[] days = getResources().getStringArray(R.array.entries_day_of_week);
+            /* day decimal string value: 1, 2, 3... */
+            final String[] dayValues = getResources().getStringArray(R.array.entry_values_day_of_week);
+
+            final String dayOfWeek = dto.getDayOfWeekValue();
+            final boolean[] index = ArrayUtil.convertIndexFromArray(dayOfWeek, dayValues, ",");
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(contents);
+            builder.setTitle(R.string.label_member_lesson_day_of_week_dialog_title)
+                    .setIcon(R.drawable.ic_event_black)
+                    .setMultiChoiceItems(daysFull, index, (dialogInterface, which, isChecked) -> {
+                        index[which] = isChecked;
+                        ((AlertDialog) dialogInterface)
+                                .getButton(AlertDialog.BUTTON_POSITIVE)
+                                .setEnabled(ArrayUtils.contains(index, true));
+                    })
+                    .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                        final String label = ArrayUtil.concatIndexOfArray(days, index, ", ");
+                        final String dayOfWeekValue = ArrayUtil.concatIndexOfArray(dayValues, index, ",");
+                        dto.getDayOfWeek().setText(label);
+                        dto.setDayOfWeekValue(dayOfWeekValue);
+                    })
+                    .setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> {
+
+                    })
+                    .show();
         });
 
-        dto.getEndPeriod().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText endPeriod = (EditText) view;
-                final String[] dates = String.valueOf(endPeriod.getText()).split(DateTimeUtil.SLASH);
-                final int month = Integer.valueOf(dates[1]) - 1;
-                new DatePickerDialog(contents, dto.endPeriodSetListener,
-                        Integer.valueOf(dates[0]), month, Integer.valueOf(dates[2])).show();
-            }
+        dto.getStartPeriod().setOnClickListener(view -> {
+            final EditText startPeriod = (EditText) view;
+            final String[] dates = String.valueOf(startPeriod.getText()).split(DateTimeUtil.SLASH);
+            final int month = Integer.valueOf(dates[1]) - 1;
+            new DatePickerDialog(contents, dto.startPeriodSetListener,
+                    Integer.valueOf(dates[0]), month, Integer.valueOf(dates[2])).show();
         });
 
-        dto.getTextColorImageButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-
-                final ImageButton textColorButton = (ImageButton) view;
-                final int textColor = textColorButton.getTag(R.string.tag_member_lesson_preview_color) == null
-                        ? ContextCompat.getColor(contents, R.color.black)
-                        : (int) textColorButton.getTag(R.string.tag_member_lesson_preview_color);
-
-                new SpectrumDialog.Builder(contents)
-                        .setColors(R.array.color_picker_target)
-                        .setSelectedColor(textColor)
-                        .setOutlineWidth(1)
-                        .setOnColorSelectedListener(new SpectrumDialog.OnColorSelectedListener() {
-                            @Override
-                            public void onColorSelected(boolean positiveResult, @ColorInt int color) {
-                                dto.setTextColor(color);
-                                dto.getPreviewText().setTextColor(color);
-                                textColorButton.setTag(R.string.tag_member_lesson_preview_color, color);
-                            }
-                        }).build().show(getFragmentManager(), "text_color_select_dialog");
-            }
+        dto.getEndPeriod().setOnClickListener(view -> {
+            final EditText endPeriod = (EditText) view;
+            final String[] dates = String.valueOf(endPeriod.getText()).split(DateTimeUtil.SLASH);
+            final int month = Integer.valueOf(dates[1]) - 1;
+            new DatePickerDialog(contents, dto.endPeriodSetListener,
+                    Integer.valueOf(dates[0]), month, Integer.valueOf(dates[2])).show();
         });
 
-        dto.getBackgroundColorImageButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        dto.getTextColorImageButton().setOnClickListener(view -> {
 
-                final ImageButton backgroundColorButton = (ImageButton) view;
-                final int backgroundColor = backgroundColorButton.getTag(R.string.tag_member_lesson_preview_color) == null
-                        ? ContextCompat.getColor(contents, R.color.amber_500)
-                        : (int) backgroundColorButton.getTag(R.string.tag_member_lesson_preview_color);
+            final ImageButton textColorButton = (ImageButton) view;
+            final int textColor = textColorButton.getTag(R.string.tag_member_lesson_preview_color) == null
+                    ? ContextCompat.getColor(contents, R.color.black)
+                    : (int) textColorButton.getTag(R.string.tag_member_lesson_preview_color);
 
-                new SpectrumDialog.Builder(contents)
-                        .setColors(R.array.color_picker_target)
-                        .setSelectedColor(backgroundColor)
-                        .setOutlineWidth(1)
-                        .setOnColorSelectedListener(new SpectrumDialog.OnColorSelectedListener() {
-                            @Override
-                            public void onColorSelected(boolean positiveResult, @ColorInt int color) {
-                                dto.setBackgroundColor(color);
-                                dto.getPreviewText().setBackgroundColor(color);
-                                backgroundColorButton.setTag(R.string.tag_member_lesson_preview_color, color);
-                            }
-                        }).build().show(getFragmentManager(), "background_color_select_dialog");
-            }
+            new SpectrumDialog.Builder(contents)
+                    .setColors(R.array.color_picker_target)
+                    .setSelectedColor(textColor)
+                    .setOutlineWidth(1)
+                    .setOnColorSelectedListener((positiveResult, color) -> {
+                        dto.setTextColor(color);
+                        dto.getPreviewText().setTextColor(color);
+                        textColorButton.setTag(R.string.tag_member_lesson_preview_color, color);
+                    }).build().show(getFragmentManager(), "text_color_select_dialog");
+        });
+
+        dto.getBackgroundColorImageButton().setOnClickListener(view -> {
+
+            final ImageButton backgroundColorButton = (ImageButton) view;
+            final int backgroundColor = backgroundColorButton.getTag(R.string.tag_member_lesson_preview_color) == null
+                    ? ContextCompat.getColor(contents, R.color.amber_500)
+                    : (int) backgroundColorButton.getTag(R.string.tag_member_lesson_preview_color);
+
+            new SpectrumDialog.Builder(contents)
+                    .setColors(R.array.color_picker_target)
+                    .setSelectedColor(backgroundColor)
+                    .setOutlineWidth(1)
+                    .setOnColorSelectedListener((positiveResult, color) -> {
+                        dto.setBackgroundColor(color);
+                        dto.getPreviewText().setBackgroundColor(color);
+                        backgroundColorButton.setTag(R.string.tag_member_lesson_preview_color, color);
+                    }).build().show(getFragmentManager(), "background_color_select_dialog");
         });
     }
 
@@ -498,21 +426,13 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         final String defaultValue = getString(R.string.value_preference_member_name_display);
         final int displayNameCode = Integer.valueOf(preferences.getString(key, defaultValue));
 
-        disposable = memberService.getById(memberId).subscribe(new Consumer<Member>() {
-            @Override
-            public void accept(Member entity) throws Exception {
-                dto.getMemberName().setText(memberService.getDisplayName(entity, displayNameCode, builder));
-                if( entity.photo != null && entity.photo.length > 0 ) {
-                    final Bitmap bitmap = BitmapFactory.decodeByteArray(entity.photo, 0, entity.photo.length);
-                    dto.getPhoto().setImageBitmap(bitmap);
-                }
+        disposable = memberService.getById(memberId).subscribe(entity -> {
+            dto.getMemberName().setText(memberService.getDisplayName(entity, displayNameCode, builder));
+            if( entity.photo != null && entity.photo.length > 0 ) {
+                final Bitmap bitmap = BitmapFactory.decodeByteArray(entity.photo, 0, entity.photo.length);
+                dto.getPhoto().setImageBitmap(bitmap);
             }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Log.e(TAG, "can not get member entity by id: " + memberId, throwable);
-            }
-        });
+        }, throwable -> Log.e(TAG, "can not get member entity by id: " + memberId, throwable));
     }
 
     /**
@@ -572,18 +492,10 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
      */
     private void storeEntityToDto(final long lessonId) {
 
-        disposable = memberLessonService.getById(lessonId).subscribe(new Consumer<MemberLesson>() {
-            @Override
-            public void accept(MemberLesson entity) throws Exception {
-                dto.store(entity);
-                dto.getDayOfWeek().setText(buildDayOfWeek(dto.getDayOfWeekValue()));
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Log.e(TAG, "can not read MemberLesson by id: " + lessonId, throwable);
-            }
-        });
+        disposable = memberLessonService.getById(lessonId).subscribe(entity -> {
+            dto.store(entity);
+            dto.getDayOfWeek().setText(buildDayOfWeek(dto.getDayOfWeekValue()));
+        }, throwable -> Log.e(TAG, "can not read MemberLesson by id: " + lessonId, throwable));
     }
 
     private boolean validatePeriod() {

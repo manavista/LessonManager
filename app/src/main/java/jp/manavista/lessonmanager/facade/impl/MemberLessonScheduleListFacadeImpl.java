@@ -4,7 +4,6 @@
 
 package jp.manavista.lessonmanager.facade.impl;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
@@ -13,12 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.facade.MemberLessonScheduleListFacade;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleListCriteria;
 import jp.manavista.lessonmanager.model.vo.MemberLessonScheduleVo;
@@ -65,37 +59,21 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
         val emptyState = criteria.getEmptyState();
 
         return lessonService.getSingleVoListByMemberId(memberId, criteria.getContainPastLesson())
-                .flatMapObservable(new Function<List<MemberLessonVo>, ObservableSource<MemberLessonScheduleVo>> () {
-                    @Override
-                    public ObservableSource<MemberLessonScheduleVo> apply(@io.reactivex.annotations.NonNull List<MemberLessonVo> list) throws Exception {
-                        lessonVoList.addAll(list);
-                        return scheduleService.getVoListByMemberId(memberId, criteria.getScheduleStatusIntegerSet());
-                    }
-                }).subscribe(new Consumer<MemberLessonScheduleVo>() {
-                    @Override
-                    public void accept(MemberLessonScheduleVo vo) throws Exception {
-                        scheduleVoList.add(vo);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
+                .flatMapObservable(list -> {
+                    lessonVoList.addAll(list);
+                    return scheduleService.getVoListByMemberId(memberId, criteria.getScheduleStatusIntegerSet());
+                }).subscribe(scheduleVoList::add, Throwable::printStackTrace, () -> {
 
-                        criteria.getLessonSection().setList(lessonVoList);
-                        criteria.getScheduleSection().setList(scheduleVoList);
-                        criteria.getSectionAdapter().notifyDataSetChanged();
-                        if( lessonVoList.isEmpty() && scheduleVoList.isEmpty() ) {
-                            Log.d(TAG, "List is empty");
-                            view.setVisibility(View.GONE);
-                            emptyState.setVisibility(View.VISIBLE);
-                        } else {
-                            view.setVisibility(View.VISIBLE);
-                            emptyState.setVisibility(View.GONE);
-                        }
+                    criteria.getLessonSection().setList(lessonVoList);
+                    criteria.getScheduleSection().setList(scheduleVoList);
+                    criteria.getSectionAdapter().notifyDataSetChanged();
+                    if( lessonVoList.isEmpty() && scheduleVoList.isEmpty() ) {
+                        Log.d(TAG, "List is empty");
+                        view.setVisibility(View.GONE);
+                        emptyState.setVisibility(View.VISIBLE);
+                    } else {
+                        view.setVisibility(View.VISIBLE);
+                        emptyState.setVisibility(View.GONE);
                     }
                 });
     }
@@ -112,16 +90,6 @@ public class MemberLessonScheduleListFacadeImpl implements MemberLessonScheduleL
                 .build();
 
         return Observable.concat(targetList)
-                .reduce(0, new BiFunction<Integer, Integer, Integer>() {
-                    @Override
-                    public Integer apply(@NonNull Integer sum, @NonNull Integer rows) throws Exception {
-                        return sum + rows;
-                    }
-                }).flatMapObservable(new Function<Integer, ObservableSource<MemberLessonScheduleVo>>() {
-                    @Override
-                    public ObservableSource<MemberLessonScheduleVo> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                        return scheduleService.getVoListByMemberId(memberId, criteria.getScheduleStatusIntegerSet());
-                    }
-                });
+                .reduce(0, (sum, rows) -> sum + rows).flatMapObservable(integer -> scheduleService.getVoListByMemberId(memberId, criteria.getScheduleStatusIntegerSet()));
     }
 }

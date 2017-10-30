@@ -127,29 +127,20 @@ public final class MemberSection extends StatelessSection implements FilterableS
      */
     private void prepareObjectLister(final MemberHolder itemHolder, final int position) {
 
-        itemHolder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "click position: " + itemHolder.getAdapterPosition());
-                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
-                operation.lessonList(vo, itemHolder.getAdapterPosition());
-            }
+        itemHolder.view.setOnClickListener(view -> {
+            Log.d(TAG, "click position: " + itemHolder.getAdapterPosition());
+            MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
+            operation.lessonList(vo, itemHolder.getAdapterPosition());
         });
 
-        itemHolder.viewEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
-                operation.edit(vo.getId(), itemHolder.getAdapterPosition());
-            }
+        itemHolder.viewEdit.setOnClickListener(view -> {
+            MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
+            operation.edit(vo.getId(), itemHolder.getAdapterPosition());
         });
 
-        itemHolder.viewDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
-                operation.delete(vo.getId(), itemHolder.getAdapterPosition());
-            }
+        itemHolder.viewDelete.setOnClickListener(view -> {
+            MemberVo vo = filteredList.get(itemHolder.getAdapterPosition());
+            operation.delete(vo.getId(), itemHolder.getAdapterPosition());
         });
 
     }

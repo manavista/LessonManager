@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.MemberLessonScheduleFragment;
@@ -34,12 +33,7 @@ public class MemberLessonScheduleActivity extends AppCompatActivity {
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         fragment = MemberLessonScheduleFragment.newInstance(scheduleId);
         getSupportFragmentManager()

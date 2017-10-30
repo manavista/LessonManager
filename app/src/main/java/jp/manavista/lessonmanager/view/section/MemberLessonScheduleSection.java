@@ -154,31 +154,22 @@ public final class MemberLessonScheduleSection extends StatelessSection implemen
      */
     private void prepareObjectLister(final MemberLessonScheduleHolder holder, final int position) {
 
-        holder.viewEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final MemberLessonScheduleVo vo = filteredList.get(position);
-                operation.edit(vo.getId(), position);
-            }
+        holder.viewEdit.setOnClickListener(view -> {
+            final MemberLessonScheduleVo vo = filteredList.get(position);
+            operation.edit(vo.getId(), position);
         });
         
-        holder.viewDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.viewDelete.setOnClickListener(view -> {
 
-                Log.d(TAG, "position: " + position);
-                Log.d(TAG, "getAdapterPosition(): " + holder.getAdapterPosition());
+            Log.d(TAG, "position: " + position);
+            Log.d(TAG, "getAdapterPosition(): " + holder.getAdapterPosition());
 
-                operation.delete(holder.getAdapterPosition());
-            }
+            operation.delete(holder.getAdapterPosition());
         });
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final MemberLessonScheduleVo vo = filteredList.get(position);
-                operation.edit(vo.getId(), position);
-            }
+        holder.view.setOnClickListener(view -> {
+            final MemberLessonScheduleVo vo = filteredList.get(position);
+            operation.edit(vo.getId(), position);
         });
     }
 }

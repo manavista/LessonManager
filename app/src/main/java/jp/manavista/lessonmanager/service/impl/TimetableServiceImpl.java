@@ -5,12 +5,8 @@
 package jp.manavista.lessonmanager.service.impl;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import jp.manavista.lessonmanager.model.dto.TimetableDto;
 import jp.manavista.lessonmanager.model.entity.Timetable;
@@ -48,12 +44,7 @@ public class TimetableServiceImpl implements TimetableService {
     public Observable<TimetableDto> getDtoListAll() {
         return repository.getSelector()
                 .executeAsObservable()
-                .map(new Function<Timetable, TimetableDto>() {
-                    @Override
-                    public TimetableDto apply(@NonNull Timetable timetable) throws Exception {
-                        return TimetableDto.copy(timetable);
-                    }
-                })
+                .map(TimetableDto::copy)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }
@@ -68,39 +59,21 @@ public class TimetableServiceImpl implements TimetableService {
 
         return repository.getSelector().orderByLessonNoDesc().executeAsObservable().take(1)
                 .switchIfEmpty(Observable.just(timetable))
-                .flatMap(new Function<Timetable, ObservableSource<Timetable>>() {
-                    @Override
-                    public ObservableSource<Timetable> apply(@NonNull Timetable entity) throws Exception {
+                .flatMap(entity -> {
 
-                        if( entity.id > 0 ) {
-                            /* A New Row */
-                            entity.id = 0;
-                            entity.lessonNo += 1;
-                            int spanMinutes = DateTimeUtil.calculateMinuteSpan(entity.startTime, entity.endTime);
-                            entity.startTime = DateTimeUtil.addMinutes(entity.endTime, 10);
-                            entity.endTime = DateTimeUtil.addMinutes(entity.endTime, spanMinutes + 10);
-                        }
-                        return Observable.just(entity);
+                    if( entity.id > 0 ) {
+                        /* A New Row */
+                        entity.id = 0;
+                        entity.lessonNo += 1;
+                        int spanMinutes = DateTimeUtil.calculateMinuteSpan(entity.startTime, entity.endTime);
+                        entity.startTime = DateTimeUtil.addMinutes(entity.endTime, 10);
+                        entity.endTime = DateTimeUtil.addMinutes(entity.endTime, spanMinutes + 10);
                     }
+                    return Observable.just(entity);
                 })
-                .flatMapSingle(new Function<Timetable, SingleSource<Timetable>>() {
-                    @Override
-                    public SingleSource<Timetable> apply(@NonNull Timetable timetable) throws Exception {
-                        return repository.getRelation().upsertAsSingle(timetable);
-                    }
-                })
-                .flatMap(new Function<Timetable, ObservableSource<Timetable>>() {
-                    @Override
-                    public ObservableSource<Timetable> apply(@NonNull Timetable timetable) throws Exception {
-                        return getListAll();
-                    }
-                })
-                .map(new Function<Timetable, TimetableDto>() {
-                    @Override
-                    public TimetableDto apply(@NonNull Timetable timetable) throws Exception {
-                        return TimetableDto.copy(timetable);
-                    }
-                })
+                .flatMapSingle(timetable13 -> repository.getRelation().upsertAsSingle(timetable13))
+                .flatMap(timetable12 -> getListAll())
+                .map(TimetableDto::copy)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }
@@ -108,41 +81,21 @@ public class TimetableServiceImpl implements TimetableService {
     @Override
     public Observable<Timetable> delete(int id) {
         return deleteById(id)
-                .flatMapObservable(new Function<Integer, ObservableSource<? extends Timetable>>() {
-                    @Override
-                    public ObservableSource<? extends Timetable> apply(@NonNull Integer integer) throws Exception {
-                        return getListAll();
-                    }
-                });
+                .flatMapObservable(integer -> getListAll());
     }
 
     @Override
     public Observable<Timetable> update(Timetable timetable) {
         return save(timetable)
-                .flatMapObservable(new Function<Timetable, ObservableSource<? extends Timetable>>() {
-                    @Override
-                    public ObservableSource<? extends Timetable> apply(@NonNull Timetable timetable) throws Exception {
-                        return getListAll();
-                    }
-                });
+                .flatMapObservable(timetable1 -> getListAll());
     }
 
     @Override
     public Observable<TimetableDto> updateDtoList(final Timetable timetable) {
         return repository.getRelation()
                 .upsertAsSingle(timetable)
-                .flatMapObservable(new Function<Timetable, ObservableSource<? extends Timetable>>() {
-                    @Override
-                    public ObservableSource<? extends Timetable> apply(@NonNull Timetable timetable) throws Exception {
-                        return repository.getSelector().executeAsObservable();
-                    }
-                })
-                .map(new Function<Timetable, TimetableDto>() {
-                    @Override
-                    public TimetableDto apply(@NonNull Timetable timetable) throws Exception {
-                        return TimetableDto.copy(timetable);
-                    }
-                })
+                .flatMapObservable(timetable12 -> repository.getSelector().executeAsObservable())
+                .map(TimetableDto::copy)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }

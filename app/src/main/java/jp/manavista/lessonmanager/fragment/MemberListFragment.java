@@ -31,8 +31,6 @@ import javax.inject.Inject;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.MemberActivity;
 import jp.manavista.lessonmanager.activity.MemberLessonScheduleListActivity;
@@ -167,29 +165,16 @@ public final class MemberListFragment extends Fragment {
         final String defaultValue = getString(R.string.value_preference_member_name_display);
         final int displayNameCode = Integer.valueOf(preferences.getString(key, defaultValue));
 
-        disposable = memberService.getVoListAll(displayNameCode).subscribe(new Consumer<MemberVo>() {
-            @Override
-            public void accept(MemberVo vo) throws Exception {
-                list.add(vo);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Log.e(TAG, "Can not get member List all.", throwable);
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                memberSection.setList(list);
-                sectionAdapter.notifyDataSetChanged();
+        disposable = memberService.getVoListAll(displayNameCode).subscribe(list::add, throwable -> Log.e(TAG, "Can not get member List all.", throwable), () -> {
+            memberSection.setList(list);
+            sectionAdapter.notifyDataSetChanged();
 
-                if( list.isEmpty() ) {
-                    view.setVisibility(View.GONE);
-                    emptyState.setVisibility(View.VISIBLE);
-                } else {
-                    view.setVisibility(View.VISIBLE);
-                    emptyState.setVisibility(View.GONE);
-                }
+            if( list.isEmpty() ) {
+                view.setVisibility(View.GONE);
+                emptyState.setVisibility(View.VISIBLE);
+            } else {
+                view.setVisibility(View.VISIBLE);
+                emptyState.setVisibility(View.GONE);
             }
         });
     }
@@ -247,44 +232,33 @@ public final class MemberListFragment extends Fragment {
         };
 
         private DialogInterface.OnClickListener onOkListener(final long id, final int position) {
-            return new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    itemTouchHelper.closeOpened();
-                    execDelete(id, position);
-                }
+            return (dialogInterface, i) -> {
+                itemTouchHelper.closeOpened();
+                execDelete(id, position);
             };
         }
 
         private void execDelete(final long id, final int position) {
-            disposable = facade.delete(id).subscribe(new Consumer<Integer>() {
-                @Override
-                public void accept(Integer rows) throws Exception {
-                    memberSection.getList().remove(position);
-                    sectionAdapter.notifyItemRemoved(position);
+            disposable = facade.delete(id).subscribe(rows -> {
+                memberSection.getList().remove(position);
+                sectionAdapter.notifyItemRemoved(position);
 
-                    if( memberSection.getList().isEmpty() ) {
-                        view.setVisibility(View.GONE);
-                        emptyState.setVisibility(View.VISIBLE);
-                    } else {
-                        view.setVisibility(View.VISIBLE);
-                        emptyState.setVisibility(View.GONE);
-                    }
-
-                    final String message = getString(R.string.message_member_list_delete_member);
-                    Toast.makeText(contents, message, Toast.LENGTH_SHORT).show();
-
-                    final Bundle bundle = new Bundle();
-                    bundle.putString(CONTENT_TYPE, ContentType.Member.label());
-                    bundle.putInt(Param.Rows.label(), rows);
-                    analytics.logEvent(Event.Delete.label(), bundle);
+                if( memberSection.getList().isEmpty() ) {
+                    view.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
                 }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(Throwable throwable) throws Exception {
-                    Log.e(TAG, "Can not delete a member!", throwable);
-                }
-            });
+
+                final String message = getString(R.string.message_member_list_delete_member);
+                Toast.makeText(contents, message, Toast.LENGTH_SHORT).show();
+
+                final Bundle bundle = new Bundle();
+                bundle.putString(CONTENT_TYPE, ContentType.Member.label());
+                bundle.putInt(Param.Rows.label(), rows);
+                analytics.logEvent(Event.Delete.label(), bundle);
+            }, throwable -> Log.e(TAG, "Can not delete a member!", throwable));
         }
     };
 }

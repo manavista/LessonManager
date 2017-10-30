@@ -9,8 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import jp.manavista.lessonmanager.constants.MemberDisplayNameType;
 import jp.manavista.lessonmanager.model.entity.Member;
@@ -54,13 +52,10 @@ public class MemberServiceImpl implements MemberService {
 
         return repository.getSelector()
                 .executeAsObservable()
-                .map(new Function<Member, MemberVo>() {
-                    @Override
-                    public MemberVo apply(@NonNull Member member) throws Exception {
-                        final MemberVo vo = MemberVo.copy(member);
-                        vo.setDisplayName(getDisplayName(member, displayNameCode, builder));
-                        return vo;
-                    }
+                .map(member -> {
+                    final MemberVo vo = MemberVo.copy(member);
+                    vo.setDisplayName(getDisplayName(member, displayNameCode, builder));
+                    return vo;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());

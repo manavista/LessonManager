@@ -132,33 +132,24 @@ public final class SettingFragment extends PreferenceFragment
         final Intent intent = new Intent(contents, SettingActivity.class);
 
         final Preference lessonAndSchedule = findPreference(getString(R.string.key_preference_lesson_and_schedule));
-        lessonAndSchedule.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, LESSON_AND_SCHEDULE);
-                contents.startActivity(intent);
-                return false;
-            }
+        lessonAndSchedule.setOnPreferenceClickListener(preference -> {
+            intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, LESSON_AND_SCHEDULE);
+            contents.startActivity(intent);
+            return false;
         });
 
         final Preference event = findPreference(getString(R.string.key_preference_event));
-        event.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, EVENT);
-                contents.startActivity(intent);
-                return false;
-            }
+        event.setOnPreferenceClickListener(preference -> {
+            intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, EVENT);
+            contents.startActivity(intent);
+            return false;
         });
 
         final Preference delete = findPreference(getString(R.string.preferences_key_delete_using_data));
-        delete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, DELETE);
-                contents.startActivity(intent);
-                return false;
-            }
+        delete.setOnPreferenceClickListener(preference -> {
+            intent.putExtra(SettingActivity.EXTRA_FRAGMENT_TYPE, DELETE);
+            contents.startActivity(intent);
+            return false;
         });
     }
 }

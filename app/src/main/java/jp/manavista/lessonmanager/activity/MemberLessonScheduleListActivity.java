@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -66,22 +65,14 @@ public class MemberLessonScheduleListActivity extends AppCompatActivity {
         final Activity activity = this;
 
         final FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent intent = new Intent(activity, MemberLessonActivity.class);
-                intent.putExtra(MEMBER_ID, memberId);
-                intent.putExtra(MEMBER_LESSON_ID, 0);
-                startActivityForResult(intent, MemberLessonActivity.RequestCode.CREATE);
-            }
+        fab.setOnClickListener(view -> {
+            final Intent intent1 = new Intent(activity, MemberLessonActivity.class);
+            intent1.putExtra(MEMBER_ID, memberId);
+            intent1.putExtra(MEMBER_LESSON_ID, 0);
+            startActivityForResult(intent1, MemberLessonActivity.RequestCode.CREATE);
         });
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         val fragment = MemberLessonScheduleListFragment.newInstance(memberId);
         getSupportFragmentManager()

@@ -28,8 +28,6 @@ import javax.inject.Inject;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.EventActivity;
 import jp.manavista.lessonmanager.constants.DateLabel;
@@ -149,29 +147,16 @@ public final class EventListFragment extends Fragment {
 
         final List<EventVo> list = new ArrayList<>();
 
-        disposable = service.getVoListByCriteria(containPast, dateLabelArray).subscribe(new Consumer<EventVo>() {
-            @Override
-            public void accept(EventVo vo) throws Exception {
-                list.add(vo);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                section.setList(list);
-                adapter.notifyDataSetChanged();
+        disposable = service.getVoListByCriteria(containPast, dateLabelArray).subscribe(list::add, Throwable::printStackTrace, () -> {
+            section.setList(list);
+            adapter.notifyDataSetChanged();
 
-                if( list.isEmpty() ) {
-                    view.setVisibility(View.GONE);
-                    emptyState.setVisibility(View.VISIBLE);
-                } else {
-                    view.setVisibility(View.VISIBLE);
-                    emptyState.setVisibility(View.GONE);
-                }
+            if( list.isEmpty() ) {
+                view.setVisibility(View.GONE);
+                emptyState.setVisibility(View.VISIBLE);
+            } else {
+                view.setVisibility(View.VISIBLE);
+                emptyState.setVisibility(View.GONE);
             }
         });
     }
@@ -203,24 +188,21 @@ public final class EventListFragment extends Fragment {
         @Override
         public void delete(long id, final int position) {
             itemTouchHelper.closeOpened();
-            disposable = service.deleteById(id).subscribe(new Consumer<Integer>() {
-                @Override
-                public void accept(Integer integer) throws Exception {
-                    section.getList().remove(position);
-                    adapter.notifyItemRemoved(position);
+            disposable = service.deleteById(id).subscribe(integer -> {
+                section.getList().remove(position);
+                adapter.notifyItemRemoved(position);
 
-                    if( section.getList().isEmpty() ) {
-                        view.setVisibility(View.GONE);
-                        emptyState.setVisibility(View.VISIBLE);
-                    } else {
-                        view.setVisibility(View.VISIBLE);
-                        emptyState.setVisibility(View.GONE);
-                    }
-
-                    final Bundle bundle = new Bundle();
-                    bundle.putString(CONTENT_TYPE, ContentType.Event.label());
-                    analytics.logEvent(Event.Delete.label(), bundle);
+                if( section.getList().isEmpty() ) {
+                    view.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
                 }
+
+                final Bundle bundle = new Bundle();
+                bundle.putString(CONTENT_TYPE, ContentType.Event.label());
+                analytics.logEvent(Event.Delete.label(), bundle);
             });
         }
     };

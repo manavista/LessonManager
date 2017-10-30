@@ -72,20 +72,14 @@ public final class EventSection extends StatelessSection implements FilterableSe
         itemHolder.eventIconImage.setColorFilter(vo.getTextColor());
         DrawableCompat.setTint(itemHolder.eventIconImage.getBackground(), vo.getBackgroundColor());
 
-        itemHolder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final val vo = filteredList.get(itemHolder.getAdapterPosition());
-                operation.edit(vo.getId(), itemHolder.getAdapterPosition());
-            }
+        itemHolder.view.setOnClickListener(view -> {
+            final val vo1 = filteredList.get(itemHolder.getAdapterPosition());
+            operation.edit(vo1.getId(), itemHolder.getAdapterPosition());
         });
 
-        itemHolder.viewDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final val vo = filteredList.get(itemHolder.getAdapterPosition());
-                operation.delete(vo.getId(), itemHolder.getAdapterPosition());
-            }
+        itemHolder.viewDelete.setOnClickListener(view -> {
+            final val vo12 = filteredList.get(itemHolder.getAdapterPosition());
+            operation.delete(vo12.getId(), itemHolder.getAdapterPosition());
         });
     }
 

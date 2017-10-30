@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import java.sql.Time;
 import java.util.List;
@@ -78,95 +77,72 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableHolder> {
         holder.startTime.setText(list.get(position).getStartTimeFormatted());
         holder.endTime.setText(list.get(position).getEndTimeFormatted());
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*
-                 * no description
-                 * If there is no such definition, deletion processing is executed when clicking
-                 * (viewDelete OnClickListener)
-                 */
-            }
+        holder.view.setOnClickListener(view -> {
+            /*
+             * no description
+             * If there is no such definition, deletion processing is executed when clicking
+             * (viewDelete OnClickListener)
+             */
         });
 
-        holder.viewDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.viewDelete.setOnClickListener(view -> {
+            final TimetableDto dto = list.get(holder.getAdapterPosition());
+            timetableOperation.delete(dto.getId());
+        });
+
+        holder.lessonNo.setOnClickListener(view -> timetableOperation.inputLessonNo(view, holder.getAdapterPosition()));
+
+        holder.startTime.setOnClickListener(view -> {
+
+            final TextView textView = (TextView) view;
+            String[] times = String.valueOf(textView.getText()).split(DateTimeUtil.COLON);
+
+            val dialog = new TimePickerDialog(context, (timePicker, hourOfDay, minute) -> {
+
+                final Time time = DateTimeUtil.parseTime(hourOfDay, minute);
                 final TimetableDto dto = list.get(holder.getAdapterPosition());
-                timetableOperation.delete(dto.getId());
-            }
+
+                /*
+                 * If the start time is later than the end time,
+                 * make the end time equal to the start time
+                 */
+                if( time.compareTo(dto.getEndTime()) > 0 ) {
+                    dto.setEndTime(time);
+                }
+                dto.setStartTime(time);
+
+                Log.d(TAG, "changed row: " + holder.getAdapterPosition() + "changed dto: " + dto.toString());
+
+                timetableOperation.update(Timetable.convert(dto));
+            }, Integer.valueOf(times[0]), Integer.valueOf(times[1]), false);
+            dialog.show();
         });
 
-        holder.lessonNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                timetableOperation.inputLessonNo(view, holder.getAdapterPosition());
-            }
-        });
+        holder.endTime.setOnClickListener(view -> {
 
-        holder.startTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            final TextView textView = (TextView) view;
+            String[] times = String.valueOf(textView.getText()).split(DateTimeUtil.COLON);
 
-                final TextView textView = (TextView) view;
-                String[] times = String.valueOf(textView.getText()).split(DateTimeUtil.COLON);
+            val dialog = new TimePickerDialog(context, (timePicker, hourOfDay, minute) -> {
 
-                val dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                final Time time = DateTimeUtil.parseTime(hourOfDay, minute);
+                final TimetableDto dto = list.get(holder.getAdapterPosition());
 
-                        final Time time = DateTimeUtil.parseTime(hourOfDay, minute);
-                        final TimetableDto dto = list.get(holder.getAdapterPosition());
+                if( time.compareTo(dto.getStartTime()) <= 0 ) {
+                    Crouton.makeText((Activity) context,
+                            R.string.message_timetable_error_end_time,
+                            Style.ALERT).show();
+                    return;
+                }
 
-                        /*
-                         * If the start time is later than the end time,
-                         * make the end time equal to the start time
-                         */
-                        if( time.compareTo(dto.getEndTime()) > 0 ) {
-                            dto.setEndTime(time);
-                        }
-                        dto.setStartTime(time);
+                dto.setEndTime(time);
 
-                        Log.d(TAG, "changed row: " + holder.getAdapterPosition() + "changed dto: " + dto.toString());
+                Log.d(TAG, "changed row: " + holder.getAdapterPosition() + "changed dto: " + dto.toString());
 
-                        timetableOperation.update(Timetable.convert(dto));
-                    }
-                }, Integer.valueOf(times[0]), Integer.valueOf(times[1]), false);
-                dialog.show();
-            }
-        });
+                timetableOperation.update(Timetable.convert(dto));
 
-        holder.endTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final TextView textView = (TextView) view;
-                String[] times = String.valueOf(textView.getText()).split(DateTimeUtil.COLON);
-
-                val dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-
-                        final Time time = DateTimeUtil.parseTime(hourOfDay, minute);
-                        final TimetableDto dto = list.get(holder.getAdapterPosition());
-
-                        if( time.compareTo(dto.getStartTime()) <= 0 ) {
-                            Crouton.makeText((Activity) context,
-                                    R.string.message_timetable_error_end_time,
-                                    Style.ALERT).show();
-                            return;
-                        }
-
-                        dto.setEndTime(time);
-
-                        Log.d(TAG, "changed row: " + holder.getAdapterPosition() + "changed dto: " + dto.toString());
-
-                        timetableOperation.update(Timetable.convert(dto));
-
-                    }
-                }, Integer.valueOf(times[0]), Integer.valueOf(times[1]), false);
-                dialog.show();
-            }
+            }, Integer.valueOf(times[0]), Integer.valueOf(times[1]), false);
+            dialog.show();
         });
     }
 
