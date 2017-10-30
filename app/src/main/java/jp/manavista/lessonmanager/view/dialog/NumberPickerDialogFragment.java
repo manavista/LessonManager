@@ -5,7 +5,6 @@
 package jp.manavista.lessonmanager.view.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -101,11 +100,8 @@ public class NumberPickerDialogFragment extends DialogFragment {
 
         } else {
 
-            this.onSetListener = new OnSetListener() {
-                @Override
-                public void onNumberSet(int value) {
-                    /* no description */
-                }
+            this.onSetListener = (OnSetListener) value -> {
+                /* no description */
             };
             minValue = 1;
             maxValue = 20;
@@ -137,18 +133,12 @@ public class NumberPickerDialogFragment extends DialogFragment {
         return builder
                 .setTitle(this.title)
                 .setView(linearLayout)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        final int value = numberPicker.getValue();
-                        onSetListener.onNumberSet(value);
-                    }
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                    final int value = numberPicker.getValue();
+                    onSetListener.onNumberSet(value);
                 })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        /* no description */
-                    }
+                .setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> {
+                    /* no description */
                 })
                 .create();
     }

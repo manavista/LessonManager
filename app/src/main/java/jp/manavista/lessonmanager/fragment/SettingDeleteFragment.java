@@ -24,7 +24,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.facade.SettingDeleteFacade;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
@@ -105,12 +104,9 @@ public final class SettingDeleteFragment extends Fragment {
                 }
             }
 
-            facade.delete(deleteSet).subscribe(new Consumer<Integer>() {
-                @Override
-                public void accept(Integer integer) throws Exception {
-                    Log.d(TAG, "delete total rows: " + integer);
-                    contents.finish();
-                }
+            facade.delete(deleteSet).subscribe(integer -> {
+                Log.d(TAG, "delete total rows: " + integer);
+                contents.finish();
             });
 
         }

@@ -13,8 +13,6 @@ import java.util.Set;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
@@ -74,12 +72,7 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
                 .orderBy(repository.getSchema().lessonDate.orderInAscending())
                 .orderBy(repository.getSchema().lessonStartTime.orderInAscending())
                 .executeAsObservable()
-                .map(new Function<MemberLessonSchedule, MemberLessonScheduleVo>() {
-                    @Override
-                    public MemberLessonScheduleVo apply(@NonNull MemberLessonSchedule entity) throws Exception {
-                        return MemberLessonScheduleVo.copy(entity);
-                    }
-                })
+                .map(MemberLessonScheduleVo::copy)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }
@@ -90,12 +83,7 @@ public class MemberLessonScheduleServiceImpl implements MemberLessonScheduleServ
                 .selector()
                 .statusIn(statusSet)
                 .executeAsObservable()
-                .map(new Function<MemberLessonSchedule, MemberLessonScheduleVo>() {
-                    @Override
-                    public MemberLessonScheduleVo apply(@NonNull MemberLessonSchedule entity) throws Exception {
-                        return MemberLessonScheduleVo.copy(entity);
-                    }
-                })
+                .map(MemberLessonScheduleVo::copy)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
     }

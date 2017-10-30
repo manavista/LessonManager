@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.TimetableFragment;
@@ -37,20 +36,10 @@ public class TimetableActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         final FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fragment.addTimetable();
-            }
-        });
+        fab.setOnClickListener(view -> fragment.addTimetable());
 
         fragment = TimetableFragment.newInstance();
         getSupportFragmentManager()

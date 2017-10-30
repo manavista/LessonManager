@@ -26,11 +26,8 @@ import javax.inject.Inject;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.constants.analytics.ContentType;
 import jp.manavista.lessonmanager.constants.analytics.Event;
@@ -140,29 +137,18 @@ public final class TimetableFragment extends Fragment {
 
         final List<TimetableDto> list = new ArrayList<>();
 
-        timetableDisposable = timetableService.getListAll().subscribe(new Consumer<Timetable>() {
-            @Override
-            public void accept(@NonNull Timetable timetable) throws Exception {
-                list.add(TimetableDto.copy(timetable));
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@NonNull Throwable throwable) throws Exception {
-                throw new RuntimeException(throwable.toString());
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                adapter.setList(list);
-                adapter.notifyDataSetChanged();
+        timetableDisposable = timetableService.getListAll().subscribe(timetable -> list.add(TimetableDto.copy(timetable)), throwable -> {
+            throw new RuntimeException(throwable.toString());
+        }, () -> {
+            adapter.setList(list);
+            adapter.notifyDataSetChanged();
 
-                if( list.isEmpty() ) {
-                    view.setVisibility(View.GONE);
-                    emptyState.setVisibility(View.VISIBLE);
-                } else {
-                    view.setVisibility(View.VISIBLE);
-                    emptyState.setVisibility(View.GONE);
-                }
+            if( list.isEmpty() ) {
+                view.setVisibility(View.GONE);
+                emptyState.setVisibility(View.VISIBLE);
+            } else {
+                view.setVisibility(View.VISIBLE);
+                emptyState.setVisibility(View.GONE);
             }
         });
     }
@@ -181,19 +167,34 @@ public final class TimetableFragment extends Fragment {
 
         final List<TimetableDto> list = new ArrayList<>();
 
-        timetableDisposable = timetableService.addDtoList().subscribe(new Consumer<TimetableDto>() {
-            @Override
-            public void accept(TimetableDto dto) throws Exception {
-                list.add(dto);
+        timetableDisposable = timetableService.addDtoList().subscribe(list::add, throwable -> {
+            throw new RuntimeException(throwable);
+        }, () -> {
+            adapter.setList(list);
+            adapter.notifyDataSetChanged();
+
+            if( list.isEmpty() ) {
+                view.setVisibility(View.GONE);
+                emptyState.setVisibility(View.VISIBLE);
+            } else {
+                view.setVisibility(View.VISIBLE);
+                emptyState.setVisibility(View.GONE);
             }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throw new RuntimeException(throwable);
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
+
+            final Bundle bundle = new Bundle();
+            bundle.putString(CONTENT_TYPE, ContentType.Timetable.label());
+            analytics.logEvent(Event.Add.label(), bundle);
+        });
+    }
+
+    private final TimetableOperation timetableOperation = new TimetableOperation() {
+        @Override
+        public void delete(int id) {
+            itemTouchHelper.closeOpened();
+            final List<TimetableDto> list = new ArrayList<>();
+            timetableDisposable = timetableService.delete(id).subscribe(timetable -> list.add(TimetableDto.copy(timetable)), throwable -> {
+                throw new RuntimeException(throwable.toString());
+            }, () -> {
                 adapter.setList(list);
                 adapter.notifyDataSetChanged();
 
@@ -207,44 +208,7 @@ public final class TimetableFragment extends Fragment {
 
                 final Bundle bundle = new Bundle();
                 bundle.putString(CONTENT_TYPE, ContentType.Timetable.label());
-                analytics.logEvent(Event.Add.label(), bundle);
-            }
-        });
-    }
-
-    private final TimetableOperation timetableOperation = new TimetableOperation() {
-        @Override
-        public void delete(int id) {
-            itemTouchHelper.closeOpened();
-            final List<TimetableDto> list = new ArrayList<>();
-            timetableDisposable = timetableService.delete(id).subscribe(new Consumer<Timetable>() {
-                @Override
-                public void accept(@NonNull Timetable timetable) throws Exception {
-                    list.add(TimetableDto.copy(timetable));
-                }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(@NonNull Throwable throwable) throws Exception {
-                    throw new RuntimeException(throwable.toString());
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    adapter.setList(list);
-                    adapter.notifyDataSetChanged();
-
-                    if( list.isEmpty() ) {
-                        view.setVisibility(View.GONE);
-                        emptyState.setVisibility(View.VISIBLE);
-                    } else {
-                        view.setVisibility(View.VISIBLE);
-                        emptyState.setVisibility(View.GONE);
-                    }
-
-                    final Bundle bundle = new Bundle();
-                    bundle.putString(CONTENT_TYPE, ContentType.Timetable.label());
-                    analytics.logEvent(Event.Delete.label(), bundle);
-                }
+                analytics.logEvent(Event.Delete.label(), bundle);
             });
         }
 
@@ -253,34 +217,23 @@ public final class TimetableFragment extends Fragment {
 
             itemTouchHelper.closeOpened();
             final List<TimetableDto> list = new ArrayList<>();
-            timetableDisposable = timetableService.updateDtoList(timetable).subscribe(new Consumer<TimetableDto>() {
-                @Override
-                public void accept(@NonNull TimetableDto dto) throws Exception {
-                    list.add(dto);
-                }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(@NonNull Throwable throwable) throws Exception {
-                    throw new RuntimeException(throwable);
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    adapter.setList(list);
-                    adapter.notifyDataSetChanged();
+            timetableDisposable = timetableService.updateDtoList(timetable).subscribe(list::add, throwable -> {
+                throw new RuntimeException(throwable);
+            }, () -> {
+                adapter.setList(list);
+                adapter.notifyDataSetChanged();
 
-                    if( list.isEmpty() ) {
-                        view.setVisibility(View.GONE);
-                        emptyState.setVisibility(View.VISIBLE);
-                    } else {
-                        view.setVisibility(View.VISIBLE);
-                        emptyState.setVisibility(View.GONE);
-                    }
-
-                    final Bundle bundle = new Bundle();
-                    bundle.putString(CONTENT_TYPE, ContentType.Timetable.label());
-                    analytics.logEvent(Event.Edit.label(), bundle);
+                if( list.isEmpty() ) {
+                    view.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
                 }
+
+                final Bundle bundle = new Bundle();
+                bundle.putString(CONTENT_TYPE, ContentType.Timetable.label());
+                analytics.logEvent(Event.Edit.label(), bundle);
             });
         }
 
@@ -290,27 +243,24 @@ public final class TimetableFragment extends Fragment {
             final TextView textView = (TextView) view;
             final int lessonNo = Integer.valueOf(textView.getText().toString());
 
-            final val dialog = NumberPickerDialogFragment.newInstance(new NumberPickerDialogFragment.OnSetListener() {
-                @Override
-                public void onNumberSet(int value) {
-                    final TimetableDto row = adapter.getList().get(position);
+            final val dialog = NumberPickerDialogFragment.newInstance((NumberPickerDialogFragment.OnSetListener) value -> {
+                final TimetableDto row = adapter.getList().get(position);
 
-                    List<Integer> lessonNoList = new ArrayList<>();
-                    for( val dto : adapter.getList() ) {
-                        lessonNoList.add(dto.getLessonNo());
-                    }
-
-                    if( lessonNoList.contains(value) ) {
-                        Crouton.makeText(getActivity(),
-                                R.string.message_timetable_error_duplicate_lesson_no,
-                                Style.ALERT).show();
-                        return;
-                    }
-
-                    row.setLessonNo(value);
-                    Log.d(TAG, "change Timetable row position: " + position + " row: " + row);
-                    update(Timetable.convert(row));
+                List<Integer> lessonNoList = new ArrayList<>();
+                for( val dto : adapter.getList() ) {
+                    lessonNoList.add(dto.getLessonNo());
                 }
+
+                if( lessonNoList.contains(value) ) {
+                    Crouton.makeText(getActivity(),
+                            R.string.message_timetable_error_duplicate_lesson_no,
+                            Style.ALERT).show();
+                    return;
+                }
+
+                row.setLessonNo(value);
+                Log.d(TAG, "change Timetable row position: " + position + " row: " + row);
+                update(Timetable.convert(row));
             }, 1, 20, lessonNo, getString(R.string.label_timetable_lesson_no_dialog_title));
             dialog.show(getFragmentManager(), "LESSON_NO_DIALOG");
 

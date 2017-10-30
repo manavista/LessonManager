@@ -5,11 +5,7 @@
 package jp.manavista.lessonmanager.facade.impl;
 
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import jp.manavista.lessonmanager.facade.MemberLessonFacade;
-import jp.manavista.lessonmanager.model.entity.Member;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.MemberLessonService;
@@ -43,22 +39,13 @@ public class MemberLessonFacadeImpl implements MemberLessonFacade {
     @Override
     public Single<Long> save(final long memberId, final MemberLesson entity, final boolean addSchedule) {
         return memberService.getById(memberId)
-                .flatMap(new Function<Member, SingleSource<MemberLesson>>() {
-                    @Override
-                    public SingleSource<MemberLesson> apply(@NonNull Member member) throws Exception {
-                        entity.member = member;
-                        return memberLessonService.save(entity);
-                    }
+                .flatMap(member -> {
+                    entity.member = member;
+                    return memberLessonService.save(entity);
                 })
-                .flatMap(new Function<MemberLesson, SingleSource<Long>>() {
-                    @Override
-                    public SingleSource<Long> apply(@NonNull MemberLesson lesson) throws Exception {
-
-                        return addSchedule
-                                ? memberLessonScheduleService.createByLesson(lesson.member, lesson)
-                                : Single.just(0L);
-                    }
-                });
+                .flatMap(lesson -> addSchedule
+                        ? memberLessonScheduleService.createByLesson(lesson.member, lesson)
+                        : Single.just(0L));
     }
 
     @Override

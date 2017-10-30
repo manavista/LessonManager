@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -63,20 +62,12 @@ public class MemberListActivity extends AppCompatActivity implements SearchView.
         final Activity activity = this;
 
         final FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent intent = new Intent(activity, MemberActivity.class);
-                startActivityForResult(intent, MemberActivity.RequestCode.CREATE);
-            }
+        fab.setOnClickListener(view -> {
+            final Intent intent = new Intent(activity, MemberActivity.class);
+            startActivityForResult(intent, MemberActivity.RequestCode.CREATE);
         });
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
         memberListFragment = MemberListFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()

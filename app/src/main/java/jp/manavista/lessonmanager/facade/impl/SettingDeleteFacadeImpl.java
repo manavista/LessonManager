@@ -10,8 +10,6 @@ import java.util.Set;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.BiFunction;
 import jp.manavista.lessonmanager.facade.SettingDeleteFacade;
 import jp.manavista.lessonmanager.service.EventService;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
@@ -78,11 +76,6 @@ public class SettingDeleteFacadeImpl implements SettingDeleteFacade {
 
         return Observable
                 .concat(targetList)
-                .reduce(0, new BiFunction<Integer, Integer, Integer>() {
-                    @Override
-                    public Integer apply(@NonNull Integer sum, @NonNull Integer rows) throws Exception {
-                        return sum + rows;
-                    }
-                });
+                .reduce(0, (sum, rows) -> sum + rows);
     }
 }

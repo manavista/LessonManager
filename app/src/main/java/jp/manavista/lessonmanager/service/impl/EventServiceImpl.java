@@ -15,8 +15,6 @@ import java.util.Date;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import jp.manavista.lessonmanager.constants.DateLabel;
 import jp.manavista.lessonmanager.model.entity.Event;
@@ -56,26 +54,17 @@ public class EventServiceImpl implements EventService {
     public Observable<WeekViewEvent> getEventListAll() {
         return repository.getSelector()
                 .executeAsObservable()
-                .map(new Function<Event, EventVo>() {
-                    @Override
-                    public EventVo apply(@NonNull Event event) throws Exception {
-                        return EventVo.newInstance(event);
-                    }
-                })
-                .map(new Function<EventVo, WeekViewEvent>() {
-                    @Override
-                    public WeekViewEvent apply(@NonNull EventVo vo) throws Exception {
-
-                        final WeekViewEvent event = new WeekViewEvent(
-                                vo.getId(),
-                                vo.getName(),
-                                StringUtils.EMPTY,
-                                vo.getStartDateCalendar(),
-                                vo.getEndDateCalendar(), true
-                        );
-                        event.setColor(vo.getBackgroundColor());
-                        return event;
-                    }
+                .map(EventVo::newInstance)
+                .map(vo -> {
+                    final WeekViewEvent event = new WeekViewEvent(
+                            vo.getId(),
+                            vo.getName(),
+                            StringUtils.EMPTY,
+                            vo.getStartDateCalendar(),
+                            vo.getEndDateCalendar(), true
+                    );
+                    event.setColor(vo.getBackgroundColor());
+                    return event;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
@@ -106,23 +95,19 @@ public class EventServiceImpl implements EventService {
         return selector
                 .orderByDateAsc()
                 .executeAsObservable()
-                .map(new Function<Event, EventVo>() {
-                    @Override
-                    public EventVo apply(@NonNull Event event) throws Exception {
-
-                        EventVo vo = EventVo.newInstance(event);
-                        Date date = DateTimeUtil.DATE_FORMAT_YYYYMMDD.parse(vo.getDate());
-                        if( DateUtils.isSameDay(date, today) ) {
-                            vo.setDisplayDate(labelMap.get(DateLabel.TODAY.code()));
-                        } else if( DateUtils.isSameDay(date, yesterday) ) {
-                            vo.setDisplayDate(labelMap.get(DateLabel.YESTERDAY.code()));
-                        } else if( DateUtils.isSameDay(date, tomorrow) ) {
-                            vo.setDisplayDate(labelMap.get(DateLabel.TOMORROW.code()));
-                        } else if( DateUtils.truncatedEquals(date, today, Calendar.YEAR) ) {
-                            vo.setDisplayDate(DateTimeUtil.DATE_FORMAT_MMDD.format(date));
-                        }
-                        return vo;
+                .map(event -> {
+                    EventVo vo = EventVo.newInstance(event);
+                    Date date = DateTimeUtil.DATE_FORMAT_YYYYMMDD.parse(vo.getDate());
+                    if( DateUtils.isSameDay(date, today) ) {
+                        vo.setDisplayDate(labelMap.get(DateLabel.TODAY.code()));
+                    } else if( DateUtils.isSameDay(date, yesterday) ) {
+                        vo.setDisplayDate(labelMap.get(DateLabel.YESTERDAY.code()));
+                    } else if( DateUtils.isSameDay(date, tomorrow) ) {
+                        vo.setDisplayDate(labelMap.get(DateLabel.TOMORROW.code()));
+                    } else if( DateUtils.truncatedEquals(date, today, Calendar.YEAR) ) {
+                        vo.setDisplayDate(DateTimeUtil.DATE_FORMAT_MMDD.format(date));
                     }
+                    return vo;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());

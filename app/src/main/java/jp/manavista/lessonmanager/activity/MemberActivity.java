@@ -6,7 +6,6 @@ package jp.manavista.lessonmanager.activity;
 
 import android.Manifest;
 import android.content.ContentUris;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -27,7 +26,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -68,12 +66,7 @@ public class MemberActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         final Intent intent = getIntent();
         final long id = intent.getLongExtra(EXTRA_MEMBER_ID, 0);
@@ -244,18 +237,8 @@ public class MemberActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.label_member_phone_dialog))
-                        .setItems(numberList.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int which) {
-                                fragment.getDto().getPhoneNumber().setText(numberList.get(which));
-                            }
-                        })
-                        .setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                fragment.getDto().getPhoneNumber().setText(StringUtils.EMPTY);
-                            }
-                        })
+                        .setItems(numberList.toArray(new String[0]), (dialogInterface, which) -> fragment.getDto().getPhoneNumber().setText(numberList.get(which)))
+                        .setPositiveButton(android.R.string.cancel, (dialogInterface, i) -> fragment.getDto().getPhoneNumber().setText(StringUtils.EMPTY))
                         .show();
             }
         }
@@ -285,18 +268,8 @@ public class MemberActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.label_member_email_dialog))
-                        .setItems(addressList.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int which) {
-                                fragment.getDto().getEmail().setText(addressList.get(which));
-                            }
-                        })
-                        .setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                fragment.getDto().getEmail().setText(StringUtils.EMPTY);
-                            }
-                        })
+                        .setItems(addressList.toArray(new String[0]), (dialogInterface, which) -> fragment.getDto().getEmail().setText(addressList.get(which)))
+                        .setPositiveButton(android.R.string.cancel, (dialogInterface, i) -> fragment.getDto().getEmail().setText(StringUtils.EMPTY))
                         .show();
             }
         }

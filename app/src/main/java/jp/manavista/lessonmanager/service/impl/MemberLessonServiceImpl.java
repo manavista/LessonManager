@@ -9,8 +9,6 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import jp.manavista.lessonmanager.model.entity.MemberLesson;
 import jp.manavista.lessonmanager.model.entity.MemberLesson_Selector;
@@ -60,12 +58,7 @@ public class MemberLessonServiceImpl implements MemberLessonService {
         return selector
                 .memberIdEq(memberId)
                 .executeAsObservable()
-                .map(new Function<MemberLesson, MemberLessonVo>() {
-                    @Override
-                    public MemberLessonVo apply(@NonNull MemberLesson entity) throws Exception {
-                        return MemberLessonVo.copy(entity);
-                    }
-                })
+                .map(MemberLessonVo::copy)
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());

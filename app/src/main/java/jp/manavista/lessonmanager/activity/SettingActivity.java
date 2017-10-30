@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.fragment.SettingDeleteFragment;
@@ -76,12 +75,7 @@ public class SettingActivity extends AppCompatActivity {
         toolbar.setTitle(getApplicationContext().getString(type.getResourceId()));
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         switch (type) {
             case GENERAL:

@@ -9,8 +9,6 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.BiFunction;
 import jp.manavista.lessonmanager.facade.MemberListFacade;
 import jp.manavista.lessonmanager.service.MemberLessonScheduleService;
 import jp.manavista.lessonmanager.service.MemberLessonService;
@@ -50,11 +48,6 @@ public class MemberListFacadeImpl implements MemberListFacade {
         targetList.add(memberService.deleteById(memberId).toObservable());
 
         return Observable.concat(targetList)
-                .reduce(0, new BiFunction<Integer, Integer, Integer>() {
-                    @Override
-                    public Integer apply(@NonNull Integer sum, @NonNull Integer rows) throws Exception {
-                        return sum + rows;
-                    }
-                });
+                .reduce(0, (sum, rows) -> sum + rows);
     }
 }

@@ -9,7 +9,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -34,12 +32,10 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Consumer;
 import jp.manavista.lessonmanager.R;
 import jp.manavista.lessonmanager.activity.EventActivity;
 import jp.manavista.lessonmanager.injector.DependencyInjector;
 import jp.manavista.lessonmanager.model.dto.EventDto;
-import jp.manavista.lessonmanager.model.entity.Event;
 import jp.manavista.lessonmanager.service.EventService;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
 
@@ -111,13 +107,13 @@ public final class EventFragment extends Fragment implements Validator.Validatio
         final View rootView = inflater.inflate(R.layout.fragment_event, container, false);
 
         dto = EventDto.builder()
-                .name((EditText) rootView.findViewById(R.id.event_name_edit_text))
-                .date((EditText) rootView.findViewById(R.id.event_date_edit_text))
-                .memo((EditText) rootView.findViewById(R.id.event_memo_edit_text))
-                .previewText((TextView) rootView.findViewById(R.id.preview_text))
-                .eventDateImageButton((ImageButton) rootView.findViewById(R.id.event_date_image_button))
-                .textColorImageButton((ImageButton) rootView.findViewById(R.id.text_color_image_button))
-                .backgroundColorImageButton((ImageButton) rootView.findViewById(R.id.background_color_image_button))
+                .name(rootView.findViewById(R.id.event_name_edit_text))
+                .date(rootView.findViewById(R.id.event_date_edit_text))
+                .memo(rootView.findViewById(R.id.event_memo_edit_text))
+                .previewText(rootView.findViewById(R.id.preview_text))
+                .eventDateImageButton(rootView.findViewById(R.id.event_date_image_button))
+                .textColorImageButton(rootView.findViewById(R.id.text_color_image_button))
+                .backgroundColorImageButton(rootView.findViewById(R.id.background_color_image_button))
 
                 .dateFormat("%04d/%02d/%02d")
 
@@ -159,15 +155,11 @@ public final class EventFragment extends Fragment implements Validator.Validatio
 
     @Override
     public void onValidationSucceeded() {
-        disposable = service.save(dto.toEntity()).subscribe(new Consumer<Event>() {
-            @Override
-            public void accept(Event event) throws Exception {
-
-                final Intent intent = new Intent();
-                intent.putExtra(EventActivity.Extra.EVENT_NAME, event.name);
-                contents.setResult(Activity.RESULT_OK, intent);
-                contents.finish();
-            }
+        disposable = service.save(dto.toEntity()).subscribe(event -> {
+            final Intent intent = new Intent();
+            intent.putExtra(EventActivity.Extra.EVENT_NAME, event.name);
+            contents.setResult(Activity.RESULT_OK, intent);
+            contents.finish();
         });
     }
 
@@ -217,12 +209,7 @@ public final class EventFragment extends Fragment implements Validator.Validatio
     }
 
     private void storeEntity(final long id) {
-        disposable = service.getById(id).subscribe(new Consumer<Event>() {
-            @Override
-            public void accept(Event entity) throws Exception {
-                dto.store(entity);
-            }
-        });
+        disposable = service.getById(id).subscribe(entity -> dto.store(entity));
     }
 
     /**
@@ -236,87 +223,69 @@ public final class EventFragment extends Fragment implements Validator.Validatio
      */
     private void prepareButtonListener() {
 
-        dto.getDate().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText date = (EditText) view;
-                String[] dates;
-                if( StringUtils.isEmpty(date.getText().toString()) ) {
-                    final Calendar today = DateTimeUtil.today();
-                    dates = DateTimeUtil.format(DATE_PATTERN_YYYYMMDD, today).split(DateTimeUtil.SLASH);
-                } else {
-                    dates = String.valueOf(date.getText()).split(DateTimeUtil.SLASH);
-                }
-                final int month = Integer.valueOf(dates[1]) - 1;
-                new DatePickerDialog(contents, dto.dateSetListener,
-                        Integer.valueOf(dates[0]), month, Integer.valueOf(dates[2])).show();
+        dto.getDate().setOnClickListener(view -> {
+            final EditText date = (EditText) view;
+            String[] dates;
+            if( StringUtils.isEmpty(date.getText().toString()) ) {
+                final Calendar today = DateTimeUtil.today();
+                dates = DateTimeUtil.format(DATE_PATTERN_YYYYMMDD, today).split(DateTimeUtil.SLASH);
+            } else {
+                dates = String.valueOf(date.getText()).split(DateTimeUtil.SLASH);
             }
+            final int month = Integer.valueOf(dates[1]) - 1;
+            new DatePickerDialog(contents, dto.dateSetListener,
+                    Integer.valueOf(dates[0]), month, Integer.valueOf(dates[2])).show();
         });
 
-        dto.getEventDateImageButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText date = dto.getDate();
-                String[] dates;
-                if( StringUtils.isEmpty(date.getText().toString()) ) {
-                    final Calendar today = DateTimeUtil.today();
-                    dates = DateTimeUtil.format(DATE_PATTERN_YYYYMMDD, today).split(DateTimeUtil.SLASH);
-                } else {
-                    dates = String.valueOf(date.getText()).split(DateTimeUtil.SLASH);
-                }
-
-                final int month = Integer.valueOf(dates[1]) - 1;
-                new DatePickerDialog(contents, dto.dateSetListener,
-                        Integer.valueOf(dates[0]), month, Integer.valueOf(dates[2])).show();
+        dto.getEventDateImageButton().setOnClickListener(view -> {
+            final EditText date = dto.getDate();
+            String[] dates;
+            if( StringUtils.isEmpty(date.getText().toString()) ) {
+                final Calendar today = DateTimeUtil.today();
+                dates = DateTimeUtil.format(DATE_PATTERN_YYYYMMDD, today).split(DateTimeUtil.SLASH);
+            } else {
+                dates = String.valueOf(date.getText()).split(DateTimeUtil.SLASH);
             }
+
+            final int month = Integer.valueOf(dates[1]) - 1;
+            new DatePickerDialog(contents, dto.dateSetListener,
+                    Integer.valueOf(dates[0]), month, Integer.valueOf(dates[2])).show();
         });
 
-        dto.getTextColorImageButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
+        dto.getTextColorImageButton().setOnClickListener(view -> {
 
-                final ImageButton textColorButton = (ImageButton) view;
-                final int textColor = textColorButton.getTag(TAG_PREVIEW_TEXT) == null
-                        ? ContextCompat.getColor(contents, R.color.black)
-                        : (int) textColorButton.getTag(TAG_PREVIEW_TEXT);
+            final ImageButton textColorButton = (ImageButton) view;
+            final int textColor = textColorButton.getTag(TAG_PREVIEW_TEXT) == null
+                    ? ContextCompat.getColor(contents, R.color.black)
+                    : (int) textColorButton.getTag(TAG_PREVIEW_TEXT);
 
-                new SpectrumDialog.Builder(contents)
-                        .setColors(R.array.color_picker_target)
-                        .setSelectedColor(textColor)
-                        .setOutlineWidth(1)
-                        .setOnColorSelectedListener(new SpectrumDialog.OnColorSelectedListener() {
-                            @Override
-                            public void onColorSelected(boolean positiveResult, @ColorInt int color) {
-                                dto.setTextColor(color);
-                                dto.getPreviewText().setTextColor(color);
-                                textColorButton.setTag(TAG_PREVIEW_TEXT, color);
-                            }
-                        }).build().show(getFragmentManager(), "text_color_select_dialog");
-            }
+            new SpectrumDialog.Builder(contents)
+                    .setColors(R.array.color_picker_target)
+                    .setSelectedColor(textColor)
+                    .setOutlineWidth(1)
+                    .setOnColorSelectedListener((positiveResult, color) -> {
+                        dto.setTextColor(color);
+                        dto.getPreviewText().setTextColor(color);
+                        textColorButton.setTag(TAG_PREVIEW_TEXT, color);
+                    }).build().show(getFragmentManager(), "text_color_select_dialog");
         });
 
-        dto.getBackgroundColorImageButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        dto.getBackgroundColorImageButton().setOnClickListener(view -> {
 
-                final ImageButton backgroundColorButton = (ImageButton) view;
-                final int backgroundColor = backgroundColorButton.getTag(TAG_PREVIEW_TEXT) == null
-                        ? ContextCompat.getColor(contents, R.color.amber_500)
-                        : (int) backgroundColorButton.getTag(TAG_PREVIEW_TEXT);
+            final ImageButton backgroundColorButton = (ImageButton) view;
+            final int backgroundColor = backgroundColorButton.getTag(TAG_PREVIEW_TEXT) == null
+                    ? ContextCompat.getColor(contents, R.color.amber_500)
+                    : (int) backgroundColorButton.getTag(TAG_PREVIEW_TEXT);
 
-                new SpectrumDialog.Builder(contents)
-                        .setColors(R.array.color_picker_target)
-                        .setSelectedColor(backgroundColor)
-                        .setOutlineWidth(1)
-                        .setOnColorSelectedListener(new SpectrumDialog.OnColorSelectedListener() {
-                            @Override
-                            public void onColorSelected(boolean positiveResult, @ColorInt int color) {
-                                dto.setBackgroundColor(color);
-                                dto.getPreviewText().setBackgroundColor(color);
-                                backgroundColorButton.setTag(TAG_PREVIEW_TEXT, color);
-                            }
-                        }).build().show(getFragmentManager(), "background_color_select_dialog");
-            }
+            new SpectrumDialog.Builder(contents)
+                    .setColors(R.array.color_picker_target)
+                    .setSelectedColor(backgroundColor)
+                    .setOutlineWidth(1)
+                    .setOnColorSelectedListener((positiveResult, color) -> {
+                        dto.setBackgroundColor(color);
+                        dto.getPreviewText().setBackgroundColor(color);
+                        backgroundColorButton.setTag(TAG_PREVIEW_TEXT, color);
+                    }).build().show(getFragmentManager(), "background_color_select_dialog");
         });
 
     }
