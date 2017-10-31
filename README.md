@@ -2,6 +2,8 @@
 Lesson management application for teachers to provide courses and activities.
 The app supports devices running Android 7.0+, and is optimized for phones only.
 
+![ScreenShot Image](./screenshot/Screenshot_1509408062.png "ScreenShot Image")
+
 ## Source
 The source code in this repository reflects the app as Google Play Application.
 
