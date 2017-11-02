@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -104,16 +105,17 @@ public final class EventFragment extends Fragment implements Validator.Validatio
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+
         final View rootView = inflater.inflate(R.layout.fragment_event, container, false);
 
         dto = EventDto.builder()
-                .name(rootView.findViewById(R.id.event_name_edit_text))
-                .date(rootView.findViewById(R.id.event_date_edit_text))
-                .memo(rootView.findViewById(R.id.event_memo_edit_text))
-                .previewText(rootView.findViewById(R.id.preview_text))
-                .eventDateImageButton(rootView.findViewById(R.id.event_date_image_button))
-                .textColorImageButton(rootView.findViewById(R.id.text_color_image_button))
-                .backgroundColorImageButton(rootView.findViewById(R.id.background_color_image_button))
+                .name((EditText) rootView.findViewById(R.id.event_name_edit_text))
+                .date((EditText) rootView.findViewById(R.id.event_date_edit_text))
+                .memo((EditText) rootView.findViewById(R.id.event_memo_edit_text))
+                .previewText((TextView) rootView.findViewById(R.id.preview_text))
+                .eventDateImageButton((ImageButton) rootView.findViewById(R.id.event_date_image_button))
+                .textColorImageButton((ImageButton) rootView.findViewById(R.id.text_color_image_button))
+                .backgroundColorImageButton((ImageButton) rootView.findViewById(R.id.background_color_image_button))
 
                 .dateFormat("%04d/%02d/%02d")
 

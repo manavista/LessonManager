@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -51,6 +52,7 @@ import jp.manavista.lessonmanager.service.MemberService;
 import jp.manavista.lessonmanager.service.TimetableService;
 import jp.manavista.lessonmanager.util.ArrayUtil;
 import jp.manavista.lessonmanager.util.DateTimeUtil;
+import jp.manavista.lessonmanager.view.image.CircleImageView;
 
 import static jp.manavista.lessonmanager.util.DateTimeUtil.DATE_PATTERN_YYYYMMDD;
 
@@ -145,22 +147,22 @@ public final class MemberLessonFragment extends Fragment implements Validator.Va
         dto = MemberLessonDto.builder()
                 .id(id)
                 .memberId(memberId)
-                .memberName(rootView.findViewById(R.id.member_name))
-                .photo(rootView.findViewById(R.id.member_icon_image))
-                .name(rootView.findViewById(R.id.name))
-                .abbr(rootView.findViewById(R.id.abbr))
-                .type(rootView.findViewById(R.id.type))
-                .location(rootView.findViewById(R.id.location))
-                .presenter(rootView.findViewById(R.id.presenter))
-                .startTimeText(rootView.findViewById(R.id.start_time))
-                .endTimeText(rootView.findViewById(R.id.end_time))
-                .timetableIcon(rootView.findViewById(R.id.timetable_image_button))
-                .dayOfWeek(rootView.findViewById(R.id.day_of_week))
-                .startPeriod(rootView.findViewById(R.id.start_period))
-                .endPeriod(rootView.findViewById(R.id.end_period))
-                .previewText(rootView.findViewById(R.id.preview_text))
-                .textColorImageButton(rootView.findViewById(R.id.text_color_image_button))
-                .backgroundColorImageButton(rootView.findViewById(R.id.background_color_image_button))
+                .memberName((TextView) rootView.findViewById(R.id.member_name))
+                .photo((CircleImageView) rootView.findViewById(R.id.member_icon_image))
+                .name((EditText) rootView.findViewById(R.id.name))
+                .abbr((EditText) rootView.findViewById(R.id.abbr))
+                .type((EditText) rootView.findViewById(R.id.type))
+                .location((EditText) rootView.findViewById(R.id.location))
+                .presenter((EditText) rootView.findViewById(R.id.presenter))
+                .startTimeText((EditText) rootView.findViewById(R.id.start_time))
+                .endTimeText((EditText) rootView.findViewById(R.id.end_time))
+                .timetableIcon((ImageButton) rootView.findViewById(R.id.timetable_image_button))
+                .dayOfWeek((EditText) rootView.findViewById(R.id.day_of_week))
+                .startPeriod((EditText) rootView.findViewById(R.id.start_period))
+                .endPeriod((EditText) rootView.findViewById(R.id.end_period))
+                .previewText((TextView) rootView.findViewById(R.id.preview_text))
+                .textColorImageButton((ImageButton) rootView.findViewById(R.id.text_color_image_button))
+                .backgroundColorImageButton((ImageButton) rootView.findViewById(R.id.background_color_image_button))
 
                 .dateFormat("%04d/%02d/%02d")
 

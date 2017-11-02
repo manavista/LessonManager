@@ -18,6 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -111,23 +114,23 @@ public final class MemberLessonScheduleFragment extends Fragment implements Vali
 
         dto = MemberLessonScheduleDto.builder()
                 .id(scheduleId)
-                .statusRadioGroup(rootView.findViewById(R.id.statusRadioGroup))
-                .statusScheduled(rootView.findViewById(R.id.scheduledRadioButton))
-                .statusDone(rootView.findViewById(R.id.doneRadioButton))
-                .statusAbsent(rootView.findViewById(R.id.absentRadioButton))
-                .statusSuspend(rootView.findViewById(R.id.suspendedRadioButton))
-                .name(rootView.findViewById(R.id.name))
-                .abbr(rootView.findViewById(R.id.abbr))
-                .type(rootView.findViewById(R.id.type))
-                .location(rootView.findViewById(R.id.location))
-                .presenter(rootView.findViewById(R.id.presenter))
-                .scheduleDate(rootView.findViewById(R.id.schedule_date))
-                .startTimeText(rootView.findViewById(R.id.start_time))
-                .endTimeText(rootView.findViewById(R.id.end_time))
-                .timetableIcon(rootView.findViewById(R.id.timetable_image_button))
-                .previewText(rootView.findViewById(R.id.preview_text))
-                .textColorImageButton(rootView.findViewById(R.id.text_color_image_button))
-                .backgroundColorImageButton(rootView.findViewById(R.id.background_color_image_button))
+                .statusRadioGroup((RadioGroup) rootView.findViewById(R.id.statusRadioGroup))
+                .statusScheduled((RadioButton) rootView.findViewById(R.id.scheduledRadioButton))
+                .statusDone((RadioButton) rootView.findViewById(R.id.doneRadioButton))
+                .statusAbsent((RadioButton) rootView.findViewById(R.id.absentRadioButton))
+                .statusSuspend((RadioButton) rootView.findViewById(R.id.suspendedRadioButton))
+                .name((EditText) rootView.findViewById(R.id.name))
+                .abbr((EditText) rootView.findViewById(R.id.abbr))
+                .type((EditText) rootView.findViewById(R.id.type))
+                .location((EditText) rootView.findViewById(R.id.location))
+                .presenter((EditText) rootView.findViewById(R.id.presenter))
+                .scheduleDate((EditText) rootView.findViewById(R.id.schedule_date))
+                .startTimeText((EditText) rootView.findViewById(R.id.start_time))
+                .endTimeText((EditText) rootView.findViewById(R.id.end_time))
+                .timetableIcon((ImageButton) rootView.findViewById(R.id.timetable_image_button))
+                .previewText((TextView) rootView.findViewById(R.id.preview_text))
+                .textColorImageButton((ImageButton) rootView.findViewById(R.id.text_color_image_button))
+                .backgroundColorImageButton((ImageButton) rootView.findViewById(R.id.background_color_image_button))
 
                 .dateFormat("%04d/%02d/%02d")
 

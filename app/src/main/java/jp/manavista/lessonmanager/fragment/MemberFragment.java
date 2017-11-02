@@ -20,6 +20,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -123,18 +126,18 @@ public final class MemberFragment extends Fragment implements Validator.Validati
         View rootView = inflater.inflate(R.layout.fragment_member, container, false);
 
         dto = MemberDto.builder()
-                .givenName(rootView.findViewById(R.id.givenNameEditText))
-                .additionalName(rootView.findViewById(R.id.additionalNameEditText))
-                .familyName(rootView.findViewById(R.id.familyNameEditText))
-                .nickName(rootView.findViewById(R.id.nickNameEditText))
-                .phoneType(rootView.findViewById(R.id.phoneNumberTypeSpinner))
-                .phoneNumber(rootView.findViewById(R.id.phoneNumberEditText))
-                .emailType(rootView.findViewById(R.id.emailTypeSpinner))
-                .email(rootView.findViewById(R.id.emailEditText))
-                .birthday(rootView.findViewById(R.id.birthdayEditText))
-                .birthdayIconImage(rootView.findViewById(R.id.birthdayCalenderIcon))
-                .photo(rootView.findViewById(R.id.member_photo_image))
-                .photoIconImage(rootView.findViewById(R.id.photo_operation_image_button))
+                .givenName((EditText) rootView.findViewById(R.id.givenNameEditText))
+                .additionalName((EditText) rootView.findViewById(R.id.additionalNameEditText))
+                .familyName((EditText) rootView.findViewById(R.id.familyNameEditText))
+                .nickName((EditText) rootView.findViewById(R.id.nickNameEditText))
+                .phoneType((Spinner) rootView.findViewById(R.id.phoneNumberTypeSpinner))
+                .phoneNumber((EditText) rootView.findViewById(R.id.phoneNumberEditText))
+                .emailType((Spinner) rootView.findViewById(R.id.emailTypeSpinner))
+                .email((EditText) rootView.findViewById(R.id.emailEditText))
+                .birthday((EditText) rootView.findViewById(R.id.birthdayEditText))
+                .birthdayIconImage((ImageButton) rootView.findViewById(R.id.birthdayCalenderIcon))
+                .photo((ImageView) rootView.findViewById(R.id.member_photo_image))
+                .photoIconImage((ImageButton) rootView.findViewById(R.id.photo_operation_image_button))
 
                 .phoneTypeValues(getResources().getIntArray(R.array.values_member_phone_type))
                 .emailTypeValues(getResources().getIntArray(R.array.values_member_email_type))
