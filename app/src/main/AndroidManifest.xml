@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="jp.manavista.developbase">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="jp.manavista.lessonmanager">
+
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.SET_ANIMATION_SCALE" />
 
     <application
+        android:name=".ManavistaApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:fullBackupContent="@xml/backup_content"
+        android:icon="@mipmap/ic_lesson_manager_app"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_lesson_manager_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:theme="@style/LessonManagerTheme">
+        <activity android:name=".activity.LessonViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".activity.MemberActivity"/>
+        <activity android:name=".activity.MemberListActivity"/>
+        <activity android:name=".activity.MemberLessonActivity"/>
+        <activity android:name=".activity.MemberLessonScheduleActivity"/>
+        <activity android:name=".activity.MemberLessonScheduleListActivity"/>
+        <activity android:name=".activity.SettingActivity"/>
+        <activity android:name=".activity.TimetableActivity"/>
+        <activity android:name=".activity.EventActivity"/>
+        <activity android:name=".activity.EventListActivity"/>
     </application>
 
 </manifest>

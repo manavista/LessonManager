@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/option_import_contact"
+        android:title="@string/toolbar.member.option.import_contact"
+        android:icon="@drawable/ic_import_contacts_white"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/option_save"
+        android:title="@string/toolbar.member.option.save"
+        android:icon="@drawable/ic_save_white"
+        app:showAsAction="always"/>
+</menu>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Preferences -->
+
+    <!-- NOTICE: preference values has string-array necessarily. -->
+    <!-- If integer-array set to properties, stop to NullPointerException. -->
+
+    <string-array name="entries_day_of_week">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thr</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
+    <string-array name="entries_day_of_week_short_name">
+        <item>Su</item>
+        <item>Mo</item>
+        <item>Tu</item>
+        <item>We</item>
+        <item>Th</item>
+        <item>Fr</item>
+        <item>Sa</item>
+    </string-array>
+    <string-array name="entries_day_of_week_full_name">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+    <string-array name="entry_values_day_of_week">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+
+    <string-array name="entries_start_visible_days">
+        <item>1 Day</item>
+        <item>3 Days</item>
+        <item>5 Days</item>
+        <item>7 Days</item>
+    </string-array>
+    <string-array name="entry_values_start_visible_days">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
+    </string-array>
+
+    <string-array name="entries_delete_category">
+        <item>Timetable</item>
+        <item>Member</item>
+        <item>Lesson</item>
+        <item>Schedule</item>
+        <item>Event</item>
+    </string-array>
+
+    <string-array name="entries_member_name_display">
+        <item>First Additional Family (Nick)</item>
+        <item>Family Additional First (Nick)</item>
+        <item>Nick (First Additional Family)</item>
+        <item>Nick (Family Additional First)</item>
+    </string-array>
+    <string-array name="entry_values_member_name_display">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="entries_schedule_list_display_status">
+        <item>Scheduled</item>
+        <item>Suspended</item>
+        <item>Absent</item>
+        <item>Done</item>
+    </string-array>
+    <string-array name="entry_values_schedule_list_display_status">
+        <item>0</item>
+        <item>3</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+    <string-array name="default_values_schedule_list_display_status">
+        <item>0</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- Member -->
+
+    <string-array name="items_member_phone_type">
+        <item>Mobile</item>
+        <item>Home</item>
+        <item>Work</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="items_member_email_type">
+        <item>Mobile</item>
+        <item>Home</item>
+        <item>Work</item>
+        <item>Other</item>
+    </string-array>
+
+    <integer-array name="values_member_phone_type">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>9</item>
+    </integer-array>
+    <integer-array name="values_member_email_type">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>9</item>
+    </integer-array>
+
+</resources>

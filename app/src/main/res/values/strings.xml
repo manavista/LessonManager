@@ -1,3 +1,310 @@
 <resources>
-    <string name="app_name">DevelopBase</string>
+
+    <!-- String TYPE     -->
+    <!--   message:  -->
+    <!--   label:  -->
+    <!--   description: -->
+    <!--   hint: -->
+    <!--   title: -->
+    <!--   key: -->
+    <!--   summary: -->
+    <!--   tag: -->
+    <!--   default: -->
+
+    <!-- application -->
+    <string name="app_name">Lesson Manager</string>
+    <string name="app_version">Version 0.9.1</string>
+    <string name="app_version_short">v0.9.1</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="app_author">Atsushi TAKAHAGI</string>
+    <string name="app_organization">manavista</string>
+    <string name="app_url">https://github.com/manavista/LessonManager</string>
+
+    <!-- drawable and option menu -->
+    <string name="description.drawable_menu.application.image.icon">Application Icon</string>
+    <string name="label.drawable_menu.member_list">Member List</string>
+    <string name="label.drawable_menu.add">Add</string>
+    <string name="label.drawable_menu.member">Member</string>
+    <string name="label.drawable_menu.timetable">Timetable</string>
+    <string name="label.drawable_menu.event">Event</string>
+    <string name="label.drawable_menu.settings">Settings</string>
+    <string name="label.drawable_menu.info">Info</string>
+
+    <!-- Common List Action -->
+    <string name="label.common.list.action.edit">Edit</string>
+    <string name="label.common.list.action.delete">Delete</string>
+
+    <!-- Preference -->
+    <string name="title.preference.general.toolbar">Settings</string>
+    <string name="title.preference.event.toolbar">Event</string>
+    <string name="title.preference.delete.toolbar">Delete</string>
+    <string name="title.preference.lesson_and_schedule.toolbar">Lesson and Schedule</string>
+
+    <string name="label.preference.category.delete">Delete</string>
+    <string name="label.preference.category.lesson_week_view">LessonWeek View</string>
+
+    <string name="preferences.key.display_start_time">display_start_hour</string>
+    <string name="preferences.title.display_start_time">Display Start Time</string>
+    <string name="preferences.summary.display_start_time">Select display start time</string>
+
+    <string name="preferences.key.display_end_time">display_end_hour</string>
+    <string name="preferences.title.display_end_time">Display End Time</string>
+    <string name="preferences.summary.display_end_time">Select display end time</string>
+
+    <string name="preferences.key.delete_using_data">delete_using_data</string>
+    <string name="preferences.title.delete_using_data">Delete using data</string>
+    <string name="preferences.summary.delete_using_data">Select delete category</string>
+
+    <string name="preferences.key.start_visible_days">start_visible_days</string>
+    <string name="preferences.title.start_visible_days">Start Visible Days</string>
+    <string name="preferences.summary.start_visible_days">Select the Start Visible Days</string>
+    <string name="preferences.default.start_visible_days">3</string>
+
+    <string name="label.preferences.button.delete">Delete Selected Items</string>
+    <string name="label.preferences.icon.attention">Attention</string>
+    <string name="message.preferences.icon.attention">Deleting a member also deletes the related Lesson and Schedule. And deleted data can not be restored.</string>
+
+    <string name="label.preference.category.event">Event</string>
+    <string name="key.preference.event">event</string>
+    <string name="title.preference.event">Event</string>
+    <string name="summary.preference.event">Select Event Category</string>
+
+    <string name="label.preference.category.general">General</string>
+    <string name="key.preference.general.delete.confirm">delete_confirm</string>
+    <string name="title.preference.general.delete.confirm">Confirm Delete</string>
+    <string name="summary.preference.general.delete.confirm">Show dialog box when item deletes</string>
+
+    <string name="label.preference.category.member">Member</string>
+    <string name="key.preference.member.name_display">member_display_name</string>
+    <string name="title.preference.member.name_display">Display Name</string>
+    <string name="summary.preference.member.name_display">Select the name display item</string>
+    <string name="value.preference.member.name_display">1</string>
+
+    <string name="label.preference.category.lesson_and_schedule">Lesson and Schedule</string>
+    <string name="key.preference.lesson_and_schedule">lesson_and_schedule</string>
+    <string name="title.preference.lesson_and_schedule">Lesson and Schedule List</string>
+    <string name="summary.preference.lesson_and_schedule">Setting for Lesson and Schedule List</string>
+
+    <!-- Preferences Event -->
+    <string name="label.preferences.category.event_list">Event List</string>
+    <string name="key.preferences.event_list.display_past">event_list_display_past</string>
+    <string name="title.preferences.event_list.display_past">Display Past Event</string>
+    <string name="summary.preferences.event_list.display_past">Select display past event</string>
+
+    <!-- Preferences Lesson and Schedule -->
+    <string name="label.preferences.category.lesson_list">Lesson List</string>
+    <string name="key.preferences.lesson_list.display_past">lesson_list_display_past</string>
+    <string name="title.preferences.lesson_list.display_past">Display Past Lesson</string>
+    <string name="summary.preferences.lesson_list.display_past">Select display past lesson</string>
+
+    <string name="label.preferences.category.schedule_list">Schedule List</string>
+    <string name="key.preferences.schedule_list.display_status">schedule_list_display_status</string>
+    <string name="title.preferences.schedule_list.display_status">Display Status</string>
+    <string name="summary.preferences.schedule_list.display_status">Select display item status</string>
+    <string name="title.preferences.dialog.schedule_list.display_status">Display item status</string>
+
+    <!-- LessonView -->
+    <string name="toolbar.lesson_view.change_date">Change Date</string>
+    <string name="toolbar.lesson_view.1_day">View 1 Day</string>
+    <string name="toolbar.lesson_view.3_days">View 3 Days</string>
+    <string name="toolbar.lesson_view.5_days">View 5 Days</string>
+    <string name="toolbar.lesson_view.7_days">View 7 Days</string>
+
+    <string name="message.lesson_view.add.member">Added %1$s to Member</string>
+
+    <!-- Timetable -->
+    <string name="toolbar.timetable.title">Timetable</string>
+    <string name="label.timetable.hyphen_spaces"> - </string>
+    <string name="label.timetable.lesson_no.dialog.title">Select Lesson No</string>
+
+    <string name="description.timetable.empty_stat.image">Timetable Image</string>
+    <string name="description.timetable.delete.icon">Delete</string>
+
+    <string name="message.timetable.error.end_time">Invalid End Time</string>
+    <string name="message.timetable.error.duplicate.lesson_no">Duplicate lesson No</string>
+    <string name="message.timetable.empty_stat.no_timetable">No Timetable</string>
+    <string name="message.timetable.empty_stat.add_timetable">Add Timetable and Make a Lesson !</string>
+
+    <!-- Member -->
+    <string name="toolbar.member.title">Member</string>
+    <string name="toolbar.member.option.save">Save</string>
+    <string name="toolbar.member.option.import_contact">Import Contacts</string>
+    <string name="label.category.member.name">Name</string>
+    <string name="label.category.member.contact">Contact</string>
+    <string name="label.category.member.other">Other Info</string>
+    <string name="label.member.given_name">Given Name:</string>
+    <string name="label.member.additional_name">Additional Name:</string>
+    <string name="label.member.family_name">Family Name:</string>
+    <string name="label.member.nick_name">Nick Name:</string>
+    <string name="label.member.phone_number">Phone Number:</string>
+    <string name="label.member.email">Email:</string>
+    <string name="label.member.birthday">Birthday:</string>
+    <string name="label.member.photo">Photo:</string>
+
+    <string name="hint.member.birthday">YYYY/MM/DD</string>
+    <string name="description.member.birthday.icon">Enter your birthday calendar</string>
+    <string name="description.member.birthday.dummy">This element is necessary to determine the vertical position of the calendar icon</string>
+    <string name="description.member.photo.image">Member Photo</string>
+    <string name="description.member.photo_operation.image">Photo Operation</string>
+
+    <string name="message.member.birthday.input_invalid_date">Input invalid date</string>
+
+    <string name="label.member.phone.dialog">Select Phone Number</string>
+    <string name="label.member.email.dialog">Select Email Address</string>
+
+    <!-- Member List -->
+    <string name="toolbar.member_list.title">Member List</string>
+    <string name="toolbar.member_list.option.search">Search</string>
+
+    <string name="label.member_list.name">Member Name</string>
+    <string name="title.member_list.dialog.delete.confirm">Delete member</string>
+
+    <string name="description.member_list.photo.image">Member Photo</string>
+    <string name="description.member_list.empty_stat.image">Member Image</string>
+    <string name="description.member_list.delete.icon">Delete</string>
+    <string name="description.member_list.edit.icon">Edit</string>
+
+    <string name="message.member_list.dialog.delete.confirm">Are you sure you want to delete the member?</string>
+    <string name="message.member_list.edit.member">Edited the %1$s</string>
+    <string name="message.member_list.add.member">Added %1$s to Member</string>
+    <string name="message.member_list.delete.member">Deleted the Member</string>
+    <string name="message.member_list.empty_stat.no_member">No Member</string>
+    <string name="message.member_list.empty_stat.add_member">Let\'s meet people you need !</string>
+
+    <!-- Member Lesson -->
+    <string name="toolbar.member_lesson.title">Lesson</string>
+    <string name="toolbar.member_lesson.option.save">Save</string>
+    <string name="label.member_lesson.category.name">Name</string>
+    <string name="label.member_lesson.category.colors">Colors</string>
+    <string name="label.member_lesson.category.time">Time</string>
+    <string name="label.member_lesson.category.repeat">Repeat</string>
+    <string name="label.member_lesson.category.period">Period</string>
+    <string name="label.member_lesson.hint.member">member</string>
+    <string name="label.member_lesson.hint.name">name (required)</string>
+    <string name="label.member_lesson.hint.abbr">abbr.</string>
+    <string name="label.member_lesson.hint.type">type</string>
+    <string name="label.member_lesson.hint.location">location</string>
+    <string name="label.member_lesson.hint.presenter">presenter</string>
+    <string name="label.member_lesson.start_time">FROM:</string>
+    <string name="label.member_lesson.end_time">TO:</string>
+    <string name="label.member_lesson.start_period">FROM:</string>
+    <string name="label.member_lesson.end_period">TO:</string>
+    <string name="label.member_lesson.select_timetable">Select Timetable</string>
+    <string name="label.member_lesson.day_of_week">Day of week</string>
+    <string name="label.member_lesson.preview_color_string">Sample ABC</string>
+    <string name="label.member_lesson.text_color">Text Color</string>
+    <string name="label.member_lesson_background_color">Background Color</string>
+    <string name="label.member_lesson.day_of_week.dialog.title">Select day of week</string>
+    <string name="label.member_lesson.dialog.schedule.exist.save_lesson_only">SAVE LESSON ONLY</string>
+    <string name="label.member_lesson.dialog.schedule.exist.force_add">FORCE ADD</string>
+
+    <string name="tag.member_lesson.preview.color">TAG_SELECTED_COLOR</string>
+    <string name="title.member_lesson.dialog.timetable">Select a Timetable</string>
+    <string name="title.member_lesson.dialog.invalid.period">The period is too long</string>
+    <string name="title.member_lesson.dialog.schedule.exists">Schedule exists</string>
+    <string name="message.member_lesson.end_time.invalid">Input after start time</string>
+    <string name="message.member_lesson.end_period.invalid.relation">Input after start period</string>
+    <string name="message.member_lesson.end_period.invalid.span">Please set the end period within 6 months of start period</string>
+    <string name="message.member_lesson.schedule.exists">A schedule already exists. May I add a new one?</string>
+
+    <string name="default.member_lesson.start_time">10:00</string>
+    <string name="default.member_lesson.end_time">12:00</string>
+
+    <!-- Member Lesson List -->
+    <string name="description.member_lesson_list.lesson_icon_image">Member Lesson Icon</string>
+    <string name="description.member_lesson_list.day_of_week_icon">Day of Week Icon</string>
+    <string name="description.member_lesson_list.timetable_icon">Day of Week Icon</string>
+    <string name="description.member_lesson_list.filter">Filter</string>
+    <string name="description.member_lesson_list.expand">Expand Status</string>
+    <string name="description.member_lesson_list.location">Location</string>
+    <string name="description.member_lesson_list.presenter">Presenter</string>
+    <string name="description.member_lesson_list.period">Period</string>
+    <string name="description.member_lesson_list.delete.icon">Delete</string>
+    <string name="description.member_lesson_list.edit.icon">Edit</string>
+
+    <string name="label.member_lesson_list.lesson_name">Lesson Name</string>
+    <string name="label.member_lesson_list.lesson_type">Lesson Type</string>
+    <string name="label.member_lesson_list.day_of_week">Day of Week</string>
+    <string name="label.member_lesson_list.timetable">HH:MM - HH:MM</string>
+    <string name="label.member_lesson_list.day_of_week.everyday">Everyday</string>
+    <string name="label.member_lesson_list.location">Location Name</string>
+    <string name="label.member_lesson_list.presenter">Presenter Name</string>
+    <string name="label.member_lesson_list.period">YYYY/MM/DD - YYYY/MM/DD</string>
+
+    <string name="message.member_lesson_list.add.lesson">Added %1$s to Lesson</string>
+    <string name="message.member_lesson_list.edit.lesson">Edited the %1$s</string>
+
+    <!-- Member Lesson Schedule -->
+    <string name="toolbar.member_lesson_schedule.title">Schedule</string>
+    <string name="label.member_lesson_schedule.status">Status</string>
+    <string name="label.member_lesson_schedule.date_and_time">Date and Time</string>
+    <string name="label.member_lesson_schedule.contents">Contents</string>
+    <string name="label.member_lesson_schedule.date">DATE:</string>
+    <string name="label.member_lesson_schedule.start_time">FROM:</string>
+    <string name="label.member_lesson_schedule.end_time">TO:</string>
+    <string name="label.member_lesson_schedule.radio.scheduled">Scheduled</string>
+    <string name="label.member_lesson_schedule.radio.done">Done</string>
+    <string name="label.member_lesson_schedule.radio.suspended">Suspended</string>
+    <string name="label.member_lesson_schedule.radio.absent">Absent</string>
+    <string name="label.member_lesson_schedule.dialog.timetable.create">CREATE</string>
+
+    <string name="title.member_lesson_schedule.select_timetable">Select a Timetable</string>
+    <string name="title.member_lesson_schedule.no_timetable">No Timetable</string>
+
+    <string name="hint.member_lesson_schedule.name">name (required)</string>
+    <string name="hint.member_lesson_schedule.abbr">abbr.</string>
+    <string name="hint.member_lesson_schedule.location">location</string>
+    <string name="hint.member_lesson_schedule.presenter">presenter</string>
+    <string name="hint.member_lesson_schedule.schedule_type">type</string>
+
+    <string name="message.member_lesson_schedule.dialog.timetable">You can create a Timetable and select a time from that list.</string>
+
+    <!-- Member Lesson Schedule List -->
+    <string name="toolbar.member_lesson_schedule_list.title">Schedule</string>
+    <string name="title.member_lesson_schedule_list.section.lesson">Lesson</string>
+    <string name="title.member_lesson_schedule_list.section.schedule">Schedule</string>
+    <string name="title.toolbar.member_lesson_schedule_list.option.setting">Setting</string>
+
+    <string name="label.member_lesson_schedule_list.name">Name(abbr)</string>
+    <string name="label.member_lesson_schedule_list.type">Type</string>
+    <string name="label.member_lesson_schedule_list.schedule_date">YYYY/MM/DD (SSS)</string>
+
+    <string name="message.member_lesson_schedule_list.empty_stat.no_lesson">No Member Lesson</string>
+    <string name="message.member_lesson_schedule_list.empty_stat.add_lesson">Add Lesson and send you a present !</string>
+
+    <string name="description.member_lesson_schedule_list.empty_stat.image">Lesson Image</string>
+
+    <!-- Event List -->
+    <string name="toolbar.event_list.title">Event List</string>
+    <string name="toolbar.event_list.option.list">Setting List Item</string>
+    <string name="toolbar.event_list.option.search">Search</string>
+
+    <string name="description.event_list.image">Icon Image</string>
+    <string name="description.event_list.empty_stat.image">Event Image</string>
+    <string name="description.event_list.delete.icon">Delete</string>
+
+    <string name="message.event_list.empty_stat.no_event">No Event</string>
+    <string name="message.event_list.empty_stat.add_event">The goal is what we decide !</string>
+    <string name="message.event_list.add.event">Added %1$s to Event</string>
+    <string name="message.event_list.edit.event">Edited %1$s to Event</string>
+
+    <string name="label.event_list.name">Event Name</string>
+    <string name="label.event_list.memo">Event Memo</string>
+    <string name="label.event_list.date">YYYY/MM/DD</string>
+    <string name="label.event_list.date.today">Today</string>
+    <string name="label.event_list.date.yesterday">Yesterday</string>
+    <string name="label.event_list.date.tomorrow">Tomorrow</string>
+
+    <!-- Event -->
+    <string name="toolbar.event.title">Event</string>
+    <string name="toolbar.event.option.save">Save</string>
+    <string name="label.event.name">Event Name:</string>
+    <string name="label.event.date">Date:</string>
+    <string name="label.event.memo">Memo:</string>
+    <string name="hint.event.name">Input Event Name</string>
+    <string name="hint.event.memo">Input Event Memo</string>
+    <string name="description.event.date_button">Enter Event Date</string>
+    <string name="tag.event.preview.color">TAG_SELECTED_COLOR</string>
+
 </resources>

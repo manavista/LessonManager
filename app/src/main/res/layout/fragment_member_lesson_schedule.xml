@@ -1,0 +1,280 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="jp.manavista.lessonmanager.fragment.MemberLessonScheduleFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/label.member_lesson_schedule.status"
+            android:background="@color/lightGray"
+            android:paddingTop="@dimen/margin_4dp"
+            android:paddingBottom="@dimen/margin_4dp"
+            android:paddingStart="@dimen/margin_4dp"
+            android:paddingEnd="@dimen/margin_4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <RadioGroup
+            android:id="@+id/statusRadioGroup"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4dp"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_8dp"
+            android:layout_marginBottom="@dimen/margin_8dp">
+
+            <RadioButton
+                android:id="@+id/scheduledRadioButton"
+                android:text="@string/label.member_lesson_schedule.radio.scheduled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RadioButton
+                android:id="@+id/doneRadioButton"
+                android:text="@string/label.member_lesson_schedule.radio.done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RadioButton
+                android:id="@+id/suspendedRadioButton"
+                android:text="@string/label.member_lesson_schedule.radio.suspended"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RadioButton
+                android:id="@+id/absentRadioButton"
+                android:text="@string/label.member_lesson_schedule.radio.absent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+        <TextView
+            android:text="@string/label.member_lesson_schedule.date_and_time"
+            android:background="@color/lightGray"
+            android:paddingTop="@dimen/margin_4dp"
+            android:paddingBottom="@dimen/margin_4dp"
+            android:paddingStart="@dimen/margin_4dp"
+            android:paddingEnd="@dimen/margin_4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/date_and_time"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4dp"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
+            android:layout_marginBottom="@dimen/margin_8dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/label.member_lesson_schedule.date"
+                    android:labelFor="@+id/schedule_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:id="@+id/schedule_date"
+                    android:inputType="date"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/label.member_lesson_schedule.start_time"
+                    android:labelFor="@+id/start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:id="@+id/start_time"
+                    android:inputType="time"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/label.member_lesson_schedule.end_time"
+                    android:labelFor="@+id/end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:id="@+id/end_time"
+                    android:inputType="time"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
+            android:layout_marginBottom="@dimen/margin_8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- use background android:selectableItemBackgroundBorderless ! -->
+            <ImageButton
+                android:id="@+id/timetable_image_button"
+                android:src="@drawable/button_event_black"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:contentDescription="@string/label.member_lesson.select_timetable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:text="@string/label.member_lesson.select_timetable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_toEndOf="@+id/timetable_image_button"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:text="@string/label.member_lesson_schedule.contents"
+            android:background="@color/lightGray"
+            android:paddingTop="@dimen/margin_4dp"
+            android:paddingBottom="@dimen/margin_4dp"
+            android:paddingStart="@dimen/margin_4dp"
+            android:paddingEnd="@dimen/margin_4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/name"
+            android:hint="@string/hint.member_lesson_schedule.name"
+            android:drawableStart="@drawable/ic_import_contacts_black"
+            android:drawablePadding="@dimen/margin_4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
+
+        <EditText
+            android:id="@+id/abbr"
+            android:hint="@string/hint.member_lesson_schedule.abbr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
+
+        <EditText
+            android:id="@+id/type"
+            android:hint="@string/hint.member_lesson_schedule.schedule_type"
+            android:drawableStart="@drawable/ic_bookmark_black"
+            android:drawablePadding="@dimen/margin_4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
+
+        <EditText
+            android:id="@+id/location"
+            android:hint="@string/hint.member_lesson_schedule.location"
+            android:drawableStart="@drawable/ic_room_black"
+            android:drawablePadding="@dimen/margin_4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
+
+        <EditText
+            android:id="@+id/presenter"
+            android:drawableStart="@drawable/ic_face_black"
+            android:drawablePadding="@dimen/margin_4dp"
+            android:hint="@string/hint.member_lesson_schedule.presenter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
+
+
+        <TextView
+            android:text="@string/label.member_lesson.category.colors"
+            android:background="@color/lightGray"
+            android:paddingTop="@dimen/margin_4dp"
+            android:paddingBottom="@dimen/margin_4dp"
+            android:paddingStart="@dimen/margin_4dp"
+            android:paddingEnd="@dimen/margin_4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4dp"
+            android:layout_marginStart="@dimen/margin_8dp"
+            android:layout_marginEnd="@dimen/margin_8dp"
+            android:layout_marginBottom="@dimen/margin_8dp">
+
+            <TextView
+                android:background="@color/amber_500"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="@string/label.member_lesson.preview_color_string"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:id="@+id/preview_text"/>
+
+            <ImageButton
+                android:id="@+id/text_color_image_button"
+                android:contentDescription="@string/label.member_lesson.text_color"
+                android:src="@drawable/button_format_color_text_black"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/preview_text"/>
+
+            <ImageButton
+                android:id="@+id/background_color_image_button"
+                android:contentDescription="@string/label.member_lesson_background_color"
+                android:src="@drawable/button_format_color_fill_black"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/text_color_image_button"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

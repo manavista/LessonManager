@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.general">
+
+        <SwitchPreference
+            android:id="@+id/preferences_general_delete_confirm"
+            android:key="@string/key.preference.general.delete.confirm"
+            android:title="@string/title.preference.general.delete.confirm"
+            android:summary="@string/summary.preference.general.delete.confirm"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.member">
+
+        <ListPreference
+            android:key="@string/key.preference.member.name_display"
+            android:title="@string/title.preference.member.name_display"
+            android:summary="@string/summary.preference.member.name_display"
+            android:entries="@array/entries_member_name_display"
+            android:entryValues="@array/entry_values_member_name_display"
+            android:defaultValue="@string/value.preference.member.name_display"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.lesson_week_view">
+
+        <ListPreference
+            android:key="@string/preferences.key.start_visible_days"
+            android:title="@string/preferences.title.start_visible_days"
+            android:summary="@string/preferences.summary.start_visible_days"
+            android:entries="@array/entries_start_visible_days"
+            android:entryValues="@array/entry_values_start_visible_days"
+            android:defaultValue="@string/preferences.default.start_visible_days"/>
+
+        <jp.manavista.lessonmanager.view.preference.NumberPickerPreference
+            android:key="@string/preferences.key.display_start_time"
+            android:title="@string/preferences.title.display_start_time"
+            android:summary="@string/preferences.summary.display_start_time"
+            app:minValue="0"
+            app:maxValue="23"
+            android:defaultValue="9" />
+
+        <jp.manavista.lessonmanager.view.preference.NumberPickerPreference
+            android:key="@string/preferences.key.display_end_time"
+            android:title="@string/preferences.title.display_end_time"
+            android:summary="@string/preferences.summary.display_end_time"
+            app:minValue="0"
+            app:maxValue="23"
+            android:defaultValue="21" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.lesson_and_schedule">
+
+        <Preference
+            android:key="@string/key.preference.lesson_and_schedule"
+            android:title="@string/title.preference.lesson_and_schedule"
+            android:summary="@string/summary.preference.lesson_and_schedule"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.event">
+
+        <Preference
+            android:key="@string/key.preference.event"
+            android:title="@string/title.preference.event"
+            android:summary="@string/summary.preference.event"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/label.preference.category.delete">
+
+        <Preference
+            android:key="@string/preferences.key.delete_using_data"
+            android:title="@string/preferences.title.delete_using_data"
+            android:summary="@string/preferences.summary.delete_using_data"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
