@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/application_info"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingStart="@dimen/margin_16dp"
-    android:paddingEnd="@dimen/margin_16dp"
-    android:paddingTop="@dimen/margin_16dp">
+    android:layout_height="match_parent">
 
     <ImageView
         android:src="@mipmap/ic_lesson_manager"
         android:contentDescription="@string/description.drawable_menu.application.image.icon"
+        android:paddingTop="@dimen/margin_16dp"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:text="@string/app_name"
         android:textSize="18sp"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <TextView
         android:text="@string/app_version"
         android:layout_marginBottom="@dimen/margin_16dp"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <TextView
         android:text="@string/app_author"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <TextView
         android:text="@string/app_organization"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <TextView
         android:text="@string/app_url"
         android:autoLink="web"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
