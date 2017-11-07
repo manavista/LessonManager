@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/view_list_repo_action_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/view_list_repo_action_edit"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:background="@color/event_edit">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/ic_edit_white"
+                android:contentDescription="@string/description.member_lesson_list.edit.icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/view_list_repo_action_delete"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:background="@color/event_delete">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/ic_delete_white"
+                android:contentDescription="@string/description.member_lesson_list.delete.icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <include layout="@layout/item_member_lesson"/>
+
+</FrameLayout>

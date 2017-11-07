@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/item_group_view_conversion">
+
+        <item
+            android:id="@+id/nav_member_list"
+            android:icon="@drawable/ic_people_black"
+            android:title="@string/label.drawable_menu.member_list"/>
+    </group>
+
+    <item android:title="@string/label.drawable_menu.add">
+        <menu>
+            <item
+                android:id="@+id/nav_member"
+                android:icon="@drawable/ic_person_black"
+                android:title="@string/label.drawable_menu.member"/>
+            <item
+                android:id="@+id/nav_timetable"
+                android:icon="@drawable/ic_schedule_black"
+                android:title="@string/label.drawable_menu.timetable"/>
+            <item
+                android:id="@+id/nav_event"
+                android:icon="@drawable/ic_assistant_photo_black"
+                android:title="@string/label.drawable_menu.event"/>
+        </menu>
+    </item>
+
+    <group android:id="@+id/item_group_other">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/label.drawable_menu.settings"/>
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/ic_info_black"
+            android:title="@string/label.drawable_menu.info"/>
+    </group>
+
+</menu>

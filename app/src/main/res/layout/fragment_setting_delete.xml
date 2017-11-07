@@ -1,0 +1,62 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="jp.manavista.lessonmanager.fragment.SettingDeleteFragment">
+
+    <ListView
+        android:id="@+id/category_delete_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:choiceMode="multipleChoice"/>
+
+    <FrameLayout
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:layout_marginTop="@dimen/margin_16dp"
+        android:background="@color/event_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:src="@drawable/ic_delete_white"
+            android:contentDescription="@string/label.preferences.button.delete"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="6dp"
+            android:layout_width="96dp"
+            android:layout_height="36dp"
+            android:elevation="2dp"/>
+    </FrameLayout>
+
+    <View
+        android:background="@color/lightGray"
+        android:layout_marginTop="@dimen/margin_16dp"
+        android:layout_marginBottom="@dimen/margin_4dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp">
+    </View>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/attention_icon_image"
+            android:src="@drawable/ic_error_black"
+            android:contentDescription="@string/label.preferences.icon.attention"
+            android:alpha="0.6"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="@string/message.preferences.icon.attention"
+            android:layout_toEndOf="@+id/attention_icon_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_16dp"/>
+    </RelativeLayout>
+
+</LinearLayout>
