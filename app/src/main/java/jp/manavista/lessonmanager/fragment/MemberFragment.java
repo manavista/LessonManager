@@ -185,8 +185,14 @@ public final class MemberFragment extends Fragment implements Validator.Validati
             if (data != null) {
 
                 final Uri uri = data.getData();
+                if( uri == null ) {
+                    throw new RuntimeException("Request pick gallery URI is null.");
+                }
                 try {
-                    dto.getPhoto().setImageBitmap(getBitmapFromUri(uri));
+                    final ImageView photo = dto.getPhoto();
+                    photo.setImageBitmap(getBitmapFromUri(uri));
+                    photo.setBackgroundResource(android.R.color.transparent);
+                    photo.setAlpha(1.0f);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
