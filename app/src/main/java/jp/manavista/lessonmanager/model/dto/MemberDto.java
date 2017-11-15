@@ -151,6 +151,17 @@ public final class MemberDto implements Serializable {
         return entity;
     }
 
+    /**
+     *
+     * Store
+     *
+     * <p>
+     * Overview:<br>
+     * Store entity specified as argument as property of dto.
+     * </p>
+     *
+     * @param entity {@code Member} from repository
+     */
     public void store(@NonNull Member entity) {
 
         id = entity.id;
@@ -169,6 +180,7 @@ public final class MemberDto implements Serializable {
 
         if( entity.photo != null && entity.photo.length > 0 ) {
             final Bitmap bitmap = BitmapFactory.decodeByteArray(entity.photo, 0, entity.photo.length);
+            photo.setBackgroundResource(android.R.color.transparent);
             photo.setImageBitmap(bitmap);
         }
     }
