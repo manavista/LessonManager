@@ -33,7 +33,7 @@ With the app, you can:
 
 ## Development environment
 - Windows7 x64
-- Android Studio v3.0.0
+- Android Studio v3.0.1
 
 ## Privacy Policy
 manavista built the LessonManager app as an Open Source app. This SERVICE is provided by manavista at no cost and is intended for use as is.
